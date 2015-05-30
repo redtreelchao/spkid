@@ -1,0 +1,3 @@
+2011-07-15
+更改了db->where_in的实现，如果传入的是空数组，则生成in ('') 而不是原来的 in ()
+更改位置system/database/DB_driver.php 中的 _where_in函数

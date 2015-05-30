@@ -1,0 +1,461 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="商品名称，商品名称+团购，妈咪团，团购" name="keywords" />
+<meta content="商品名称+团购，宝贝购旗下妈咪团每天开抢" name="Description" />
+<title>商品名称_妈咪团</title>
+
+<link href="css/tuan.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" language="javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/ad.js"></script>
+<!--[if lt IE 7 ]>
+    <script type="text/javascript" src="js/dd_belatedpng.js"></script>
+    <script>
+        DD_belatedPNG.fix("img, .png_bg");
+    </script>
+<![endif]-->
+
+</head>
+<body>
+	<!--头部-->
+	<div class="tHeader">
+		<!--logo层-->
+		<div id="tHeadLogo">
+			<div class="mainTopBoxInfoLeft">
+				<ul>
+					<li><a id="goBaby" href="http://www.baobeigou.com" title="返回宝贝购"></a></li>
+					<li><span id="forQuality">品质保障</span></li>
+					<li><span id="per100Brand">100%品牌授权</span></li>
+					<li><span id="qiDay">7天无理由退货</span></li>
+					<li><a href="javascript:addFavorite()" id="addFavirate"  class="main_darkgray_black">点击收藏本站</a></li>
+				</ul>
+			</div>
+			
+			<div class="mainTopBoxInfoRight">
+				<ul>
+				<!--未登录-->
+				<!--<li class="noLeftLine"><a href="" class="main_darkgray_black">登录</a></li>
+				<li><a href="" class="main_darkgray_black">快速注册</a></li>-->
+				<!--已登录-->
+				<li id="userInfobox">欢迎您， <a href="" id="userInfo" class="main_black mainImgUser"><b id="mainIconUser">zhangkaixin1983</b></a>
+					<div class="infoPersonalBox" style="display:none;">
+						<ul id="myinfo">
+							<li><a href="" target="_blank" id="myOrder">我的订单</a></li>
+							<li><a href="" target="_blank" id="myFav">我的收藏</a></li>
+							<li><a href="" target="_blank" id="myCount">我的积分</a></li>
+							<li><a href="" target="_blank" id="myCash">我的现金券</a></li>
+							<li><a href="" target="_blank" id="myInfo">我的资料</a></li>
+							<li><a href="" target="_blank" id="myQuit">退出账号</a></li>
+						</ul>
+					</div>
+				</li>
+				<li>|&nbsp;<a href="#" target="_blank" class="main_darkgray_black">会员中心</a></li>
+				<li style="height:25px; _margin-top:13px;">|&nbsp;<span id="sevOnline">在线客服</span></li>
+				</ul>
+		    </div>
+		</div>
+		<!--导向层-->
+		<div id="tHeadNav">
+			<div class="floatL">
+				<a href="#" title="妈咪团" id="logoMamituan"></a>
+				<ul id="tuanList">
+					<li class="tSpanBox"><span>今日团购</span><s>12555</s></li>
+					<li><a href="" class="main_white" title="全部团购" target="_self">全部团购</a><s>12555</s></li>
+				</ul>
+			</div>
+			<div class="floatR">
+				<p id="brandNum"><a href="#" target="_self" title="品牌特卖">(1200品牌)</a></p>
+				<p id="toyNum" onclick="window.open('http://www.baobeigou.com/zhuanti/shangcheng.html')"><!--<a href="#" target="_self" title="品牌特卖">(1200款)</a>--></p>
+				<div id="tCartsBox">
+					<span>(12件)</span>
+					<!--已有商品加入购物车-->
+			        <div style="display:none" id="mainCartBox">
+			            <ul>
+			              <li>
+			                <div class="main_fLeft"> <a class="" target="_blank" href="http://e.fclub.cn/goods-3473-13.html"><img alt="" src="img/toptail/demoCartSimg.png" width="55px;" height="55px;"></a> </div>
+			                <div class="main_fLeft main_mL10 mainCartGoodInfo"> <a title="" class="main_black main_fLeft" target="_blank" href="#">BIQI FASHION(碧琦）</a><br />
+			                  <a title="" class="main_black" target="_blank" href="#">无袖针织背心</a><br />
+			                  <b>[蓝色]</b>&nbsp;<b>[L]</b> </div>
+			                <div class="main_fLeft main_mR10 mainCartGoods"> <b class="main_red">￥9.00元&nbsp;x1</b></div>
+			                <div class="mainCartOptions">
+			                    <b><s id="cartOption_1" class="subOprate0"></s><span id="cartNum_1" class="mainCartNum">1</span><s onclick='' id="cartOption_1" class="addOprate1"></s></b>
+			                    <a href="javascript:;" class="main_black main_mR20">删除</a>
+			                </div>
+			              </li>
+			              <li>
+			                <div class="main_fLeft"> <a class="" target="_blank" href="http://e.fclub.cn/goods-3473-13.html"><img alt="" src="img/toptail/demoCartSimg.png" width="55px;" height="55px;"></a> </div>
+			                <div class="main_fLeft main_mL10 mainCartGoodInfo"> <a title="" class="main_black main_fLeft" target="_blank" href="#">BIQI FASHION(碧琦）</a><br />
+			                  <a title="" class="main_black" target="_blank" href="#">无袖针织背心</a><br />
+			                  <b>[蓝色]</b>&nbsp;<b>[L]</b> </div>
+			                <div class="main_fLeft main_mR10 mainCartGoods"> <b class="main_red">￥9.00元&nbsp;x1</b></div>
+			                <div class="mainCartOptions">
+			                    <b><s id="cartOption_1" class="subOprate1"></s><span id="cartNum_1" class="mainCartNum">5</span><s id="cartOption_1" class="addOprate0"></s></b>
+			                    <a href="javascript:;" class="main_black main_mR20">删除</a>
+			                </div>
+			              </li>
+			              <li id="cartTotalBox">
+			                <div id="cartTotalDivBox" class="main_mR10 main_fRight main_mT10">
+			                  <p class="pfont12 main_mR10" style="width:auto">共有<strong class="main_red">2</strong>件商品&nbsp;&nbsp;总价格:<strong class="main_red">￥24.00元</strong></p>
+			                  <a target="_self" class="main_btnRed4 main_fRight" href="http://e.fclub.cn/flow.php">去结算</a> </div>
+			              </li>
+			            </ul>
+			          </div>
+			      
+					</div>
+					<!--没有商品加入购物车-->
+					<!--<div style="display:none;" id="mainCartBoxNull"> <span class="">购物车中还没有商品，赶紧选购吧！</span> </div>-->
+				</div>
+				
+			</div>
+		</div>
+		
+	</div>
+	<!--团购内容-->
+	<!--顶部定制广告 开始-->
+	<!--<div id="allAdBox">
+		<span id="btnSwitchAllAd"></span>
+		<ul id="boxBtnAllAd">
+			<li class="activeBtnLiAllAd"></li>
+			<li></li>
+			
+		</ul>
+		<ul id="allBannerUl" class="allBannerUl">
+			<li class="Active">
+				<a id="allAdUrl1" href="#" target="_self" allAdId="s1" start="1347325800" end="1347329999"><img src="img/temp/ad_603_1362038690.jpg" title="#"  /></a>
+			</li>
+			<li>
+				<a id="allAdUrl2" href="#" target="_self" allAdId="s2" start="1347325800" end="1347329999"><img src="img/temp/ad_603_1362102973.jpg" title="#"  /></a>
+			</li>
+			
+		</ul>
+	</div>-->
+    <div id="allAdBox">
+	<span id="btnSwitchAllAd"></span>
+    <ul id="boxBtnAllAd">
+            	<li class='activeBtnLiAllAd'>1</li>
+            	<li >2</li>
+            	<li >3</li>
+            </ul>
+    <ul id="allBannerUl" class="allBannerUl">
+                    <li class='active'>
+        	    <a id="allAdUrl1" href="http://www.51buy.com" target="_blank" allAdId="s1">
+                    <img src="http://img4.tbaby.cn/front_ad/f54248d675c76fe7670253b242fb1de9.jpg" alt=""/>
+                </a>
+            </li>    
+                    <li >
+        	    <a id="allAdUrl2" href="http://www.vipshop.com" target="_blank" allAdId="s2">
+                    <img src="http://img.tbaby.cn/front_ad/ddbc0867934139f863144ea278637692.jpg" alt=""/>
+                </a>
+            </li>    
+                    <li >
+        	    <a id="allAdUrl3" href="http://www.vipshop.com" target="_blank" allAdId="s3">
+                    <img src="http://img1.tbaby.cn/front_ad/0b5fc168a42471dcb9ce35ae491466b0.jpg" alt=""/>
+                </a>
+            </li>    
+            </ul>
+</div>
+	<!--团购广告图-->
+	<div id="tuanAdMainBox">
+		<a href="" id="AdMainImg" target="_blank"><img src="img/temp/tuanBgAd.fw.png" width="338px" height="345px" title="" /></a>
+		<div id="tuanAdMainCont" class="main_fRight">
+			<h3 class="rushTitle">今日推荐</h3>
+			<ul>
+				<li>
+					<a href="" target="_blank" ><img src="img/temp/tuanRight.fw.png" width="300px" height="200px" alt="" /> </a>
+					<div class="floatL margL10">
+						<p class="pBrandKeywords"><b>ZARA</b>T恤、牛仔裤、外套</p>
+						<h4 class="h4Price">￥<strong>169.00</strong><s>￥139.00</s></h4>
+					</div>
+					<a href="" class="btnSquare floatR margR10" target="_blank"> </a>
+
+				</li>
+				<li>
+					<a href="" target="_blank" ><img src="img/temp/tuanRight.fw.png" width="300px" height="200px" alt="" /> </a>
+					<div class="floatL margL10">
+						<p class="pBrandKeywords"><b>ZARA</b>T恤、牛仔裤、外套</p>
+						<h4 class="h4Price">￥<strong>169.00</strong><s>￥139.00</s></h4>
+					</div>
+					<a href="" class="btnSquare floatR margR10" target="_blank"> </a>
+				</li>
+			</ul>
+		</div>
+		
+
+	</div>
+    
+	<!--团购主体开始 -->
+	<div id="tuanRush" class="tuanBox">
+		<p id="rushTitle">今日团购</p>
+		<div id="tuanRushTab">
+			<ul id="tuanRushTabUl">
+				<li class="tuanRushTabOn"><a target="_self" href="#">最新</a></li>
+				<li><a target="_self" href="#" class="sortDown">销量</a></li>
+				<li id="discount"><span>折扣</span><a href="#" id="discountUp" class="discountUp" target="_self"></a><a href="#" id="discountDown" target="_self"></a></li>
+			</ul>
+			<div id="tuanForView">
+				<p id="btnForView">最近浏览的团购</p>
+				<div id="boxForView" style="display:none;">
+					<div id="boxForViewContent">
+						<ul id="boxForViewUl1"  class="boxForViewUl">
+							<li>
+								<a href="" target="_blank" class="imgForView" title=""><img src="img/temp/tuanHoverImg.fw.png" alt="" width="168px" height="110px" /></a>
+								<h5 class="btnForView"><s>￥139.00</s> ￥109.00</h5>
+								<a href="" target="_blank" title="" class=""><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮</a>
+							</li>
+							<li>
+								<a href="" target="_blank" class="imgForView" title=""><img src="img/temp/tuanHoverImg.fw.png" alt="" width="168px" height="110px" /></a>
+								<h5 class="btnForView"><s>￥139.00</s> ￥109.00</h5>
+								<a href="" target="_blank" title="" class=""><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮</a>
+							</li>
+							<li>
+								<a href="" target="_blank" class="imgForView" title=""><img src="img/temp/tuanHoverImg.fw.png" alt="" width="168px" height="110px" /></a>
+								<h5 class="btnForView"><s>￥139.00</s> ￥109.00</h5>
+								<a href="" target="_blank" title="" class=""><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮</a>
+							</li>
+							<li>
+								<a href="" target="_blank" class="imgForView" title=""><img src="img/temp/tuanHoverImg.fw.png" alt="" width="168px" height="110px" /></a>
+								<h5 class="btnForView"><s>￥139.00</s> ￥109.00</h5>
+								<a href="" target="_blank" title="" class=""><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮</a>
+							</li>
+							<li>
+								<a href="" target="_blank" class="imgForView" title=""><img src="img/temp/tuanHoverImg.fw.png" alt="" width="168px" height="110px" /></a>
+								<h5 class="btnForView"><s>￥139.00</s> ￥109.00</h5>
+								<a href="" target="_blank" title="" class=""><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮</a>
+							</li>
+							<li>
+								<a href="" target="_blank" class="imgForView" title=""><img src="img/temp/tuanHoverImg.fw.png" alt="" width="168px" height="110px" /></a>
+								<h5 class="btnForView"><s>￥139.00</s> ￥109.00</h5>
+								<a href="" target="_blank" title="" class=""><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮</a>
+							</li>
+						</ul>
+					</div>
+					<div id="barForView"><span id="moveForRecent" class="bWFont">< 最近</span>|<span id="moveForEarly" >更早 ></span><a href="javascript:void(0);" title="清除" id="">清除</a></div>
+				</div>
+			</div>
+		</div>
+		<div id="tuanRushBox">
+			<ul id="ulTuanRush">
+				<li>
+					<div class="greenBorderBox" onclick="window.open('http://www.sina.com.cn')"  style="display:none;"></div>
+					<div class="rushBox">
+						<p class="rushBoxP"><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮<span>超值加量35g不加价，性价比超高！</span></p>
+						<div class="rushShadowLiBox">
+							<div class="rushShadowLiCont">
+								<s>￥139.00</s>
+								<p><b>230</b>人已购买</p>	
+							</div>
+							<a href="http://www.sina.com.cn" target="_blank" title=""><img src="img/temp/tuanRight.fw.png" width="315px" height="207px" /></a>
+						</div>
+						<div class="rushBoxBotm">
+							<h4>169.00</h4>
+							<a href="http://www.sina.com.cn" target="_blank" class="btnGoToSee"></a>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="greenBorderBox" onclick="window.open('http://www.sina.com.cn')"  style="display:none;"></div>
+					<div class="rushBox">
+						<p class="rushBoxP"><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮<span>超值加量35g不加价，性价比超高！</span></p>
+						<div class="rushShadowLiBox">
+							<div class="rushShadowLiCont">
+								<s>￥139.00</s>
+								<p><b>230</b>人已购买</p>
+							</div>
+							<a href="" target="_blank" title=""><img src="img/temp/tuanRight.fw.png" width="315px" height="207px" /></a>
+						</div>
+						<div class="rushBoxBotm">
+							<h4>169.00</h4>
+							<a href="" target="_blank" class="btnGoToSee"></a>
+						</div>
+					</div>
+				</li>
+				<li class="marginR">
+					<div class="greenBorderBox" onclick="window.open('http://www.sina.com.cn')"  style="display:none;"></div>
+					<div class="rushBox">
+						<p class="rushBoxP"><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮<span>超值加量35g不加价，性价比超高！</span></p>
+						<div class="rushShadowLiBox">
+							<div class="rushShadowLiCont">
+								<s>￥139.00</s>
+								<p><b>230</b>人已购买</p>
+							</div>
+							<a href="" target="_blank" title=""><img src="img/temp/tuanRight.fw.png" width="315px" height="207px" /></a>
+						</div>
+						<div class="rushBoxBotm">
+							<h4>169.00</h4>
+							<a href="" target="_blank" class="btnGoToSee"></a>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="greenBorderBox" onclick="window.open('http://www.sina.com.cn')"  style="display:none;"></div>
+					<div class="rushBox">
+						<p class="rushBoxP"><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮<span>超值加量35g不加价，性价比超高！</span></p>
+						<div class="rushShadowLiBox">
+							<div class="rushShadowLiCont">
+								<s>￥139.00</s>
+								<p><b>230</b>人已购买</p>
+							</div>
+							<a href="" target="_blank" title=""><img src="img/temp/tuanRight.fw.png" width="315px" height="207px" /></a>
+						</div>
+						<div class="rushBoxBotm">
+							<h4>169.00</h4>
+							<a href="" target="_blank" class="btnGoToSee"></a>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="greenBorderBox" onclick="window.open('http://www.sina.com.cn')"  style="display:none;"></div>
+					<div class="rushBox">
+						<p class="rushBoxP"><b>[包邮]</b>See Kai Run美国品牌羊皮婴童鞋春夏皮鞋室外防滑学步鞋真皮<span>超值加量35g不加价，性价比超高！</span></p>
+						<div class="rushShadowLiBox">
+							<div class="rushShadowLiCont">
+								<s>￥139.00</s>
+								<p><b>230</b>人已购买</p>
+							</div>
+							<a href="" target="_blank" title=""><img src="img/temp/tuanRight.fw.png" width="315px" height="207px" /></a>
+						</div>
+						<div class="rushBoxBotm">
+							<h4>169.00</h4>
+							<a href="" target="_blank" class="btnGoToSee"></a>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="switch_block_page">
+		<div>
+			<a hidefocus="" class="preBtn" style="display:">上一页</a>
+		
+				<a hidefocus="" class="sel">1</a>
+				<a href="/rush-355-0-0-0-0-2.html" hidefocus="">2</a>
+				<a href="/rush-355-0-0-0-0-3.html" hidefocus="">3</a>
+				<a href="/rush-355-0-0-0-0-4.html" hidefocus="">4</a>
+				
+				<a class="nextBtn" href="/rush-355-0-0-0-0-2.html" hidefocus="">下一页</a>
+		</div>
+		
+	</div>
+	<!--footer-->
+	<div id="footer">
+	   <div class="foot">
+	   	 <div id="weixin">
+	     	<p></p>
+	        <span title="宝贝购微信二维码">宝贝购微信二维码</span>
+	        <h3 title="宝贝购客服热线：400-696-6161"></h3>
+	     </div>
+	     <div></div>
+	     <div class="foot_left hideText">
+	     <!--<a hidefocus="true" href="javascript:void(0);" onclick="window.open('/user/show_online', 'onlinewindow', 'height=450, width=600, top=200, left=400, toolbar=no, menubar=no, scrollbars=yes, resizable=yes,location=no, status=no');return false;" target="_blank">
+	       <img src="" width="228" height="55"/>
+	       </a>-->
+	       
+	     </div>
+	     <div class="foot_center">
+	     	<dl id="buyTips">
+	           <dd><a target="_blank" href="/help-47.html">购买流程</a></dd>
+	           <dd><a target="_blank" href="/help-4.html">积分说明</a></dd>
+	           <dd><a target="_blank" href="/help-16.html">发票制度</a></dd>
+	           <dd><a target="_blank" href="/help-5.html">会员制度</a></dd>
+	           <dd><a target="_blank" href="/help-66.html">正品保障</a></dd>
+	        </dl>
+	        <dl id="sentWay">
+	           <dd><a target="_blank" href="/help-12.html">配送规范</a></dd>
+	           <dd><a target="_blank" href="/help-13.html">商品签收</a></dd>
+	           <dd><a target="_blank" href="/help-14.html">配送费用</a></dd>
+	           <dd><a target="_blank" href="/help-15.html">快递送货</a></dd>
+	           <dd><a target="_blank" href="/help-77.html">免运费标准</a></dd>
+	        </dl>
+	        <dl id="payWay">
+	           
+	           <dd><a target="_blank" href="/help-17.html">货到付款</a></dd>
+	           <dd><a target="_blank" href="/help-21.html">网上支付</a></dd>
+	           <dd><a target="_blank" href="/help-74.html">银行转账</a></dd>
+	           <dd><a target="_blank" href="/help-11.html">现金券支付</a></dd>
+	           <dd><a target="_blank" href="/help-78.html">账户支付</a></dd>
+	        </dl>
+	        <dl id="saleSev">
+	           
+	           <dd><a target="_blank" href="/help-25.html">退货政策</a></dd>
+	           <dd><a target="_blank" href="/help-26.html">退货流程</a></dd>
+
+	        </dl>
+	        <dl id="selfSev">
+	           
+	           <dd><a target="_blank" href="/help-76.html">补开发票</a></dd>
+	           <dd><a target="_blank" href="/help-75.html">绑定手机/邮箱</a></dd>
+	           <dd><a target="_blank" href="/help-70.html">联系客服</a></dd>
+	           <dd><a target="_blank" href="/help-10.html">订单查询</a></dd>
+	           <dd><a target="_blank" href="/help-2.html">常见问题</a></dd>
+	        </dl>	
+	     </div>
+	     <div class="foot_right">
+	        <ul id="rightList">
+	        	<!--<li id="voteFriend"><a href="#" class="lBlack" target="_blank">邀请好友</a></li>-->
+	            <li id="tweibo"><a target="_blank" class="lBlack" href="http://weibo.com/baobeigou">官方微博</a></li>
+	            <li id="qqMama"><a target="_blank" class="lBlack" href="/zhuanti/mama.html">妈妈交流群</a></li>
+	            <li style="height:18px; line-height:18px; margin-top:23px;" class="caaa">想了解特卖信息</li>
+	            <li><input type="text" value="请输入邮箱或手机" class="mainFInput" name="" id="foot_notice_input"><span class="mainFOrder" id="mainFOrder">订阅</span></li>
+	            <li id="msgForOrderLi"><span style="display:none" class="fred" id="footInputInfo">请输入有效的手机或邮箱地址</span><a target="_self" class="lBlack" id="mainBtnCancel" href="javascript:;">取消订阅</a></li>
+	        </ul>
+	     </div>
+	     
+	   </div>
+	   <div class="icon">
+	         <ul>
+	            <li><span title="正品保障" id="zpbz"></span></li>
+	            <li><span title="开箱验货" id="kxyh"></span></li>
+	            <li><span title="7天保障" id="qidays"></span></li>
+	            <li><span title="货到付款" id="kdfk"></span></li>
+	            <li><span title="免运费" id="freeSent"></span></li>
+	            <li><span title="积分抵现金" id="jfdxj"></span></li>
+	         </ul>
+	     </div>
+	     <div class="f_us lBlack">
+	        
+	        <a target="_blank" href="/article-39.html">宝贝购简介</a> | <a target="_blank" href="/article-48.html">友情链接</a> | <a target="_blank" href="/article-72.html">联系我们</a> | <a target="_blank" href="/article-41.html">招贤纳士</a>  | <a target="_blank" href="/help-70.html">帮助中心</a></div>
+	     <div class="f_us">
+	        <span class="caaa">Copyright <font style="font-family:Arial;">&copy;</font> baobeigou.com 2011-2013 </span><a target="_blank" href="http://www.miibeian.gov.cn" class="lGray">沪ICP备13007471号-1</a></div>
+	     <div style="display:none;" class="basicTail">
+	     	<a href=""><img src="http://static1.baobeigou.com/img/toptail/bWeb.png"></a>
+	        <a href=""><img src="http://static1.baobeigou.com/img/toptail/eWeb.png"></a>
+	        <a href=""><img src="http://static2.baobeigou.com/img/toptail/payShop.png"></a>
+	        <a href=""><img src="http://static2.baobeigou.com/img/toptail/shgs.png"></a>
+	        <a href=""><img src="http://static1.baobeigou.com/img/toptail/360Web.png"></a>
+	        <a href=""><img src="http://static1.baobeigou.com/img/toptail/etaoWeb.png"></a>
+	     </div>
+	     <div style="height:35px; line-height:35px;" class="basicTail">
+	        <a title="上海网络警察" target="_blank" href="http://sh.cyberpolice.cn/infoCategoryListAction.do?act=initjpg"><img border="0" title="上海网络警察" src="http://static2.baobeigou.com/img/toptail/shNetCap.jpg"></a>
+	        <a target="_blank" title="网络社会诚信网" href="http://www.zx110.org/"><img title="网络社会诚信网" src="http://static2.baobeigou.com/img/toptail/netSciHone.jpg"></a>
+	        <a target="_blank" title="互联网违法和不良信息举报平台" href="http://www.net.china.com.cn/index.htm"><img title="互联网违法和不良信息举报平台" src="http://static2.baobeigou.com/img/toptail/3wInfo.jpg"></a>
+	        <a target="_blank" href="https://search.szfw.org/cert/l/CX20130509002870002586" id="___szfw_logo___"><img title="诚信网站" src="http://static2.baobeigou.com/img/toptail/honest.jpg"></a>
+	        <a title="一淘合作商家" target="_blank" href="http://s.etao.com/search?spm=1002.8.0.89.qyyBFd&amp;q=%B1%A6%B1%B4%B9%BA%B9%D9%CD%F8&amp;initiative_id=setao_20130428&amp;usearch=yes&amp;fseller=%B1%A6%B1%B4%B9%BA"><img alt="一淘合作商家" src="http://static2.baobeigou.com/img/toptail/etaoWeb.png"></a>
+	        <a title="放心消费网站" target="_blank" href="http://kuaitousu.com/union/76.html"><img border="0" src="http://static2.baobeigou.com/img/toptail/fangxinxiaofei.png"></a>
+
+	     </div>
+	</div>
+	<div style="top: 150px;" class="greenBox" id="cancelOrderMsg">
+	    <div class="greenBoxTop">
+	    	<h3 id="greenBoxTitle">取消订阅</h3>
+	        <span class="closeGreenWindow" id="closeCancelOrderMsg"></span>
+	    </div>
+	    <div class="mainAlertBody">
+	      <form>
+	        <div class="mainNoticeBox">
+	          <p> <b>取消手机订阅：</b>
+	            <input type="text" value="请输入手机号码" class="orderInput" id="cancelInputCall">
+	          </p>
+	          <p> <b>取消邮件订阅：</b>
+	            <input type="text" value="请输入您的邮箱" class="orderInput" id="cancelInputMail">
+	          </p>
+	          <input type="hidden" value="0" id="notice_rush_id">
+	        </div>
+	        <input type="button" class="mainBtnCancel" value="取消订阅" id="cancel_notice">
+	      </form>
+	      <p class="mainNoticeWindow"> 温馨提醒：取消订阅后，您将不再收到宝贝购每日限购信息。 </p>
+	    </div>
+	</div>
+	<script type="text/javascript" src="js/tuan.js"></script>
+	<script type="text/javascript" src="js/tuanRush.js"></script>
+</body>
+</html>

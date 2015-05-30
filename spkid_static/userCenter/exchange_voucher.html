@@ -1,0 +1,97 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />	
+<link rel="stylesheet" type="text/css" href="../css/ucenter.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/layoutFlow.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/common_new.css"></link>
+<script type="text/javascript" src="../js/jquery.js"></script>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+<script type="text/javascript">
+
+function exchange(release_id){
+	if(!confirm('积分兑换后不可逆，确认兑换此面值？')) return false;
+	$.ajax({
+		url:'/user/proc_exchange_voucher',
+		data:{release_id:release_id,rnd:new Date().getTime(0)},
+		dataType:'json',
+		type:'POST',
+		success:function(result){
+			if(result.msg) alert(result.msg);
+			if(result.err) return false;
+
+			if(result.voucher_sn){
+				alert('兑换成功'+result.voucher_sn, +'点击积分查询页面查看！');
+				/*$('#message_div .voucher_sn').html();
+				if(result.pay_points) $('.pay_points').html(result.pay_points+' 分');
+				lhgDG = new $.dialog({ id:'thepanel',titleBar:true,iconTitle:false,maxBtn:false,title:'兑换成功',btnBar:false,width:400,height:200,cover:true,html:$('#message_div')[0] });
+				lhgDG.ShowDialog();*/
+			}
+		}
+	});
+}		
+</script>
+<div class="switch_block" id="listdiv" style="margin-top:15px;">			
+	<div class="tip_top">
+		<div class="bold">当前积分:</div>
+		<div class="cred_b">0分</div>
+	</div>
+	<div class="switch_block_title">
+		<ul>
+			<li class="sel">积分兑换</li>
+			
+		</ul>
+	</div>
+	<div class="switch_block_content">
+		<table id="tbSwitch" width="748" border="0" cellspacing="0" cellpadding="0">
+			<tbody>
+				<tr>
+					<th width="25%">券值</th>
+					<th width="25%">所需积分</th>
+					<th width="25%">使用范围</th>
+					<th width="25%">操作</th>
+					
+				</tr>
+				<tr>
+					<td width="25%">5元券</td>
+					<td width="25%" class="levelPoint">600积分</td>
+					<td width="25%">全场通用</td>
+					<td width="25%"><b class="btn_g_75" onclick="exchange(74)">兑换</b></td>
+				</tr>
+				<tr>
+					<td width="25%">10元券</td>
+					<td width="25%" class="levelPoint">1200积分</td>
+					<td width="25%">全场通用</td>
+					<td width="25%"><b class="btn_g_75" onclick="exchange(75)">兑换</b></td>
+				</tr>
+				<tr>
+					<td width="25%">20元券</td>
+					<td width="25%" class="levelPoint">2000积分</td>
+					<td width="25%">全场通用</td>
+					<td width="25%"><b class="btn_g_75" onclick="exchange(71)">兑换</b></td>
+				</tr>
+				<tr>
+					<td width="25%">30元券</td>
+					<td width="25%" class="levelPoint">3000积分</td>
+					<td width="25%">全场通用</td>
+					<td width="25%"><b class="btn_g_75" onclick="exchange(70)">兑换</b></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="integral_rules">
+		<h2>【送积分】完善您的个人资料、手机或邮箱验证，立即获赠更多积分 <a class="und" href="/user/profile" target="_blank">[ 点击进入 ]</a></h2>
+		积分兑换现金券使用规则：<br>
+		1.会员积分兑换成现金券后，该现金券直接绑定会员账户，现金券不可退回为积分。<br>
+		2.会员积分在兑换后减少，积分减少不影响<a href="/article/info/5" class="b" target="_blank">会员等级</a>。<br>
+		3.购物确认订单时，选择使用现金券，立即享受抵用优惠！<br>
+		4.单笔订单限使用一张现金券，不可累积使用。现金券不兑现，不找零。<br>
+		5.现金券抵用部分的金额不开具发票（若使用现金券后，实付金额为0元，则不开具发票）。<br>
+		6.积分现金券的适用范围请详见该券说明（部分特殊商品不可使用现金券）。
+	</div>
+</div>
+</body>
+</html>

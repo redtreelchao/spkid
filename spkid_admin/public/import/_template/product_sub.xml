@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>wh</Author>
+  <LastAuthor>丁艳楠</LastAuthor>
+  <Created>2013-04-01T14:28:05Z</Created>
+  <Company>ig</Company>
+  <Version>12.00</Version>
+ </DocumentProperties>
+ <CustomDocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <KSOProductBuildVer dt:dt="string">2052-8.1.0.3526</KSOProductBuildVer>
+ </CustomDocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>7455</WindowHeight>
+  <WindowWidth>19500</WindowWidth>
+  <WindowTopX>120</WindowTopX>
+  <WindowTopY>135</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="18" ss:ExpandedRowCount="2" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+   <Column ss:AutoFitWidth="0" ss:Width="77.25"/>
+   <Column ss:AutoFitWidth="0" ss:Width="129.75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="81"/>
+   <Column ss:AutoFitWidth="0" ss:Width="71.25"/>
+   <Column ss:AutoFitWidth="0" ss:Width="72"/>
+   <Column ss:AutoFitWidth="0" ss:Width="75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="105"/>
+   <Column ss:AutoFitWidth="0" ss:Width="167.25"/>
+   <Column ss:AutoFitWidth="0" ss:Width="118.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="190.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="63.75"/>
+   <Column ss:Index="13" ss:Width="57"/>
+   <Column ss:Index="15" ss:AutoFitWidth="0" ss:Width="91.5"/>
+   <Column ss:Width="143.25"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">商品款号</Data></Cell>
+    <Cell><Data ss:Type="String">供应商货号</Data></Cell>
+    <Cell><Data ss:Type="String">商品名称</Data></Cell>
+    <Cell><Data ss:Type="String">风格名称</Data></Cell>
+    <Cell><Data ss:Type="String">性别（男-m；女-w；男女-a）</Data></Cell>
+    <Cell><Data ss:Type="String">计量单位</Data></Cell>
+    <Cell><Data ss:Type="String">三级分类编码(|线分割)</Data></Cell>
+    <Cell><Data ss:Type="String">新商品保养编码(|线分割)</Data></Cell>
+    <Cell><Data ss:Type="String">模特编码（允许为空）</Data></Cell>
+    <Cell><Data ss:Type="String">成分</Data></Cell>
+    <Cell><Data ss:Type="String">尺寸规格</Data></Cell>
+    <Cell><Data ss:Type="String">材质</Data></Cell>
+    <Cell><Data ss:Type="String">防水性</Data></Cell>
+    <Cell><Data ss:Type="String">适合人群</Data></Cell>
+    <Cell><Data ss:Type="String">温馨提示</Data></Cell>
+    <Cell><Data ss:Type="String">预计发货日期</Data></Cell>
+    <Cell><Data ss:Type="String">使用说明</Data></Cell>
+    <Cell><Data ss:Type="String">功能说明</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">MB20130306</Data></Cell>
+    <Cell><Data ss:Type="String">AD102-45-咖啡</Data></Cell>
+    <Cell><Data ss:Type="String">高领长袖毛衫</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="String">a</Data></Cell>
+    <Cell><Data ss:Type="String">件</Data></Cell>
+    <Cell><Data ss:Type="String">BBG_218</Data></Cell>
+    <Cell><Data ss:Type="String">002|004|005|008|051|58454</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="String">面料：30%羊毛70%抗起球纤维</Data></Cell>
+    <Cell><Data ss:Type="Number">121</Data></Cell>
+    <Cell><Data ss:Type="Number">543534</Data></Cell>
+    <Cell><Data ss:Type="Number">56565656</Data></Cell>
+    <Cell><Data ss:Type="Number">552</Data></Cell>
+    <Cell><Data ss:Type="String">&lt;p&gt;1.此款商品模特穿着尺寸：均码&lt;/p&gt;&lt;p&gt;2.此款商品配饰不随货品发送&lt;/p&gt;</Data></Cell>
+    <Cell><Data ss:Type="String">2013-12-12</Data></Cell>
+    <Cell><Data ss:Type="String">1.此款商品不适宜夏天穿着</Data></Cell>
+    <Cell><Data ss:Type="String">1.此款商品比较保暖</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.51180555555555596"/>
+    <Footer x:Margin="0.51180555555555596"/>
+   </PageSetup>
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>300</HorizontalResolution>
+    <VerticalResolution>300</VerticalResolution>
+   </Print>
+   <Selected/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet2">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+   <Row ss:AutoFitHeight="0"/>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.51180555555555596"/>
+    <Footer x:Margin="0.51180555555555596"/>
+   </PageSetup>
+   <Unsynced/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet3">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+   <Row ss:AutoFitHeight="0"/>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.51180555555555596"/>
+    <Footer x:Margin="0.51180555555555596"/>
+   </PageSetup>
+   <Unsynced/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

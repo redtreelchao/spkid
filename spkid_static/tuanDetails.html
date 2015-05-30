@@ -1,0 +1,462 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="商品名称，商品名称+团购，妈咪团，团购" name="keywords" />
+<meta content="商品名称+团购，宝贝购旗下妈咪团每天开抢" name="Description" />
+<title>商品名称_妈咪团</title>
+
+<link href="css/tuan.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" language="javascript" src="js/jquery.js"></script>
+<link type="text/css" rel="stylesheet" href="http://static2.baobeigou.com/js/lhgdialog/skins/default.css">
+</head>
+<body>
+	<!--头部-->
+	<div class="tHeader">
+		<!--logo层-->
+		<div id="tHeadLogo">
+			<div class="mainTopBoxInfoLeft">
+				<ul>
+					<li><a id="goBaby" href="http://www.baobeigou.com" title="返回宝贝购"></a></li>
+					<li><span id="forQuality">品质保障</span></li>
+					<li><span id="per100Brand">100%品牌授权</span></li>
+					<li><span id="qiDay">7天无理由退货</span></li>
+					<li><a href="javascript:addFavorite()" id="addFavirate"  class="main_darkgray_black">点击收藏本站</a></li>
+				</ul>
+			</div>
+			
+			<div class="mainTopBoxInfoRight">
+				<ul>
+				<!--未登录-->
+				<!--<li class="noLeftLine"><a href="" class="main_darkgray_black">登录</a></li>
+				<li><a href="" class="main_darkgray_black">快速注册</a></li>-->
+				<!--已登录-->
+				<li id="userInfobox">欢迎您， <a href="" id="userInfo" class="main_black mainImgUser"><b id="mainIconUser">zhangkaixin1983</b></a>
+					<div class="infoPersonalBox" style="display:none;">
+						<ul id="myinfo">
+							<li><a href="" target="_blank" id="myOrder">我的订单</a></li>
+							<li><a href="" target="_blank" id="myFav">我的收藏</a></li>
+							<li><a href="" target="_blank" id="myCount">我的积分</a></li>
+							<li><a href="" target="_blank" id="myCash">我的现金券</a></li>
+							<li><a href="" target="_blank" id="myInfo">我的资料</a></li>
+							<li><a href="" target="_blank" id="myQuit">退出账号</a></li>
+						</ul>
+					</div>
+				</li>
+				<li>|&nbsp;<a href="#" target="_blank" class="main_darkgray_black">会员中心</a></li>
+				<li style="height:25px; _margin-top:13px;">|&nbsp;<span id="sevOnline">在线客服</span></li>
+				</ul>
+		    </div>
+		</div>
+		<!--导向层-->
+		<div id="tHeadNav">
+			<div class="floatL">
+				<a href="#" title="妈咪团" id="logoMamituan"></a>
+				<ul id="tuanList">
+					<li class="tSpanBox"><span>今日团购</span><s>12555</s></li>
+					<li><a href="" class="main_white" title="全部团购" target="_self">全部团购</a><s>12555</s></li>
+				</ul>
+			</div>
+			<div class="floatR">
+				<p id="brandNum"><a href="#" target="_self" title="品牌特卖">(1200品牌)</a></p>
+				<p id="toyNum"><a href="#" target="_self" title="品牌特卖">(1200款)</a></p>
+				<div id="tCartsBox">
+					<span>(12件)</span>
+					<!--已有商品加入购物车-->
+			        <div style="display:none" id="mainCartBox">
+			            <ul>
+			              <li>
+			                <div class="main_fLeft"> <a class="" target="_blank" href="http://e.fclub.cn/goods-3473-13.html"><img alt="" src="img/toptail/demoCartSimg.png" width="55px;" height="55px;"></a> </div>
+			                <div class="main_fLeft main_mL10 mainCartGoodInfo"> <a title="" class="main_black main_fLeft" target="_blank" href="#">BIQI FASHION(碧琦）</a><br />
+			                  <a title="" class="main_black" target="_blank" href="#">无袖针织背心</a><br />
+			                  <b>[蓝色]</b>&nbsp;<b>[L]</b> </div>
+			                <div class="main_fLeft main_mR10 mainCartGoods"> <b class="main_red">￥9.00元&nbsp;x1</b></div>
+			                <div class="mainCartOptions">
+			                    <b><s id="cartOption_1" class="subOprate0"></s><span id="cartNum_1" class="mainCartNum">1</span><s onclick='' id="cartOption_1" class="addOprate1"></s></b>
+			                    <a href="javascript:;" class="main_black main_mR20">删除</a>
+			                </div>
+			              </li>
+			              <li>
+			                <div class="main_fLeft"> <a class="" target="_blank" href="http://e.fclub.cn/goods-3473-13.html"><img alt="" src="img/toptail/demoCartSimg.png" width="55px;" height="55px;"></a> </div>
+			                <div class="main_fLeft main_mL10 mainCartGoodInfo"> <a title="" class="main_black main_fLeft" target="_blank" href="#">BIQI FASHION(碧琦）</a><br />
+			                  <a title="" class="main_black" target="_blank" href="#">无袖针织背心</a><br />
+			                  <b>[蓝色]</b>&nbsp;<b>[L]</b> </div>
+			                <div class="main_fLeft main_mR10 mainCartGoods"> <b class="main_red">￥9.00元&nbsp;x1</b></div>
+			                <div class="mainCartOptions">
+			                    <b><s id="cartOption_1" class="subOprate1"></s><span id="cartNum_1" class="mainCartNum">5</span><s id="cartOption_1" class="addOprate0"></s></b>
+			                    <a href="javascript:;" class="main_black main_mR20">删除</a>
+			                </div>
+			              </li>
+			              <li id="cartTotalBox">
+			                <div id="cartTotalDivBox" class="main_mR10 main_fRight main_mT10">
+			                  <p class="pfont12 main_mR10" style="width:auto">共有<strong class="main_red">2</strong>件商品&nbsp;&nbsp;总价格:<strong class="main_red">￥24.00元</strong></p>
+			                  <a target="_self" class="main_btnRed4 main_fRight" href="http://e.fclub.cn/flow.php">去结算</a> </div>
+			              </li>
+			            </ul>
+			          </div>
+			      
+					</div>
+					<!--没有商品加入购物车-->
+					<!--<div style="display:none;" id="mainCartBoxNull"> <span class="">购物车中还没有商品，赶紧选购吧！</span> </div>-->
+				</div>
+				
+			</div>
+		</div>
+		
+	</div>
+	<!--团购内容-->
+	<div id="tuanBtnMove">
+		<ul>
+			<li id="tLiPrice"><h3>169.00</h3></li>
+			<li id="libtnBuyNow1"><a href="#tuanFloatLTop" class="btnBuyNow1"> </a></li>
+			<li class="moveLiNormal"><p>市场价</p><s>588元</s></li>
+			<li class="moveLiNormal"><p>折扣</p><s>1.0折</s></li>
+			<li class="moveLiNormal"><p>节省</p><s>288元</s></li>
+			<li id="moveLiTotal"><span>24343人</span><h4>已购买</h4></li>
+		</ul>
+	</div>
+	<div class="tuanCont">
+		<!--左边部分-->
+		<div id="tuanFloatL">
+			<!--产品显示购买-->
+			<div  id="tuanFloatLTop">
+				<p id="tuanInfoMsg"><span>今日团购：</span>50元，抢购原价598元的丹尼熊复古单肩挎包；小细节的重工运用，匠心独到的做工赋予迷彩格调以更多的潮流元素，多材质的混合，奢靡中不失朴实，纷繁中不失平衡，一半的复古，一半的浪漫，唯美与奢华在设计师缤纷的构想中跃然绽放在这里。</p>
+				<div id="tuanBroadBox">
+					<!--价格牌box-->
+					<div id="tuanBroadLeft">
+						<h3>169.00</h3>
+						<a href="javascript: void(0)" target="_self" title="立即购买" id="btnBuyNow0"></a>
+						<ul id="priceOff">
+							<li class="moveLiNormal"><p>市场价</p><s>588元</s></li>
+							<li class="moveLiNormal"><p>折扣</p><s>1.0折</s></li>
+							<li class="moveLiNormal"><p>节省</p><s>288元</s></li>
+						</ul>
+						<p id="tuanComeDown">
+							<b id="tuanCH">12</b>时<b id="tuanCM">03</b>分<b id="tuanCS">05</b>秒
+						</p>
+						<div class="tuanCountNum">
+							<span>24343人</span><h4>已购买</h4>
+							<p>数量有限，下手要快哦！</p>
+						</div>
+					</div>
+					<!--产品图box-->
+					<div id="tuanBroadRight">
+						<div id="tuanBroadRImgBox">
+							<div id="tuanShadowBox" style="display:none;">
+								<h4 id="tuanShadowTitle">请选择您想购买的商品尺寸和颜色<a href="javascript: void(0)" id="closeShadowBox" title="关闭弹层"></a></h4>
+								<!--<div id="tuanShadowContent">
+									<div class="tuanShadowCon"><h5>颜色：</h5>
+										<ul id="tuanChoseColor" class="ulSelect">
+											<li class="checked">黑灰色</li>
+											<li>黑灰色</li>
+											<li class="offChecked">黑色</li>
+										</ul>
+									</div>
+									<div class="tuanShadowCon"><h5>尺码：</h5>
+										<ul id="tuanChoseSize" class="ulSelect">
+											<li class="checked">s</li>
+											<li>xl</li>
+											<li>xxl</li>
+											<li>xs</li>
+											<li>xxs</li>
+											<li>xxxxl</li>
+											<li>xxxs</li>
+											<li>xxl</li>
+											<li class="offChecked">xxxl</li>
+										</ul>
+									</div>
+									<div class="tuanShadowCon"><h5>数量：</h5>
+										<div id="tuanChoseNum">
+											<span id="subNum" class="unSub"></span>
+											<s id="textNum">1</s>
+											<span id="addNum" class="numAdd"></span>
+										</div>
+									</div>
+									<p id="btnBuyNow3"></p>
+								</div>-->
+								<div class="y_block">
+									<input type="hidden" value="" name="sub_id">
+									<dl>
+										<dt>颜色 ：</dt>
+						            	<dd class="color">
+											<span id="color_6" onclick="click_color(6)" class="sel">
+												<img width="20" height="20" title="绿" src="http://image5.baobeigou.com/gallery//000/055/791-6_40x40_3.jpg">
+												<s></s>
+											</span>
+										</dd>
+						            </dl>
+									<dl>
+										<dt>尺码 ：</dt>
+						                <dd class="size">
+						                	<a onclick="click_size(38)" id="size_38" href="javascript:void(0)">150<s></s></a><a onclick="click_size(37)" id="size_37" href="javascript:void(0)">140<s></s></a><a onclick="click_size(6)" id="size_6" href="javascript:void(0)">130<s></s></a><a onclick="click_size(5)" id="size_5" href="javascript:void(0)">120<s></s></a><a onclick="click_size(4)" id="size_4" href="javascript:void(0)">110<s></s></a>
+						                </dd>
+									    
+						            </dl>
+									<dl>
+										<dt>数量 ：</dt>
+						                <!--判断显示文字-->
+						                <!--<dd class="number">请先选择尺码</dd>-->
+						                <dd class="number"><a class="down">-</a><input type="text" disabled="disabled" value="1" id="num" name="num"><a class="up">+</a>&nbsp;</dd>
+						            </dl>
+									
+										<p id="btnBuyNow3"></p>
+										
+									
+									<!--<p class="topNotice l">
+										<span>发货时间：当天16:00点前下单并完成支付于当日发货。</span>
+									</p>-->
+									<p class="mianyun"></p>
+								</div>
+							</div>
+							<img src="img/temp/tuanGoods.jpg" width="500px" height="450px" alt="" />
+						</div>
+						<div id="tuanBroadRIcon">
+							<a id="tuanIconFav" target="_self" href="">我收藏<span>(5138)</span></a>
+							
+							<!--分享到**开始-->
+						    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=708902181" type="text/javascript" charset="utf-8"></script>
+						    <div id="shareFriend" style="height:25px; float:right;">  
+						        <p style="width:auto; float:left; font-size:12px; margin:0; padding:0; height:16px; line-height:16px;">|&nbsp;&nbsp;&nbsp;&nbsp;分享到：</p>
+						        <!--分享到微博-->
+						        <div class="shareFriends" style="float:left!important; width:16px; height:16px; margin-right:10px;">
+						            <wb:share-button count="n" appkey="708902181" ></wb:share-button>
+						        </div>
+						        <!--分享到qq好友和群-->
+						        <div class="shareFriends" style="float:left!important; width:16px; height:16px; margin-right:10px;">
+						            <script type="text/javascript">
+						                (function(){
+						                    var p = {
+						                    url:location.href,
+						                    showcount:'0',/*是否显示分享总数,显示：'1'，不显示：'0' */
+						                    desc:'',/*默认分享理由(可选)*/
+						                    summary:'',/*分享摘要(可选)*/
+						                    title:'',/*分享标题(可选)*/
+						                    site:'',/*分享来源 如：腾讯网(可选)*/
+						                    pics:'', /*分享图片的路径(可选)*/
+						                    style:'203',
+						                    width:22,
+						                    height:22
+						                    };
+						                    var s = [];
+						                    for(var i in p){
+						                    s.push(i + '=' + encodeURIComponent(p[i]||''));
+						                    }
+						                    document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
+						                })();
+						            </script>
+						            <script src="http://qzonestyle.gtimg.cn/qzone/app/qzlike/qzopensl.js#jsdate=20111201" charset="utf-8"></script>
+						            <script src="http://connect.qq.com/widget/loader/loader.js" widget="shareqq" charset="utf-8"></script>
+						        </div>
+						        <!--分享腾讯微博-->
+						        <div class="shareFriends" style="float:left; width:16px; height:16px; margin-right:10px;">
+						            <div id="qqwb_share__" data-appkey="801358475" data-icon="2" data-counter="0" data-content="{title}" data-richcontent="{line1}|{line2}|{line3}" data-pic="{pic}"></div>
+						        </div>
+						        
+						        
+						    </div>
+						    <!--分享微博JS-->
+						    <script src="http://mat1.gtimg.com/app/openjs/openjs.js#autoboot=no&debug=no"></script>
+						    <!--分享到**结束-->
+						</div>
+					</div>
+				</div>
+				<div id="tuanBuyNote">
+					<p>
+					支付方式：支持在线支付;配送时间：购买成功后4个工作日内发货，7-10个工作日送达;售后保障：如需退换货，请联系商家，详情请见物流售后保障;配送费用：本单包邮，配送范围内无需再额外支付邮费
+					</p>
+				</div>
+				
+			</div>
+			<!--编辑器-->
+			<div class="htmlEditorBox">HTML编辑框</div>
+			<!--商品评论信息故事-->
+			<div id="tuanTabBox">
+				<div id="tuanTabTop">
+					<ul id="ulTuanTab">
+						<li class="onTabShow">商品信息</li>
+						<li>商品评论</li>
+						<li>品牌故事</li>
+					</ul>
+				</div>
+				<div id="tuanTabCon">
+					<!--商品详情-->
+					<div id="tuanTabCon1" class="pro_main_block" style="display: block;">
+						<!--优惠信息-->
+						<div class="youhui" id="youhui">
+							<div style="text-align:right" class="c99">(优惠方式在购物袋中选择)</div>
+							<div class="youhui_top">
+							<p class="youhui_table">优惠信息：</p>
+							</div>
+							<ul class="youhui_m">
+											<li>1.全场购物满99元即送“超级玛丽”精美拼装玩具</li>				</ul>
+						</div>
+						<!--产品描述-->
+						<div class="pro_main_block_b">
+							<h3 class="b">产品描述</h3>
+							<div style="border-bottom:1px dotted #d9d9d9" class="pro_main_block_c">
+										</div>
+						</div>
+						<!--产品属性-->
+						<div class="pro_main_block_b">
+							<h3 class="b">产品属性</h3>
+							<div class="pro_main_block_c">
+							<table class="desc_table">
+													<tbody><tr>
+									<td class="tdleft">商品名称</td>
+									<td class="tdright">卡西龙 / 运动凉鞋</td>
+									</tr>
+													<tr>
+									<td class="tdleft">成分</td>
+									<td class="tdright">人造皮革/MD</td>
+									</tr>
+													<tr>
+									<td class="tdleft">尺寸规格</td>
+									<td class="tdright">26</td>
+									</tr>
+											</tbody></table>
+							</div>
+						</div>
+						<!--尺码图-->
+						<div class="pro_main_block_b">
+							<div class="attr_title">
+								<div class="goods_size"></div>
+								<span>卡西龙</span>
+							</div>
+							<div class="pro_main_block_c">
+								<img src="http://image3.baobeigou.com/product_size_images/582fe00860ae13e754ce50b5477e0a5c.jpg">
+							</div>
+						</div>
+						<!--平铺图-->
+						<div class="pro_main_block_b">
+							<div class="attr_title">
+								<div class="tile_show"></div>
+								<span>卡西龙</span>
+							</div>
+							<div class="pro_main_block_c pro_main_block_c_img">
+								<img width="760" height="760" src="http://image1.baobeigou.com/gallery//000/040/810-13_760x760_7.jpg">
+								<img width="760" height="760" src="http://image4.baobeigou.com/gallery//000/040/810-13_760x760_2.jpg">
+								<img width="760" height="760" src="http://image5.baobeigou.com/gallery//000/040/810-13_760x760_5.jpg">
+								<img width="760" height="760" src="http://image1.baobeigou.com/gallery//000/040/810-13_760x760_1.jpg">
+								<img width="760" height="760" src="http://image3.baobeigou.com/gallery//000/040/810-13_760x760_4.jpg">
+								<img width="760" height="760" src="http://image5.baobeigou.com/gallery//000/040/810-13_760x760_6.jpg">
+							</div>
+						</div>
+						<!--细节图-->
+						<div class="pointOut">
+							<p>1. 关于色差: 宝贝购的商品全部采用专业影棚拍摄，已尽量减少色差，由于每个人的显示器不同，仍然存在一部分色差，希望各位会员能够理解。</p>
+							<p>2. 关于商品: 宝贝购商品的市场价均采集自商场门店专柜价，品牌官网标价或由品牌供应商提供。由于地区差异性或时间差异性可能导致宝贝购供您参考的市场价与您购物时的市场价不一致，温馨提醒您，宝贝购标注的市场价仅供您参考，不作为购物依据，请您知悉。</p>
+						</div>
+					</div>
+					<!--商品评论-->
+					<div id="tuanTabCon2" class="pro_main_block" style="display:none;">
+
+						<div class="comment_rule">
+							<p>
+							1. 每次点评可获得<strong class="red">20</strong>积分；<br>
+							2. 只有购买过该商品的用户才能点评；<br>
+							3. 第一个点评的用户，将获得<strong class="red">40</strong>积分，详情请见<a target="_blank" href="/help-4.html">积分规则</a>；<br>
+							4. 评论请查看宝贝购<a target="_blank" href="/help-4.html">点评规则</a>；
+							</p>
+							<a onclick="load_dianping_panel('40820');" id="pinglun_show_box_btn" title="点评拿积分" class="getfen" href="javascript:void(0)"></a>
+						</div>
+						<div style="background-image:none" class="myAdeMsgBox" id="dianping_div">
+							暂时没有针对此商品的点评。
+						</div>
+					</div>
+					<!--品牌故事-->
+					<div id="tuanTabCon3" class="pro_main_block" style="display:none;">
+						<p>暂无品牌故事。 </p>
+					</div>
+				</div>
+			</div>
+			<!--编辑器-->
+			<div class="htmlEditorBox">HTML编辑框</div>
+			<!--品质保障图标载入-->
+			<div id="iconLoadTab">
+				<ul id="iconUlTab">
+					<li><a href="javascript:void(0)" target="_self" id="iconQA" title="品质保障"></a></li>
+					<li><a href="javascript:void(0)" target="_self" id="icon7Day" title="7天退换"></a></li>
+					<li><a href="javascript:void(0)" target="_self" id="iconWms" title="精细仓储"></a></li>
+					<li><a href="javascript:void(0)" target="_self" id="iconCam" title="精心实拍"></a></li>
+					<li><a href="javascript:void(0)" target="_self" id="iconSent" title="快速发货"></a></li>
+					<li><a href="javascript:void(0)" target="_self" id="iconPackage" title="贴心包装"></a></li>
+					<li><a href="javascript:void(0)" target="_self" id="iconServ" title="温情客服"></a></li>
+					<li><a href="javascript:void(0)" target="_self" id="iconPart" title="合作伙伴"></a></li>
+					
+				</ul>
+				<div id="loadContentBox">
+
+				</div>
+			</div>
+		</div>
+		<!--右边部分-->
+		<div id="tuanFloatR">
+			<div class="adTraceBox"></div>
+
+			<div id="tuanListRightBox">
+				<h3>您可能感兴趣的团购</h3>
+				<ul id="tuanUlList">
+					<li>
+						<a class="tuanLiTitle main_black" title="" target="_self" href="#">【都市潮流拼色超大】单肩包都市潮超大单肩包流拼...</a>
+						<a href="" target="_self" title=""><img src="img/temp/tuanRight.fw.png" width="168px" height="110px" alt="" /></a>
+						<div class="tuanBroadBuyBox">
+							<h5><span>￥</span>169.00</h5>
+							<s>￥139.00</s>
+							<a href="#" class="btnBuyNow2" title="立即购买"></a>
+							<p>1525<b>人已团购</b></p>
+						</div>
+					</li>
+					<li>
+						<a class="tuanLiTitle main_black" title="" target="_self" href="#">【都市潮流拼色超大】单肩包都市潮超大单肩包流拼...</a>
+						<a href="" target="_self" title=""><img src="img/temp/tuanRight.fw.png" width="168px" height="110px" alt="" /></a>
+						<div class="tuanBroadBuyBox">
+							<h5><span>￥</span>169.00</h5>
+							<s>￥139.00</s>
+							<a href="#" class="btnBuyNow2" title="立即购买"></a>
+							<p>1525<b>人已团购</b></p>
+						</div>
+					</li>
+					<li>
+						<a class="tuanLiTitle main_black" title="" target="_self" href="#">【都市潮流拼色超大】单肩包都市潮超大单肩包流拼...</a>
+						<a href="" target="_self" title=""><img src="img/temp/tuanRight.fw.png" width="168px" height="110px" alt="" /></a>
+						<div class="tuanBroadBuyBox">
+							<h5><span>￥</span>169.00</h5>
+							<s>￥139.00</s>
+							<a href="#" class="btnBuyNow2" title="立即购买"></a>
+							<p>1525<b>人已团购</b></p>
+						</div>
+					</li>
+					<li>
+						<a class="tuanLiTitle main_black" title="" target="_self" href="#">【都市潮流拼色超大】单肩包都市潮超大单肩包流拼...</a>
+						<a href="" target="_self" title=""><img src="img/temp/tuanRight.fw.png" width="168px" height="110px" alt="" /></a>
+						<div class="tuanBroadBuyBox">
+							<h5><span>￥</span>169.00</h5>
+							<s>￥139.00</s>
+							<a href="#" class="btnBuyNow2" title="立即购买"></a>
+							<p>1525<b>人已团购</b></p>
+						</div>
+					</li>
+					<li>
+						<a class="tuanLiTitle main_black" title="" target="_self" href="#">【都市潮流拼色超大】单肩包都市潮超大单肩包流拼...</a>
+						<a href="" target="_self" title=""><img src="img/temp/tuanRight.fw.png" width="168px" height="110px" alt="" /></a>
+						<div class="tuanBroadBuyBox">
+							<h5><span>￥</span>169.00</h5>
+							<s>￥139.00</s>
+							<a href="#" class="btnBuyNow2" title="立即购买"></a>
+							<p>1525<b>人已团购</b></p>
+						</div>
+					</li>
+				</ul>
+				<div class="ad2GoodBox"></div>
+				<div class="ad2GoodBox"></div>
+			</div>
+
+		</div>
+		<!--右边结束-->
+	</div>
+
+
+
+<script type="text/javascript" src="js/tuanDetail.js"></script>
+</body>
+</html>
