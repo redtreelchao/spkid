@@ -1,0 +1,33 @@
+<script type="text/javascript">
+	var editor; 
+	KindEditor.ready(function(K) {
+		editor1 = K.create('textarea[name="goodsDesc"]', {
+			cssPath : '/editor/plugins/code/prettify.css',
+			uploadJson : '/editor/upload.htm',
+			fileManagerJson : '/editor/show.htm',
+			allowFileManager : true,
+			afterCreate : function() {
+				var self = this;
+				self.sync();
+			}
+		});
+		prettyPrint();
+	});
+</script>
+	
+##商品详情描述
+<table id="allDatas" width="90%" align="center" cellpadding="0" cellspacing="0" style="display:none;" class="config_tab">
+	<tbody id="tbody">
+    	<tr>
+			<td align="center">
+            	温馨提示：自定义区域宽度不超过760像素。
+				<textarea name="goodsDesc" cols="100" rows="8" style="width:1100px;height:500px;visibility:hidden;">$!goods.goodsDesc</textarea>
+			</td>
+		</tr>
+    </tbody>
+</table>
+<div id="option_desc" style="text-align:center; padding:5px 0;display:none;">
+	#if ($stringUtil.isEmpty($goods.tpdGoodsStatus) || $goods.tpdGoodsStatus != '0')
+	<input type="button" value=" 保存 " class="button" onClick="doSave('processForm')">
+	#end
+</div>

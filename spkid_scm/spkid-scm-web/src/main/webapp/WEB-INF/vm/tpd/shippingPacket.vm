@@ -1,0 +1,94 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>订单查询</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/jquery.form.pack.js"></script>
+<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/page.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">订单查询</span>
+	</div>
+	
+	<div class="clear"></div>
+	
+	<div id="searchPanel" class="search_row dark_blue">
+		<form id="searchForm" action="/shippingpacket/list/query.htm" method="post" style="margin: 0;">
+			<input type="hidden" id="pageSize" name="pageSize" value="$!page.pageSize" />
+			<input type="hidden" id="pageNo" name="pageNo" value="$!page.pageNo" />
+			<input type="hidden" id="order" name="order" value="$!page.order" />
+			<input type="hidden" id="orderBy" name="orderBy" value="$!page.orderBy" />
+			
+			<div class="search_row_element">
+			订单号：<input type="text" class="inputBorder enterQuery" name="orderSn" style="width:150px;" />
+			&nbsp;&nbsp;
+            </div>
+			<div class="search_row_element">
+			运单号：<input type="text" class="inputBorder enterQuery" name="packetSn" style="width:150px;" />
+			&nbsp;&nbsp;
+            </div>
+			<div class="search_row_element">
+			订单审核时间：
+				<input type="text" class="inputBorder Wdate" name="dateBegin" id="dateBegin" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'dateEnd\')}'})" style="width:100px;" /> ~ 
+				<input type="text" class="inputBorder Wdate" name="dateEnd" id="dateEnd" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'dateBegin\')}'})" style="width:100px;" /> 
+			&nbsp;&nbsp;
+            </div>
+			<div class="search_row_element">
+			供应商货号：<input type="text" class="inputBorder enterQuery" name="providerGoods" />
+			&nbsp;&nbsp;
+            </div>
+			<div class="search_row_element">
+			收货人：<input type="text" class="inputBorder enterQuery" name="consignee" />
+			&nbsp;&nbsp;
+            </div>
+			<div class="search_row_element">
+			手机号码：<input type="text" class="inputBorder enterQuery" name="mobile" />
+			&nbsp;&nbsp;
+            </div>
+			<div class="search_row_element">
+			发货状态：#dictSelect("ShippingPacket.status" "status" "" false true)
+			&nbsp;&nbsp;
+            </div>
+			<div class="search_row_element">
+    			<input type="button" class="button" value="搜索" onclick="submitSearch();">&nbsp;&nbsp;
+    			<input type="button" class="button" value="导出订单" onclick="submitExportOrder();" />&nbsp;&nbsp;
+    			<input type="button" class="button" value="导出订单(单行)" onclick="submitExportAll();" />&nbsp;&nbsp;
+    			<input type="button" class="button" value="导出商品" onclick="submitExportGoods();" />
+            </div>
+		</form>
+	</div>
+	<div class="clear"></div>
+	<div id="contentPanel"></div>
+</div>
+
+#pageScript(20)
+
+<script type="text/javascript">
+function submitExportOrder() {
+	TB_showMaskLayer("正在导出...", 1000);
+	$("#searchForm").attr("action", "/shippingpacket/export/order.htm");
+	$("#searchForm").submit();
+	$("#searchForm").attr("action", "/shippingpacket/list/query.htm");
+}
+function submitExportAll() {
+	TB_showMaskLayer("正在导出...", 1000);
+	$("#searchForm").attr("action", "/shippingpacket/export/order/format.htm");
+	$("#searchForm").submit();
+	$("#searchForm").attr("action", "/shippingpacket/list/query.htm");
+}
+function submitExportGoods() {
+	TB_showMaskLayer("正在导出...", 1000);
+	$("#searchForm").attr("action", "/shippingpacket/export/goods.htm");
+	$("#searchForm").submit();
+	$("#searchForm").attr("action", "/shippingpacket/list/query.htm");
+}
+</script>
+</body>
+</html>

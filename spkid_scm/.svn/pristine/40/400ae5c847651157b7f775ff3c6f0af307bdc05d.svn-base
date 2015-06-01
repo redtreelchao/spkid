@@ -1,0 +1,63 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<title></title>
+<style type="text/css">
+*{font-family:Tahoma, SimSun, Arial,'宋体';font-size:12px;font-weight:400;}
+table.listTable {
+	width: 100%;
+	border: 1px solid #80BDCB;
+	border-collapse: collapse;
+}
+table.listTable tr {
+	height: 30px;
+}
+table.listTable .td_title {
+	text-align: center;
+	font-weight: bold;
+}
+table.listTable td {
+	word-wrap: break-word;
+	padding: 0 5px ;
+	margin:0;
+	color: #000;
+	border: 1px solid #80BDCB;
+}
+table.listTable th {
+	background-color: #BBDDE5;
+	word-wrap: break-word;
+	padding: 0 5px ;
+	margin:0;
+	color: #000;
+	font-weight:bold;
+	border: 1px solid #80BDCB;
+	text-align: left;
+}
+</style>
+</head>
+<body>
+	<div style="width:600px;  padding:10px;">
+    <table class="listTable" cellspacing="0" cellpadding="0">
+		<tr>
+            <th colspan="4">操作时间: $!date &nbsp;&nbsp;&nbsp;&nbsp; 结果：$!result.msg</th>
+        </tr>
+        <tr>
+            <td width="20" class="td_title"></td>
+            <td width="80" class="td_title">商品款号</td>
+            <td width="80" class="td_title">颜色编码</td>
+            <td class="td_title">错误信息</td>
+        </tr>
+		#set($i=1)
+		#foreach($msg in $content)
+        <tr>
+            <td align="center">$i</td>
+            <td align="center">$!msg.goodsSn</td>
+            <td align="center">$!msg.colorCode</td>
+            <td>$!msg.message</td>
+        </tr>
+		#set($i=$i+1)
+		#end
+    </table>
+    </div>
+</body>
+</html>

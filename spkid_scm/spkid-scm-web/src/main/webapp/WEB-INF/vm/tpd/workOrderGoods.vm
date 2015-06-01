@@ -1,0 +1,22 @@
+<div id="workOrderGoodsDiv">
+	<table id="workOrderGoodsTb" class="contentTable" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<th align="center">商品款号</th>
+				<th align="center">商品名称</th>
+				<th align="center">品牌名称</th>
+				<th align="center">商品货号</th>
+				<th align="center">供应商编码</th>
+			</tr>
+			#foreach( $info in $list) 
+			<tr class="mainTr" onclick="selectProvider($!info.providerId, '$!info.providerCode');">
+				<td align="center"> $!info.goodsSn </td>
+				<td align="center"> $!info.goodsName </td>
+				<td align="center"> $!info.brandName </td>
+				<td align="center"> $!info.providerGoods </td>
+				<td align="center"> $!info.providerCode </td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>

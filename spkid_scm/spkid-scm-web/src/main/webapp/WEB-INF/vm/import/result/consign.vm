@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <meta content="text/html; charset=gbk">
+            <style type="text/css">
+                *{font-family:Tahoma, SimSun, Arial,'宋体';font-size:12px;font-weight:400;}
+                table.listTable {
+                width: 100%;
+                border: 1px solid #80BDCB;
+                border-collapse: collapse;
+                }
+                table.listTable tr {
+                height: 30px;
+                }
+                table.listTable .td_title {
+                text-align: center;
+                font-weight: bold;
+                }
+                table.listTable td {
+                word-wrap: break-word;
+                padding: 0 5px ;
+                margin:0;
+                color: #000;
+                border: 1px solid #80BDCB;
+                }
+                table.listTable th {
+                background-color: #BBDDE5;
+                word-wrap: break-word;
+                padding: 0 5px ;
+                margin:0;
+                color: #000;
+                font-weight:bold;
+                border: 1px solid #80BDCB;
+                text-align: left;
+                }
+            </style>
+</head>
+<body>
+    <div style="width:98%;  padding:10px;">
+        <table class="listTable" cellspacing="0" cellpadding="0">
+            <tr>
+                <th colspan="6">操作时间: $!date &nbsp;&nbsp;&nbsp;&nbsp; 结果：$!result.msg</th>
+            </tr>
+            <tr>
+                <th>商品款号</th>
+				<th>颜色名称</th>
+                <th>尺寸名称</th>
+				<th>虚库库存</th>
+                <th>错误信息</th>
+            </tr>
+            #foreach($g in $content)
+                <tr>
+                    <td>$g.goodsSn</td>
+                    <td>$!g.colorName</td>
+                    <td>$!g.sizeName</td>
+					<td>$!g.consignNum</td>
+                    <td><pre>$!g.error.toString()</pre></td>
+                </tr>
+            #end
+        </table>
+    </div>
+</body>
+</html>

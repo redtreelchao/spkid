@@ -1,0 +1,651 @@
+#macro(page)
+<div id="pageDiv" class="list_b">
+	<div class="left">
+		第
+		<span class="bold red">$page.pageNo</span>
+		页，共
+		<span class="bold red" id="totalPages">$page.totalPages</span>
+		页，
+		<span class="bold red">$page.totalCount</span>
+		条，
+		每页显示
+		<select id="selePageSize" onchange="changePageSize();">
+			<option value="10" #if($page.pageSize==10) selected #end >10</option>
+			<option value="20" #if($page.pageSize==20) selected #end >20</option>
+			<option value="30" #if($page.pageSize==30) selected #end >30</option>
+			<option value="50" #if($page.pageSize==50) selected #end >50</option>
+			<option value="100" #if($page.pageSize==100) selected #end >100</option>
+			<option value="500" #if($page.pageSize==500) selected #end >500</option>
+		</select>
+	</div>
+	<div class="right list_bottom list_b">
+    	<a #if(!$page.hasPre) class="gray" #else href="javascript:jumpPage(1)" #end >首页</a>
+		<a #if(!$page.hasPre) class="gray" #else href="javascript:jumpPage($page.prePage)" #end >上一页</a>
+        <a #if(!$page.hasNext) class="gray" #else href="javascript:jumpPage($page.nextPage)" #end >下一页</a>
+		<a #if(!$page.hasNext) class="gray" #else href="javascript:jumpPage($page.totalPages)" #end >尾页</a>
+        <input type="text" class="input" id="pageTo" style="width:30px;">
+    	<a href="javascript:jumpPageTo()" class="button">GO</a>
+	</div>
+</div>
+<div class="clear"></div>
+#end
+#macro(pageScript $pageSize)
+<script type="text/javascript">
+function submitSearch() {
+	$("#pageNo").val("1");
+	if($("#selePageSize").val()) {
+    	$("#pageSize").val($("#selePageSize").val());
+	}
+	TB_showMaskLayer("正在查询...");
+	$("#searchForm").ajaxSubmit(function(result) {
+		$("#contentPanel").html(result); 
+		TB_removeMaskLayer();
+	});
+}
+$(function() {
+    $(".enterQuery").bind('keydown', function(event){
+    	if(event.keyCode==13){
+    		submitSearch();
+    	}
+    });
+    $("#pageSize").val($pageSize);
+    submitSearch();
+});
+</script>
+#end
+
+#macro(brandAutoComplete)
+<input type="hidden" id="brandId" name="brandId" class="autocomplete"/>
+<input type="text" validate="required" class="inputBorder" id="brandName" name="brandName" style="width:150px;" />
+<script type="text/javascript">
+$(function(){
+    $('#brandName').autocomplete({ 
+    	serviceUrl:'/commons/brand/autoComplete.htm'
+    });
+});
+</script>
+#end
+#macro(brandAuto $id $name)
+<input type="hidden" id="$id" name="$id" class="autocomplete"/>
+<input type="text" class="inputBorder" id="$name" name="$name" style="width:150px;" />
+<script type="text/javascript">
+$(function(){
+    $('#$name').autocomplete({ 
+    	serviceUrl:'/commons/brand/autoComplete.htm'
+    });
+});
+</script>
+#end
+#macro(brandAutoEdit $val)
+<input type="hidden" id="brandId" name="brandId" #if($val)value="$val"#end class="autocomplete"/>
+<input type="text" class="inputBorder" id="brandName" name="brandName" #if($val) value="$!commonComponent.getBrandName($val)" #end />
+<script type="text/javascript">
+$(function(){
+    $('#brandName').autocomplete({ 
+    	serviceUrl:'/commons/brand/autoComplete.htm'
+    });
+});
+</script>
+#end
+
+#macro(batchNoAutoComplete $bringBrand $callback)
+<input type="text" validate="required" class="inputBorder" id="batchNo" name="batchNo" style="width:150px;" />
+<script type="text/javascript">
+$(function(){
+    $('#batchNo').autocomplete({ 
+    	serviceUrl:'/commons/batch/batchNo/autoComplete.htm',
+		onSelect: function(value, data){
+			#if(${bringBrand} == true)
+			if($('#brandId')) {
+				$('#brandId').val(data.brandId);
+			}
+			if($('#brandName')) {
+				$('#brandName').val(data.brandName);
+			}
+			//if($('#planReturnDate')) {
+			//	$('#planReturnDate').val(data.planReturnTime);
+			//}
+			#end
+			#if(${callback} != '') 
+			${callback}();
+			#end
+		}
+    });
+});
+</script>
+#end
+
+## 品牌运营品牌组件
+#macro(batchBrandAuto $validate $bringProvider $bringBatchNo $val)
+<input type="hidden" id="brandId" name="brandId" #if($val)value="$val"#end class="autocomplete"/>
+<input type="text" #if($validate)validate="$validate"#end class="inputBorder enterQuery" id="brandName" name="brandName" #if($val) value="$!commonComponent.getBrandName($val)" #end style="min-width:120px;" />
+<script type="text/javascript">
+$(function(){
+    $('#brandName').autocomplete({ 
+    	serviceUrl:'/commons/brand/autoComplete.htm',
+		maxHeight:350,
+		onSelect: function(value, data){
+			//if($('#brandId')) {
+			//	$('#brandId').val(data.brandId);
+			//}
+			#if(${bringProvider})
+				var providerSelect = $("#providerId");
+            	providerSelect.empty();
+            	providerSelect.append('<option value="0">请选择...</option>');
+    			var url = '/commons/provider/getProvidersByBrand.htm';
+    			$ .post(url, {brandId:data}, function(result) {
+					if(result == '') {
+						return;
+					}
+            		$ .each(result, function(i,n) {
+        				var option = '<option value="'+i+'">'+n+'</option>';
+        				providerSelect.append(option);
+            		});
+    			});
+			#end
+			#if(${bringBatchNo})
+				var batchNoSelect = $("#batchNo");
+            	batchNoSelect.empty();
+            	batchNoSelect.append('<option value="">请选择...</option>');
+    			var url = '/commons/batch/getBatchNoByBrand.htm';
+    			$ .post(url, {brandId:data}, function(result) {
+					if(result == '') {
+						return;
+					}
+            		$ .each(result, function(i,n) {
+        				var option = '<option value="'+n+'">'+n+'</option>';
+        				batchNoSelect.append(option);
+            		});
+    			});
+			#end
+		}
+    });
+});
+</script>
+#end
+
+##供应商
+#macro(providerAutoComplete $validate $val $callback)
+<input type="hidden" id="providerId" name="providerId" #if($val)value="$val"#end class="autocomplete"/>
+<input type="text" #if($validate)validate="$validate"#end class="inputBorder enterQuery" id="providerCode" name="providerCode" #if($val) value="$!goodsComponentHelper.getProviderById($val).providerCode" #end style="width: 120px;" />
+<script type="text/javascript">
+$(function(){
+    $('#providerCode').autocomplete({ 
+    	serviceUrl:'/commons/provider/autoComplete.htm',
+		onSelect: function(value, data){
+			#if(${callback})
+			${callback}();
+			#end
+		}
+    });
+});
+</script>
+#end
+
+##商品分类选项框,公共组件##
+#macro(goodsCategorySelect $id $name)
+<select #if($id)id="$!id"#else id="catId" #end #if($name)name="$!name"#else name="catId"#end>
+	 <option value="-1">后台分类</option>
+	 #foreach($item in $goodsComponentHelper.getGoodsAllCategory())
+		<option value ="$item.catId">$item.catName</option>
+		#foreach($info in $item.getSubCategoryList())
+			<option value ="$info.catId">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$info.catName</option>
+		#end
+	 #end
+</select>
+#end
+
+##商品分类选项框,公共组件##
+#macro(goodsCategorySelecter $name)
+<div class="search_row_select">
+	<div class="searchRowSelectT">后台分类</div>
+	<input type="hidden" id="catId" value="-1" #if($name)name="$!name"#else name="catId"#end />
+	<div class="searchRowSelectC">
+		 #foreach($item in $goodsComponentHelper.getGoodsAllCategory())
+		<div class="SRSub">
+			<div class="SRSubTitle" value="$item.catId">$item.catName</div>
+			<div class="SRSubArrow"></div>
+			<div class="SRSubMain">
+				<div class="SRSubInfo">
+					#foreach($info in $item.getSubCategoryList())
+					<a value="$info.catId">$info.catName</a>
+					#end
+				</div>
+			</div>
+		</div>
+		 #end
+	</div>
+</div>
+#end
+##商品分类选项框,回显##
+#macro(goodsCategoryEdit $name $val)
+<select id="$name" name="$name" class="inputBorder">
+	 <option value="-1">后台分类</option>
+	 #foreach($item in $goodsComponentHelper.getGoodsAllCategory())
+		<option value ="$item.catId" #if($item.catId == $val) selected #end>$item.catName</option>
+		#foreach($info in $item.getSubCategoryList())
+			<option value ="$info.catId" #if($info.catId == $val) selected #end>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$info.catName</option>
+		#end
+	 #end
+</select>
+#end
+##商品二级分类选项框,公共组件##
+#macro(goodsSubCategorySelect $id $name )
+	#goodsSubCategorySelect($id,$name,'-1','后台分类')
+#end
+
+#macro(goodsSubCategorySelect $id $name $defVal $defName)
+<select #if($id)id="$!id"#else id="catId" #end #if($name)name="$!name"#else name="catId"#end>
+	 <option value="$defVal">$defName</option>
+	 #foreach($item in $goodsComponentHelper.getGoodsSubCategory())
+		<option value ="$item.catId">$item.catName</option>
+	 #end
+</select>
+#end
+##商品季节选项框,公共组件##
+#macro(goodsSeasonSelect $id $name)
+<select #if($id)id="$!id"#else id="seasonId" #end #if($name)name="$!name"#else name="seasonId"#end>
+	 <option value="-1">商品季节</option>
+	 #foreach($item in $goodsComponentHelper.getGoodsSeasonList())
+		<option value ="$item.seasonId">$item.seasonName</option>
+	 #end
+</select>
+#end
+##性别选项框,公共组件##
+#macro(sexSelect $id $name)
+<select #if($id)id="$!id"#else id="sexId" #end #if($name)name="$!name"#else name="sexId"#end>
+	 <option value="">性别</option>
+	 #set($sexMap=$goodsComponentHelper.getSexMap())
+	 #foreach($item in $sexMap.keySet())
+		#set($val=$sexMap.get($item))
+		<option value ="$item">$val</option>
+	 #end
+</select>
+#end
+##显示性别
+#macro(sexShow $key)
+	$!goodsComponentHelper.getSexMap().get($!key)
+#end
+##显示是否
+#macro(showTF $val)
+	#if($val) 是 #else 否 #end
+#end
+##单选是否
+#macro(radioTF $name $val)
+<label><input type="radio" name="$name" value="1" #if( $val==1 or $val==true ) checked="checked" #end >
+是</label>
+<label><input type="radio" name="$name" value="0" #if( $val==0 or $val==false ) checked="checked" #end >
+否</label>
+#end
+##单选是否
+#macro(selectTF $name $val)
+<select id="$name" name="$name" style="width: 120px;">
+	<option value="1" #if( $val==1 ) selected #end>是</option>
+	<option value="0" #if( $val==0 ) selected #end>否</option>
+</select>
+#end
+##商品前台三级分类-第三级
+#macro(goodsThreeTypeSelect $id $name)
+<select #if($id)id="$!id"#else id="pagecatId" #end #if($name)name="$!name"#else name="pagecatId"#end>
+	<option value="0">请选择...</option>
+	#foreach($item in $goodsComponentHelper.getAllLevelThreeTypes())
+		<option value="$item.typeId">$item.typeName</option>
+	#end
+</select>
+#end
+##商品前台三级分类-第三级
+#macro(levelOneTypeSelect $id $name)
+<select id="$!id" name="$!name">
+	<option value="0">---请选择---</option>
+	#foreach($item in $goodsComponentHelper.getLevelOneTypes())
+		<option value="$item.typeId">$item.typeName</option>
+	#end
+</select>
+#end
+##商品样式
+#macro(stypeSelect $id $name)
+<select #if($id)id="$!id"#else id="stypeId" #end #if($name)name="$!name"#else name="stypeId"#end>
+	<option value="0">请选择...</option>
+	#foreach($item in $goodsComponentHelper.getGoodsStyleList())
+		<option value="$item.styleId">$item.styleName</option>
+	#end
+</select>
+#end
+##合作方式
+#macro(cooperationSelect $id $name)
+<select #if($id)id="$!id"#else id="cooperationId" #end #if($name)name="$!name"#else name="cooperationId"#end>
+	<option value="0">请选择...</option>
+	#foreach($item in $goodsComponentHelper.getAllCooperationList())
+		<option value="$item.coopId">$item.coopName</option>
+	#end
+</select>
+#end
+##计量单位
+#macro(unitSelect $id $name)
+<select #if($id)id="$!id"#else id="unitId" #end #if($name)name="$!name"#else name="unitId"#end>
+	<option value="0">请选择...</option>
+	#foreach($item in $goodsComponentHelper.getAllUnitList())
+		<option value="$item.unitId">$item.unitName</option>
+	#end
+</select>
+#end
+
+##供应商
+#macro(providerSelect $id $name)
+<select #if($id)id="$!id"#else id="providerId" #end #if($name)name="$!name"#else name="providerId"#end>
+	<option value="0">请选择...</option>
+	#foreach($item in $goodsComponentHelper.getProviderList())
+		<option value="$item.providerId">$item.providerCode</option>
+	#end
+</select>
+#end
+
+##产地国家
+#macro(areaSelect $id $name)
+<select #if($id)id="$!id"#else id="areaId" #end #if($name)name="$!name"#else name="areaId"#end>
+	<option value="0">请选择...</option>
+	#foreach($item in $goodsComponentHelper.getAllAreaList())
+		<option value="$item.areaId">$item.areaName</option>
+	#end
+</select>
+#end
+
+##商品模特
+#macro(goodsModelSelect $id $name)
+<select #if($id)id="$!id"#else id="modelId" #end #if($name)name="$!name"#else name="modelId"#end>
+	<option value="0">请选择...</option>
+	#foreach($item in $goodsComponentHelper.getAllGoodsModelList())
+		<option value="$item.modelId">$item.modelName</option>
+	#end
+</select>
+#end
+
+##商品尺寸示意图
+#macro(bcsDiagramSelect $id $name)
+<select #if($id)id="$!id"#else id="diagramCode" #end #if($name)name="$!name"#else name="diagramCode"#end>
+	<option value="0">请选择...</option>
+	#foreach($item in $goodsComponentHelper.getAllBcsDiagramList())
+		<option value="$item.diagramCode">$item.diagramName</option>
+	#end
+</select>
+#end
+
+##商品尺寸
+#macro(goodsSizeSelect $id $name)
+<select #if($id)id="$!id"#else id="sizeId" #end #if($name)name="$!name"#else name="sizeId"#end>
+	<option value="0">请选择...</option>
+	#foreach($item in $goodsComponentHelper.geAllSizeList())
+		<option value="$item.sizeId">$item.sizeName</option>
+	#end
+</select>
+#end
+
+##年份选择
+#macro(yearSelect $id $name $start $finish)
+#if($finish)#set($finish=$dateTool.getYear())#end
+<select #if($id)id="$!id"#else id="year" #end #if($name)name="$!name"#else name="year"#end>
+	<option value="0">请选择...</option>
+	#foreach($foo in [$start .. $finish])
+		<option value="$foo">$foo</option>
+	#end
+</select>
+#end
+
+##月份选择
+#macro(monthSelect $id $name)
+<select #if($id)id="$!id"#else id="month" #end #if($name)name="$!name"#else name="month"#end>
+	<option value="0">请选择...</option>
+	#foreach($foo in [1 .. 12])
+		<option value="$foo">$foo</option>
+	#end
+</select>
+#end
+
+##仓库选择
+#macro(depotSelect $id $name)
+<select #if($id)id="$!id"#else id="depotId" #end #if($name)name="$!name"#else name="depotId"#end validate="required">
+	<option value="">请选择...</option>
+	#foreach($item in $goodsComponentHelper.getAllDepotList())
+		<option value="$item.depotId">$item.depotName</option>
+	#end
+</select>
+#end
+
+
+## 可编辑组件
+#macro(click2Expand $val $id $url)
+<div title="双击编辑" style="width:100%; height:24px; line-height:24px; cursor:pointer;" ondblclick="change2Edit(this)" upKey="$!id" upUrl="$!url" >$!val</div>
+#end
+
+## Table添加行脚本，demo: batchSampleAdd.vm
+#macro(addTrItemScript $initNum)
+<script type="text/javascript">
+	var trApprover=$("#trConItem").clone();
+	$("#trConItem").remove();
+	var cloneCount = 0;
+	var index=${conItemCount};
+	
+	for (i=0;i<${initNum};i++){
+		addItem();
+	}
+	
+	function addItem(){
+		var trApprover_new=trApprover.clone();
+		cloneCount++;
+		$(trApprover_new).show();
+		$(trApprover_new).find(":input").each(function(i){
+			this.name=this.name.replace('0',index);
+			this.id=this.id.replace('0',index);
+		});
+		$("#tbConItem").append(trApprover_new);
+		index++;
+	}
+	function delItem(dom){
+		//if(confirm("确定删除？")) {
+			$(dom).parent().parent().remove();
+		//	var id = $(dom).parent().parent().attr("value");
+		//}
+	}
+</script>
+#end
+
+##显示短信发送状态
+#macro(getSmsStatus $statusCode)
+	#if($statusCode == 0)
+		发送未就绪
+	#elseif($statusCode == 1)
+		发送就绪
+	#elseif($statusCode == 2)
+		不发送
+	#elseif($statusCode == 3)
+		发送中
+	#else
+		发送完毕
+	#end
+#end
+
+##显示会员等级
+#macro(getUserRank $id)
+	#if($id == 1)
+		普卡会员
+	#elseif($id == 2)
+		银卡会员
+	#elseif($id == 3)
+		金卡会员
+	#elseif($id == 4)
+		钻石会员
+	#end
+#end
+
+##通知单管理 -通知单类型
+#macro(noticeTypeSelect)
+#set($noticeType=$adviceComponent.getAllNoticeType())
+<select id="noticeType" name="noticeType">
+	<option value="0">所有类型</option>
+	#foreach($item in $noticeType)
+    <option value="$item.code" type="$item.name()">$item.desc</option>
+	#end
+</select>
+#end
+##通知单管理 -采购单类型
+#macro(purchaseTypeSelect)
+<select id="purchaseType" name="purchaseType">
+	<option value="-1">采购类型</option>
+	#foreach($item in $adviceComponent.getAllPurchaseType())
+    <option value="$item.purchaseTypeId">$item.purchaseTypeName</option>
+	#end
+</select>
+#end
+
+##通知单管理 -通知单状态
+#macro(noticeStatusSelect)
+#set($noticeStatus=$adviceComponent.getAllNoticeStatus())
+<select id="noticeStatus" name="noticeStatus">
+	<option value="-1">请选择...</option>
+	#foreach($item in $noticeStatus)
+    <option value="$item.code" type="$item.name()" >$item.desc</option>
+	#end
+</select>
+<script type="text/javascript">
+	$("#noticeStatus >*[type='COS_STOPED']").attr("style","color:white;background-color:red;");
+	$("#noticeStatus >*[type='COS_FINISHED']").attr("style","color:white;background-color:green;");
+</script>
+#end
+
+## 文章分类组件
+#macro(articleCatSelect $name $val $rootName)
+<select id="$!name" name="$!name">
+	##if($showRoot != '')
+	<option value="0">#if($rootName != '')$rootName #else 全部分类 #end</option>
+	##end
+	#foreach($item in $commonComponent.getAllArticleCat())
+	<option value ="$item.catId" #if($val == $item.catId) selected #end >$item.catName</option>
+	#end
+</select>
+#end
+
+## Table拖动排序
+#macro(tableDragRowScript $table $sort)
+<script type="text/javascript">
+
+$(document).ready(function() {
+	$("#$table").tableDnD({
+		onDragClass: "dragClass",
+		onDrop: function(table, row) {
+			var length = $("#$table").find("input[name^=$sort]").length;
+			$("#$table").find("input[name^=$sort]").each(function(i,dom){
+				$(dom).val(length-i);
+			});
+		},
+    	dragHandle: ".dragHandle"
+	});
+});
+
+</script>
+#end
+
+#macro(showImgTF $val)
+<img #if($val && $val != 0) src="/img/yes.gif" #else src="/img/no.gif" #end />
+#end
+
+#macro(editImgTF $val $id)
+<img title="点击修改" #if($val) src="/img/yes.gif" #else src="/img/no.gif" #end onclick="toggleImg(this, $id)" style="cursor:pointer;"/>
+#end
+
+#macro(showColor $val)
+<span style="display:block; width:15px; height:15px; background-color: $val "></span>
+#end
+
+#macro(showTips $tital $tip)
+<div class="dark_blue tipDiv">
+<table width="100%" align="center" cellspacing="0" cellpadding="3" class="tips_row">
+    <tbody>
+        <tr>
+            <th align="left">
+                <font class="bold">$!tital</font>
+                <font class="close">隐藏/展开</font>
+            </th>
+        </tr>
+        <tr class="flow">
+            <td align="left" class="tips_row_text dark_blue">
+				$!tip
+			</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+#end
+
+##合作公司选项框,公共组件##
+#macro(companySelect)
+<select id="providerCompany" name="providerCompany">
+	 <option value="0">---请选择---</option>
+	 #set($companyMap = $constants.getCompany())
+	 #foreach($item in $companyMap.keySet())
+		#set($val=$companyMap.get($item))
+		<option value ="$item">$val</option>
+	 #end
+</select>
+#end
+#macro(companySelectDef $value)
+<select id="providerCompany" name="providerCompany">
+	 <option value="0">---请选择---</option>
+	 #set($companyMap = $constants.getCompany())
+	 #foreach($item in $companyMap.keySet())
+		#set($val=$companyMap.get($item))
+		<option value ="$item" #if($value == $item)selected="selected"#end>$val</option>
+	 #end
+</select>
+#end
+
+#macro(regionComponent)
+<select id="country" name="country" onchange="changeRegion(this, 'province')" validate="required">
+	<option value="">---请选择---</option>
+	#foreach($region in $goodsComponentHelper.getTopLevelRegion())
+    <option value ="$region.regionId">$region.regionName</option>
+	#end
+</select>
+<select id="province" name="province" onchange="changeRegion(this, 'city')" empty="请选择省">
+	<option value="">请选择省</option>
+</select>
+<select id="city" name="city" onchange="changeRegion(this, 'district')" empty="请选择市">
+	<option value="">请选择市</option>
+</select>
+<select id="district" name="district" empty="请选择区/县">
+	<option value="">请选择区/县</option>
+</select>
+<script type="text/javascript">
+function changeRegion(dom, childid) {
+	$(dom).nextAll("select[empty]").each(function(index, domEle){
+		$(domEle).empty();
+		$(domEle).append('<option value="">'+$(domEle).attr("empty")+'</option>');
+	});
+	if(dom.value == '') {
+		return;
+	}
+	var subSele = $("#"+childid);
+	var url = "/commons/region/getChildRegion.htm";
+	$. post(url, {regionId:dom.value}, function(result) {
+		$. each(result, function(i,n) {
+			var option = '<option value="'+i+'">'+n+'</option>';
+			subSele.append(option);
+		});
+	});
+}
+</script>
+#end
+
+##数据字典应用
+#macro(dictSelect $dictKey $eleName $val $validate $showRoot)
+<select id="$eleName" name="$eleName" #if($validate)validate="$validate"#end>
+	#if($showRoot)
+	<option value="-1">---请选择---</option>
+	#end
+	#foreach($entry in $!dictUtil.getDictMap($dictKey).entrySet())
+	<option value ="$entry.key" #if($entry.key == $val) selected="selected" #end>$entry.value</option>
+	#end
+</select>
+#end
+#macro(dictShow $dictKey $val)
+	$!dictUtil.getDictMap($dictKey).get($val)
+#end

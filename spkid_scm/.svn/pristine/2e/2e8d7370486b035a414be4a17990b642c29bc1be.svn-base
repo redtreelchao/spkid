@@ -1,0 +1,231 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>添加商品图片表</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/fclub.validate.js"></script>
+<script type="text/javascript" src="/js/tpd/goodsGallery.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">添加商品图片表</span>
+		<span class="right add_t"><a class="add" href="/goodsgallery/list/main.htm" >返回列表</a></span>
+	</div>
+	<div class="clear"></div>
+	<div class=" title_row dark_blue">
+		<form id="processForm" action="/goodsgallery/add.htm" method="post" >
+		<table width="100%" cellspacing="1" cellpadding="3">
+			<tbody>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsId" id="goodsId" />
+					<span class="red_dian">*</span>
+					<span id="goodsIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">颜色id</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="colorId" id="colorId" />
+					<span class="red_dian">*</span>
+					<span id="colorIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">原图相同-用来使用的(可能加水印)</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="imgUrl" id="imgUrl" />
+					<span class="red_dian">*</span>
+					<span id="imgUrlTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="imgDesc" id="imgDesc" />
+					<span class="red_dian">*</span>
+					<span id="imgDescTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">缩略图(72*96)</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="thumbUrl" id="thumbUrl" />
+					<span class="red_dian">*</span>
+					<span id="thumbUrlTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">600*800 图</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="middleUrl" id="middleUrl" />
+					<span class="red_dian">*</span>
+					<span id="middleUrlTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">1200*1600 图</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="bigUrl" id="bigUrl" />
+					<span class="red_dian">*</span>
+					<span id="bigUrlTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">30*40 图</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="teenyUrl" id="teenyUrl" />
+					<span class="red_dian">*</span>
+					<span id="teenyUrlTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">180*240 图</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="smallUrl" id="smallUrl" />
+					<span class="red_dian">*</span>
+					<span id="smallUrlTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">原始图片</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="imgOriginal" id="imgOriginal" />
+					<span class="red_dian">*</span>
+					<span id="imgOriginalTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">default 默认,part 局部,tonal 色片</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="imgDefault" id="imgDefault" />
+					<span class="red_dian">*</span>
+					<span id="imgDefaultTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="imgAid" id="imgAid" />
+					<span class="red_dian">*</span>
+					<span id="imgAidTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder Wdate" name="imgTime" id="imgTime" onfocus="WdatePicker()"/>
+					<span class="red_dian">*</span>
+					<span id="imgTimeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">102*160</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="url120160" id="url120160" />
+					<span class="red_dian">*</span>
+					<span id="url120160Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">99*132</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="url99132" id="url99132" />
+					<span class="red_dian">*</span>
+					<span id="url99132Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">480*640</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="url480640" id="url480640" />
+					<span class="red_dian">*</span>
+					<span id="url480640Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">63*84</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="url5684" id="url5684" />
+					<span class="red_dian">*</span>
+					<span id="url5684Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="url222296" id="url222296" />
+					<span class="red_dian">*</span>
+					<span id="url222296Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="sortOrder" id="sortOrder" />
+					<span class="red_dian">*</span>
+					<span id="sortOrderTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">342*455</td>
+				<td>
+					<input type="text"  class="inputBorder" name="url342455" id="url342455" />
+					<span id="url342455Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">170*227</td>
+				<td>
+					<input type="text"  class="inputBorder" name="url170227" id="url170227" />
+					<span id="url170227Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">iphone3终端商品列表图</td>
+				<td>
+					<input type="text"  class="inputBorder" name="url135180" id="url135180" />
+					<span id="url135180Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">iphone3终端商品详情大图</td>
+				<td>
+					<input type="text"  class="inputBorder" name="url251323" id="url251323" />
+					<span id="url251323Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">ipad终端商品详情大图</td>
+				<td>
+					<input type="text"  class="inputBorder" name="url502646" id="url502646" />
+					<span id="url502646Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">1200*1600 详情放大镜</td>
+				<td>
+					<input type="text"  class="inputBorder" name="url12001600" id="url12001600" />
+					<span id="url12001600Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2"><br>
+					<input type="button" value=" 确定 " class="button" onclick="doSave();">
+					<input type="reset" value=" 重置 " class="button">
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+</body>
+</html>

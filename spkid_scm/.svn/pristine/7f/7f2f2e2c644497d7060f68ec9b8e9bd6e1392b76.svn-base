@@ -1,0 +1,39 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<th >发货波次号</th>
+				<th >创建时间</th>
+				<th >订单数量</th>
+				<th >已发货数量</th>
+				<th >缺货数量</th>
+				<th >未处理数量</th>
+				<th >波次状态</th>
+				<th >拣货完成时间</th>
+				<th >是否打印</th>
+				<th >操作</th>
+			</tr>
+			#foreach( $info in $page.result) 
+			<tr>
+				<td align="center"> $!info.waveSn </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.createTime)  </td>
+				<td align="center"> $!info.orderNum </td>
+				<td align="center"> $!info.shippingNum </td>
+				<td align="center"> $!info.shortages </td>
+				<td align="center"> $!info.unProcessNum </td>
+				<td align="center"> #dictShow("ShippingWave.waveStatus" $!info.waveStatus) </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.finishTime)  </td>
+				<td align="center"> #showImgTF($!info.isPrintBox) </td>
+				<td align="center">
+					<a class="edit" href="/shippingwave/info/${info.waveSn}.htm">查看波次</a>
+					<a class="edit" href="/shippingwave/export/${info.waveSn}.htm">导出波次</a>
+					<a class="edit" href="/shippingwave/export/${info.waveSn}/format.htm">导出波次(单行)</a>
+					<a class="edit" href="/shippingwave/printWave/${info.waveSn}.htm" target="_blank" >装箱单打印</a>
+				</td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>
+
+#page()

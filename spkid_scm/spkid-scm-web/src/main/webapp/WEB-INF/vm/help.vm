@@ -1,0 +1,270 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>操作手册</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<style type="text/css">
+img{
+	-webkit-box-shadow:	2px 2px 5px rgba(0,0,0,.3);
+	-moz-box-shadow:	2px 2px 5px rgba(0,0,0,.3);
+	-ms-box-shadow:		2px 2px 5px rgba(0,0,0,.3);
+	-o-box-shadow:		2px 2px 5px rgba(0,0,0,.3);
+}
+.main_title{
+	margin-top:40px;padding:10px;height:auto;
+	background-image:none;background-color:#eee;
+	-webkit-transition:	background-color 1s ease;
+	-moz-transition:	background-color 1s ease;
+	transition:			background-color 1s ease;
+}
+.main_title.red{
+	background-color:#feb;
+	-webkit-transition:	background-color 0s ease;
+	-moz-transition:	background-color 0s ease;
+	transition:			background-color 0s ease;
+}
+.main_title a{
+	font:14px bold;font-weight:bold;color:#000;
+}
+.main_title2{padding:10px 0;font:20px '微软雅黑';text-align:center;border-top:1px dashed #aaa;border-bottom:1px dashed #aaa;}
+.main_txt{padding-right:100px;}
+.main_txt p{padding-left:20px;font-size:14px;}
+.main_txt p.pl40{padding-left:40px;}
+.main_txt p *{font-size:14px;color:red;font-weight:bold;}
+.main_txt p a:hover{text-decoration:underline;}
+div.guide{
+	position:fixed;_position:absolute;top:100px;top:expression(eval(document.documentElement.scrollTop)+100);
+	right:0;width:100px;display:block;
+	-webkit-box-shadow:-2px 2px 5px rgba(0,0,0,.1);
+	-moz-box-shadow:-2px 2px 5px rgba(0,0,0,.1);
+	box-shadow:-2px 2px 5px rgba(0,0,0,.1);
+}
+div.guide:hover{
+	-webkit-box-shadow:-2px 2px 5px rgba(0,0,0,.3);
+	-moz-box-shadow:-2px 2px 5px rgba(0,0,0,.3);
+	box-shadow:-2px 2px 5px rgba(0,0,0,.3);
+}
+.guide .guide_top{background:#09f;padding:5px 10px;text-align:center;color:#fff;font:16px '微软雅黑';}
+.guide dl{
+	-webkit-opacity:.2;
+	-moz-opacity:.2;
+	opacity:.2;
+	-webkit-transition:	-webkit-opacity .2s ease;
+	-moz-transition:	-moz-opacity .2s ease;
+	transition:			opacity .2s ease;
+}
+div.guide:hover dl{
+	-webkit-opacity:1;
+	-moz-opacity:1;
+	opacity:1;
+}
+.guide dl dt,.guide dl dd{color:#fff;font:14px '微软雅黑';line-height:16px;}
+.guide dl dt{background:#069;padding:5px 10px;}
+.guide dl dd{background:#222;overflow:hidden;}
+.guide dl dd a{
+	color:#fff;display:block;float:left;padding-left:10px;width:90px;
+	background:#6ac4ff;line-height:22px;cursor:default;
+	-webkit-transition:all .2s ease;
+	-moz-transition:all .2s ease;
+	transition:all .2s ease;
+}
+.guide dl dd a:hover{background:#eee;color:#333;}
+</style>
+</head>
+<body>
+<div class="guide">
+	<div class="guide_top">导  航</div>
+	<dl>
+		<dt>供应商信息</dt>
+		<dd><a href="#basicInfo" shref="#basicInfo" hideFocus>基础信息</a></dd>
+	</dl>
+	<dl>
+		<dt>运营管理</dt>
+		<dd><a href="#rushManage" shref="#rushManage" hideFocus>专场管理</a></dd>
+		<dd><a href="javascript:void(0);" shref="#orderManage" hideFocus>工单处理</a></dd>
+		<dd><a href="javascript:void(0);" shref="#selfReturn" hideFocus>自助退货</a></dd>
+		<dd><a href="javascript:void(0);" shref="#systemMsg" hideFocus>系统公告</a></dd>
+	</dl>
+	<dl>
+		<dt>商品管理</dt>
+		<dd><a href="javascript:void(0);" shref="#goodsList" hideFocus>商品列表</a></dd>
+		<dd><a href="javascript:void(0);" shref="#bulkImport" hideFocus>批量导入</a></dd>
+		<dd><a href="javascript:void(0);" shref="#goodsCategor" hideFocus>商品分类</a></dd>
+		<dd><a href="javascript:void(0);" shref="#front3Categor" hideFocus>前台三级分类</a></dd>
+	</dl>
+	<dl>
+		<dt>发货管理</dt>
+		<dd><a href="javascript:void(0);" shref="#waveList" hideFocus>波次列表</a></dd>
+		<dd><a href="javascript:void(0);" shref="#bulkShip" hideFocus>批量发货</a></dd>
+		<dd><a href="javascript:void(0);" shref="#logistics" hideFocus>物流公司</a></dd>
+		<dd><a href="javascript:void(0);" shref="#orderTrack" hideFocus>订单查询</a></dd>
+	</dl>
+</div>
+<div class="main">
+	<div id="contentPanel">
+		<div class="main_block">
+			<div class="main_title2">妈咪树供应商平台管理基础信息介绍</div>
+			<div class="main_txt">
+				<p>1、商品资料由供应商录入</p>
+				<p>2、货品由供应商发出</p>
+				<p>3、退货退到供应商提供的退货地址处，客退的钱款由妈咪树返给客户</p>
+				<p>4、妈咪树只支持退货，不支持换货</p>
+			</div>
+		</div>
+		<div class="main_block">
+			<div class="main_title2">供应商信息</div>
+			<div class="main_title">
+				<a id="basicInfo">基础信息</a>
+			</div>
+			<div class="main_txt">
+				<p class="bold">包含信息有：</p>
+				<p class="pl40">公司名称/地址、开户行/账户/账号、品牌（ID、名称、税率、扣点）</p>
+				<p class="pl40">退货信息、负责人信息、订单处理人信息</p>
+				<p class="pl40">以上信息，如有变更，需第一时间通知妈咪树负责人。</p>
+				<p class="bold">说明：</p>
+				<p class="pl40">A、退货信息是用来显示在前台客户的个人中心，客户会根据这个信息做退货</p>
+				<p class="pl40">B、项目负责人/订单处理人信息是运营过程中，方便妈咪树和供应商联系的桥梁</p>
+				<p class="pl40">C、商品资料录入时，品牌ID是需要来这里查看的</p>
+				<p>以下为界面效果：</p>
+				<p><a href="img/new_style/help/image001.png" target="_blank"><img src="img/new_style/help/image001.png" width="680"></a></p>
+			</div>
+		</div>
+		<div class="main_block">
+			<div class="main_title2">运营管理</div>
+			<div class="main_title">
+				<a id="orderManage">工单处理</a>
+			</div>
+			<div class="main_txt">
+				<p class="bold">附件下载</p>
+				<p class="pl40"><a class="red" href="cachefile/发货退货工单指南.pptx">《发货退货工单指南》</a></p>
+				<p class="bold">简介：</p>
+				<p class="pl40">供应商和妈咪树售后对接人都有权利新增工单，以订单为最基本的元素，提交问题，因问题都是客户在线提出的，比较急，故需赶紧处理。有处理结果后，回复工单即可。倘若工单回复后不是发起者想要的结果，可以再次发起工单。</p>
+				<p>以下为此工单的操作流程：</p>
+				<p><img src="img/new_style/help/image003.png" width="680"></p>
+			</div>
+			<div class="main_title">
+				<a id="selfReturn">自助退货</a>
+			</div>
+			<div class="main_txt">
+				<p class="bold">附件下载</p>
+				<p class="pl40"><a class="red" href="cachefile/发货退货工单指南.pptx">《发货退货工单指南》</a></p>
+				<p class="bold">简介：</p>
+				<p class="pl40">客户在妈咪树前台申请退货后，记录会直接到供应商平台的自助退货处显示（假如客户后续取消申请，则记录消失），待供应商收到客退的包裹，核实是否有退货申请</p>
+				<p class="bold">有的：</p>
+				<p class="pl40">核实客户的退货原因，情况一致的直接选择“正常”，并操作审核。情况不一致的，联系客户沟通，然后写上“供应商意见”，选择“异常”，审核。</p>
+				<p class="bold">没有的：</p>
+				<p class="pl40">填写《品牌名日期退回包裹反馈表》，邮件反馈给妈咪树售后，邮箱为：<span>disanfang@f-club.cn</span>。</p>
+			</div>
+			<div class="main_title">
+				<a id="systemMsg">系统公告</a>
+			</div>
+			<div class="main_txt">
+				<p>妈咪树会以“系统公告”的形式告知供应商相关信息，请务必关注</p>
+				<p class="bold">说明：</p>
+				<p class="pl40">在供应商平台的顶端，会以滚动条的形式滚动显示最新的3条公告标题，点击标题，可直接跳转到系统公告列表</p>
+			</div>
+		</div>
+		<div class="main_block">
+			<div class="main_title2">商品管理</div>
+			<div class="main_txt">
+				<p class="bold">附件下载</p>
+				<p class="bold pl40"><a class="red" href="cachefile/商品资料批量导入指南.pptx">《商品资料批量导入指南》</a></p>
+				<p class="bold pl40"><a class="red" href="cachefile/商品图片导入系统前的先后顺序说明.docx">《商品图片导入系统前的先后顺序说明》</a></p>
+				<p class="bold pl40"><a class="red" href="cachefile/商品描述要求.xlsx">《商品描述要求》</a></p>
+				<p class="bold pl40"><a class="red" href="cachefile/做尺寸图的操作步骤实例.xls">《做尺寸图的操作步骤实例》</a></p>
+			</div>
+			<div class="main_title">
+				<a id="goodsList">商品列表</a>
+			</div>
+			<div class="main_txt">
+				<p>用于查看商品信息，可通过搜索条件：商品品牌、供应商货号、商品款号、状态，查看商品信息。</p>
+			</div>
+			<div class="main_title">
+				<a id="bulkImport">批量导入</a>
+			</div>
+			<div class="main_txt">
+				<p class="bold">即将商品资料录入系统，需要录入字段包括如下：</p>
+				<p class="bold">必录字段：</p>
+				<p class="pl40">商品分类名称、商品名称、品牌ID、货号+颜色、市场价、fclub售价、代销价、性别、三级分类编码、商品图片（1张默认图、至少3张局部图）。</p>
+				<p class="bold">至少二选一字段</p>
+				<p class="pl40">成分/材质</p>
+				<p class="bold">可选录字段：</p>
+				<p class="pl40">尺寸规格、防水性、适合人群、温馨提示、商品条码（建议导入商品条码，方便拣货）、商品尺寸图。</p>
+				<p class="bold">录入步骤如下：</p>
+				<p><img src="img/new_style/help/image004.jpg"></p>
+				<p class="bold">备注：</p>
+				<p class="pl40">A、主信息指的是除了颜色、尺寸、条码、商品图片、商品尺寸图以外的其他所有字段</p>
+				<p class="pl40">B、导入资料的模版和相关注意事项在平台上都有说明</p>
+				<p class="bold">强调：</p>
+				<p class="pl40">资料提交审核后，妈咪树商品对接人会审核商品资料，有审核和驳回的权利。假如驳回了，请查看驳回的商品，是否存在异常，假如审核了，就代表资料录入成功了，而且后继也不能更改商品资料了。</p>
+			</div>
+			<div class="main_title">
+				<a id="goodsCategor">商品分类</a>
+			</div>
+			<div class="main_txt">
+				<p>导入主要信息时，需要填入商品分类信息，可参考此分类。</p>
+			</div>
+			<div class="main_title">
+				<a id="front3Categor">前台三级分类</a>
+			</div>
+			<div class="main_txt">
+				<p>导入主要信息时，需要填入三级分类信息，可参考此分类。</p>
+			</div>
+		</div>
+		<div class="main_block">
+			<div class="main_title2">发货管理</div>
+			<div class="main_txt">
+				<p class="bold">附件下载</p>
+				<p class="pl40"><a class="red" href="cachefile/发货退货工单指南.pptx">《发货退货工单指南》</a></p>
+			</div>
+			<div class="main_title">
+				<a id="waveList">波次列表</a>
+			</div>
+			<div class="main_txt">
+				<p class="bold">简介：</p>
+				<p class="pl40">必须是人为先点击生成波次，才会有波次生成。</p>
+				<p class="pl40">波次可查看，可导出，导出格式有两种：</p>
+				<p class="pl40">1. 订单信息单行显示，2. 多行显示</p>
+				<p class="pl40">波次里的订单，可批量打印装箱单，也可在搜索条件里输入某个订单号，单个打印装箱单。导出波次/导出波次单行，即可看到需发货的订单明细，根据这些信息去拣货打包大货。已经成功发货的包裹，再去导入系统发运，即批量发货操作。</p><br>
+				<p class="bold">说明：</p>
+				<p class="pl40">A、前台生成的订单付款后，才会在供应商平台显示的。</p>
+				<p class="pl40">B、每点击一次生成波次，最多只能有40个订单能进入波次。（假如你点击生成波次时，有超过40个订单的，请注意需要多次点击）</p>
+			</div>
+			<div class="main_title">
+				<a id="bulkShip">批量发货</a>
+			</div>
+			<div class="main_txt">
+				<p>点击“批量发货”，下载发货/缺货模版，表格里填入准确的信息，然后导入系统发货/缺货。</p>
+			</div>
+			<div class="main_title">
+				<a id="logistics">物流公司</a>
+			</div>
+			<div class="main_txt">
+				<p>编辑“发运表格”时，用于参考快递公司编码。</p>
+			</div>
+			<div class="main_title">
+				<a id="orderTrack">订单查询</a>
+			</div>
+			<div class="main_txt">
+				<p>主要用于查询订单信息，若订单是超时发运的，系统会标注上红底背景色。</p>
+				<p>查询到的订单信息可以单行导出，也可以以订单为单元导出。</p>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$('.guide a').bind('click',function() {
+	var id=$(this).attr('shref'),
+		top=$(id).parent().offset().top;
+	$("html,body").animate({scrollTop:top},300,function () {
+		setTimeout(function () {
+			$(id).parent().removeClass('red');
+		},500);
+	});
+	$(id).parent().addClass('red');
+});
+</script>
+</body>
+</html>

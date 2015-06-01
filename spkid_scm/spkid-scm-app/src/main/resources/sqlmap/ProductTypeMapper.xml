@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ProductTypeMapper">
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.ProductType">
+		<id column="type_id" property="typeId" jdbcType="INTEGER" />
+		<result column="type_code" property="typeCode" jdbcType="VARCHAR" />
+		<result column="type_name" property="typeName" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="parent_id2" property="parentId2" jdbcType="INTEGER" />
+		<result column="is_show_cat" property="isShowCat" jdbcType="INTEGER" />
+		<result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+		<result column="category_id" property="categoryId" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="ProductTypeLinkMap" type="com.fclub.tpd.dataobject.ProductType">
+		<id column="type_id" property="typeId" jdbcType="INTEGER" />
+		<result column="type_name" property="typeName" jdbcType="VARCHAR" />
+		<result column="type_code" property="typeCode" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="parent_id2" property="parentId2" jdbcType="INTEGER" />
+		<result column="is_show_cat" property="isShowCat" jdbcType="INTEGER" />
+		<result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+		<result column="admin_id" property="adminId" jdbcType="INTEGER" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="linkId" property="linkId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		type_id, type_name, parent_id, parent_id2, is_show_cat,
+		sort_order, type_code
+	</sql>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+		a.type_id, a.type_name, a.parent_id, a.parent_id2,
+		a.is_show_cat, a.sort_order, a.type_code, 
+		b.type_name as oneLevel
+<!-- 		,c.type_name as twoLevel -->
+		FROM ty_product_type a
+		LEFT JOIN ty_product_type b ON a.parent_id=b.type_id AND b.parent_id2 = 0 
+<!-- 		LEFT JOIN -->
+<!-- 		ty_product_type c ON a.parent_id2=c.type_id -->
+
+		where a.parent_id != 0 AND a.parent_id2 = 0 
+		<if test="keyWord!= null and keyWord!=''">
+			and (a.type_name LIKE CONCAT('%','${keyWord}','%')
+			OR
+			a.type_code LIKE CONCAT('%','${keyWord}','%'))
+		</if>
+		<if test="goods_type_1!=0 ">
+			and a.parent_id=#{goods_type_1}
+		</if>
+<!-- 		<if test="goods_type_2!=0 "> -->
+<!-- 			and a.parent_id2=#{goods_type_2} -->
+<!-- 		</if> -->
+<!-- 		and a.tpd_show = 1 -->
+		order by a.parent_id2,a.parent_id,a.sort_order DESC,a.type_id
+	</select>
+	
+	<select id="selectL2ByCode" parameterType="String" resultMap="BaseResultMap">
+		SELECT type_id, type_name, type_code, category_id  
+		FROM ty_product_type 
+		WHERE parent_id != 0 AND parent_id2 = 0 
+		AND type_code = #{typeCode, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findListPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+		a.type_id, a.type_name, a.parent_id, a.parent_id2, a.is_show_cat, 
+		a.sort_order, a.type_code, 
+		b.type_name as oneLevel,c.type_name as twoLevel
+		FROM ty_product_type a
+		LEFT JOIN ty_product_type b ON a.parent_id=b.type_id 
+		LEFT JOIN ty_product_type c ON a.parent_id2=c.type_id 
+		
+		where 1=1 
+		<if test="parentId != 0 ">
+		and (a.parent_id=${parentId} or a.parent_id2=${parentId})
+		</if>
+		order by a.parent_id2,a.parent_id,a.sort_order DESC,a.type_id
+	</select>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT
+		a.type_id, a.type_name, a.parent_id, a.parent_id2, a.is_show_cat,
+		a.sort_order, a.type_code, 
+		b.type_name as
+		oneLevel,c.type_name as twoLevel
+		FROM ty_product_type a
+		LEFT JOIN
+		ty_product_type b ON a.parent_id=b.type_id
+		LEFT JOIN
+		ty_product_type c ON a.parent_id2=c.type_id
+		where a.type_id =
+		#{typeId,jdbcType=INTEGER}
+	</select>
+
+	<select id="getLevelOneTypes" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ty_product_type
+		where parent_id=0 and parent_id2=0
+		order by
+		type_id
+	</select>
+	
+	<select id="getLevelOneTypesWithoutGift" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ty_product_type
+		where parent_id=0 and parent_id2=0
+		and type_name != '赠品'
+		order by
+		type_id
+	</select>
+	
+	<select id="getLevelTwoTypes" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from ty_product_type
+		where parent_id2=0
+		and
+		parent_id=#{value,jdbcType=INTEGER}
+		order by type_id
+	</select>
+	<select id="getLevelThreeTypes" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from ty_product_type
+		where parent_id2=#{value,jdbcType=INTEGER}
+	</select>
+	<select id="getAllLevelThreeTypes" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from ty_product_type
+		where parent_id2 &#60;&#62;0
+		and parent_id
+		&#60;&#62;0
+	</select>
+	<select id="getAllTypesByGoodsId" resultMap="ProductTypeLinkMap"
+		parameterType="java.lang.Integer">
+		select
+		gt.type_id, gt.type_name, gt.parent_id,
+		gt.parent_id2, gt.is_show_cat,
+		gt.sort_order, gt.type_code,
+		gtl.id as linkId
+		from ty_product_type gt
+		left join ty_product_type_link gtl
+		on gt.type_id=gtl.type_id
+		and
+		gtl.goods_id=#{value,jdbcType=INTEGER}
+		order by gt.parent_id,
+		gt.parent_id2, gt.type_id
+	</select>
+	<select id="getProductTypeByGoodsId" resultType="java.lang.String"
+		parameterType="java.lang.Integer">
+		select
+		group_concat(gt.type_name separator '/') as
+		type_names
+		from fc_goods g
+		left join ty_product_type_link gtl on
+		gtl.goods_id=g.goods_id
+		left join ty_product_type gt on
+		gtl.type_id=gt.type_id
+		where g.is_delete=0
+		and
+		g.goods_id=#{value,jdbctype=INTEGER}
+	</select>
+	<select id="selectByTypeCode" resultMap="BaseResultMap"
+		parameterType="com.fclub.tpd.dataobject.ProductType">
+		SELECT
+		a.type_id, a.type_name, a.parent_id, a.parent_id2,
+		a.is_show_cat,
+		a.sort_order, a.type_code, 
+		b.type_name as
+		oneLevel,c.type_name as twoLevel
+		FROM ty_product_type a
+		LEFT JOIN
+		ty_product_type b ON a.parent_id=b.type_id
+		LEFT JOIN
+		ty_product_type c ON a.parent_id2=c.type_id
+		where a.type_code
+		=#{typeCode,jdbcType=VARCHAR}
+		<if test="typeId != null">
+			and a.type_id &#60;&#62; #{typeId,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<select id="confirmBeingUsed1" resultType="java.lang.Boolean"
+		parameterType="java.lang.Integer">
+		SELECT CASE WHEN t.co>0 THEN TRUE ELSE FALSE END FROM (
+		SELECT COUNT(*) as co FROM ty_product_type
+		WHERE parent_id=
+		#{typeId,jdbcType=INTEGER}
+		OR parent_id2= #{typeId,jdbcType=INTEGER}
+		)AS t
+	</select>
+	
+	<select id="confirmBeingUsed2" resultType="java.lang.Boolean"
+		parameterType="java.lang.Integer">
+		SELECT CASE WHEN t.co>0 THEN TRUE ELSE FALSE END FROM (
+		SELECT COUNT(*) as co FROM ty_product_type_link
+		WHERE
+		type_id=#{typeId,jdbcType=INTEGER}
+		)AS t
+	</select>
+
+	<select id="selectOneTypeId" resultType="java.lang.Integer">
+		SELECT type_id FROM
+		ty_product_type WHERE type_code IN
+		<foreach collection="array" item="goodsArr" open="("
+			separator="," close=")">
+			#{goodsArr}
+		</foreach>
+		AND
+		parent_id>0 AND parent_id2=0 limit 1
+	</select>
+	
+	<select id="selectRushingGoodsTypeList" parameterType="Integer" resultMap="BaseResultMap">
+		SELECT 
+			t2.type_id,t2.type_name,IF(length(t2.type_name) > 12,1,0) as style
+		FROM 
+			fc_flc_goods_rush_link AS rl
+			LEFT JOIN fc_flc_goods_rush AS r ON r.rush_id=rl.rush_id               
+	        LEFT JOIN ty_product_type_link AS tl ON rl.goods_id=tl.goods_id
+	        LEFT JOIN  ty_product_type AS t  ON t.type_id=tl.type_id 
+	        LEFT JOIN fc_flc_goods_labor AS gl ON gl.goods_id=rl.goods_id
+	        LEFT JOIN  ty_product_type AS t2  ON t.parent_id2=t2.type_id 
+        WHERE r.date_start <![CDATA[<]]> UNIX_TIMESTAMP()-28800 
+            AND r.date_end <![CDATA[>]]> UNIX_TIMESTAMP()-28800 AND r.status=1
+            AND t2.parent_id= #{typeId} AND t2.parent_id2=0 AND gl.on_sale=1
+        GROUP BY t2.type_id 
+        ORDER BY LENGTH(t2.type_name) ASC
+	</select>
+	
+    <select id="findTypeNameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+    	select type_name from ty_product_type where type_id = #{id}   
+    </select>
+</mapper>

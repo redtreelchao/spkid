@@ -1,0 +1,65 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>查看供应商信息</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/jquery.form.pack.js"></script>
+<script type="text/javascript" src="/js/chilltip.js"></script>
+<script type="text/javascript" src="/js/thickbox_plus.js"></script>
+<script type="text/javascript" src="/js/page.js"></script>
+<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/tpd/provider.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">查看供应商帐户信息</span>
+	</div>
+	<div class="clear"></div>
+	<div>
+		<span class="left bold main_title_top dark_blue">基本信息</span>
+		<span class="right add_t">&nbsp;</span>
+	</div>
+	<div class="clear"></div>
+	<div class="dataTable dark_blue">
+		<table width="100%" align="center" cellspacing="0" cellpadding="0">
+			<tr>
+				<td class="bold" align="right" width="20%">帐户余额：</td>
+				<td width="30%">￥$!provider.accountBalance</td>	
+				<td class="bold" align="right" width="20%">短信价格：</td>
+				<td width="30%">￥$!provider.smsPrice</td>					
+			</tr>			
+		</table>
+	</div>
+	<div class="clear"></div>
+	<div>
+		<span class="left bold main_title_top dark_blue">帐户变动信息</span>
+		<span class="right add_t">&nbsp;</span>
+	</div>
+	<div class="clear"></div>
+		<div id="searchPanel" class="search_row dark_blue">
+		<form id="searchForm" action="/provider/account/list.htm" method="post" style="margin: 0;">
+			<input type="hidden" id="pageSize" name="pageSize" value="$!page.pageSize" />
+			<input type="hidden" id="pageNo" name="pageNo" value="$!page.pageNo" />
+			<input type="hidden" id="order" name="order" value="$!page.order" />
+			<input type="hidden" id="orderBy" name="orderBy" value="$!page.orderBy" />				
+			操作时间:  
+			<input type="text" class="enterQuery input black Wdate" name="dateStart"  onClick="WdatePicker()" />--
+			<input type="text" class="enterQuery input black Wdate" name="dateEnd"  onClick="WdatePicker()" />
+			
+			<input type="button" class="button" value="搜索" onclick="submitSearch();">&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" class="button" value="充值" onclick="chongzhi();">
+		</form>
+	</div>
+	<div class="clear"></div>
+	<div id="contentPanel"></div>
+</div>
+
+#pageScript(20)
+
+</body>
+</html>

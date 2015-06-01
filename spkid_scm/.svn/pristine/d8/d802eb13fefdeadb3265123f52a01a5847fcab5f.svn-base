@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<link href="/css/common.css" rel="stylesheet" type="text/css"/>
+<link href="/css/main.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/jumpTo.js"></script>
+</head>
+<body >
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">$!finishVO.operationName</span>
+	</div>
+	<div class="clear"></div>
+	<div class="title_row dark_blue">
+		<table width="400" align="center">
+     		<tbody>
+            	<tr>
+        			<td width="50" valign="top">
+                    	<img width="32" height="32" border="0" alt="information" src="/img/information.png">
+                	</td>
+					<td class="font_size14 bold dark_blue">$!finishVO.operationDesc</td>
+      			</tr>
+      			<tr>
+        			<td></td>
+        			<td id="redirectionMsg">
+            			#set($operation=$finishVO.operation )
+            			#set($interval=$finishVO.interval)
+            			#if($operation == "SUCCESS")
+              				如果您不做出选择，将在 <span id="jumpTo">$interval</span> 秒后跳转到第一个链接地址。
+						#elseif($operation=="FINISH")
+							操作完成,将在 <span id="jumpTo">$interval</span> 秒后跳转到操作前页面。
+						#elseif($operation=="ERROR")
+							$errorMsg
+						#elseif($operation=="WARING")
+							$msg
+              			#else
+              				##None
+              			#end
+					</td>
+      			</tr>
+      			<tr>
+        			<td></td>
+        			<td style="line-height:22px;">
+          				<ul style="margin:10px 0; padding:0 10px">
+          					#if($operation == "SUCCESS" || $operation == "ERROR")
+                        	<li><a href="$!finishVO.originalUrl">$!finishVO.originalLabel</a></li>
+                        	#end
+                        	<li><a href="$!finishVO.returnUrl">$!finishVO.returnLabel</a></li>
+                    	</ul>
+					</td>
+      			</tr>
+    		</tbody>
+		</table>
+	</div>
+	#if($operation == "SUCCESS")
+		<script type="text/javascript">countDown($interval,'$!finishVO.originalUrl');</script>
+	#elseif($operation == "FINISH")
+		<script type="text/javascript">countDown($interval,'$!finishVO.returnUrl');</script>
+	#end
+	<div class="clear"></div>
+	
+</div>
+
+</body>
+</html>

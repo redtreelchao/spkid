@@ -1,0 +1,670 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>添加商品表</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/fclub.validate.js"></script>
+<script type="text/javascript" src="/js/tpd/goods.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">添加商品表</span>
+		<span class="right add_t"><a class="add" href="/goods/list/main.htm" >返回列表</a></span>
+	</div>
+	<div class="clear"></div>
+	<div class=" title_row dark_blue">
+		<form id="processForm" action="/goods/add.htm" method="post" >
+		<table width="100%" cellspacing="1" cellpadding="3">
+			<tbody>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="catId" id="catId" />
+					<span class="red_dian">*</span>
+					<span id="catIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">前台分类</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="pagecatId" id="pagecatId" />
+					<span class="red_dian">*</span>
+					<span id="pagecatIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">商品编码</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsSn" id="goodsSn" />
+					<span class="red_dian">*</span>
+					<span id="goodsSnTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsName" id="goodsName" />
+					<span class="red_dian">*</span>
+					<span id="goodsNameTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsNameStyle" id="goodsNameStyle" />
+					<span class="red_dian">*</span>
+					<span id="goodsNameStyleTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="clickCount" id="clickCount" />
+					<span class="red_dian">*</span>
+					<span id="clickCountTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="brandId" id="brandId" />
+					<span class="red_dian">*</span>
+					<span id="brandIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="providerName" id="providerName" />
+					<span class="red_dian">*</span>
+					<span id="providerNameTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsNumber" id="goodsNumber" />
+					<span class="red_dian">*</span>
+					<span id="goodsNumberTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsWeight" id="goodsWeight" />
+					<span class="red_dian">*</span>
+					<span id="goodsWeightTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="marketPrice" id="marketPrice" />
+					<span class="red_dian">*</span>
+					<span id="marketPriceTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="shopPrice" id="shopPrice" />
+					<span class="red_dian">*</span>
+					<span id="shopPriceTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="promotePrice" id="promotePrice" />
+					<span class="red_dian">*</span>
+					<span id="promotePriceTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">代销价</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="consignPrice" id="consignPrice" />
+					<span class="red_dian">*</span>
+					<span id="consignPriceTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">成本价</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="costPrice" id="costPrice" />
+					<span class="red_dian">*</span>
+					<span id="costPriceTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">浮动代销率</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="consignRate" id="consignRate" />
+					<span class="red_dian">*</span>
+					<span id="consignRateTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">0为非代销1为固定代销价2为浮动代销率</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="consignType" id="consignType" />
+					<span class="red_dian">*</span>
+					<span id="consignTypeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="promoteStartDate" id="promoteStartDate" />
+					<span class="red_dian">*</span>
+					<span id="promoteStartDateTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="promoteEndDate" id="promoteEndDate" />
+					<span class="red_dian">*</span>
+					<span id="promoteEndDateTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="warnNumber" id="warnNumber" />
+					<span class="red_dian">*</span>
+					<span id="warnNumberTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="keywords" id="keywords" />
+					<span class="red_dian">*</span>
+					<span id="keywordsTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">商品备注</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsBrief" id="goodsBrief" />
+					<span class="red_dian">*</span>
+					<span id="goodsBriefTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">f-club点评</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsDesc" id="goodsDesc" />
+					<span class="red_dian">*</span>
+					<span id="goodsDescTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsThumb" id="goodsThumb" />
+					<span class="red_dian">*</span>
+					<span id="goodsThumbTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsImg" id="goodsImg" />
+					<span class="red_dian">*</span>
+					<span id="goodsImgTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="originalImg" id="originalImg" />
+					<span class="red_dian">*</span>
+					<span id="originalImgTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="isReal" id="isReal" />
+					<span class="red_dian">*</span>
+					<span id="isRealTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="extensionCode" id="extensionCode" />
+					<span class="red_dian">*</span>
+					<span id="extensionCodeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">0为下架,1为上架</td>
+				<td>
+					#selectTF("isOnSale", false)
+					<span class="red_dian">*</span>
+					<span id="isOnSaleTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					#selectTF("isAloneSale", false)
+					<span class="red_dian">*</span>
+					<span id="isAloneSaleTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="integral" id="integral" />
+					<span class="red_dian">*</span>
+					<span id="integralTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="sortOrder" id="sortOrder" />
+					<span class="red_dian">*</span>
+					<span id="sortOrderTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">回收站 1</td>
+				<td>
+					#selectTF("isDelete", false)
+					<span class="red_dian">*</span>
+					<span id="isDeleteTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					#selectTF("isBest", false)
+					<span class="red_dian">*</span>
+					<span id="isBestTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					#selectTF("isNew", false)
+					<span class="red_dian">*</span>
+					<span id="isNewTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					#selectTF("isHot", false)
+					<span class="red_dian">*</span>
+					<span id="isHotTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					#selectTF("isPromote", false)
+					<span class="red_dian">*</span>
+					<span id="isPromoteTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">断码</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="isOffcode" id="isOffcode" />
+					<span class="red_dian">*</span>
+					<span id="isOffcodeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="isEmpty" id="isEmpty" />
+					<span class="red_dian">*</span>
+					<span id="isEmptyTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="bonusTypeId" id="bonusTypeId" />
+					<span class="red_dian">*</span>
+					<span id="bonusTypeIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="lastUpdate" id="lastUpdate" />
+					<span class="red_dian">*</span>
+					<span id="lastUpdateTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsType" id="goodsType" />
+					<span class="red_dian">*</span>
+					<span id="goodsTypeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="sellerNote" id="sellerNote" />
+					<span class="red_dian">*</span>
+					<span id="sellerNoteTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="giveIntegral" id="giveIntegral" />
+					<span class="red_dian">*</span>
+					<span id="giveIntegralTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="rankIntegral" id="rankIntegral" />
+					<span class="red_dian">*</span>
+					<span id="rankIntegralTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">风格id</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="styleId" id="styleId" />
+					<span class="red_dian">*</span>
+					<span id="styleIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">季节id</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="seasonId" id="seasonId" />
+					<span class="red_dian">*</span>
+					<span id="seasonIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">供应商id</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="providerId" id="providerId" />
+					<span class="red_dian">*</span>
+					<span id="providerIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">合作方式id</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="coopId" id="coopId" />
+					<span class="red_dian">*</span>
+					<span id="coopIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">1为启用,0为停止订货</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsStop" id="goodsStop" />
+					<span class="red_dian">*</span>
+					<span id="goodsStopTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">供应商货号</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="providerGoods" id="providerGoods" />
+					<span class="red_dian">*</span>
+					<span id="providerGoodsTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">年</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsYear" id="goodsYear" />
+					<span class="red_dian">*</span>
+					<span id="goodsYearTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">月</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsMonth" id="goodsMonth" />
+					<span class="red_dian">*</span>
+					<span id="goodsMonthTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">性别(m.为男,w.为女,a.为全部)</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsSex" id="goodsSex" />
+					<span class="red_dian">*</span>
+					<span id="goodsSexTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">计量单位id</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="unitId" id="unitId" />
+					<span class="red_dian">*</span>
+					<span id="unitIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">是否审核(0 为未审核,1.为审核通过)</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsAudit" id="goodsAudit" />
+					<span class="red_dian">*</span>
+					<span id="goodsAuditTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">面料</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsStuff" id="goodsStuff" />
+					<span class="red_dian">*</span>
+					<span id="goodsStuffTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">保养</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsMaterial" id="goodsMaterial" />
+					<span class="red_dian">*</span>
+					<span id="goodsMaterialTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsMaterialNew" id="goodsMaterialNew" />
+					<span class="red_dian">*</span>
+					<span id="goodsMaterialNewTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">审核管理员id</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsAuditAid" id="goodsAuditAid" />
+					<span class="red_dian">*</span>
+					<span id="goodsAuditAidTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">审核时间</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder Wdate" name="goodsAuditTime" id="goodsAuditTime" onfocus="WdatePicker()"/>
+					<span class="red_dian">*</span>
+					<span id="goodsAuditTimeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">修改时间</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder Wdate" name="updateTime" id="updateTime" onfocus="WdatePicker()"/>
+					<span class="red_dian">*</span>
+					<span id="updateTimeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsAid" id="goodsAid" />
+					<span class="red_dian">*</span>
+					<span id="goodsAidTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder Wdate" name="goodsTime" id="goodsTime" onfocus="WdatePicker()"/>
+					<span class="red_dian">*</span>
+					<span id="goodsTimeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">国旗</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="areaId" id="areaId" />
+					<span class="red_dian">*</span>
+					<span id="areaIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="modelId" id="modelId" />
+					<span class="red_dian">*</span>
+					<span id="modelIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">税率</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsCess" id="goodsCess" />
+					<span class="red_dian">*</span>
+					<span id="goodsCessTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="scId" id="scId" />
+					<span class="red_dian">*</span>
+					<span id="scIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="scDesc" id="scDesc" />
+					<span class="red_dian">*</span>
+					<span id="scDescTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">尺寸图JSON内容</td>
+				<td>
+					<input type="text"  class="inputBorder" name="scImageContent" id="scImageContent" />
+					<span id="scImageContentTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">商品模特图</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="goodsModelimg" id="goodsModelimg" />
+					<span class="red_dian">*</span>
+					<span id="goodsModelimgTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text"  class="inputBorder" name="isRush" id="isRush" />
+					<span id="isRushTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">赠品</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="isGifts" id="isGifts" />
+					<span class="red_dian">*</span>
+					<span id="isGiftsTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text"  class="inputBorder" name="goodsDesc2" id="goodsDesc2" />
+					<span id="goodsDesc2Tip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue"></td>
+				<td>
+					<input type="text"  class="inputBorder" name="goodsDescImg" id="goodsDescImg" />
+					<span id="goodsDescImgTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">wms同步状态-1为不同步，0为未同步，1为已同步</td>
+				<td>
+					#selectTF("recordStatus", false)
+					<span class="red_dian">*</span>
+					<span id="recordStatusTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">成分、尺寸规格、材质、防水性、适合人群、温馨提示信息，格式为JSON</td>
+				<td>
+					<input type="text"  class="inputBorder" name="goodsDescAdditional" id="goodsDescAdditional" />
+					<span id="goodsDescAdditionalTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">每ID限购数量，不超过99，默认0不限制限购数量</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" name="limitNum" id="limitNum" />
+					<span class="red_dian">*</span>
+					<span id="limitNumTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">尺寸示意图编码</td>
+				<td>
+					<input type="text"  class="inputBorder" name="diagramCode" id="diagramCode" />
+					<span id="diagramCodeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">商品状态(0-草稿,1-待审核,2-已审核)</td>
+				<td>
+					<input type="text"  class="inputBorder" name="tpdGoodsStatus" id="tpdGoodsStatus" />
+					<span id="tpdGoodsStatusTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2"><br>
+					<input type="button" value=" 确定 " class="button" onclick="doSave();">
+					<input type="reset" value=" 重置 " class="button">
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+</body>
+</html>

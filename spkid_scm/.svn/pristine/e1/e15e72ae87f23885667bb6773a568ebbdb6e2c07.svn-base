@@ -1,0 +1,69 @@
+#default_database
+default.jdbc.driver=com.mysql.jdbc.Driver
+default.jdbc.url=jdbc:mysql://192.168.5.126:3306/mammytree?autoReconnect=true&zeroDateTimeBehavior=convertToNull
+default.jdbc.username=mmt_web
+default.jdbc.password=mmt_web
+default.dbcp.initialSize=10
+default.dbcp.maxActive=50
+default.dbcp.maxIdle=20
+default.dbcp.minIdle=10
+default.dbcp.maxWait=30000
+default.dbcp.timeBetweenEvictionRunsMillis=1800000
+default.dbcp.numTestsPerEvictionRun=50
+default.dbcp.minEvictableIdleTimeMillis=3600000
+
+#query_database
+query.jdbc.driver=com.mysql.jdbc.Driver
+query.jdbc.url=jdbc:mysql://192.168.5.126:3306/mammytree?autoReconnect=true&zeroDateTimeBehavior=convertToNull
+query.jdbc.username=mmt_web
+query.jdbc.password=mmt_web
+query.dbcp.initialSize=20
+query.dbcp.maxActive=100
+query.dbcp.maxIdle=30
+query.dbcp.minIdle=10
+query.dbcp.maxWait=30000
+query.dbcp.timeBetweenEvictionRunsMillis=1800000
+query.dbcp.numTestsPerEvictionRun=100
+query.dbcp.minEvictableIdleTimeMillis=3600000
+
+
+#run model option: NONE;TEST;PRODUCT
+fclub.run.model=PRODUCT
+
+
+fclub.cookie.domain=.tspkid.cn
+fclub.image.domain=http://localhost:9292
+fclub.front.domain=http://www.tspkid.cn
+fclub.back.domain=http://www.mammmm.cn
+
+fclub.ftp.root.dir =/var/www/remote_data/ftp
+fclub.pic.root.dir =/var/www
+fclub.static.root.dir =/home/baolm/work
+
+
+# cache driver configurations
+fclub.cache.id=mammytree-cache-driver
+fclub.cache.class.name=com.fclub.cache.support.HashMapCacheDriver
+fclub.cache.config.location=classpath:xmemcached.properties
+fclub.cache.thread.pool.size=10
+
+
+#---- if scm ---------------------------
+fclub.image.server1=192.168.6.236:1199:2
+#fclub.image.server2=192.168.1.26:1199:2
+
+fclub.tpd.bcs.in=/bcs
+
+fclub.tpd.batch.result=/result
+fclub.tpd.batch.console=/console
+fclub.tpd.batch.history=/var/tmp
+fclub.tpd.batch.progress=/import/progress.properties
+
+
+#---- else if img ----------------------
+fclub.tpd.image.in = /image
+fclub.tpd.image.out = data3/new_goodsimg
+
+fclub.remote.imageserver.ip=192.168.6.236
+fclub.remote.imageserver.port=1199
+fclub.remote.imageserver.cpu=2

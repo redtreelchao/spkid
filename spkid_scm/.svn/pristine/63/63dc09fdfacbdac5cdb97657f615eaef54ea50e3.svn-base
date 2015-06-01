@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.GoodsMaterialMapper" >
+  <resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.GoodsMaterial" >
+    <id column="carelabel_id" property="materId" jdbcType="INTEGER" />
+<!--     <result column="mater_code" property="materCode" jdbcType="VARCHAR" /> -->
+    <result column="carelabel_name" property="materName" jdbcType="VARCHAR" />
+    <result column="carelabel_url" property="materImg" jdbcType="VARCHAR" />
+    <result column="create_date" property="materTime" jdbcType="TIMESTAMP" />
+    <result column="create_admin" property="materAid" jdbcType="INTEGER" />
+  </resultMap>
+ 	
+	
+	<!-- 查询单个的materId -->
+	<select id="getMaterIdByCode" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select mater_id
+		from ty_product_carelabel
+		where carelabel_name = #{materCode}
+		limit 1
+	</select>
+	
+</mapper>

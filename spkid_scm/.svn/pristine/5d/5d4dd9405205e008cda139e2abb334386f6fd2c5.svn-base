@@ -1,0 +1,141 @@
+<table width="100%" cellspacing="0" cellpadding="0" align="center" style="display:none;" class="config_tab">
+    <tbody>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="importTable">
+                    <tbody>
+                       <tr>
+                            <th align="left">
+                                 <font class="bold">批量导入流程</font>
+                               ## <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="center">
+                               <div class="buttonElement">
+                                    <input #if($pr)class="none_color"#else class="thickbox_LAX" href="/batchImport/importView.htm?type=importConsign&height=300&width=550" title="导入虚库库存"#end type="button" value="商品库存" sType="08" />
+									#if($pr)
+									<div class="runing_color">
+                                        <div class="StatBarButtonDiv" id="CONSIGN_BAR" type="08"></div>
+                                    </div>
+									<script type="text/javascript">
+										roll("#CONSIGN_BAR");
+                                    </script>
+									#end
+							   </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="clear"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="tips_row">
+                    <tbody>
+                        <tr>
+                            <th align="left">
+                                <font class="bold">导入流程说明</font>
+                                <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="left" class="tips_row_text dark_blue">
+								<div style="padding-left:10px;">
+								商品状态必须为"已审核"时，才能导入库存。<br>
+								<a class="edit orange" href="/batchImport/downloadConsign.htm?importType=0">虚库导入模板.xlsx</a><br/>
+								##<a class="edit orange" href="/batchImport/downloadConsign.htm?importType=0">普通商品和系统生成卡密的虚拟商品虚库导入模板.xlsx</a><br/>
+								##<a class="edit orange" href="/batchImport/downloadConsign.htm?importType=1">手工导入卡密虚拟商品虚库导入模板.xlsx</a>
+								</div>
+							</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+		<tr>
+			<td>
+                <div class="clear"></div>
+            </td>
+		</tr>
+		<tr>
+            <td>
+				<div class="search_row dark_blue">
+    				<form id="searchFormCONSIGN" name="search" action="/batchImport/list/query.htm" method="post">
+            			<input type="hidden" id="batch_no08" name="type" value="08" />
+						<input type="hidden" id="pageSize08" name="pageSize" value="$!page.pageSize" />
+            			<input type="hidden" id="pageNo08" name="pageNo" value="$!page.pageNo" />
+            			<input type="hidden" id="order08" name="order" value="$!page.order" />
+            			<input type="hidden" id="orderBy08" name="orderBy" value="$!page.orderBy" />
+            			##<div class="search_row_element"><span>批次号：</span><input type="text" id="batchNo" name="batchNo" class="input"/></div>
+            			<div class="search_row_element">
+            				导入时间：<input type="text" name="importDateBegin" class="enterQuery input black Wdate" onClick="WdatePicker()" />
+            				- 
+            				<input type="text" name="importDateEnd" class="enterQuery input black Wdate" onClick="WdatePicker()" />
+            			</div>
+            			<div class="search_row_element"><input type="button" class="button" value="搜索" onclick="submitSearch_CONSIGN();"></div>
+            		</form>
+                </div>
+            </td>
+        </tr>
+        <tr>
+			<td>
+                <div class="clear"></div>
+            </td>
+		</tr>
+		<tr>
+			<td>
+				<div id="contentPanel_08"></div>
+			</td>
+		</tr>	
+    </tbody>
+</table>
+	
+<script type="text/javascript">
+function submitSearch_CONSIGN() {
+	var pageNo = $("#pageNo08").val();
+	if(pageNo == null || pageNo < 1)
+		$("#pageNo08").val("1");
+	if($("#selePageSize").val()) {
+    	$("#pageSize08").val($("#selePageSize").val());
+	}
+	$("#searchFormCONSIGN").ajaxSubmit(function(result) {
+		$("#contentPanel_08").html(result); 
+	});
+}
+function jumpPage(pageNo) {
+	$("#pageNo08").val(pageNo);
+	$("#pageSize08").val($("#selePageSize").val());
+	$("#searchFormCONSIGN").ajaxSubmit(function(result) {
+		$("#contentPanel_08").html(result);
+	});
+}
+function jumpPageTo() {
+	var index = $("#pageTo").val();
+	index = parseInt(index);
+	if (index > 0) {
+		jumpPage(index);
+	}
+}
+function changePageSize() {
+	$("#pageSize08").val($("#selePageSize").val());
+	$("#searchFormCONSIGN").ajaxSubmit(function(result) {
+		$("#contentPanel_08").html(result);
+	});
+}
+
+$(function() {
+    $(".enterQuery").bind('keydown', function(event){
+    	if(event.keyCode==13){
+    		submitSearch_CONSIGN();
+    	}
+    });
+    $("#pageSize08").val("20");
+    submitSearch_CONSIGN();
+});
+</script>

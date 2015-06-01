@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.CooperationTipsMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.CooperationTips">
+		<id column="ct_id" property="ctId" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.ct_id,
+		t.content,
+		t.create_user,
+		t.create_time,
+		t.update_user,
+		t.update_time
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from fc_tpd_cooperation_tips t
+		where ct_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+		<include refid="Base_Column_List" />
+		from fc_tpd_cooperation_tips t
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from fc_tpd_cooperation_tips
+		where ct_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.CooperationTips">
+		insert into fc_tpd_cooperation_tips (
+			content,
+			create_user,
+			create_time,
+			update_user,
+			update_time
+		)
+		values (
+			#{content,jdbcType=LONGVARCHAR},
+			#{createUser,jdbcType=INTEGER},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateUser,jdbcType=INTEGER},
+			#{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.CooperationTips">
+		update fc_tpd_cooperation_tips
+		<set>
+		<if test="content != null">
+		content = #{content,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="createUser != null">
+		create_user = #{createUser,jdbcType=INTEGER},
+		</if>
+		<if test="createTime != null">
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="updateUser != null">
+		update_user = #{updateUser,jdbcType=INTEGER},
+		</if>
+		<if test="updateTime != null">
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		</if>
+		</set>
+		where ct_id = #{ctId,jdbcType=INTEGER}
+	</update>
+</mapper>

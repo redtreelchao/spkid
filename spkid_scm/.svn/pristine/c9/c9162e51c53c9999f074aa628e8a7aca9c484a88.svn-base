@@ -1,0 +1,184 @@
+##通用信息TAB
+<table width="80%" cellspacing="1" cellpadding="3" align="center" style="display:table;" class="config_tab">
+	<tbody>
+        <tr>
+			<td align="left" colspan="4"><div class="main_title bold center">基本信息</div></td>
+		</tr>
+        <tr>
+			<td align="right" class="label2">商品款号</td>
+			<td align="left">
+            	<input type="text" validate="required" name="goodsSn" value="$!goods.goodsSn"  id="goodsSn" onblur="checkUnique('goodsSn')" class="inputBorder_readOnly" readonly/>
+				##<span class="red_dian">*</span>
+				##<span id="goodsSnTip" class="red_dian"></span>
+			</td>
+            <td class="dark_blue label2" align="right">商品名称</td>
+            <td>
+				#if($!readOnly == 1)
+				<input type="text" validate="required" name="goodsName" value="$!goods.goodsName" class="inputBorder_readOnly" readonly/>
+				#else
+				<input type="text" validate="required" name="goodsName" value="$!goods.goodsName" class="inputBorder"/><span class="red_dian">*</span>
+				#end
+            </td>
+		</tr>
+        <tr>
+			<td align="right" class="label2">商品分类</td>
+			<td align="left">
+				#if($!readOnly == 1)
+				<select id="catId" name="catId" disabled="true">
+                	<option value="0">请选择...</option>
+                	#foreach($category in $categoryList)
+                    <option value ="$category.categoryId" #if($category.categoryId==$goods.catId)selected#end>$category.categoryName</option>
+                	#end
+                </select>
+				#else
+				<select id="catId" name="catId">
+                	<option value="0">请选择...</option>
+                	#foreach($category in $categoryList)
+                    <option value ="$category.categoryId" #if($category.categoryId==$goods.catId)selected#end>$category.categoryName</option>
+                	#end
+                </select>
+				<span class="red_dian">*</span>
+				#end
+			</td>
+            <td class="dark_blue label2" align="right">商品品牌</td>
+            <td align="left">
+            	#if($!readOnly == 1)
+				<select id="brandId" name="brandId" disabled="true">
+                	<option value="0">请选择...</option>
+                	#foreach($brand in $brandList)
+                    <option value ="$brand.brandId" #if($brand.brandId==$goods.brandId)selected#end>$brand.brandName</option>
+                	#end
+                </select>
+				#else
+				<select id="brandId" name="brandId">
+                	<option value="0">请选择...</option>
+                	#foreach($brand in $brandList)
+                    <option value ="$brand.brandId" #if($brand.brandId==$goods.brandId)selected#end>$brand.brandName</option>
+                	#end
+                </select>
+				<span class="red_dian">*</span>
+				#end
+			</td>
+		</tr>
+        <tr>
+            <td align="right" class="label2"> 供应商货号 </td>
+			<td align="left">
+            	#if($!readOnly == 1)
+				<input type="text" validate="required" name="providerGoods" value="$!goods.providerGoods" class="inputBorder_readOnly" readonly/>
+				#else
+				<input type="text" validate="required" name="providerGoods" value="$!goods.providerGoods" class="inputBorder"/>
+				<span class="red_dian">*</span>
+				#end
+			</td>
+			<td class="dark_blue label2" align="right"> 性别 </td>
+            <td align="left">
+            	#if($!readOnly == 1)
+				<select id="goodsSex" name="goodsSex" disabled="true">
+                	<option value="0">请选择...</option>
+                	#foreach($item in $sexMap.keySet())
+						#set($val=$sexMap.get($item))
+                		<option value ="$item" #if($item==$goods.goodsSex)selected#end>$val</option>
+                	#end
+                </select>
+				#else
+				<select id="goodsSex" name="goodsSex">
+                	<option value="0">请选择...</option>
+                	#foreach($item in $sexMap.keySet())
+						#set($val=$sexMap.get($item))
+                		<option value ="$item" #if($item==$goods.goodsSex)selected#end>$val</option>
+                	#end
+                </select>
+				<span class="red_dian">*</span>
+				#end
+			</td>
+		</tr>
+		<tr>
+            <td align="right" class="label2"> 计量单位 </td>
+			<td align="left">
+            	#if($!readOnly == 1)
+				<input type="text" validate="required" name="unitName" value="$!goods.unitName" class="inputBorder_readOnly" readonly/>
+				#else
+				<input type="text" validate="required" name="unitName" value="$!goods.unitName" class="inputBorder"/>
+				<span class="red_dian">*</span>
+				#end
+			</td>
+			<td align="right" class="label2">限购数量</td>
+			<td align="left">
+				#if($!readOnly == 1)
+				<input type="text" name="limitNum" value="$!goods.limitNum" class="inputBorder_readOnly" readonly/>
+				#else
+				<input type="text" name="limitNum" value="$!goods.limitNum" class="inputBorder" />
+				#end
+			</td>
+		</tr>
+		<tr>
+			<td align="left" colspan="4"><div class="main_title bold center">商品描述（新）</div></td>
+		</tr>
+		<tr>
+            <td align="right" class="label2">成分</td>
+            <td>
+				#if($!readOnly == 1)
+				<input type="text" size="30" value="$!goodsDescVo.desc_composition" name="desc_composition" class="inputBorder_readOnly" readonly/>
+				#else
+				<input type="text" size="30" value="$!goodsDescVo.desc_composition" name="desc_composition" class="inputBorder" />
+				#end
+			</td>
+            <td align="right" class="label2">尺寸规格</td>
+            <td>
+				#if($!readOnly == 1)
+				<input type="text" size="30" value="$!goodsDescVo.desc_dimensions" name="desc_dimensions" class="inputBorder_readOnly" readonly/>
+				#else
+				<input type="text" size="30" value="$!goodsDescVo.desc_dimensions" name="desc_dimensions" class="inputBorder" />
+				#end
+			</td>
+        </tr>
+		<tr>
+            <td align="right" class="label2">材质</td>
+            <td>
+				#if($!readOnly == 1)
+				<input type="text" size="30" value="$!goodsDescVo.desc_material" name="desc_material" class="inputBorder_readOnly" readonly/>
+				#else
+				<input type="text" size="30" value="$!goodsDescVo.desc_material" name="desc_material" class="inputBorder" />
+				#end
+			</td>
+            <td align="right" class="label2">防水性</td>
+            <td>
+				#if($!readOnly == 1)
+				<input type="text" size="30" value="$!goodsDescVo.desc_waterproof" name="desc_waterproof" class="inputBorder_readOnly" readonly/>
+				#else
+				<input type="text" size="30" value="$!goodsDescVo.desc_waterproof" name="desc_waterproof" class="inputBorder" />
+				#end
+			</td>
+        </tr>
+		<tr>
+            <td align="right" class="label2">适合人群</td>
+            <td>
+				#if($!readOnly == 1)
+				<input type="text" size="30" value="$!goodsDescVo.desc_crowd" name="desc_crowd" class="inputBorder_readOnly" readonly/>
+				#else
+				<input type="text" size="30" value="$!goodsDescVo.desc_crowd" name="desc_crowd" class="inputBorder" />
+				#end
+			</td>
+            <td align="right" class="label2">温馨提示</td>
+            <td>
+				#if($!readOnly == 1)
+				<textarea type="text" id="desc_notes" rows="4" cols="40" name="desc_notes" class="inputTextarea_readOnly" readonly>$!goodsDescVo.desc_notes</textarea>
+				#else
+				<textarea type="text" id="desc_notes" rows="4" cols="40" name="desc_notes" class="inputTextarea">$!goodsDescVo.desc_notes</textarea>
+				#end
+			</td>
+        </tr>
+		<tr>
+			<td align="left" colspan="4"><div class="main_title bold center">商品前台分类</div></td>
+		</tr>
+		<tr>
+			<td align="left" colspan="4">
+				#foreach($goodsTypeName in $goodsTypeNames)
+				<div class="classifiedElement" style="WHITE-SPACE:nowrap;display:inline">
+                    <label><span>$!goodsTypeName</span></label>
+                </div>
+            	#end
+			</td>
+		</tr>
+	</tbody>
+</table>

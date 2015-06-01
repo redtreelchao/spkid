@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title></title>
+		<link href="/css/common.css" rel="stylesheet" type="text/css"/>
+        <link href="/css/main.css" rel="stylesheet" type="text/css"/>
+		<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+        <script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+        <script type="text/javascript" src="/js/plugins/MaskLayer.js"></script>
+        <script type="text/javascript" src="/js/plugins/jquery.form.pack.js"></script>
+		<script type="text/javascript" src="/js/fclub.validate.js"></script>
+		<script type="text/javascript" src="/js/tpd/goodsManager.js"></script>
+		<script type="text/javascript" src="/js/tpd/goodsManagerValidate.js"></script>
+		<script type="text/javascript" src="/js/tpd/goodsManagerOper.js"></script>
+		<script type="text/javascript" src="/js/imgPreview/CJL.0.1.min.js"></script>
+		<script type="text/javascript" src="/js/imgPreview/ImagePreviewd.js"></script>
+		<script type="text/javascript" src="/js/common/previewImage.js"></script>
+		<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+
+		<script type="text/javascript" src="/editor/kindeditor.js"></script>
+		<script type="text/javascript" src="/editor/lang/zh_CN.js"></script>
+		<script type="text/javascript" src="/editor/plugins/code/prettify.js"></script>
+		
+<script type="text/javascript">
+$(function(){
+		var btns = $(".config_btn");
+		var tabs = $(".config_tab");
+		$ .each(btns, function(i, btn){
+			$(btn).bind("click",function(){
+				$(tabs).hide();
+				$(tabs[i]).show();
+				$(btns).removeClass("currentbtn");
+				$(this).addClass("currentbtn");
+				
+				if (i == 3 || i == 4)
+					$("#option_fir").hide();
+				else
+					$("#option_fir").show();
+				
+				if (i == 1) {
+					$("#option_desc").show();
+				} else {
+					$("#option_desc").hide();
+				}
+			});
+			$(btn).bind("focus",function(){$(this).blur();});
+		});
+	});
+</script>
+</head>
+<body >
+<div class="main">
+	<div class="main_title"><span class="left bold main_title_top dark_blue">#if($!readOnly == 1)查看#else修改#end商品</span>
+		<span class="right add_t"><a class="icon_Return" href="/goods/list/main.htm">返回列表</a></span>
+  </div>
+	<div id="title_msg_t" class="clear"></div>
+   <div style="height:26px;">
+    	<ul>
+        	<li class="config_btn currentbtn"><span>通用信息</span></li>
+			<li class="config_btn"><span>商品详情</span></li>
+            <li class="config_btn"><span>商品价格</span></li>
+            <li class="config_btn"><span>尺寸颜色</span></li>
+			##<li class="config_btn"><span>尺寸对照图</span></li>
+        </ul>
+    </div>
+    ##<div class="clear"></div>
+	<div class=" title_row dark_blue">
+		<form id="processForm" enctype="multipart/form-data" name="" action="/goods/edit.htm" method="post">
+        	<input id="goodsId" type="hidden" name="goodsId" value="$goods.goodsId" />
+			<!--通用信息-->
+			#parse("tpd/goodsCommon.vm")
+			<!--商品详情-->
+			#parse("tpd/goodsDetail.vm")
+            <!--商品价格-->
+            #parse("tpd/goodsPrice.vm")
+            <!--尺寸颜色-->
+            #parse("tpd/goodsColorSize.vm")
+			<!--尺寸对照图-->
+            #parse("tpd/goodsBcs.vm")
+      		<div id="option_fir" style="text-align:center; padding:5px 0;">
+				#if ($stringUtil.isNotEmpty($goods.tpdGoodsStatus) && $goods.tpdGoodsStatus == '0')
+				<input type="button" value=" 保存 " class="button" onClick="doSave('processForm')">
+				<input type="button" value=" 提交 " class="button" onClick="doSubmit('processForm')">
+      			<input type="reset" value=" 重置 " class="button">
+				#end
+  			</div>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+##js控制select默认选中
+ #parse("tpd/goodsOption.vm")
+</body>
+</html>

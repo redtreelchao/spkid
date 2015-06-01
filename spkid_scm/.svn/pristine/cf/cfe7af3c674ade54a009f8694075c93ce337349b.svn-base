@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<link href="../css/common.css" rel="stylesheet" type="text/css"/>
+<link href="../css/main.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">波次详情</span>
+		<span class="right add_t"><a class="icon_Return" href="#">返回列表</a></span>
+	</div>
+	<div class="clear"></div>
+		
+	<div class="search_row dark_blue">
+		<form name="search" action="" method="get" style="margin: 0;">
+			订单号：<input type="text" class="input black" name="product_name" value="" >
+			订单状态：
+			<select name="style_id" class="dark_blue">
+				<option value="0">订单状态</option>
+				<option value="1">拣货中</option>
+				<option value="2">已发货</option>
+				<option value="3">缺货</option>
+			</select>
+			<input type="submit" class="button" value="搜索">
+		</form>
+	</div>
+	<div class="clear"></div>
+	<div class="msgBox">
+		<ul>
+			<li><a href="" title="">波次详情列表：显示该波次所有的订单信息，多个订单以“------------ 订单分割线 ------------</a></li>
+			<li>波次详情搜索：可按照订单号、订单状态搜索查询波次详情。</li>
+			<li>“------------ 订单分割线 ------------”分割，每个订单第一行显示订单详情</li>
+		</ul>
+	</div>
+	<div id="listDiv">
+		<div class="listBlockBox">
+			<table id="dataTableA" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<th>订单号</th>
+					<th>运单号</th>
+					<th>物流公司</th>
+					<th>订单创建时间</th>
+					<th>订单导出时间</th>
+					<th>订单发货时间</th>
+					<th>发货状态</th>
+					<th>送货地址</th>
+					<th>配送地址</th>
+					<th>收件人</th>
+					<th>手机号码</th>
+					<th>电话号码</th>
+					<th>预约送货时间</th>
+					<th>客户备注</th>
+				</tr>
+				<tr>
+					<td align="center">DD2013050287BEB</td>
+					<td align="center">34566</td>
+					<td align="center">北京大洋</td>
+					<td align="center">2013-05-02 16:23:58</td>
+					<td align="center">2013-05-02 17:30:01</td>
+					<td align="center">2013-05-02 17:35:45</td>
+					<td align="center">已发货</td>
+					<td align="center">中国 上海 上海 浦东新区</td>
+					<td align="center">金桥路525号654幢</td>
+					<td align="center">王香</td>
+					<td align="center">15001963543</td>
+					<td align="center"></td>
+					<td align="center">只工作日送货(双休日、假日不用送)</td>
+					<td align="center"></td>
+				</tr>
+			</table>
+			<table id="dataTableB" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<th>SKU</th>
+					<th>商品名称</th>
+					<th>品牌</th>
+					<th>供应商货号</th>
+					<th>颜色</th>
+					<th>尺码</th>
+					<th>商品数量</th>
+					<th>商品条码</th>
+				</tr>
+				<tr>
+					<td align="center">XND81336003 071 007</td>
+					<td align="center">虚拟代销商品测试3(线下数据,仅供测试使用,请勿购买)</td>
+					<td align="center">虚拟代销1</td>
+					<td align="center">H234874-棕色</td>
+					<td align="center">棕色</td>
+					<td align="center">F</td>
+					<td align="center">1</td>
+					<td align="center"></td>
+				</tr>
+				<tr>
+					<td align="center">XND81336003 071 007</td>
+					<td align="center">虚拟代销商品测试3(线下数据,仅供测试使用,请勿购买)</td>
+					<td align="center">虚拟代销1</td>
+					<td align="center">H234874-棕色</td>
+					<td align="center">棕色</td>
+					<td align="center">F</td>
+					<td align="center">1</td>
+					<td align="center"></td>
+				</tr>
+				<tr>
+					<td align="center">XND81336003 071 007</td>
+					<td align="center">虚拟代销商品测试3(线下数据,仅供测试使用,请勿购买)</td>
+					<td align="center">虚拟代销1</td>
+					<td align="center">H234874-棕色</td>
+					<td align="center">棕色</td>
+					<td align="center">F</td>
+					<td align="center">1</td>
+					<td align="center"></td>
+				</tr>
+			</table>
+		</div>
+		<div class="listBlockBox">
+			<table id="dataTableA" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<th>订单号</th>
+					<th>运单号</th>
+					<th>物流公司</th>
+					<th>订单创建时间</th>
+					<th>订单导出时间</th>
+					<th>订单发货时间</th>
+					<th>发货状态</th>
+					<th>送货地址</th>
+					<th>配送地址</th>
+					<th>收件人</th>
+					<th>手机号码</th>
+					<th>电话号码</th>
+					<th>预约送货时间</th>
+					<th>客户备注</th>
+				</tr>
+				<tr>
+					<td align="center">DD2013050287BEB</td>
+					<td align="center">34566</td>
+					<td align="center">北京大洋</td>
+					<td align="center">2013-05-02 16:23:58</td>
+					<td align="center">2013-05-02 17:30:01</td>
+					<td align="center">2013-05-02 17:35:45</td>
+					<td align="center">已发货</td>
+					<td align="center">中国 上海 上海 浦东新区</td>
+					<td align="center">金桥路525号654幢</td>
+					<td align="center">王香</td>
+					<td align="center">15001963543</td>
+					<td align="center"></td>
+					<td align="center">只工作日送货(双休日、假日不用送)</td>
+					<td align="center"></td>
+				</tr>
+			</table>
+			<table id="dataTableB" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<th>SKU</th>
+					<th>商品名称</th>
+					<th>品牌</th>
+					<th>供应商货号</th>
+					<th>颜色</th>
+					<th>尺码</th>
+					<th>商品数量</th>
+					<th>商品条码</th>
+				</tr>
+				<tr>
+					<td align="center">XND81336003 071 007</td>
+					<td align="center">虚拟代销商品测试3(线下数据,仅供测试使用,请勿购买)</td>
+					<td align="center">虚拟代销1</td>
+					<td align="center">H234874-棕色</td>
+					<td align="center">棕色</td>
+					<td align="center">F</td>
+					<td align="center">1</td>
+					<td align="center"></td>
+				</tr>
+				<tr>
+					<td align="center">XND81336003 071 007</td>
+					<td align="center">虚拟代销商品测试3(线下数据,仅供测试使用,请勿购买)</td>
+					<td align="center">虚拟代销1</td>
+					<td align="center">H234874-棕色</td>
+					<td align="center">棕色</td>
+					<td align="center">F</td>
+					<td align="center">1</td>
+					<td align="center"></td>
+				</tr>
+				<tr>
+					<td align="center">XND81336003 071 007</td>
+					<td align="center">虚拟代销商品测试3(线下数据,仅供测试使用,请勿购买)</td>
+					<td align="center">虚拟代销1</td>
+					<td align="center">H234874-棕色</td>
+					<td align="center">棕色</td>
+					<td align="center">F</td>
+					<td align="center">1</td>
+					<td align="center"></td>
+				</tr>
+			</table>
+		</div>
+		<div class="listBlockBox">
+			<table id="dataTableA" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<th>订单号</th>
+					<th>运单号</th>
+					<th>物流公司</th>
+					<th>订单创建时间</th>
+					<th>订单导出时间</th>
+					<th>订单发货时间</th>
+					<th>发货状态</th>
+					<th>送货地址</th>
+					<th>配送地址</th>
+					<th>收件人</th>
+					<th>手机号码</th>
+					<th>电话号码</th>
+					<th>预约送货时间</th>
+					<th>客户备注</th>
+				</tr>
+				<tr>
+					<td align="center">DD2013050287BEB</td>
+					<td align="center">34566</td>
+					<td align="center">北京大洋</td>
+					<td align="center">2013-05-02 16:23:58</td>
+					<td align="center">2013-05-02 17:30:01</td>
+					<td align="center">2013-05-02 17:35:45</td>
+					<td align="center">已发货</td>
+					<td align="center">中国 上海 上海 浦东新区</td>
+					<td align="center">金桥路525号654幢</td>
+					<td align="center">王香</td>
+					<td align="center">15001963543</td>
+					<td align="center"></td>
+					<td align="center">只工作日送货(双休日、假日不用送)</td>
+					<td align="center"></td>
+				</tr>
+			</table>
+			<table id="dataTableB" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<th>SKU</th>
+					<th>商品名称</th>
+					<th>品牌</th>
+					<th>供应商货号</th>
+					<th>颜色</th>
+					<th>尺码</th>
+					<th>商品数量</th>
+					<th>商品条码</th>
+				</tr>
+				<tr>
+					<td align="center">XND81336003 071 007</td>
+					<td align="center">虚拟代销商品测试3(线下数据,仅供测试使用,请勿购买)</td>
+					<td align="center">虚拟代销1</td>
+					<td align="center">H234874-棕色</td>
+					<td align="center">棕色</td>
+					<td align="center">F</td>
+					<td align="center">1</td>
+					<td align="center"></td>
+				</tr>
+				<tr>
+					<td align="center">XND81336003 071 007</td>
+					<td align="center">虚拟代销商品测试3(线下数据,仅供测试使用,请勿购买)</td>
+					<td align="center">虚拟代销1</td>
+					<td align="center">H234874-棕色</td>
+					<td align="center">棕色</td>
+					<td align="center">F</td>
+					<td align="center">1</td>
+					<td align="center"></td>
+				</tr>
+				<tr>
+					<td align="center">XND81336003 071 007</td>
+					<td align="center">虚拟代销商品测试3(线下数据,仅供测试使用,请勿购买)</td>
+					<td align="center">虚拟代销1</td>
+					<td align="center">H234874-棕色</td>
+					<td align="center">棕色</td>
+					<td align="center">F</td>
+					<td align="center">1</td>
+					<td align="center"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="title_row" stype="margin-bottom:10px; text-align:center;">
+		<div style="color:black;text-align :left;">
+			<b class="bold">页面功能说明：</b>
+			<br>
+			<br>
+			1、波次详情列表：显示该波次所有的订单信息，多个订单以“------------ 订单分割线 ------------”分割，每个订单第一行显示订单详情，订单详情下面显示订单商品详情；
+			<br>
+			2、波次详情搜索：可按照订单号、订单状态搜索查询波次详情。
+		</div>
+    </div>
+	<div class="list_b">
+		<div class="left">
+			显示
+			<select name="style_id">
+				<option value="">20</option>
+			</select>
+			条，共
+			<span class="bold red">300</span>
+			条
+		</div>
+		<div class="right list_bottom list_b">
+            	<a href="#" class="gray">首页</a>
+				<a href="#" class="gray">上一页</a>
+            	<a class="bold red">1</a>
+				<a href="#">2</a>
+				<a href="#">3</a>
+				<a href="#">4</a>
+				<a href="#">5</a>
+				<a href="#">6</a>
+				<a href="#">7</a>
+				<a href="#">8</a>
+				<a href="#">9</a>
+				<a href="#">10</a>
+                <a href="#">下一页</a>
+				<a href="#">尾页</a>
+                <a style="padding:0;"><input type="text" class="input" name="product_name" value="" style="width:30px;"></a>
+            	<input type="submit" class="button" value="前往">
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<script type="text/javascript">
+var h=$('.msgBox li').height();
+if ($('.msgBox li').length>1) {
+	$('.msgBox ul').height(h);
+	$('.msgBox li').hover(
+		function () {clearInterval(t)},
+		function () {t=setInterval(function(){gundong()},2000)}
+	);
+	var t=setInterval(function(){gundong()},2000);
+}
+function gundong(){
+	$('.msgBox li:eq(0)').animate({marginTop:-h},500,function () {
+		$(this).removeAttr('style');
+		$('.msgBox ul').append($(this));
+	});
+}
+</script>
+</body>
+</html>

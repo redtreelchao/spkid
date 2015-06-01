@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ProductSubMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.ProductSub">
+		<id column="gl_id" property="glId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="color_id" property="colorId" jdbcType="INTEGER" />
+		<result column="size_id" property="sizeId" jdbcType="INTEGER" />
+		<result column="is_pic" property="isPic" jdbcType="SMALLINT" />
+		<result column="consign_num" property="consignNum" jdbcType="INTEGER" />
+		<result column="sort_order" property="sortOrder" jdbcType="SMALLINT" />
+		<result column="provider_barcode" property="providerBarcode" jdbcType="VARCHAR" />
+		<result column="tpd_provider_barcode" property="tpdProviderBarcode" jdbcType="VARCHAR" />
+		<result column="size_code" property="sizeCode" jdbcType="VARCHAR" />
+		<result column="size_name" property="sizeName" jdbcType="VARCHAR" />
+		<result column="color_name" property="colorName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="ExtBaseResultMap" extends="BaseResultMap" type="com.fclub.tpd.dataobject.ProductSub">
+		<collection property="goodsGallerys"
+			select="com.fclub.tpd.mapper.ProductGalleryMapper.selectByGoodsId"
+			column="{goodsId=goods_id,colorId=color_id}" javaType="java.util.List" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.gl_id,
+		t.goods_id,
+		t.color_id,
+		t.size_id,
+		t.is_pic,
+		t.consign_num,
+		t.sort_order,
+		t.provider_barcode,
+		t.tpd_provider_barcode
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_product_sub t
+		where gl_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_product_sub t
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_scm_product_sub
+		where gl_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.ProductSub">
+		insert into ty_scm_product_sub (
+			goods_id,
+			color_id,
+			size_id,
+			is_pic,
+			consign_num,
+			sort_order,
+			provider_barcode,
+			tpd_provider_barcode
+		)
+		values (
+			#{goodsId,jdbcType=INTEGER},
+			#{colorId,jdbcType=INTEGER},
+			#{sizeId,jdbcType=INTEGER},
+			#{isPic,jdbcType=SMALLINT},
+			#{consignNum,jdbcType=INTEGER},
+			#{sortOrder,jdbcType=SMALLINT},
+			#{providerBarcode,jdbcType=VARCHAR},
+			#{tpdProviderBarcode,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.ProductSub">
+		update ty_scm_product_sub
+		<set>
+		<if test="goodsId != null">
+		goods_id = #{goodsId,jdbcType=INTEGER},
+		</if>
+		<if test="colorId != null">
+		color_id = #{colorId,jdbcType=INTEGER},
+		</if>
+		<if test="sizeId != null">
+		size_id = #{sizeId,jdbcType=INTEGER},
+		</if>
+		<if test="isPic != null">
+		is_pic = #{isPic,jdbcType=SMALLINT},
+		</if>
+		<if test="consignNum != null">
+		consign_num = #{consignNum,jdbcType=INTEGER},
+		</if>
+		<if test="sortOrder != null">
+		sort_order = #{sortOrder,jdbcType=SMALLINT},
+		</if>
+		<if test="providerBarcode != null">
+		provider_barcode = #{providerBarcode,jdbcType=VARCHAR},
+		</if>
+		<if test="tpdProviderBarcode != null">
+		tpd_provider_barcode = #{tpdProviderBarcode,jdbcType=VARCHAR},
+		</if>
+		</set>
+		where gl_id = #{glId,jdbcType=INTEGER}
+	</update>
+	
+	<select id="findByGoodsId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	  	select 'true' as QUERYID,
+	    	<include refid="Base_Column_List" />,
+	    from ty_scm_product_sub t
+	    where t.goods_id = #{goods_id,jdbcType=INTEGER}
+    </select>
+	
+	<select id="selectByGoodsId" resultMap="ExtBaseResultMap" parameterType="java.lang.Integer" >
+	  	select 'true' as QUERYID,
+	    	<include refid="Base_Column_List" />,
+	    	c.color_name,s.size_sn,s.size_name
+	    from ty_scm_product_sub t
+	   	left join ty_product_color as c on t.color_id=c.color_id 
+		left join ty_product_size  as s on t.size_id=s.size_id 
+	    where t.goods_id = #{goods_id,jdbcType=INTEGER}
+    </select>
+    <select id="findByGoodsIdColorIdSizeId" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(1) from ty_scm_product_sub
+		where goods_id = #{goodsId} and color_id = #{colorId} and size_id = #{sizeId}
+	</select>
+	<select id="findByGoodsIdWithOutColorId" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(1) from ty_scm_product_sub
+		where goods_id = #{goodsId} and color_id &#60;&#62; #{colorId}
+	</select>
+	<!--  fc_flc_goods  -->
+    <select id="findByGoodsColorSizeId" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select * from ty_scm_product_sub
+		where goods_id = #{goodsId,jdbcType=INTEGER} 
+		and color_id = #{colorId,jdbcType=INTEGER} 
+		and size_id = #{sizeId,jdbcType=INTEGER}
+	</select>
+	
+	<update id="clearConsignNum" parameterType="java.util.List">
+		update ty_scm_product_sub 
+		set consign_num = 0  
+		where goods_id in
+		<foreach item="goodsId" collection="list" open="(" separator="," close=")">
+			#{goodsId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+	<update id="clearConsignNumTpd" parameterType="java.util.List">
+		update ty_scm_product_sub l 
+		inner join fc_tpd_rush_goods g on g.tpd_goods_id = l.goods_id 
+		set l.consign_num = 0  
+		where g.goods_id in
+		<foreach item="goodsId" collection="list" open="(" separator="," close=")">
+			#{goodsId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+	<update id="batchUpdate" parameterType="java.util.List">
+		update ty_scm_product_sub 
+		set consign_num = case gl_id 
+		<foreach item="goodsLabor" collection="list">
+			when #{goodsLabor.glId, jdbcType=INTEGER} then #{goodsLabor.consignNum, jdbcType=INTEGER} 
+		</foreach>
+		end
+		where gl_id in
+		<foreach item="goodsLabor" collection="list" open="(" separator="," close=")">
+			#{goodsLabor.glId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+	<update id="batchUpdateTpd" parameterType="java.util.List">
+		update ty_scm_product_sub l 
+		inner join fc_tpd_rush_goods g on g.tpd_goods_id = l.goods_id
+		inner join fc_flc_goods_labor gl on gl.goods_id = g.goods_id 
+		set l.consign_num = case gl.gl_id 
+		<foreach item="goodsLabor" collection="list">
+			when #{goodsLabor.glId, jdbcType=INTEGER} then #{goodsLabor.consignNum, jdbcType=INTEGER} 
+		</foreach>
+		end
+		where gl.gl_id in
+		<foreach item="goodsLabor" collection="list" open="(" separator="," close=")">
+			#{goodsLabor.glId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+	<select id="selectByGoodsIdGroupByColorId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	  	select t.goods_id, t.color_id
+	    from ty_scm_product_sub t 
+	    where t.goods_id = #{goods_id,jdbcType=INTEGER}
+	    group by t.goods_id, t.color_id
+    </select>
+    
+    <delete id="deleteByGoodsId" parameterType="java.lang.Integer">
+ 		delete from ty_scm_product_sub where goods_id = #{goodsId,jdbcType=INTEGER}
+ 	</delete>
+ 	
+ 	<select id="getCountByGoodsAndColor" resultType="java.lang.Integer" >
+		select count(gl_id)
+		from ty_scm_product_sub
+		where goods_id = #{goodsId,jdbcType=INTEGER}
+		and color_id = #{colorId,jdbcType=INTEGER}
+	</select>
+	
+	
+	<update id="batchUpdateConsignNum">
+		UPDATE ty_scm_product_sub SET consign_num = CASE gl_id  
+		<foreach collection="list" item="sub">
+			WHEN #{sub.tpdGlId, jdbcType=INTEGER} THEN #{sub.consignNum, jdbcType=INTEGER} 
+		</foreach>
+		END WHERE gl_id IN 
+		<foreach collection="list" item="sub" open="(" close=")" separator=",">
+			#{sub.tpdGlId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+	<update id="batchUpdateConsignNumByCard">
+		UPDATE ty_scm_product_sub SET consign_num = consign_num + 1
+		WHERE gl_id IN 
+		<foreach collection="list" item="productCard" open="(" close=")" separator=",">
+			#{productCard.glId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+</mapper>

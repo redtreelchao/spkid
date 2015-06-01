@@ -1,0 +1,59 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<script type="text/javascript">
+function fileUpload(){
+	var pdv = new Validate("uoloadForm");
+	if (pdv.validate()) {
+		if ($("#isVirtual").val() == -1) {
+			alert("请选择商品类型！");
+			return;
+		}
+		$("input[flg='import']").attr("disabled","true").attr("class","none_color");
+    	$("#uoloadForm").ajaxSubmit(function(data) {
+    		if(typeof data == "string"){
+    		  data = jQuery.parseJSON(data);
+    		}
+    		if(data.success){
+    			$("#result").html(data.result.msg);
+    			$("#result").show();
+    		}else{
+    			$("#result").html("<span style='color:red'>"+data.msg+"</span>");
+    			$("#result").show();
+    		}
+    	});
+	}
+}
+</script>
+</head>
+<body >
+<div class="main">
+	<div class="clear"></div>
+	<div class="search_row dark_blue">
+		导入商品虚库库存
+    </div>
+	<div class="clear"></div>
+	<div class="title_row dark_blue ">
+		<form id="uoloadForm" name="upload" action="/batchImport/importConsign.htm" method="post" enctype="multipart/form-data">
+			上传文件：&nbsp;<input validate="required" type="file" id="upload_file" name="file" /><br/>
+			商品类型：
+			<select id="isVirtual" name="isVirtual" style="width:100px">
+        		##<option value="-1">---请选择---</option>
+    			<option value="0">普通商品</option>
+        		##<option value="1">虚拟商品</option>
+        	</select><br/>
+			<input flg="import" type="button" class="button" value="导入" onclick="fileUpload();"/>#emptyInput()
+		</form>
+    </div>
+	<div class="clear"></div>
+	<div class="title_row dark_blue">
+		上传文件格式为xls文件<br/>
+		注:第一行默认为标题,将不执行导入操作。 
+    </div>
+	<div class="clear"></div>
+	<div id="result" class="title_row dark_blue" style="display:none;"></div>
+	<div class="clear"></div>
+</div>
+</body>
+</html>

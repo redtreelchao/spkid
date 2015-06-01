@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>帐户充值</title>
+        <link type="text/css" rel="stylesheet" href="/css/common.css" />
+        <link type="text/css" rel="stylesheet" href="/css/main.css" />
+        <link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+        <script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+        <script type="text/javascript" src="/js/fclub.validate.js"></script>
+		<script type="text/javascript" src="/js/jquery.form.import.js"></script>
+		<script type="text/javascript" src="/js/tpd/provider.js"></script>
+        <script type="text/javascript">
+            function doUpdateLimit() {
+            	$("#payShow").hide();
+            	$("#payOk").show();
+            	$("#updateFrom").submit();            	
+            }
+            function saveAgain(){            	
+            	$("#payOk").hide();
+				$("#payShow").show();            	
+			}
+        </script>
+    </head>
+    <body>
+        <div class="main">
+        	<div class="title_row dark_blue ">
+        		<form id="updateFrom" name="updateFrom" action="/provider/chongzhi/pay.htm" method="post" target="_blank">					
+                    <table width="100%" cellspacing="1" cellpadding="3" align="center" style="display:table;" class="config_tab">
+        				<tbody>
+    					<tr align="left" id="payShow">
+        						<td align="left">充值金额（单位 元）：</td>
+                                <td align="left">
+                                    <input type="text" name="money" value="" />
+                                    <input type="button" name="save" value="确定 " class="button" onclick="doUpdateLimit();" />
+                                </td>
+                        	</tr>
+                        	<tr align="left" id="payOk" style="display:none">
+        						<td align="center" colspan=2>                                   
+                                    <input type="button" name="btnSaveOk" value="完成付款 " class="button" onclick="saveOk();" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="button" name="btnSaveAgain" value="付款发生错误 " class="button" onclick="saveAgain();" />
+                                </td>
+                        	</tr>
+                   	 	</tbody>
+                	</table>
+        		</form>
+            </div>
+        	<div class="clear"></div>
+        	<div id="result" style="display:none;"></div>
+			<div id="errorMsg" style="display:none;"></div>
+        	<div class="clear"></div>
+        </div>
+    </body>
+</html>

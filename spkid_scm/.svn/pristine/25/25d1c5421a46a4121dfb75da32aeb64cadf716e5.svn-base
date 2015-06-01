@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ProductCardMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.ProductCard">
+		<id column="card_id" property="cardId" jdbcType="INTEGER" />
+		<result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+		<result column="card_pwd" property="cardPwd" jdbcType="VARCHAR" />
+		<result column="is_used" property="isUsed" jdbcType="BOOLEAN" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="use_time" property="useTime" jdbcType="TIMESTAMP" />
+		
+		<result column="sub_id" property="subId" jdbcType="INTEGER" />
+		<result column="op_id" property="opId" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="ExtBaseResultMap" extends="BaseResultMap"
+		type="com.fclub.tpd.dataobject.ProductCard">
+		<result column="product_sn" property="productSn" jdbcType="VARCHAR" />
+		<result column="color_name" property="colorName" jdbcType="VARCHAR" />
+		<result column="size_name" property="sizeName" jdbcType="VARCHAR" />
+		<result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		card_id, card_no, card_pwd, is_used, create_time, order_time, use_time, sub_id, op_id 
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+			<include refid="Base_Column_List" />
+		from ty_product_card 
+		where card_id = #{cardId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByNo" resultMap="BaseResultMap" parameterType="String">
+		select 
+			<include refid="Base_Column_List" /> 
+		from ty_product_card
+		where card_no = #{cardNo,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findPage" resultMap="ExtBaseResultMap" parameterType="java.util.Map">
+		select t.card_id, t.card_no, t.card_pwd, t.is_used, t.order_time, t.use_time, pi.product_sn, pc.color_name, psize.size_name, oi.order_sn
+		from ty_product_card t
+		left join ty_product_sub ps on t.sub_id = ps.sub_id
+		left join ty_product_info pi on ps.product_id = pi.product_id
+		left join ty_product_color pc on ps.color_id = pc.color_id
+		left join ty_product_size psize on ps.size_id = psize.size_id
+		left join ty_order_product op on t.op_id = op.op_id
+		left join ty_order_info oi on op.order_id = oi.order_id
+		where 1
+		<if test="param.productSn !=null and param.productSn != ''">
+			and pi.product_sn like '%${param.productSn}%'
+		</if>
+		<if test="param.cardNo !=null and param.cardNo != ''">
+			and t.card_no like '%${param.cardNo}%'
+		</if>
+		<if test="param.cardPwd !=null and param.cardPwd != ''">
+			and t.card_pwd like '%${param.cardPwd}%'
+		</if>
+		<if test="param.providerId !=null">
+			and pi.provider_id = #{param.providerId}
+		</if>
+	</select>
+
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.ProductCard" >
+		insert into ty_product_card (
+			card_no,
+			card_pwd,
+			is_used,
+			create_time,
+			sub_id,
+			op_id
+		) values (
+			#{cardNo,jdbcType=VARCHAR},
+			#{cardPwd,jdbcType=VARCHAR},
+			#{isUsed,jdbcType=BOOLEAN},
+			NOW(),
+			#{subId,jdbcType=INTEGER},
+			#{opId,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<insert id="batchInsert">
+		insert into ty_product_card (
+			card_no,
+			card_pwd,
+			create_time,
+			sub_id
+		) values
+		<foreach collection="list" item="productCard" separator=",">
+	        (#{productCard.cardNo},#{productCard.cardPwd},now(),#{productCard.subId})
+	    </foreach>
+	</insert>
+	
+	<select id="getCountBySubNoPwd" resultType="Integer">
+		select count(1)
+		from ty_product_card
+		where sub_id = #{subId,jdbcType=INTEGER}
+		and card_no = #{cardNo,jdbcType=VARCHAR}
+		and card_pwd = #{cardPwd,jdbcType=VARCHAR}
+	</select>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.ProductCard">
+		update ty_product_card
+		<set>
+		<if test="cardNo != null">
+		card_no = #{cardNo,jdbcType=VARCHAR},
+		</if>
+		<if test="cardPwd != null and cardPwd != ''">
+		card_pwd = #{cardPwd,jdbcType=VARCHAR},
+		</if>
+		<if test="isUsed != null">
+		is_used = #{isUsed,jdbcType=BOOLEAN},
+		</if>
+		<if test="orderTime != null">
+		order_time = #{orderTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="useTime != null">
+		use_time = #{useTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="opId != null">
+		op_id = #{opId,jdbcType=INTEGER},
+		</if>
+		</set>
+		where card_id = #{cardId,jdbcType=INTEGER}
+	</update>
+	
+	<update id="batchUpdate" parameterType="java.util.List">
+		update ty_product_card 
+		set is_used = case card_id 
+		<foreach item="productCard" collection="list">
+			when #{productCard.cardId, jdbcType=INTEGER} then #{productCard.isUsed, jdbcType=BOOLEAN} 
+		</foreach>
+		end, use_time = now()
+		where card_id in
+		<foreach item="productCard" collection="list" open="(" separator="," close=")">
+			#{productCard.cardId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_product_card
+		where card_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<select id="queryExportCardData" resultMap="ExtBaseResultMap" parameterType="com.fclub.tpd.dataobject.ProductCard">
+		select t.card_id, t.card_no, t.card_pwd, t.is_used, t.order_time, t.use_time, pi.product_sn, pc.color_name, psize.size_name, oi.order_sn
+		from ty_product_card t
+		left join ty_product_sub ps on t.sub_id = ps.sub_id
+		left join ty_product_info pi on ps.product_id = pi.product_id
+		left join ty_product_color pc on ps.color_id = pc.color_id
+		left join ty_product_size psize on ps.size_id = psize.size_id
+		left join ty_order_product op on t.op_id = op.op_id
+		left join ty_order_info oi on op.order_id = oi.order_id
+		where 1
+		<if test="productSn !=null and productSn != ''">
+			and pi.product_sn like '%${productSn}%'
+		</if>
+		<if test="cardNo !=null and cardNo != ''">
+			and t.card_no like '%${cardNo}%'
+		</if>
+		<if test="cardPwd !=null and cardPwd != ''">
+			and t.card_pwd like '%${cardPwd}%'
+		</if>
+		<if test="providerId !=null">
+			and pi.provider_id = #{providerId}
+		</if>
+		order by t.card_id desc
+	</select>
+	
+</mapper>

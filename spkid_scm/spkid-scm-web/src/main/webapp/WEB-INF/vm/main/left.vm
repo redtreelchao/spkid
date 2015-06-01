@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="overflow-x:hidden;overflow-y:auto;">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>妈咪树-供应商平台管理系统</title>
+<link href="/css/common.css" rel="stylesheet" type="text/css"/>
+<link href="/css/core.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/left.js"></script>
+</head>
+
+<body style="background:url(/img/new_style/top/td_menuHeightDIVcentre.gif) top no-repeat;">
+<div id="left_list">
+    <div class="left_title">
+      	<span class="left_title_top">菜单</span>
+      	<div class="left_button1" id="left_list_button"></div>
+    </div>
+    <div class="left_list_Center">
+		#if($!tpdHelper.isAdmin())
+			<dl>
+    			<dt class="bold">
+    				<s class="icon_yygl"></s>
+    				后台管理
+    			</dt>
+    			<dd>
+    				<a href="/notice/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>公告管理</a>
+    			</dd>
+    			<dd>
+    				<a href="/workorder/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>工单管理</a>
+    			</dd>
+				<dd>
+    				<a href="/goods/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>商品管理</a>
+    			</dd>
+				<dd >
+    				<a href="/sms/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>上传短信管理</a>
+    			</dd>
+				#*<dd >
+    				<a href="/mamituan/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>团购管理</a>
+    			</dd>*#
+    		</dl>
+		#else
+    		<dl>
+    			<dt class="bold">
+    				<s class="icon_gysxx"></s>
+    				商家信息
+    			</dt>
+    			<dd >
+    				<a href="/provider/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>基本信息</a>
+    			</dd>
+    			<dd >
+    				<a href="/provider/account.htm" target="mainFrame" title="" hidefocus="true"><s></s>帐户管理</a>
+    			</dd>
+    		</dl>
+    		<dl>
+    			<dt class="bold">
+    				<s class="icon_yygl"></s>
+    				运营管理
+    			</dt>
+    			<dd >
+    				<a href="/workorder/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>工单处理</a>
+    			</dd>
+    			<dd >
+    				<a href="/selfreturn/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>自助退货</a>
+    			</dd>
+    			<dd >
+    				<a href="/notice/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>系统公告</a>
+    			</dd>
+    		</dl>
+    		<dl>
+    			<dt class="bold">
+    				<s class="icon_spgl"></s>
+    				商品管理
+    			</dt>
+    			<dd >
+    				<a href="/batchImport/init.htm" target="mainFrame" title="" hidefocus="true"><s></s>批量导入</a>
+    			</dd>
+    			<dd >
+    				<a href="/goods/type/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>前台分类</a>
+    			</dd>
+    			<dd >
+    				<a href="/goods/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>商品列表</a>
+    			</dd>
+				#*
+    			<dd >
+    				<a href="/bcsimp/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>尺寸图导入</a>
+    			</dd>
+    			<dd >
+    				<a href="/goods/category/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>商品后台分类</a>
+    			</dd>
+				*#
+    		</dl>
+    		<dl>
+    			<dt class="bold">
+    				<s class="icon_fhgl"></s>
+    				发货管理
+    			</dt>
+    			<dd >
+    				<a href="/shippingwave/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>波次列表</a>
+    			</dd>
+    			<dd >
+    				<a href="/shippingwave/shipping/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>批量发货</a>
+    			</dd>
+    			<dd >
+    				<a href="/shippingpacket/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>订单查询</a>
+    			</dd>
+    			<dd >
+    				<a href="/shipping/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>物流公司</a>
+    			</dd>
+    			<dd >
+    				<a href="/orderreturnquery/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>订单/退货单查询</a>
+    			</dd>
+    		</dl>
+			<dl>
+    			<dt class="bold">
+    				<s class="icon_fhgl"></s>
+    				促销管理
+    			</dt>
+				#*<dd >
+    				<a href="/voucher/campaign/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>现金券活动管理</a>
+    			</dd>*#
+    			<dd >
+    				<a href="/region/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>区域运费配置</a>
+    			</dd>
+				<dd >
+    				<a href="/sms/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>短信发送</a>
+    			</dd>
+				#*<dd >
+    				<a href="/mamituan/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>团购管理</a>
+    			</dd>*#
+    		</dl>
+    		#*
+    		<dl>
+    			<dt class="bold">
+    				<s class="icon_fhgl"></s>
+    				报表管理
+    			</dt>
+    			<dd >
+    				<a href="/reportform/list/main.htm" target="mainFrame" title="" hidefocus="true"><s></s>销售报表</a>
+    			</dd>
+    		</dl>
+    		*#
+		#end
+    </div>
+    <div class="shadow"></div>
+</div>
+</body>
+<script type="text/javascript">
+if (!('v'=='\v')) {
+	$(window).scroll(function () {
+		if ($('body').scrollTop()>0) {
+			$('.shadow').height($('body').height());
+		} else {$('.shadow').removeAttr('style')}
+	});
+}
+</script>
+</html>

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.fclub.tpd.mapper.BrandMapper" >
+	
+	<resultMap id="brandMap" type="com.fclub.tpd.dataobject.Brand">
+			   
+		<!-- basic informations -->
+		<id column="brand_id" property="brandId" jdbcType="SMALLINT" />
+	    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+	    <result column="brand_short" property="brandShort" jdbcType="VARCHAR" />
+	    <result column="brand_initial" property="brandInitial" jdbcType="VARCHAR" />
+	    <result column="site_url" property="siteUrl" jdbcType="VARCHAR" />
+	    <result column="sort_order" property="sortOrder" jdbcType="TINYINT" />
+	    <result column="brand_desc" property="brandDesc" jdbcType="LONGVARCHAR" />
+	    <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+	    <result column="hits" property="hits" jdbcType="INTEGER" />
+	    
+	    <result column="brand_banner_url" property="brandBannerUrl" jdbcType="VARCHAR" />
+	    <result column="brand_story_link" property="brandStoryLink" jdbcType="VARCHAR" />
+	    
+	    <result column="brand_story" property="brandStory" jdbcType="LONGVARCHAR" />
+	    <result column="brand_address" property="brandAddress" jdbcType="LONGVARCHAR" />
+	    <result column="brand_custom" property="brandCustom" jdbcType="LONGVARCHAR" />
+	    <result column="brand_activity" property="brandActivity" jdbcType="LONGVARCHAR" />
+	    
+	    <result column="is_focus" property="isFocus" jdbcType="TINYINT" />
+	    <result column="is_show" property="isShow" jdbcType="BIT" />
+	    <result column="is_empty" property="isEmpty" jdbcType="SMALLINT" />
+	    
+	    <result column="area_id" property="areaId" jdbcType="SMALLINT" />
+		
+		<!-- images -->
+	    <result column="brand_logo" property="brandLogo" jdbcType="VARCHAR" />
+	    <result column="brand_logobig" property="brandLogobig" jdbcType="VARCHAR" />
+	    <result column="brand_logo_small" property="brandLogoSmall" jdbcType="VARCHAR" />
+	    <result column="brand_playimg" property="brandPlayimg" jdbcType="VARCHAR" />
+	    <result column="brand_focus" property="brandFocus" jdbcType="VARCHAR" />
+	    <result column="brand_video" property="brandVideo" jdbcType="VARCHAR" />
+	    <result column="brand_banner" property="brandBanner" jdbcType="VARCHAR" />
+	    
+	    <result column="logo_75_50_url" property="logo7550Url" jdbcType="VARCHAR" />
+	    
+	    <!-- operation informations -->
+	    <result column="brand_aid" property="brandAid" jdbcType="SMALLINT" />
+	    <result column="brand_time" property="brandTime" jdbcType="TIMESTAMP" />
+	    
+	    <result column="uptuser" property="uptUser" jdbcType="INTEGER" />
+	    <result column="upttime" property="uptTime" jdbcType="TIMESTAMP" />
+	    
+	   	<!-- WMS informations -->
+	    <result column="synch_status" property="synchStatus" jdbcType="BIT" />
+	    <result column="synch_time" property="synchTime" jdbcType="TIMESTAMP" />
+	    
+	</resultMap>
+	
+	<resultMap id="brandSimpleMap"
+			   type="com.fclub.tpd.dataobject.Brand">
+		<id column="brand_id" property="brandId" jdbcType="SMALLINT" />
+	    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="baseColumnList" >
+	    brand_id, brand_name, site_url, brand_desc, brand_time, sort_order, is_show
+  	</sql>
+	
+	<insert id="insert" 
+			parameterType="com.fclub.tpd.dataobject.Brand"
+			useGeneratedKeys="true"
+			keyProperty="brandId">
+		insert into ty_product_brand( 
+			brand_name, 
+      		brand_short, 
+      		brand_initial, 
+      		site_url, 
+      		sort_order, 
+      		brand_desc, 
+      		keywords, 
+      		hits, 
+      		brand_banner_url, 
+      		brand_story_link, 
+      		brand_story, 
+      		brand_address, 
+      		brand_custom, 
+      		brand_activity,
+      		is_focus, 
+      		is_show, 
+      		is_empty, 
+      		area_id, 
+			brand_logo, 
+      		brand_logobig, 
+      		brand_logo_small, 
+      		brand_playimg, 
+      		brand_focus, 
+      		brand_video, 
+      		brand_banner, 
+      		brand_aid, 
+      		brand_time    		
+		) values(
+			#{brandName},
+			#{brandShort},
+			#{brandInitial},
+			#{siteUrl},
+			#{sortOrder},
+			#{brandDesc},
+			#{keywords},
+			#{hits},
+			#{brandBannerUrl},
+			#{brandStoryLink},
+			#{brandStory},
+			#{brandAddress},
+			#{brandCustom},
+			#{brandActivity},
+			#{isFocus},
+			#{isShow},
+			#{isEmpty},
+			#{areaId},
+			#{brandLogo},
+			#{brandLogobig},
+			#{brandLogoSmall},
+			#{brandPlayimg},
+			#{brandFocus},
+			#{brandVideo},
+			#{brandBanner},
+			#{brandAid},
+			#{brandTime}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.Brand">
+		update ty_product_brand
+		<set>
+			brand_id = #{brandId}, 
+			<if test="brandName != null">brand_name = #{brandName},</if>
+			<if test="brandShort != null" >brand_short = #{brandShort},</if>
+			<if test="brandInitial != null">brand_initial = #{brandInitial},</if>
+			<if test="siteUrl != null">site_url = #{siteUrl},</if>
+			<if test="sortOrder != null">sort_order = #{sortOrder},</if>
+			<if test="brandDesc != null">brand_desc = #{brandDesc},</if>
+			<if test="keywords != null">keywords = #{keywords},</if>
+			<if test="hits != null">hits = #{hits},</if>
+			
+			<if test="brandBannerUrl != null">brand_banner_url = #{brandBannerUrl},</if>
+			<if test="brandStoryLink != null">brand_story_link = #{brandStoryLink},</if>
+			<if test="brandStory != null">brand_story = #{brandStory},</if>
+			<if test="brandAddress != null">brand_address = #{brandAddress},</if>
+			
+			<if test="brandCustom != null">brand_custom = #{brandCustom},</if>
+			<if test="brandActivity != null">brand_activity = #{brandActivity},</if>
+			
+			<if test="isFocus != null">is_focus = #{isFocus},</if>
+			<if test="isShow != null">is_show = #{isShow},</if>
+			<if test="isEmpty != null">is_empty = #{isEmpty},</if>
+			
+			<if test="areaId != null">area_id = #{areaId},</if>
+			
+			<if test="brandLogo != null">brand_logo = #{brandLogo},</if>
+			<if test="brandLogobig != null">brand_logobig = #{brandLogobig},</if>
+			<if test="brandLogoSmall != null">brand_logo_small = #{brandLogoSmall},</if>
+			<if test="brandPlayimg != null">brand_playimg = #{brandPlayimg},</if>
+			<if test="brandFocus != null">brand_focus = #{brandFocus},</if>
+			<if test="brandVideo != null">brand_video = #{brandVideo},</if>
+			<if test="brandBanner != null">brand_banner = #{brandBanner}</if>
+		</set>
+		where brand_id = #{brandId}
+	</update>
+	
+	<delete id="deleteById" parameterType="_int">
+		delete from ty_product_brand where brand_id = #{brandId}
+	</delete>
+	
+	<select id="selectById" parameterType="_int" resultMap="brandMap">
+		select 
+			brand_id,
+			brand_name
+<!-- 			,  -->
+<!--       		brand_short,  -->
+<!--       		brand_initial,  -->
+<!--       		site_url,  -->
+<!--       		sort_order,  -->
+<!--       		brand_desc,  -->
+<!--       		keywords,  -->
+<!--       		hits,  -->
+<!--       		brand_banner_url,  -->
+<!--       		brand_story_link,  -->
+<!--       		brand_story,  -->
+<!--       		brand_address,  -->
+<!--       		brand_custom,  -->
+<!--       		brand_activity, -->
+<!--       		is_focus,  -->
+<!--       		is_show,  -->
+<!--       		is_empty,  -->
+<!--       		area_id,  -->
+<!-- 			brand_logo,  -->
+<!--       		brand_logobig,  -->
+<!--       		brand_logo_small,  -->
+<!--       		brand_playimg,  -->
+<!--       		brand_focus,  -->
+<!--       		brand_video,  -->
+<!--       		brand_banner -->
+		from ty_product_brand
+		where brand_id = #{brandId}
+	</select>
+	
+	<select id="get" parameterType="_int" resultMap="brandMap">
+		select 
+			brand_id,
+			brand_name, 
+      		brand_short, 
+      		brand_initial, 
+      		site_url, 
+      		sort_order, 
+      		brand_desc, 
+      		keywords, 
+      		hits, 
+      		brand_banner_url, 
+      		brand_story_link, 
+      		brand_story, 
+      		brand_address, 
+      		brand_custom, 
+      		brand_activity,
+      		is_focus, 
+      		is_show, 
+      		is_empty, 
+      		area_id, 
+			brand_logo, 
+      		brand_logobig, 
+      		brand_logo_small, 
+      		brand_playimg, 
+      		brand_focus, 
+      		brand_video, 
+      		brand_banner
+		from ty_product_brand
+		where brand_id = #{brandId}
+	</select>
+	
+	<select id="isExistedName" 
+			parameterType="com.fclub.tpd.dataobject.Brand" 
+			resultType="_boolean">
+		select case when count(*) > 0 then true else false end
+		from ty_product_brand
+		where brand_name = #{brandName}
+		<if test="brandId != null"> and brand_id != #{brandId}</if>
+	</select>
+	
+	<select id="isExistedShort" 
+			parameterType="com.fclub.tpd.dataobject.Brand" 
+			resultType="_boolean">
+		select case when count(*) > 0 then true else false end
+		from ty_product_brand
+		where brand_short = #{brandShort}
+		<if test="brandId != null"> and brand_id != #{brandId}</if>
+	</select>
+	
+	<select id="beingUsed" parameterType="_int" resultType="_boolean">
+		select case when g.count > 0 then true else false end
+		from (
+			select count(*) as count 
+			from fc_goods
+			where brand_id = #{brandId}
+		) as g
+	</select>
+	
+	<select id="findPage" resultMap="brandMap" parameterType="java.util.Map">
+		select <include refid="baseColumnList" />
+		from ty_product_brand
+		<if test="param.brandName != ''">
+		where brand_name like '${param.brandName}%'
+		</if>
+		order by sort_order desc
+	</select>
+	
+	<!-- 获取品牌列表，活动管理中“手动商品模块中品牌下拉列表，用于搜索商品的，并按品牌名首字母排序”有用到-->
+	<select id="findAll" resultMap="brandMap">
+		select brand_id, brand_name
+		from ty_product_brand
+		order by brand_initial
+	</select>
+	
+	<!-- 获取品牌列表，用于活动管理中对“品牌模块”、“自动商品模块中品牌”、“品牌加分类中品牌”的列表展示 、-->
+	<select id="selectAllShowBrands" resultMap="brandMap">
+		select brand_id, brand_name
+		from ty_product_brand
+		where is_show = 1
+		order by sort_order desc
+	</select>
+	
+	<select id="getBrandByName" resultMap="brandSimpleMap" parameterType="java.lang.String">
+		select brand_id, brand_name
+		from ty_product_brand
+		where brand_name like #{brandName,jdbcType=VARCHAR}
+		limit 10
+	</select>
+	
+	<select id="findNameByid" parameterType="java.lang.Integer" resultType="java.lang.String">
+		select brand_name from ty_product_brand where brand_id = #{id}
+	</select>
+	
+	<select id="findBrandsByProviderId" parameterType="java.lang.Integer" resultMap="brandMap">
+		select b.brand_id, b.brand_name
+		from ty_product_brand b 
+		inner join ty_provider_brand p on p.brand_id = b.brand_id
+		where p.provider_id =  #{providerId, jdbcType=INTEGER}
+	</select>
+	
+</mapper>

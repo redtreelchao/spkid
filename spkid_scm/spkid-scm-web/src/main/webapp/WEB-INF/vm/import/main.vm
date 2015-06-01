@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+<title>批量导入</title>
+<link href="/css/common.css" rel="stylesheet" type="text/css"/>
+<link href="/css/main.css" rel="stylesheet" type="text/css"/>
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/thickbox_plus.js"></script>
+<script type="text/javascript" src="/js/artdialog/artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="/js/jquery.timers.js"></script>
+<script type="text/javascript" src="/js/jquery.form.pack.js"></script>
+<script type="text/javascript" src="/js/jquery.form.import.js"></script>
+<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/fclub.validate.js"></script>
+<script type="text/javascript" src="/js/importing/importResult.js?v=20130121"></script>
+<script type="text/javascript">
+/*标签切换*/
+$(function(){
+        var btns = $ (".config_btn");
+        var tabs = $ (".config_tab");
+        $ .each(btns, function(i, btn){
+            $(btn).bind("click",function(){
+                $(tabs).hide();
+                $(tabs[i]).show();
+                $(btns).removeClass("currentbtn");
+                $(this).addClass("currentbtn");
+				var type = $(this).attr("type");
+				//submitSearch(type)
+            });
+            $(btn).bind("focus",function(){$(this).blur();});
+        });
+    });
+
+/*隐藏展开批量导入*/
+$(function () {
+    $('.importTable .close').click(function () {
+        if($('.importTable .flow:visible').length>0){
+            $('.importTable .flow').hide();
+            $('.importTable').css('border-bottom','none');
+        } else{
+            $('.importTable .flow').show();
+            $('.importTable').removeAttr('style');
+        }
+    });
+});
+
+/*隐藏展开tips*/
+$(function () {
+    $('.tips_row .close').click(function () {
+        if($('.tips_row_text:visible').length>0){
+            $('.tips_row_text').hide();
+            $('.tips_row').css('border-bottom','none');
+        } else{
+            $('.tips_row_text').show();
+            $('.tips_row').removeAttr('style');
+        }
+    });
+});
+$(function(){
+	//main Import
+    $("input.thickbox_LAX_MAIN").click(function(obj){
+      var t = $(obj.currentTarget).attr("title");
+	  var callBack= function(){
+	  	submitSearch_MAIN();
+	  };
+      TB_show(t,$(obj.currentTarget).attr("href"),callBack);
+      this.blur();
+    });
+	//colorSize 
+	$("input.thickbox_LAX").click(function(obj){
+      var t = $(obj.currentTarget).attr("title");
+	  var t_type = $(obj.currentTarget).attr("sType");
+	  var callBack= function(){
+	  	submitSearch_cs();
+	  };
+      TB_show(t,$(obj.currentTarget).attr("href"),callBack);
+      this.blur();
+    });
+});
+</script>
+<style rel="stylesheet" type="text/css">
+.runing_color_list {
+background: url("../../../img/StatBarButtonDiv.png") no-repeat scroll 0 0 transparent;
+display: block;
+height: 9px;
+left: 10px;
+top: 33px;
+width: 110px;
+display:inline-block;
+}
+.runing_color_list div {
+    background: url("../../../img/StatBarButtonDivC.png") no-repeat scroll 0 0 transparent;
+    float: left;
+    height: 9px;
+    margin-left: 1px;
+    width: 0;
+}
+</style>
+</head>
+<body>
+<div class="main">
+    <div class="main_title"><span class="left bold main_title_top dark_blue">批量导入</span>
+        <span class="right add_t"></span>
+  </div>
+    <div class="clear"></div>
+    <div style="height:26px;">
+        <ul>
+            <li class="config_btn currentbtn"><span>导入主要信息</span></li>
+			<li class="config_btn" type="02"><span>导入颜色尺寸</span></li>
+			<li class="config_btn" type="06"><span>导入商品图</span></li>
+			##<li class="config_btn" type="07"><span>导入尺寸对照图</span></li>
+			<li class="config_btn" type="08"><span>导入虚库库存</span></li>
+        </ul>
+    </div>
+    <div class="title_row dark_blue">
+            <!--商品主要信息-->
+			#parse("import/importMainController.vm")
+			<!-- 商品颜色尺寸 -->
+			#parse("import/importColorSizeController.vm")
+			<!--商品图-->
+			#parse("import/importGalleryController.vm")
+			<!--尺寸图-->
+			##parse("import/importBCSController.vm")
+			<!--虚库库存-->
+			#parse("import/importConsignController.vm")
+    </div>
+    <div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+#if($type)
+$(".config_btn[type='$!{type}']").click();
+#else
+$(".config_btn:first").click();
+#end
+});
+</script>
+</body>
+</html>

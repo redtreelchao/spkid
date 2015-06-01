@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.NoticeMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.Notice">
+		<id column="notice_id" property="noticeId" jdbcType="INTEGER" />
+		<result column="notice_title" property="noticeTitle" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="audit_user" property="auditUser" jdbcType="INTEGER" />
+		<result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<select id="queryTop" resultMap="BaseResultMap">
+		SELECT t.notice_title
+		FROM ty_scm_notice t
+		WHERE t.audit_user > 0 AND t.is_delete = 0
+		ORDER BY t.notice_id DESC
+		LIMIT 3
+	</select>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select * 
+		from ty_scm_notice t
+		where notice_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select * 
+		from ty_scm_notice t
+		where is_delete = 0   
+		<if test="param.noticeTitle != null and param.noticeTitle != '' ">
+			and t.notice_title like '${param.noticeTitle}%'
+		</if>
+		<if test="param.createUser != null and param.createUser > 0">		
+			and t.audit_user > 0 and audit_time is not null
+		</if>
+		order by t.create_time desc
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		update ty_scm_notice
+		set is_delete = 1 
+		where notice_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.Notice">
+		insert into ty_scm_notice (
+			notice_title,
+			content,
+			create_user,
+			create_time,
+			is_delete
+		)
+		values (
+			#{noticeTitle,jdbcType=VARCHAR},
+			#{content,jdbcType=VARCHAR},
+			#{createUser,jdbcType=INTEGER},
+			NOW(),
+			0
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.Notice">
+		update ty_scm_notice 
+		set 
+		<if test="noticeTitle != null">
+			notice_title = #{noticeTitle,jdbcType=VARCHAR},
+		</if>
+		<if test="content != null">
+			content = #{content,jdbcType=VARCHAR},
+		</if>
+		<if test="updateUser != null and updateUser > 0">
+			update_user = #{updateUser,jdbcType=INTEGER},
+			update_time = NOW() 
+		</if>
+		<if test="auditUser != null and auditUser > 0">
+			audit_user = #{auditUser,jdbcType=INTEGER},
+			audit_time = NOW()
+		</if>
+		
+		where notice_id = #{noticeId,jdbcType=INTEGER}
+	</update>
+	
+</mapper>

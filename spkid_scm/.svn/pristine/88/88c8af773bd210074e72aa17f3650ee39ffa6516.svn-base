@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ProviderMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.Provider">
+		<id column="provider_id" property="providerId" jdbcType="INTEGER" />
+		<result column="provider_code" property="providerCode" jdbcType="VARCHAR" />
+		<result column="provider_name" property="providerName" jdbcType="VARCHAR" />
+		<result column="provider_cess" property="providerCess" jdbcType="DECIMAL" />
+    	
+    	<result column="user_name" property="userName" jdbcType="VARCHAR" />
+    	<result column="password" property="password" jdbcType="VARCHAR" />
+    	<result column="provider_status" property="providerStatus" jdbcType="BIT" />
+    	
+    	<result column="official_name" property="officialName" jdbcType="VARCHAR" />
+    	<result column="official_address" property="officialAddress" jdbcType="VARCHAR" />
+    	<result column="provider_bank" property="providerBank" jdbcType="VARCHAR" />
+		<result column="provider_account" property="providerAccount" jdbcType="VARCHAR" />
+    	
+    	<result column="scm_responsible_user" property="responsibleUser" jdbcType="VARCHAR" />
+    	<result column="scm_responsible_phone" property="responsiblePhone" jdbcType="VARCHAR" />
+    	<result column="scm_responsible_qq" property="responsibleQQ" jdbcType="VARCHAR" />
+    	<result column="scm_responsible_mail" property="responsibleMail" jdbcType="VARCHAR" />
+    	
+    	<result column="scm_order_process_user" property="orderProcessUser" jdbcType="VARCHAR" />
+    	<result column="scm_order_process_phone" property="orderProcessPhone" jdbcType="VARCHAR" />
+    	<result column="scm_order_process_qq" property="orderProcessQQ" jdbcType="VARCHAR" />
+    	<result column="scm_order_process_mail" property="orderProcessMail" jdbcType="VARCHAR" />
+    	
+    	<result column="return_address" property="returnAddress" jdbcType="VARCHAR" />
+    	<result column="return_consignee" property="returnConsignee" jdbcType="VARCHAR" />
+    	<result column="return_postcode" property="returnPostcode" jdbcType="VARCHAR" />
+    	<result column="return_mobile" property="returnMobile" jdbcType="VARCHAR" />
+    	
+    	<result column="provider_cooperation" property="providerCooperation" jdbcType="INTEGER" />
+    	<result column="shipping_fee_config" property="shippingFeeConfig" jdbcType="VARCHAR" />
+    	<result column="display_name" property="displayName" jdbcType="VARCHAR" />
+    	<result column="logo" property="logo" jdbcType="VARCHAR" />
+    	<result column="provider_ad" property="providerAd" jdbcType="LONGVARCHAR" />
+    	<result column="provider_ad_sdate" property="providerAdSdate" jdbcType="TIMESTAMP" />
+    	<result column="provider_ad_edate" property="providerAdEdate" jdbcType="TIMESTAMP" />
+    	<result column="account_balance" property="accountBalance" jdbcType="NUMERIC" />
+    	<result column="sms_price" property="smsPrice" jdbcType="NUMERIC" />
+	</resultMap>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.Provider">
+		update ty_product_provider
+		<set>
+			<if test="password != null and password != '' ">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="shippingFeeConfig != null and shippingFeeConfig != '' ">
+				shipping_fee_config = #{shippingFeeConfig,jdbcType=VARCHAR}, 
+			</if>
+			<if test="displayName != null and displayName != '' ">
+				display_name = #{displayName,jdbcType=VARCHAR}, 
+			</if>
+			<if test="logo != null and logo != '' ">
+				logo = #{logo,jdbcType=VARCHAR} ,
+			</if>
+			<if test="providerAd != null and providerAd != '' ">
+				provider_ad = #{providerAd,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="providerAdSdate != null ">
+				provider_ad_sdate = #{providerAdSdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="providerAdEdate != null ">
+				provider_ad_edate = #{providerAdEdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="accountBalance != null and accountBalance>0 ">
+				account_balance = #{accountBalance,jdbcType=NUMERIC},
+			</if>
+		</set>
+		where provider_id = #{providerId,jdbcType=INTEGER}
+	</update>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select * 
+		from ty_product_provider
+		where provider_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+  	<select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+	  	select * 
+	  	from ty_product_provider
+	  	where user_name = #{_parameter,jdbcType=VARCHAR}
+  	</select>
+  
+</mapper>

@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
+<body >
+<div class="main">
+	<div class="clear"></div>
+	<div class="search_row dark_blue">
+		导入商品主要信息
+    </div>
+	<div class="clear"></div>
+	<div class="title_row dark_blue ">
+		<form id="uoloadFormOfMain" name="upload" action="/batchImport/main.htm" method="post" enctype="multipart/form-data">
+            <div>上传文件：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input validate="required" type="file" id="upload_file" name="file" /><br/>
+			商品类型： &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<select id="isVirtual" name="isVirtual" style="width:100px">
+        		##<option value="-1">---请选择---</option>
+    			<option value="0">普通商品</option>
+        		##<option value="1">虚拟商品</option>
+        	</select><br/>
+			#*虚拟卡生成方式：  
+			<select id="generateMethod" style="width:100px" name="generateMethod">
+        		<option value="0">---请选择---</option>
+    			<option value="1">系统生成</option>
+        		<option value="2">手工导入</option>
+        	</select><br/>*#
+			##选择供应商：#providerSelect("providerId","providerId")
+				<input flg="import" type="button" class="button" value="导入" onclick="fileUploadOfMain();" /></div>
+			#emptyInput()
+		</form>
+    </div>
+	<div class="clear"></div>
+	<div class="title_row dark_blue">
+		注:第一行默认为标题,将不执行导入操作。 <br />点击“查看”功能，可查看导入的详细信息（包含本次导入的结果报告）。 <br />
+		[<a class="edit orange" href="/batchImport/downloadMain.htm" target="_blank">下载goods.xls模板</a>] 
+    </div>
+	<div class="clear"></div>
+	<div id="result" class="title_row dark_blue" style="display:none;"></div>
+	<div class="clear"></div>
+</div>
+</body>
+</html>

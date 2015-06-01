@@ -1,0 +1,3 @@
+#macro(emptyInput)
+<input type="text" style="display:none" />
+#end

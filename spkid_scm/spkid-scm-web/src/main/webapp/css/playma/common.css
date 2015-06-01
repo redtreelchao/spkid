@@ -1,0 +1,279 @@
+.clear_both {
+    clear: both;
+}
+.f_l {
+    float: left;
+}
+.f_r {
+    float: right;
+}
+
+.second_class {
+    background-color: #FFFFFF;
+    float: left;
+    height: auto;
+    margin-top: 5px;
+    width: 238px;
+}
+.sc_nav {
+    float: left;
+    height: 33px;
+    width: 238px;
+}
+.sc_nav span {
+    display: block;
+    float: left;
+}
+.sc_nav span img {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+.sc_nav_left {
+    height: 33px;
+    width: 191px;
+}
+.sc_nav_right {
+    background: url("http://img.fclub.cn/images/fps/s_c_dr.gif") no-repeat scroll 0 0 transparent;
+    height: 23px;
+    padding-top: 10px;
+    width: 47px;
+}
+.sc_content {
+    border-left: 1px solid #D6D6D6;
+    border-right: 1px solid #D6D6D6;
+    float: left;
+    padding-top: 5px;
+    width: 236px;
+}
+.sc_content li {
+    width: 236px;
+}
+.sc_content li a {
+    background: url("http://img.fclub.cn/images/fps/s_c_jj.gif") no-repeat scroll 15px 10px transparent;
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 25px;
+    line-height: 25px;
+    padding-left: 25px;
+    width: 90px;
+}
+.sc_content li .click_d {
+    background: url("http://img.fclub.cn/images/fps/s_c_jj.gif") no-repeat scroll 15px -7px transparent;
+    color: #BD4172;
+}
+.sc_f {
+    background: url("http://img.fclub.cn/images/fclub_ui.jpg") no-repeat scroll -2px -76px transparent;
+    clear: both;
+    height: 15px;
+}
+
+
+.liuyan_body {
+    background-color: #FFFFFF;
+    float: left;
+    height: auto;
+    margin-bottom: 10px;
+    width: 99%;
+}
+.liuyan_top {
+    background: url("http://img.fclub.cn/images/liuyanban_ico_4.gif") no-repeat scroll 10px 12px transparent;
+    border: 1px solid #CCCCCC;
+    color: #000000;
+    font-size: 13px;
+    height: 32px;
+    line-height: 32px;
+    text-indent: 20px;
+    width: 100%;
+}
+.liuyan_main {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color #CCCCCC #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+    border-style: none solid solid;
+    border-width: medium 1px 1px;
+    height: auto;
+    overflow: hidden;
+    padding-top: 20px;
+    width: 100%;
+}
+.liuyan_main .kehuliuyan {
+    color: #333333;
+    line-height: 24px;
+}
+.liuyan_main ul {
+    margin-bottom: 20px;
+    margin-left: 10px;
+    width: 98%;
+}
+.liuyan_main li {
+    height: auto;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    width: 100%;
+}
+.liuyan_main li.kh {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #FFFBE6;
+    border-color: #CCCCCC -moz-use-text-color;
+    border-style: dotted none;
+    border-width: 1px medium;
+}
+
+.fbliuyan {
+    background: url("http://img.fclub.cn/images/liuyanban_ico_4.gif") no-repeat scroll 10px 12px transparent;
+    border: 1px solid #CCCCCC;
+    color: #000000;
+    height: 30px;
+    line-height: 30px;
+    text-indent: 20px;
+    width: 755px;
+}
+.fbliuyan_nr, .fbliuyan_bottom {
+    background-color: #F0F0F0;
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+    padding: 15px;
+    width: 755px;
+}
+.fbliuyan_bottom {
+    border-bottom: 1px solid #CCCCCC;
+}
+
+
+
+
+
+
+
+
+
+.play, .nav, .goods_list, .pager, .rush_nav, .hot_goods {
+    clear: both;
+    margin: 10px auto 0;
+    overflow: hidden;
+    width: 1000px;
+}
+
+
+li.goods_area {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    float: left;
+    height: 391px;
+    list-style: none outside none;
+    margin: 18px 34px 0 0;
+    position: relative;
+    width: 222px;
+}
+a.goods_pic, a.goods_pic img {
+    border: medium none;
+    color: #000000 !important;
+    display: block;
+    font-size: 12px;
+    height: 296px;
+    line-height: 296px;
+    text-align: center;
+    width: 222px;
+}
+.lihover {
+    border: 2px solid #FF0000;
+    display: none;
+    height: 389px;
+    left: -1px;
+    position: absolute;
+    top: -1px;
+    width: 220px;
+    z-index: 1;
+}
+.lihover a {
+    display: block;
+    height: 389px;
+    width: 220px;
+}
+li.goods_area dl {
+    color: #000000;
+    font-family: Arial;
+    font-size: 12px;
+    overflow: hidden;
+    padding: 10px 0 0 14px;
+    position: absolute;
+    text-align: left;
+    width: 210px;
+    z-index: 2;
+}
+li.goods_area dl dd {
+    height: 20px;
+    line-height: 20px;
+    margin-left: 0;
+    white-space: nowrap;
+}
+li.goods_area dl dd a {
+    color: #000000 !important;
+}
+dd.dd_price {
+    height: 24px !important;
+    line-height: 24px !important;
+    margin-top: 4px;
+}
+
+.saleoff {
+    background: none repeat scroll 0 0 #000000;
+    font-family: "宋体";
+    height: 55px;
+    left: -1px;
+    opacity: 0.7;
+    position: absolute;
+    top: 226px;
+    width: 182px;
+    z-index: 2;
+}
+.saleoff strong {
+    color: #FFFF00;
+    float: right;
+    font-size: 16px;
+    margin: 8px 12px 0 0;
+}
+.saleoff p {
+    clear: both;
+    color: #FFFFFF;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    padding-right: 12px;
+    text-align: right;
+}
+span.gL {
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin-left: -4px;
+}
+span.gL em {
+    color: #FF0000;
+    font-family: "微软雅黑";
+    font-size: 17px;
+    font-style: normal;
+    padding-right: 3px;
+}
+span.gR {
+    color: #666666;
+    float: right;
+    margin-right: 8px;
+}
+
+.mr {
+    margin-right: 0 !important;
+}
+.mt {
+    margin-top: 0 !important;
+}

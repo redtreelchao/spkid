@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.SizeMapper">
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.Size">
+		<id column="size_id" property="sizeId" jdbcType="INTEGER" />
+		<result column="size_sn" property="sizeCode" jdbcType="VARCHAR" />
+		<result column="size_name" property="sizeName" jdbcType="VARCHAR" />
+		<result column="sort_order" property="sortOrder" jdbcType="SMALLINT" />
+		<result column="create_admin" property="sizeAid" jdbcType="SMALLINT" />
+		<result column="create_date" property="sizeTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		size_id, size_sn, size_name, sort_order, create_admin, create_date
+	</sql>
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.Size">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="sizeId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into ty_product_size
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sizeId != null">size_id,</if>
+			<if test="sizeCode != null">size_sn,</if>
+			<if test="sizeName != null">size_name,</if>
+			<if test="sortOrder != null">sort_order,</if>
+			<if test="sizeAid != null">create_admin,</if>
+			<if test="sizeTime != null">create_date,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sizeId != null">#{sizeId,jdbcType=INTEGER},</if>
+			<if test="sizeCode != null">#{sizeCode,jdbcType=VARCHAR},</if>
+			<if test="sizeName != null">#{sizeName,jdbcType=VARCHAR},</if>
+			<if test="sortOrder != null">#{sortOrder,jdbcType=SMALLINT},</if>
+			<if test="sizeAid != null">#{sizeAid,jdbcType=SMALLINT},</if>
+			<if test="sizeTime != null">#{sizeTime,jdbcType=TIMESTAMP},</if>
+		</trim>
+	</insert>
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_product_size
+		where size_id = #{sizeId,jdbcType=INTEGER}
+	</delete>
+	<update id="update" parameterType="com.fclub.tpd.dataobject.Size">
+		update ty_product_size
+		<set>
+			<if test="sizeCode != null">size_sn =
+				#{sizeCode,jdbcType=VARCHAR},</if>
+			<if test="sizeName != null">size_name =
+				#{sizeName,jdbcType=VARCHAR},</if>
+			<if test="sortOrder != null">sort_order =
+				#{sortOrder,jdbcType=SMALLINT},</if>
+			<if test="sizeAid != null">create_admin =
+				#{sizeAid,jdbcType=SMALLINT},</if>
+			<if test="sizeTime != null">create_date =
+				#{sizeTime,jdbcType=TIMESTAMP},</if>
+		</set>
+		where size_id = #{sizeId,jdbcType=INTEGER}
+	</update>
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from ty_product_size
+		where 1=1
+		<if test="param.sizeCode != null ">
+			and size_sn like '${param.sizeCode}%'
+		</if>
+		<if test="param.sizeName != null ">
+			and size_name like '${param.sizeName}%'
+		</if>
+		order by sort_order desc
+	</select>
+	<select id="queryAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ty_product_size
+		order by size_name
+	</select>
+	<select id="get" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_size
+		where size_id = #{sizeId,jdbcType=INTEGER}
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_size
+		where size_id = #{sizeId,jdbcType=INTEGER}
+	</select>
+	<select id="selectByUniqueKey1" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_size
+		where size_sn = #{sizeCode,jdbcType=VARCHAR}
+		<if test="sizeId != null">
+			AND size_id != #{sizeId,jdbcType=INTEGER}
+		</if>
+	</select>
+	<select id="selectByUniqueKey2" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_size
+		where size_name = #{sizeName,jdbcType=VARCHAR}
+		<if test="sizeId != null">
+			AND size_id != #{sizeId,jdbcType=INTEGER}
+		</if>
+	</select>
+	<select id="confirmBeingUsed" resultType="java.lang.Boolean"
+		parameterType="java.lang.Integer">
+		SELECT CASE WHEN t.co > 0 THEN TRUE ELSE FALSE END FROM
+		(
+		SELECT COUNT(*) AS co FROM ty_product_sub gl WHERE
+		gl.size_id=#{sizeId,jdbcType=INTEGER}
+		)AS t
+	</select>
+	<select id="getIdByName" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select size_id
+		from ty_product_size
+		where size_name = #{value,jdbcType=VARCHAR}
+	</select>
+</mapper>

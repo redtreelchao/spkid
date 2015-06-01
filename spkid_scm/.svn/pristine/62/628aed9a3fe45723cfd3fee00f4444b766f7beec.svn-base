@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>波次管理</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/jquery.form.pack.js"></script>
+<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/page.js"></script>
+<script type="text/javascript" src="/js/tpd/shippingWave.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">波次管理</span>
+		<span class="right add_t">
+			##<input type="button" class="button" value="刷新订单数" onclick="refreshOrderNum();">
+			<a class="add" id="generateBt" href="javascript:generateWave();" >生成波次($orderNum)</a>
+		</span>
+	</div>
+	
+	<div class="clear"></div>
+	
+	<div id="searchPanel" class="search_row dark_blue">
+		<form id="searchForm" action="/shippingwave/list/query.htm" method="post" style="margin: 0;">
+			<input type="hidden" id="pageSize" name="pageSize" value="$!page.pageSize" />
+			<input type="hidden" id="pageNo" name="pageNo" value="$!page.pageNo" />
+			<input type="hidden" id="order" name="order" value="$!page.order" />
+			<input type="hidden" id="orderBy" name="orderBy" value="$!page.orderBy" />
+			
+			##在此下面加搜索条件
+			波次号：<input type="text" class="inputBorder enterQuery" name="waveSn" style="width:150px;" />
+			创建时间：
+				<input type="text" class="inputBorder Wdate" name="createDateBegin" id="dateBegin" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'dateEnd\')}'})" style="width:100px;" /> ~ 
+				<input type="text" class="inputBorder Wdate" name="createDateEnd" id="dateEnd" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'dateBegin\')}'})" style="width:100px;" /> 
+			波次状态：#dictSelect("ShippingWave.waveStatus" "waveStatus" "" false true)
+			
+			<input type="button" class="button" value="搜索" onclick="submitSearch();">
+		</form>
+	</div>
+	<div class="clear"></div>
+	<div id="printPanel" class="search_row dark_blue">
+		订单号：<input type="text" class="inputBorder" id="orderSn" name="orderSn" style="width:150px;" />
+		<input type="button" class="button" value="打印订单装箱单" onclick="printOrder();">
+    </div>
+	<div class="clear"></div>
+	<div id="contentPanel"></div>
+
+    <div class="search_row dark_blue" style="margin-top:10px;">
+    	<br>页面功能说明：<br><br>
+        1、波次列表：显示所有的发货波次；<br>
+        2、波次搜索：可按照波次号、创建时间段、波次状态搜索查询波次列表；<br>
+        3、生成波次：右上角的导出数量为已客审&已支付&未发货&未导出波次的订单数量，每次最多生成40个订单，生成后波次状态为“拣货中”；<br>
+        4、批量发货：点击进入批量发货页面；<br>
+        5、查看波次：显示该波次所有的订单信息；<br>
+        6、导出波次：导出该波次所有的订单信息，导出格式为xls格式。<br>
+    </div>
+	<div class="clear"></div>
+	
+</div>
+#pageScript(20)
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ProviderBrandMapper" >
+
+  	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.ProviderBrand" >
+    	<id column="id" property="id" jdbcType="INTEGER" />
+    	<result column="brand_id" property="brandId" jdbcType="INTEGER" />
+    	<result column="provider_id" property="providerId" jdbcType="INTEGER" />
+    	<result column="commission" property="commission" jdbcType="VARCHAR" />
+  	</resultMap>
+  
+  	<resultMap type="com.fclub.tpd.dataobject.ProviderBrand" id="ExtBaseResultMap" extends="BaseResultMap">
+  		<association property="brand" resultMap="com.fclub.tpd.mapper.BrandMapper.brandMap" />
+  		<association property="provider" resultMap="com.fclub.tpd.mapper.ProviderMapper.BaseResultMap" />
+  	</resultMap>
+  
+  	<sql id="Base_Column_List" >
+    	t.id, t.brand_id, t.provider_id, commission
+  	</sql>
+  
+  	<select id="selectBrandsByProviderId" parameterType="java.lang.Integer" resultMap="ExtBaseResultMap">
+	  	select 
+	  	<include refid="Base_Column_List" />, 
+	  	b.brand_name, p.provider_cess, b.brand_logo
+	  	from ty_provider_brand t
+	  	left join ty_product_brand b on t.brand_id = b.brand_id
+	  	left join ty_product_provider p on t.provider_id = p.provider_id
+ 	  	where t.provider_id = #{providerId,jdbcType=INTEGER}
+  	</select>
+  
+</mapper>

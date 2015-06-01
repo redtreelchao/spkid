@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.BcsImpMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.BcsImp">
+		<id column="imp_id" property="impId" jdbcType="INTEGER" />
+		<result column="brand_id" property="brandId" jdbcType="INTEGER" />
+		<result column="cat_id" property="catId" jdbcType="INTEGER" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="imp_status" property="impStatus" jdbcType="INTEGER" />
+		<result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="category_name" property="catName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.imp_id,
+		t.brand_id,
+		t.cat_id,
+		t.sex,
+		t.imp_status,
+		t.image_url,
+		t.create_user,
+		t.create_time
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_bcs_imp t
+		where imp_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+		<include refid="Base_Column_List" />,
+		b.brand_name, c.category_name
+		from ty_scm_bcs_imp t
+		left join ty_provider_brand pb on t.brand_id = pb.brand_id
+		left join ty_product_brand b on t.brand_id = b.brand_id
+		left join ty_product_category c on t.cat_id = c.category_id
+		where 1
+		<if test="param.providerId != null and param.providerId > 0 "> 
+			and pb.provider_id= #{param.providerId,jdbcType=INTEGER} 
+		</if>
+		<if test="param.brandId != null and param.brandId > 0 "> 
+			and t.brand_id= #{param.brandId,jdbcType=INTEGER} 
+		</if>
+		<if test="param.catId != null and param.catId > 0 "> 
+			and t.cat_id= #{param.catId,jdbcType=INTEGER} 
+		</if>
+		<if test="param.sex != null and param.sex != '' "> 
+			and t.sex= #{param.sex,jdbcType=INTEGER} 
+		</if>
+		order by t.imp_id
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_scm_bcs_imp
+		where imp_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.BcsImp">
+		insert into ty_scm_bcs_imp (
+			brand_id,
+			cat_id,
+			sex,
+			imp_status,
+			image_url,
+			create_user,
+			create_time
+		)
+		values (
+			#{brandId,jdbcType=INTEGER},
+			#{catId,jdbcType=INTEGER},
+			#{sex,jdbcType=VARCHAR},
+			#{impStatus,jdbcType=INTEGER},
+			#{imageUrl,jdbcType=VARCHAR},
+			#{createUser,jdbcType=INTEGER},
+			#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.BcsImp">
+		update ty_scm_bcs_imp
+		<set>
+		<if test="brandId != null">
+		brand_id = #{brandId,jdbcType=INTEGER},
+		</if>
+		<if test="catId != null">
+		cat_id = #{catId,jdbcType=INTEGER},
+		</if>
+		<if test="sex != null">
+		sex = #{sex,jdbcType=VARCHAR},
+		</if>
+		<if test="impStatus != null">
+		imp_status = #{impStatus,jdbcType=INTEGER},
+		</if>
+		<if test="imageUrl != null">
+		image_url = #{imageUrl,jdbcType=VARCHAR},
+		</if>
+		<if test="createUser != null">
+		create_user = #{createUser,jdbcType=INTEGER},
+		</if>
+		<if test="createTime != null">
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		</if>
+		</set>
+		where imp_id = #{impId,jdbcType=INTEGER}
+	</update>
+	
+	<select id="checkExists" resultType="java.lang.Integer" parameterType="com.fclub.tpd.dataobject.BcsImp">
+		select 1
+		from ty_scm_bcs_imp t
+		left join ty_product_brand b on t.brand_id = b.brand_id
+		left join ty_product_category c on t.cat_id = c.category_id
+		where 1
+		<if test="brandId != null and brandId > 0 "> 
+			and t.brand_id= #{brandId,jdbcType=INTEGER} 
+		</if>
+		<if test="catId != null and catId > 0 "> 
+			and t.cat_id= #{catId,jdbcType=INTEGER} 
+		</if>
+		<if test="sex != null and sex != '' "> 
+			and t.sex= #{sex,jdbcType=INTEGER} 
+		</if>
+		order by t.imp_id
+	</select>
+</mapper>

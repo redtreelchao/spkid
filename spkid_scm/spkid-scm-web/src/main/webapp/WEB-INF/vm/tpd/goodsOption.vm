@@ -1,0 +1,106 @@
+<script type="text/javascript">
+$(function(){
+	##基础数据设置
+		##$("#catId").val($goods.catId)
+		##$("#brandId").val($goods.brandId)
+		##$("#goodsSex").val("$goods.goodsSex")
+	##颜色尺寸设置
+	#foreach($color in $goodsColors.entrySet())
+		#set($colorId=$color.key)
+		//add colorby $colorId  begin
+		#set($colorName=$color.value.get(0).color.colorName)
+		addColor($colorId,'$!colorName');
+		#set($sizeList=$color.value)
+		#foreach($size in $sizeList)
+			addColorSize($size.glId,$colorId,$size.sizeId,'$size.size.sizeName','$!size.providerBarcode');
+		#end
+		//add color Img colorId=$colorId
+		#foreach($img in $goodsGalleryDTOs)
+			#if($img.colorId==$colorId)
+    			#set($name=$img.imgName)
+    			#set($imgType=$img.imgType)
+    			#set($imgOrder=$img.imgOrder)
+				#set($imgPath=$constants.genImgURL($img.imgPath))
+    			#set($typeName="")
+    			#set($defFlag=false)
+    			#if($imgType=="default")
+    				#set($typeName="默认")
+    				#set($defFlag=true)
+    			#elseif($imgType=="tonal")
+    				#set($typeName="色片")
+    			#else
+    				#set($typeName="局部")
+    			#end
+    			addColorImg($img.galleryId,$colorId,$defFlag,'$name','$imgType','$typeName',$imgOrder,'$imgPath');
+			#end
+		#end
+		//add colorby $colorId  end
+	#end
+	});
+</script>
+
+<script >
+function addColor(colorId,colorName){
+	var name="tm_"+colorId;
+	$("#color_template").clone(true).attr("id",name ).appendTo("#allDatas tbody#tbody");
+	$("#"+name).find("#colorId").val(colorId);
+	$("#"+name).find("#colorName").html(colorName);
+	$("#"+name).find("#sizeId").attr("id",name+"_sizeId");
+	$("#"+name).find("a").attr("onclick","javascript:deleteCurrentRow('"+name+"');");
+	//设置页面属性
+	$("#"+name).find("input[flg='add']").attr("onclick","javascript:addSize('"+colorId+"');");
+	$("#"+name).find("input[flg='upload']").attr("onclick","javascript:addImg('"+colorId+"');");
+	$("#"+name).find("td[flg='size']").attr("id",colorId+"-size");
+	$("#"+name).find("td[flg='img']").attr("id",colorId+"-img");
+	$("#"+name).find("div[flg='color_opt']").attr("id",colorId+"-opt");
+	$("#"+name).find("input[flg='img_count_flag']").attr("id","img_count_flag_"+colorId);
+	$("#"+name).find("input[flg='img_count_flag']").attr("name","img_count_flag_"+colorId);
+
+	$("#"+name).find("input[flg='img_def_flag']").attr("id","img_def_flag_"+colorId);
+	$("#"+name).find("input[flg='img_def_flag']").attr("name","img_def_flag_"+colorId);
+	
+	$("#"+name).find("input[name='image_category']").attr("name","image_category_"+colorId);
+	}
+function addColorSize(glId,mach,sizeId,sizeName,size_code){
+	var name="tm_"+mach+"_size_"+sizeId;
+	$("#size_template").clone(true).attr("id",name ).appendTo("#"+mach+"-size");
+	$("#"+name).find("input[flg='size_id']").attr("name","color_size_id_"+mach).val(sizeId);
+	$("#"+name).find("input[flg='gl_id']").attr("name","color_"+mach+"size_"+sizeId+"glId").val(glId);
+	$("#"+name).find("#size_name").html(sizeName);
+	$("#"+name).find("a").attr("onclick","javascript:deleteSize('"+name+"');");
+	//重置Name
+	$("#"+name).find("input[flg='size_code']").attr("name","color_"+mach+"size_"+sizeId+"code").val(size_code);
+}
+function addColorImg(galleryId,colorId,defFlag,name,type,typeName,order,imgPath){
+		var colorImg_count_flag=parseInt(genColorImgCount(colorId))+parseInt(1);
+		var colorImgId=colorId+"_" + colorImg_count_flag;
+		var divLa="#"+colorId+"-opt";
+		//clone内容
+		$("#img_template").clone(true).attr("id",colorImgId ).appendTo("#"+colorId+"-img");
+		//设置变量
+		$("#"+colorImgId).find("input[flg='color_img_type']").val(type);
+		$("#"+colorImgId).find("input[flg='color_img_order']").val(order);
+		$("#"+colorImgId).find("a").attr("onclick","javascript:deleteView('"+colorImgId+"');");
+		$("#"+colorImgId).find("input[flg='color_img_name']").val(name);
+		
+		$("#"+colorImgId).find("input[flg='color_img_GalleryId']").val(galleryId);
+		//展示
+		$("#"+colorImgId).find("#type_name").html(typeName);
+		$("#"+colorImgId).find("img").attr("src",imgPath);
+		//重置Name
+		$("#"+colorImgId).find("input[flg='color_img_type']").attr("name","color_img_type_"+colorImgId);
+		$("#"+colorImgId).find("input[flg='color_img_order']").attr("name","color_img_order_"+colorImgId);
+		$("#"+colorImgId).find("input[flg='color_img_file']").attr("name","color_img_file_"+colorImgId);
+		$("#"+colorImgId).find("input[flg='color_img_name']").attr("name","color_img_name_"+colorImgId);
+		$("#"+colorImgId).find("input[flg='color_img_GalleryId']").attr("name","color_img_id_"+colorImgId);
+		
+		 $("#"+colorImgId).find("img").mousemove(function(e){//img1是 显示 上传图片的缩略图 
+        //鼠标经过的时候 给div加上 图片 
+                $("#large").css({top:e.pageY,left:e.pageX}).html('<img style="border:1px solid gray;" src="' + this.src + '" />').show(); 
+            }).mouseout( function(){ 
+                $("#large").hide();//否则 就隐藏 
+            }) 
+		initColorImgCount(colorId,colorImg_count_flag);
+		initDefaultFlag(colorId, defFlag);
+}
+</script>

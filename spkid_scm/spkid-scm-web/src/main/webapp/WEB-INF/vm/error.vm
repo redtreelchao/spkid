@@ -1,0 +1,22 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<link href="/css/common.css" rel="stylesheet" type="text/css"/>
+<link href="/css/main.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+</head>
+<body >
+<div class="main">
+	<span style="border:1px #fafafa solid; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block; padding:5px; width:98%; margin:9px auto; background-color:#fcfcfc; min-height:300px; font-size:12px; line-height:25px; color:#666;"><span class=red>温馨提示</span>
+	<br />执行过程中发生系统异常,请联系管理员进行处理！
+	</span>
+	
+	<div align=center style='color:#333;font-size:12px;'>
+		<a href="javascript:history.go(-2);" style='color:#666;'>返回首页</a> 
+		<a href="javascript:history.go(-1);" style='color:#333;'>返回上页</a>
+	</div>
+</div>
+
+</body>
+</html>

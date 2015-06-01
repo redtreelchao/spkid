@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ColorMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.Color">
+		<id column="color_id" property="colorId" jdbcType="INTEGER" />
+		<result column="color_sn" property="colorCode" jdbcType="VARCHAR" />
+		<result column="group_id" property="groupCode" jdbcType="INTEGER" />
+		<result column="color_name" property="colorName" jdbcType="VARCHAR" />
+		<result column="color_img" property="colorImg" jdbcType="VARCHAR" />
+		<result column="color_color" property="colorColor" jdbcType="VARCHAR" />
+		<result column="is_use" property="isUse" jdbcType="BIT" />
+		<result column="create_admin" property="colorAid" jdbcType="INTEGER" />
+		<result column="create_date" property="colorTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		color_id, color_sn, color_name, color_img, color_color 
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_product_color
+		where color_id = #{colorId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByName" resultMap="BaseResultMap" parameterType="String">
+		select 
+			color_id, color_sn, color_name 
+		from ty_product_color
+		where color_name = #{colorName,jdbcType=VARCHAR}
+	</select>
+
+	<select id="queryByCode" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select color_id
+		from ty_product_color
+		where color_sn = #{colorCode,jdbcType=VARCHAR}
+		<if test="colorId != null ">
+		and color_id != #{colorId,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<select id="queryByName" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select color_id
+		from ty_product_color
+		where color_name = #{colorName,jdbcType=VARCHAR}
+		<if test="colorId != null ">
+		and color_id != #{colorId,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.Color">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="colorId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into ty_product_color (
+			group_id,
+			color_sn,
+			color_name, 
+			color_img, 
+			color_color,
+			create_date, 
+			create_admin
+		)
+		values (
+			#{groupCode,jdbcType=INTEGER},
+			#{colorCode,jdbcType=VARCHAR},
+			#{colorName,jdbcType=VARCHAR}, 
+			#{colorImg,jdbcType=VARCHAR}, 
+			#{colorColor,jdbcType=VARCHAR},
+			NOW(), 
+			#{colorAid,jdbcType=INTEGER}
+		)
+	</insert>
+	
+</mapper>

@@ -1,0 +1,141 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>上传短信</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/jquery.form.import.js"></script>
+<script type="text/javascript" src="/js/fclub.validate.js"></script>
+<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/tpd/sms.js"></script>
+</head>
+<script type="text/javascript">
+$(document).ready(function(){
+	if("$!flag"!=''){  
+		alert('上传成功');
+	}
+	});
+$(document).ready(function(){
+		$("#file").show();	
+	    $("#fileLink").show();	
+	    $("#smsNum").hide();	
+	    $("#tiao").hide();	
+        $("#sendType").change(function(){    
+        	var select_val = $(this).children('option:selected').val();        	
+        	if(select_val != ''){
+	        	if(select_val == '1'){
+	        		//$("#fileDiv").show();	
+	        		$("#file").show();	
+	        		$("#fileLink").show();	
+	        		$("#smsNum").val()='';
+	        		$("#smsNum").hide();	
+	        		$("#tiao").hide();	        		
+	         	}else{
+	         		//$("#fileDiv").hide();	  
+	         		$("#file").hide();	
+	         		$("#fileLink").hide();	
+	         		$("#smsNum").show();	
+	        		$("#tiao").show();	
+	         	}
+         	}
+     	});
+   });
+</script>
+
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">上传短信</span>
+		<span class="right add_t"><a class="add" href="/sms/list/main.htm" >返回列表</a></span>
+	</div>
+	
+	<div class="clear"></div>
+	
+	<div id="searchPanel" class="search_row dark_blue">
+		<form id="importForm" action="/sms/upload.htm" method="post" enctype="multipart/form-data" >
+			<input id="smsId" type="hidden" name="smsId" value="$!sms.smsId" />
+			<table width="100%" style="margin: 0 auto;" cellpadding="0" cellspacing="0">
+				#if(!$sms)				
+				<tr>
+					<td width="15%" style="font-size: 10pt;font-weight: bold;line-height:30px;" align="right">
+						发送人群&nbsp;&nbsp;
+					</td>
+					<td>
+						<select name="sendType" id="sendType" style="font-size: 10pt;font-weight: bold;line-height:90px;">
+						#if($!readOnly == 0)
+						<option value="1">上传手机号码</option>						
+						#if($!hasHistory)
+						<option value="2">历史记录随机</option>
+						#end
+						#end
+						</select>&nbsp;&nbsp;						
+						#if($!readOnly == 0)
+						<input type="file" id="file" name="file"/>
+						<input type="text" size="4" maxlength="4" id="smsNum" name="smsNum" />&nbsp;&nbsp;<lable id="tiao" style="font-size: 10pt;font-weight: bold;">条</lable>
+						#end
+						&nbsp;&nbsp;
+						<a class="orange" id="fileLink" style="text-decoration:underline;" href="/sms/downloadshortage.htm">下载excel模板</a>
+					</td>
+				</tr>	
+				#end			
+				<tr>
+					<td width="15%" style="font-size: 10pt;font-weight: bold;line-height:90px;" align="right">
+						发送日期&nbsp;&nbsp;
+					</td>
+					<td>
+						<input type="text" class="enterQuery input black Wdate" name="sendTime" value="$!dateTool.format('yyyy-MM-dd HH:mm:ss', $!sms.sendTime)" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" validate="required" #if($!readOnly == 1) readonly="readonly" #end style="width:150px" />
+					</td>
+				</tr>			
+				<tr>
+					<td valign="top" width="15%"  style="font-size: 10pt;font-weight: bold;" align="right">
+						短信内容&nbsp;&nbsp;
+					</td>
+					<td >
+						  <textarea  id="content" name="content" rows="15" cols="100" onkeyup="this.value = this.value.slice(0, 65)" validate="required" #if($!readOnly == 1) readonly="readonly" #end >$!sms.content</textarea>
+						注：最多输入65个汉字
+					</td>
+				</tr>
+			
+				<tr>					
+					<td style="line-height:50px;" align="center" colspan=2>
+					#if($!readOnly == 0)
+					<input type="button" class="button" value="保存" style="width:80px;" onclick="doSubmit(0);">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" class="button" value="提交" style="width:80px;" onclick="doSubmit(1);">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="reset" class="button" value="重置" style="width:80px;">
+					#end
+					</td>
+				</tr>
+		
+			</table>
+		</form>
+	</div>
+	
+</div>
+
+</body>
+<script type="text/javascript">
+	function checkTextf(){
+		if($("#content").val()=="最多输入65个汉字"){
+			$("#content").val("");
+		}
+	}
+	function checkTextb(){
+			if($("#content").val()==""){
+				$("#content").val("最多输入65个汉字");
+			}
+		}
+	function submitsms() {
+		var pdv = new Validate("importForm");
+		if (pdv.validate()) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+</script>
+</html>

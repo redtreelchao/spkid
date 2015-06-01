@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.DepotInMainMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.erp.DepotInMain">
+		<id column="depot_in_id" property="depotInId" jdbcType="INTEGER" />
+		<result column="depot_in_code" property="depotInCode" jdbcType="VARCHAR" />
+		<result column="order_id" property="orderId" jdbcType="INTEGER" />
+		<result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+		<result column="depot_depot_id" property="depotDepotId" jdbcType="INTEGER" />
+		<result column="depot_in_reason" property="depotInReason" jdbcType="VARCHAR" />
+		<result column="depot_in_type" property="depotInType" jdbcType="INTEGER" />
+		<result column="depot_in_number" property="depotInNumber" jdbcType="INTEGER" />
+		<result column="depot_in_amount" property="depotInAmount" jdbcType="DECIMAL" />
+		<result column="depot_in_date" property="depotInDate" jdbcType="TIMESTAMP" />
+		<result column="audit_admin" property="depotInCheckAid" jdbcType="INTEGER" />
+		<result column="audit_date" property="depotInCheckTime" jdbcType="TIMESTAMP" />
+		<result column="create_admin" property="depotInAid" jdbcType="INTEGER" />
+		<result column="create_date" property="depotInTime" jdbcType="TIMESTAMP" />
+		<result column="lock_admin" property="lockAid" jdbcType="INTEGER" />
+		<result column="lock_date" property="lockTime" jdbcType="TIMESTAMP" />
+		<result column="depot_in_finished_number" property="depotInFinishedNumber" jdbcType="INTEGER" />
+		<result column="is_deleted" property="depotInDelete" jdbcType="BIT" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.erp.DepotInMain">
+		insert into ty_depot_in_main (
+			depot_in_code,
+			<!-- order_id,
+			order_sn,
+			is_deleted,
+			lock_admin,
+			lock_date, -->
+			depot_depot_id,
+			depot_in_reason,
+			depot_in_type,
+			depot_in_number,
+			depot_in_amount,
+			depot_in_date,
+			audit_admin,
+			audit_date,
+			create_admin,
+			create_date,
+			depot_in_finished_number
+		)
+		values (
+			#{depotInCode,jdbcType=VARCHAR},
+			<!-- #{orderId,jdbcType=INTEGER},
+			#{orderSn,jdbcType=VARCHAR},
+			#{depotInDelete,jdbcType=BIT},
+			#{lockAid,jdbcType=INTEGER},
+			#{lockTime,jdbcType=INTEGER}, -->
+			#{depotDepotId,jdbcType=INTEGER},
+			#{depotInReason,jdbcType=VARCHAR},
+			#{depotInType,jdbcType=INTEGER},
+			#{depotInNumber,jdbcType=INTEGER},
+			#{depotInAmount,jdbcType=DECIMAL},
+			#{depotInDate,jdbcType=TIMESTAMP},
+			#{depotInCheckAid,jdbcType=INTEGER},
+			#{depotInCheckTime,jdbcType=TIMESTAMP},
+			#{depotInAid,jdbcType=INTEGER},
+			#{depotInTime,jdbcType=TIMESTAMP},
+			#{depotInFinishedNumber,jdbcType=INTEGER}
+		)
+		<selectKey resultType="java.lang.Integer" keyProperty="depotInId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+</mapper>

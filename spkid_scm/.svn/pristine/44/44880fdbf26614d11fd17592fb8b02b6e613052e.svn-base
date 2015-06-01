@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.OrderReturnQueryMapper">
+	
+	<select id="queryReturnSnByOrderSn" resultType="java.lang.String">
+		select t.return_sn
+		from ty_order_return_info t
+		left join ty_order_info oi on t.order_id = oi.order_id
+		where oi.order_sn = #{orderSn,jdbcType=VARCHAR}
+		  and exists (select 1 from ty_order_product og 
+  				  	left join ty_product_info g on og.product_id = g.product_id 
+				  	where t.order_id = og.order_id
+				    and g.provider_id = #{providerId,jdbcType=INTEGER})
+	</select>
+	
+	<select id="findOrderSnByReturnSn" resultType="java.lang.String">
+		select t.order_sn
+		from ty_order_info t
+		left join ty_order_return_info ri on t.order_id = ri.order_id
+		where ri.return_sn = #{returnSn,jdbcType=VARCHAR}
+		  and exists (select 1 from ty_order_product og 
+  				  	left join ty_product_info g on og.product_id = g.product_id 
+				  	where t.order_id = og.order_id
+				    and g.provider_id = #{providerId,jdbcType=INTEGER})
+	</select>
+	
+</mapper>

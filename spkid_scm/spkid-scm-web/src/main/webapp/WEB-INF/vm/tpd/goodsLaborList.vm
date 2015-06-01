@@ -1,0 +1,35 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+								<th >商品ID</th>
+				<th >颜色ID</th>
+				<th >尺寸ID</th>
+				<th >是否拍摄</th>
+				<th >代销库存:-2--不限量代销;-1:不代销;>=0限量代销</th>
+				<th >大的在前面</th>
+				<th >供应商条码(妈咪树条码)</th>
+				<th >供应商条码</th>
+				<th >操作</th>
+			</tr>
+			#foreach( $info in $page.result) 
+			<tr>
+				<td align="center"> $!info.goodsId </td>
+				<td align="center"> $!info.colorId </td>
+				<td align="center"> $!info.sizeId </td>
+				<td align="center"> $!info.isPic </td>
+				<td align="center"> $!info.consignNum </td>
+				<td align="center"> $!info.sortOrder </td>
+				<td align="center"> $!info.providerBarcode </td>
+				<td align="center"> $!info.tpdProviderBarcode </td>
+				<td align="center">
+					<a class="edit" href="/goodslabor/editTo.htm?id=$info.glId">编辑</a>
+					<a class="del" href="javascript:doDelete($info.glId)">删除</a>
+				</td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>
+
+#page()

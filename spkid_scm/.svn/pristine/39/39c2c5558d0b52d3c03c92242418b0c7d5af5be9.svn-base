@@ -1,0 +1,74 @@
+
+.interval,.interval_t{ width:100%; overflow:hidden; float:left;}
+.interval{height:10px;}
+.interval_t{height:20px;}
+.women_dh{ width:930px; padding-left:50px; height:37px; background:url(http://img.fclub.cn//images/fps/w_dbg.gif) no-repeat; line-height:37px;}
+#wm_channel{ width:1000px; background-color:#EEEEEE;margin: 0 auto 10px;}
+.wm_channel_top{ width:100%;}
+.wm_channel_left{ width:238px;}
+.wm_c,.wmbrand_f,.hs_l{ background:url(http://img.fclub.cn//images/fps/wm_channel_ui.gif) no-repeat;}
+.wm_c,.wm_b{ width:208px; float:left; height:27px;}
+.wm_c{ margin:15px 0 5px 0; background-position:15px top;}
+.wmbrand{ width:238px; margin-top:10px; display:inline; margin-left:2px;background-color:#fff}
+.por_list{width:238px; margin:10px 4px 0 2px; float:left; display:inline;}
+.por_list_top,.por_list_btn{ background:url(http://img.fclub.cn/images/fps/s_all_ui.png) no-repeat;}
+.por_list_top{width:203px; padding-left:35px; font-size:14px; height:33px; line-height:33px; background-position:left -180px; background-color:#CCC;}
+.por_list_containd,.wmbrand_c,.rank_containd{border-left:1px solid #D6D6D6; border-right:1px solid #D6D6D6; float:left;}
+.por_list_containd{ width:236px;background-color:#fff}
+.por_list_f{ width:220px; padding:10px 5px 10px 10px; float:left;}
+.por_list_f dt{ line-height:30px; border-bottom:1px dotted #ccc; font-size:14px; font-weight:700; padding-left:20px; color:#C10017; 
+background: url(http://img.fclub.cn//images/fps/w_m_dh_bg.gif) no-repeat 5px 11px; float:left; width:180px;}
+.r_qb{ float:right; font-weight:400; font-size:12px;}
+.por_list_f dd{padding-top:8px; padding-left:10px; float:left;}
+.por_list_f dd li{ width:100px; height:25px; word-break:keep-all; white-space:nowrap;}
+.por_list_f dd a,.por_list_f a{ margin:0 5px;}
+.por_list_f dd a:hover{ color:#F30;}
+.por_list_btn{height:6px; background-position:left -217px; overflow:hidden; clear:both;}
+.wmbrand_f{ width:236px; height:6px; overflow:hidden; float:left;}
+.wmbrand_c{ width:216px; padding:10px 0 0 20px;}
+.wmbrand_c li{ width:190px; height:50px;  border-bottom:1px dotted #999;}
+.wmbrand_f{background-position:left -65px;}
+.ad_one{ width:238px; padding:8px 0; float:left;}
+.wm_channel_r,.wm_ppt,.hs_ad{ width:732px;}
+.wm_ppt{ margin-top:10px;}
+.wm_channel_r{ margin-bottom:10px;}
+.hs_pro{ margin-top:10px;background-color:#fff}
+.wm_ppt_t{ width:732px; height:9px; overflow:hidden; float:left;}
+.wm_ppt_c{ width:732px; background:url(http://img.fclub.cn//images/fps/wmppt_c.gif) repeat-y; float:left;}
+/*--ppt--*/
+#i_focus_btn {float:right; width:140px; background:url(http://img.fclub.cn//images/fps/fashion_t.gif) no-repeat 10px top;}
+#i_focus_btn ul{ margin-top:50px;}
+#i_focus_btn li { width:140px; padding-top:1px; text-align:center; cursor:pointer; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50)}
+#i_focus_btn img { width:90px; height:55px; border:1px solid #fff; margin-bottom:10px}
+#i_focus_btn .i_cur {opacity:1; -moz-opacity:1; filter:alpha(opacity=100); background:url(http://img.fclub.cn//images/fps/p_bf.gif) no-repeat 11px top;}
+#i_focus_r{width:572px; height:330px; float:left; padding-left:20px; margin-top:8px;}
+#i_focus_piclist { width:572px; height:329px; float:left; overflow:hidden;}
+#i_focus_piclist li { width:554px; height:329px; overflow:hidden; display:none;}
+#i_focus_piclist li span{ width:550px; height:25px; display:block; text-align:center; line-height:25px; color: #666; font-size:14px;}
+#i_focus_piclist img { width:550px; height:300px; border:1px solid #B2B2B0;}
+#i_focus_piclist li span,.hs_r{ font-family:"宋体"; font-weight:700;}
+.hs_l{ background-position:15px -72px; width:660px;}
+.hs_r a{ color:#6D6D6D;}
+.hs_ad{ height:360px; margin:10px 0;}
+.hs_pro{ width:100%;}
+.hs_pro h2{ width:100%; height:39px; line-height:39px; background:url(http://img.fclub.cn//images/fps/wm_rdh.gif) no-repeat;}
+.hs_pro h2 span{ display:block; }
+.w_l{ width:600px; padding-left:30px; height:39px; float:left;}
+.w_r{ width:85px; height:24px; padding-top:15px; background:url(http://img.fclub.cn//images/fps/wm_rdhr.gif) no-repeat right top; float:right;}
+.hs_pro_c_t,.hs_pro_c_r{ width:99.7%; border:1px solid #9A9CB3; float:left; padding:10px 0;}
+.hs_pro_c_t li,.hs_pro_c_r li{text-align:center; height:230px;}
+.hs_pro_c_t li{ width:162px;}
+.hs_pro_c_r li{ width:145px;}
+.c_66{ width:99%; height:22px; line-height:22px; overflow:hidden; white-space:nowrap;}
+.wm_foot{ width:980px; height:auto; float:left;}
+.rank{ width:237px; float:left;}
+.rank_containd{ width:226px; padding:10px 0 0 10px; height:300px;background-color:#fff}
+.wf_jg{ width:8px; height:20px; float:left;}
+.left_list2 li {padding-left:0;background:none;height:auto;width:220px; line-height:25px; _word-break:keep-all; _white-space:nowrap;}
+.ziy_ys{float:left; width:100%;}
+/*.ziy_ys{float:left; width:100%; padding-top:10px;}*/
+.zdy_sz_w{ height:25px; line-height:25px; width:220px; overflow:hidden;}
+.hdlb_pic{ float:left; padding:5px 0;}
+.hdlb_dh{ background:url("http://img.fclub.cn/images/h3title.gif") repeat-x scroll left top transparent; height:33px; line-height:33px; padding:0;}
+.liuyan_body{ margin-top:10px;}
+.wm_more{ width:96%; height:25px; font:12px/25px; font-weight:700; text-align:right; float:left; padding-right:20px;}

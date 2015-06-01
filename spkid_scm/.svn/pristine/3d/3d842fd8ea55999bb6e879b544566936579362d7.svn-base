@@ -1,0 +1,20 @@
+##商品尺寸对照图TAB
+<table id="allDatas" width="90%" align="center" cellpadding="0" cellspacing="0" style="display:none;" class="config_tab">
+	<tbody id="tbody">
+    	<tr><td></td></tr>
+        <tr>
+        	<td>
+				#if ($stringUtil.isNotEmpty($goods.scDesc))
+				<div id="common-template" class="img_template">
+                	#if ($!readOnly != 1 || ($stringUtil.isNotEmpty($goods.tpdGoodsStatus) && $goods.tpdGoodsStatus == '0'))
+					<a onclick="javascript:deleteBcs(${goods.goodsId});" class="del"></a>
+					#end<br />
+					$goods.scDesc
+					<div id="large"></div> 
+                </div>
+				#end
+            </td>
+        </tr>
+        <tr><td></td></tr>
+    </tbody>
+</table>

@@ -1,0 +1,67 @@
+<table width="100%" cellspacing="0" cellpadding="0" align="center" style="display:none;" class="config_tab">
+    <tbody>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="importTable">
+                    <tbody>
+                       <tr>
+                            <th align="left">
+                                 <font class="bold">批量导入流程</font>
+                               ## <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="center">
+                                <div class="buttonElement">
+                                    <input #if($sr)class="none_color"#else class="thickbox_LAX" href="/goods/batchImport/importView.htm?type=importSub&height=300&width=550" title="导入商品次要信息"#end type="button" value="次要数据" sType="04"/>
+									#if($sr)
+									<div class="runing_color">
+                                        <div class="StatBarButtonDiv" id="SS_BAR" type="04"></div>
+                                    </div>
+									<script type="text/javascript">
+										roll("#SS_BAR");
+                                    </script>
+									#end
+								</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="clear"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="tips_row">
+                    <tbody>
+                        <tr>
+                            <th align="left">
+                                <font class="bold">导入流程说明</font>
+                                <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="left" class="tips_row_text dark_blue">
+								注:第一行默认为标题,将不执行导入操作。 导入完成后点击右边的 "查看结果" .显示 商品信息的导入状态(没有错误信息表示导入成功)
+							</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+		<tr>
+			<td>
+                <div class="clear"></div>
+            </td>
+		</tr>
+		<tr>
+			<td>
+				<div id="contentPanel_04"></div>
+			</td>
+		</tr>	
+    </tbody>
+</table>

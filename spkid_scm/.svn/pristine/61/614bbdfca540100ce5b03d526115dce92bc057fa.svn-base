@@ -1,0 +1,29 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+								<th >操作模块(01-活动,02-商品)</th>
+				<th >操作类型(11-初审成功,12-初审失败,13-确认排期,14-排期驳回,15-驳回,16-作废,21-审核成功,22-审核失败)</th>
+				<th >操作描述</th>
+				<th ></th>
+				<th ></th>
+				<th >操作</th>
+			</tr>
+			#foreach( $info in $page.result) 
+			<tr>
+				<td align="center"> $!info.logType </td>
+				<td align="center"> $!info.logCode </td>
+				<td align="center"> $!info.logDesc </td>
+				<td align="center"> $!info.createUser </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd hh:mm:ss',$!info.createTime)  </td>
+				<td align="center">
+					<a class="edit" href="/log/editTo.htm?id=$info.logId">编辑</a>
+					<a class="del" href="javascript:doDelete($info.logId)">删除</a>
+				</td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>
+
+#page()

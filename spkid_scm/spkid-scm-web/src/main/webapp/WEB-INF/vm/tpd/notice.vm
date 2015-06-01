@@ -1,0 +1,54 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>公告</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/jquery.form.pack.js"></script>
+<script type="text/javascript" src="/js/page.js"></script>
+<script type="text/javascript" src="/js/tpd/notice.js"></script>
+<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">公告历史</span>
+		#if($!tpdHelper.isAdmin())
+		<span class="right add_t"><a class="add" href="/notice/addTo.htm" >新增</a></span>
+		#end
+	</div>
+	
+	<div class="clear"></div>
+	
+	<div id="searchPanel" class="search_row dark_blue">
+		<form id="searchForm" action="/notice/list/query.htm" method="post" style="margin: 0;">
+			<input type="hidden" id="pageSize" name="pageSize" value="$!page.pageSize" />
+			<input type="hidden" id="pageNo" name="pageNo" value="$!page.pageNo" />
+			<input type="hidden" id="order" name="order" value="$!page.order" />
+			<input type="hidden" id="orderBy" name="orderBy" value="$!page.orderBy" />
+			
+			##在此下面加搜索条件
+			公告标题：   <input type="text" class="enterQuery inputBorder" name="noticeTitle" />
+			<input type="button" class="button" value="搜索" onclick="submitSearch();">
+		</form>
+	</div>
+	<div class="clear"></div>
+	<div id="contentPanel"></div>
+</div>
+#pageScript(20)
+<script type="text/javascript">
+$(function() {
+    $(".enterQuery").bind('keydown', function(event){
+    	if(event.keyCode==13){
+    		submitSearch();
+    	}
+    });
+    $("#pageSize").val(20);
+    submitSearch();
+});
+</script>
+</body>
+</html>

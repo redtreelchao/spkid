@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>妈咪树供应商平台</title>
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript">
+if (top.location != self.location){
+    top.location=self.location;     
+}
+</script>
+</head>
+#if($session.getAttribute("goto"))
+#set($goto = $session.getAttribute("goto"))
+$session.removeAttribute("goto")
+#end
+<frameset rows="60,*" cols="*" frameborder="no" border="0" framespacing="0">
+	<frame src="/main/top.htm" name="topFrame" scrolling="no" noresize="noresize" id="topFrame">
+	<frameset cols="210,15,*" frameborder="no" border="0" framespacing="0" id="myFrame" name="myFrame">
+		<frame src="/main/left.htm" id="leftFrame" name="leftFrame" scrolling="auto" noresize="noresize">
+		<frame src="/main/drag.htm" id="midFrame" name="midFrame" scrolling="no" noresize="noresize">
+		<frame src="#if($!tpdHelper.isAdmin()) /notice/list/main.htm #else /provider/main.htm #end" id="mainFrame" name="mainFrame" scrolling="auto" noresize="noresize">
+	</frameset>
+</frameset><noframes></noframes>
+</html>

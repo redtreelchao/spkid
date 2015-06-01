@@ -1,0 +1,80 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" style="table-layout: fixed;" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<th width="150">工单号</th>
+				<th width="110">订单号</th>
+				<th width="50">工单状态</th>
+				<th width="180">工单内容</th>
+				<th >工单附件</th>
+				<th width="70">创建时间</th>
+				<th width="180">回复意见</th>
+                <th >回复附件</th>
+				<th width="8%" onclick="sortBy('reply_time')" style="cursor: pointer;">
+					<a id="batch_no" class="sequenceDef">回复时间</a>
+				</th>
+				<th width="100">操作</th>
+			</tr>
+			#foreach( $info in $page.result) 
+			<tr>
+				<td align="center"> $!info.woNo </td>
+				<td align="center" class="chill-tip" title="$!info.orderSn"> 
+					<div class="ellipsisDiv" >
+					$!info.orderSn 
+                    </div>
+				</td>
+				<td align="center"> 
+					#dictShow("WorkOrder.woStatus" $!info.woStatus)
+				</td>
+				<td align="left" class="chill-tip" title="$!info.content"> 
+    				<div class="ellipsisDiv" >
+    				$!info.content
+                    </div>
+				</td>
+				<td align="center"> 
+					#if($!info.woFile)
+					<a target="_blank" href="$!info.woFile"><img src="$!info.woFile" width="50px" height="50px"/></a>
+					#end
+				</td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.createTime)  </td>
+				<td align="left" class="chill-tip" title="$!info.replyOption"> 
+    				<div class="ellipsisDiv" >
+    				$!info.replyOption
+                    </div>
+				</td>
+				<td align="center"> 
+					#if($!info.replyFile)
+					<a target="_blank" href="$!info.replyFile"><img src="$!info.replyFile" width="50px" height="50px"/></a>
+					#end
+				</td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.replyTime)  </td>
+				<td align="center">
+					<a class="edit"  href="/workorder/list/show.htm?id=$info.woId">查看</a>
+					#if($!tpdHelper.isAdmin())
+						#if($info.woType == '01' && $info.woStatus == 0 )
+							<a class="edit" href="/workorder/editTo.htm?id=$info.woId">编辑</a>
+							<a class="del" href="javascript:doDelete($info.woId)">删除</a>
+						#elseif($info.woType == '02' && $info.woStatus == 1 )
+							<a class="edit" href="/workorder/replyTo.htm?id=$info.woId">回复</a>
+						#elseif($info.woType == '01' && $info.woStatus == 3 )
+							<a class="edit" href="javascript:doCheck($info.woId)">审核</a>
+							<a class="edit" href="javascript:doCheckCancel($info.woId)">作废</a>
+						#end
+						
+					#else
+						#if($info.woType == '02' && $info.woStatus == 0 )
+							<a class="edit" href="/workorder/editTo.htm?id=$info.woId">编辑</a>
+							<a class="del" href="javascript:doDelete($info.woId)">删除</a>
+						#elseif($info.woType == '01' && $info.woStatus == 1 )
+							<a class="edit" href="/workorder/replyTo.htm?id=$info.woId">回复</a>
+						#end
+						
+					#end
+				</td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>
+
+#page()

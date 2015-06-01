@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.SMSMapper">
+
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.SMS">
+		<id column="sms_id" property="smsId" jdbcType="INTEGER" />
+		<result column="provider_id" property="providerId" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="commit_time" property="commitTime" jdbcType="TIMESTAMP" />
+		<result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
+		<result column="check_admin" property="checkAdmin" jdbcType="INTEGER" />
+		<result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="provider_code" property="providerCode" jdbcType="VARCHAR" />
+		<result column="sms_price" property="smsPrice" jdbcType="NUMERIC" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 查询列表 -->
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select s.*, p.provider_code
+		from ty_scm_sms s
+		left join ty_product_provider p on s.provider_id = p.provider_id
+		where 1=1
+		<if test="param.providerCode!='' and param.providerCode!=null">
+			and p.provider_code=#{param.providerCode} 
+		</if>
+		<if test="param.smsId!=null ">
+			and s.sms_id=#{param.smsId} 
+		</if>
+		<if test="param.sendStartTime != NULL ">
+			and s.send_time &#62;&#61;
+			#{param.sendStartTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="param.sendEndTime != NULL ">
+			and s.send_time &#60;&#61;
+			#{param.sendEndTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="param.status != null and param.status != -1 ">
+			and s.status=#{param.status,jdbcType=INTEGER} 
+		</if>
+		<if test="!param.isAdmin">
+			and s.provider_id=#{param.providerId,jdbcType=INTEGER} 
+		</if>
+		<if test="param.isAdmin">
+			and s.status &#60;&#62; 0 
+		</if>
+		order by s.sms_id desc
+	</select>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select s.*, p.provider_code
+		from ty_scm_sms s
+		left join ty_product_provider p on s.provider_id = p.provider_id
+		where s.sms_id=#{smsId} 
+	</select>
+	
+	<select id="queryProviderCode" resultMap="BaseResultMap" parameterType="com.fclub.tpd.dataobject.SMS">
+		select DISTINCT p.provider_code 
+		from fclub.fc_flc_sms fs
+		left join fclub.fc_flc_provider p on fs.provider_id=p.provider_id
+		where 1=1
+		<if test="param.providerCode!='' and param.providerCode!=null">
+			and p.provider_code like #{providerCode} 
+		</if>
+		order by fs.sms_id desc
+	</select>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.SMS">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="smsId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into ty_scm_sms (
+			provider_id,
+			content,
+			create_time,
+			commit_time,
+			send_time,
+			status,
+			sms_price,
+			memo
+		)
+		values (
+			#{providerId,jdbcType=INTEGER},
+			#{content,jdbcType=LONGVARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			<if test="commitTime == null">
+			'0000-00-00',
+			</if>
+			<if test="commitTime != null">
+			#{commitTime,jdbcType=TIMESTAMP},
+			</if>
+			#{sendTime,jdbcType=TIMESTAMP},
+			#{status,jdbcType=INTEGER},
+			#{smsPrice,jdbcType=DECIMAL},
+			#{memo,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.SMS">
+		update ty_scm_sms
+		<set>
+		<if test="content != null">
+			content = #{content,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="commitTime != null">
+			commit_time = #{commitTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="sendTime != null">
+			send_time = #{sendTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="status != null">
+			status = #{status,jdbcType=INTEGER},
+		</if>
+		<if test="memo != null">
+			memo = #{memo,jdbcType=VARCHAR},
+		</if>
+		</set>
+		where sms_id = #{smsId,jdbcType=INTEGER}
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_scm_sms
+		where
+		sms_id = #{smsId,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insertSend" parameterType="com.fclub.tpd.dataobject.SMS">
+		insert into ty_scm_sms_send (
+			sms_id,
+			mobile,
+			source_type
+		)
+		values (
+			#{smsId,jdbcType=INTEGER},
+			#{mobile,jdbcType=VARCHAR},
+			#{sourceType,jdbcType=INTEGER}
+		) on duplicate key update mobile = #{mobile,jdbcType=VARCHAR}
+	</insert>
+	
+	<delete id="deleteSend" parameterType="java.lang.Integer">
+		delete from ty_scm_sms_send
+		where
+		sms_id = #{smsId,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insertUser" parameterType="com.fclub.tpd.dataobject.SMS">
+		insert into ty_scm_sms_user (
+			provider_id,
+			mobile,
+			update_time
+		)
+		values (
+			#{providerId,jdbcType=INTEGER},
+			#{mobile,jdbcType=VARCHAR},
+			#{updateTime,jdbcType=TIMESTAMP}
+		) on duplicate key update update_time = #{updateTime,jdbcType=TIMESTAMP}
+	</insert>
+	
+	<select id="queryMobileList" resultType="java.lang.String" parameterType="java.lang.Integer">
+		select s.mobile
+		from ty_scm_sms_send s
+		where s.sms_id=#{smsId} 
+	</select>
+	
+	<select id="selectHistoryCountByProviderId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		select count(1)
+		from ty_scm_sms_user s
+		where s.provider_id=#{providerId} 
+	</select>
+	
+	<select id="queryHistoryByProviderId" resultType="java.lang.String" parameterType="java.util.Map">
+		select s.mobile
+		from ty_scm_sms_user s
+		where s.provider_id=#{providerId}
+		limit #{smsNum}
+	</select>
+	<select id="queryMobileCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		select count(s.mobile) cnt
+		from ty_scm_sms_send s
+		where s.sms_id=#{smsId} 
+	</select>
+</mapper>

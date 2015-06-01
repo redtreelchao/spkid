@@ -1,0 +1,97 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>编辑店铺信息</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/jquery.form.import.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/tpd/provider.js"></script>
+<script type="text/javascript" src="/editor/kindeditor.js"></script>
+<script type="text/javascript" src="/editor/lang/zh_CN.js"></script>
+<script type="text/javascript" src="/editor/plugins/code/prettify.js"></script>
+<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">编辑店铺信息</span>
+		<span class="right add_t"><a class="add" href="/provider/main.htm" >返回</a></span>
+	</div>
+	<div class="clear"></div>
+	<div class=" title_row dark_blue">
+		<form enctype="multipart/form-data" id="processForm" action="/provider/edit.htm" method="post" >
+		<input id="providerId" type="hidden" name="providerId" value="$provider.providerId" />
+		<table width="100%" cellspacing="1" cellpadding="3">
+			<tbody>
+			<tr>
+    			<td align="left" colspan="4"><div class="main_title bold center">基本信息</div></td>
+    		</tr>
+			<tr>
+				<td class="bold" align="right" width="20%">店铺名称：</td>
+				<td width="30%">
+					<input type="text" class="inputBorder" id="displayName" name="displayName" value="$!provider.displayName"></input>
+				</td>
+				<td class="bold" align="right" width="20%">店铺Logo：</td>
+				<td>
+					<input type="file" name="logoFile" />
+					<img src="${tpdHelper.getImageDomain()}/$!provider.logo" width="76" height="38"/>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+    	<div class="clear"></div>
+		#*<script type="text/javascript">
+        	var editor; 
+        	KindEditor.ready(function(K) {
+        		editor1 = K.create('textarea[name="providerAd"]', {
+        			cssPath : '/editor/plugins/code/prettify.css',
+        			uploadJson : '/editor/upload.htm',
+        			fileManagerJson : '/editor/show.htm',
+        			allowFileManager : true,
+        			afterCreate : function() {
+        				var self = this;
+        				self.sync();
+        			}
+        		});
+        		prettyPrint();
+        	});
+        </script>
+        ##广告位
+        <table id="allDatas" width="90%" align="center" cellpadding="0" cellspacing="0" >
+        	<tbody id="tbody">
+            	<tr>
+        			<td align="center" colspan="4">
+        				<textarea name="providerAd" cols="100" rows="8" style="width:1100px;height:500px;visibility:hidden;">$!provider.providerAd</textarea>
+        			</td>
+        		</tr>
+				<tr>
+                    <td class="bold" align="right" width="20%">开始时间:</td>
+                    <td width="30%">
+                        <input id="providerAdSdate" name="providerAdSdate"  type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', maxDate:'#F{$dp.$D(\'providerAdEdate\')}'})" class="inputBorder Wdate" value="$dateTool.format('yyyy-MM-dd HH:mm:ss', $!provider.providerAdSdate)" style="width:222px;"/>
+                    </td>
+                    <td class="bold" align="right">结束时间:</td>
+                    <td >
+                        <input id="providerAdEdate" name="providerAdEdate"  type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', minDate:'#F{$dp.$D(\'providerAdSdate\')}'})" class="inputBorder Wdate" value="$dateTool.format('yyyy-MM-dd HH:mm:ss', $!provider.providerAdEdate)" style="width:222px;"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    	<div class="clear"></div>*#
+		<div style="text-align:center; padding:5px 0;">
+			<input type="button" value=" 提交 "  class="button" onclick="doEdit();">
+		</div>
+		<div class="clear"></div>
+		</form>
+	</div>
+	<div class="clear"></div>
+	<div class="search_row dark_blue" style="margin-top:10px;">
+    	<br>Logo图片格式说明：<br><br>
+        1、店铺Logo：120x96的JPG文件；<br>
+    </div>
+	<div class="clear"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<table width="100%" cellspacing="0" cellpadding="0" align="center" style="display:none;" class="config_tab">
+    <tbody>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="importTable">
+                    <tbody>
+                       <tr>
+                            <th align="left">
+                                 <font class="bold">批量导入流程</font>
+                               ## <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="center">
+                               <div class="buttonElement">
+                                    <input #if($pr)class="none_color"#else class="thickbox_LAX" href="/batchImport/importView.htm?type=importColorSize&height=300&width=550" title="导入商品颜色尺寸"#end type="button" value="颜色尺寸" sType="02" />
+									#if($pr)
+									<div class="runing_color">
+                                        <div class="StatBarButtonDiv" id="CZS_BAR" type="02"></div>
+                                    </div>
+									<script type="text/javascript">
+										roll("#CZS_BAR");
+                                    </script>
+									#end
+							   </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="clear"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="tips_row">
+                    <tbody>
+                        <tr>
+                            <th align="left">
+                                <font class="bold">导入流程说明</font>
+                                <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="left" class="tips_row_text dark_blue">
+								<div style="padding-left:10px;">
+								颜色名称规则:不能为空且字符长度不超过三个字符。<br>
+								尺寸名称规则:不能为空且字符长度不超过五个字符。<br>
+								注:第一行默认为标题,将不执行导入操作。导入完成后点击右边的 "查看结果"  显示颜色尺寸的导入状态(没有错误信息表示导入成功)
+								</div>
+							</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+		<tr>
+			<td>
+                <div class="clear"></div>
+            </td>
+		</tr>
+		<tr>
+            <td>
+				<div class="search_row dark_blue">
+    				<form id="searchFormCS" name="search" action="/batchImport/list/query.htm" method="post">
+            			<input type="hidden" id="batch_no02" name="type" value="02" />
+						<input type="hidden" id="pageSize02" name="pageSize" value="$!page.pageSize" />
+            			<input type="hidden" id="pageNo02" name="pageNo" value="$!page.pageNo" />
+            			<input type="hidden" id="order02" name="order" value="$!page.order" />
+            			<input type="hidden" id="orderBy02" name="orderBy" value="$!page.orderBy" />
+            			##<div class="search_row_element"><span>批次号：</span><input type="text" id="batchNo" name="batchNo" class="input"/></div>
+            			<div class="search_row_element">
+            				导入时间：<input type="text" name="importDateBegin" class="enterQuery input black Wdate" onClick="WdatePicker()" />
+            				- 
+            				<input type="text" name="importDateEnd" class="enterQuery input black Wdate" onClick="WdatePicker()" />
+            			</div>
+            			<div class="search_row_element"><input type="button" class="button" value="搜索" onclick="submitSearch_cs();"></div>
+            		</form>
+                </div>
+            </td>
+        </tr>
+        <tr>
+			<td>
+                <div class="clear"></div>
+            </td>
+		</tr>
+		<tr>
+			<td>
+				<div id="contentPanel_02"></div>
+			</td>
+		</tr>	
+    </tbody>
+</table>
+	
+<script type="text/javascript">
+function submitSearch_cs() {
+	var pageNo = $("#pageNo02").val();
+	if(pageNo == null || pageNo < 1)
+		$("#pageNo02").val("1");
+	if($("#selePageSize").val()) {
+    	$("#pageSize02").val($("#selePageSize").val());
+	}
+	$("#searchFormCS").ajaxSubmit(function(result) {
+		$("#contentPanel_02").html(result); 
+	});
+}
+function jumpPage(pageNo) {
+	$("#pageNo02").val(pageNo);
+	$("#pageSize02").val($("#selePageSize").val());
+	$("#searchFormCS").ajaxSubmit(function(result) {
+		$("#contentPanel_02").html(result);
+	});
+}
+function jumpPageTo() {
+	var index = $("#pageTo").val();
+	index = parseInt(index);
+	if (index > 0) {
+		jumpPage(index);
+	}
+}
+function changePageSize() {
+	$("#pageSize02").val($("#selePageSize").val());
+	$("#searchFormCS").ajaxSubmit(function(result) {
+		$("#contentPanel_02").html(result);
+	});
+}
+
+$(function() {
+    $(".enterQuery").bind('keydown', function(event){
+    	if(event.keyCode==13){
+    		submitSearch_cs();
+    	}
+    });
+    $("#pageSize02").val("20");
+    submitSearch_cs();
+});
+</script>

@@ -1,0 +1,141 @@
+<table width="100%" cellspacing="0" cellpadding="0" align="center" style="display:table;" class="config_tab">
+    <tbody>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="importTable">
+                    <tbody>
+                       <tr>
+                            <th align="left">
+                                 <font class="bold">批量导入流程</font>
+                               ## <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="center">
+                                <div class="buttonElement">
+                                    <input #if($mr)class="none_color"#else class="thickbox_LAX_MAIN" href="/batchImport/importView.htm?type=importMain&height=300&width=550" title="导入主要数据文件"#end type="button" value="导入主要数据" />
+									#if($mr)
+									<div class="runing_color">
+                                        <div class="StatBarButtonDiv" id="MS_BAR" type="01"></div>
+                                    </div>
+									<script type="text/javascript">
+										roll("#MS_BAR");
+                                    </script>
+									#end
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="clear"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="tips_row">
+                    <tbody>
+                        <tr>
+                            <th align="left">
+                                <font class="bold">导入流程说明</font>
+                                <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="left" class="tips_row_text dark_blue">
+								<div style="padding-left:10px;">
+								点击“导入主要数据” 按钮，在弹出框中按照提示进行操作，导入完成主要信息之后则可以在列表中下载“导入颜色尺寸”的模板。
+								<br />
+								"温馨提示"一栏,内容如需换行,可按此格式: &lt;p&gt;段落1&lt;/p&gt; &lt;p&gt;段落2&lt;/p&gt;
+								##<br />
+                    			##<a class="edit orange" href="/batchImport/downloadTotal.htm">商品录入资料总表.xlsx</a>
+                                </div>
+							</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="clear"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+				<div class="search_row dark_blue">
+    				<form id="searchFormMain" name="search" action="/batchImport/list/queryMainList.htm" method="post">
+            			<input type="hidden" id="pageSize" name="pageSize" value="$!page.pageSize" />
+            			<input type="hidden" id="pageNo" name="pageNo" value="$!page.pageNo" />
+            			<input type="hidden" id="order" name="order" value="$!page.order" />
+            			<input type="hidden" id="orderBy" name="orderBy" value="$!page.orderBy" />
+            			##<div class="search_row_element"><span>批次号：</span><input type="text" id="batchNo" name="batchNo" class="input"/></div>
+            			<div class="search_row_element">
+            				导入时间：<input type="text" name="importDateBegin" class="enterQuery input black Wdate" onClick="WdatePicker()" />
+            				- 
+            				<input type="text" name="importDateEnd" class="enterQuery input black Wdate" onClick="WdatePicker()" />
+            			</div>
+            			<div class="search_row_element"><input type="button" class="button" value="搜索" onclick="submitSearch_MAIN();"></div>
+            		</form>
+                </div>
+            </td>
+        </tr>
+        <tr>
+			<td>
+                <div class="clear"></div>
+            </td>
+		</tr>
+		<tr>
+			<td>
+				<div id="contentPanel_MAIN"></div>
+			</td>
+		</tr>	
+    </tbody>
+</table>
+
+<script type="text/javascript">
+function submitSearch_MAIN() {
+	var pageNo = $("#pageNo").val();
+	if(pageNo == null || pageNo < 1)
+		$("#pageNo").val("1");
+	if($("#selePageSize").val()) {
+    	$("#pageSize").val($("#selePageSize").val());
+	}
+	$("#searchFormMain").ajaxSubmit(function(result) {
+		$("#contentPanel_MAIN").html(result); 
+	});
+}
+function jumpPage(pageNo) {
+	$("#pageNo").val(pageNo);
+	$("#pageSize").val($("#selePageSize").val());
+	$("#searchFormMain").ajaxSubmit(function(result) {
+		$("#contentPanel_MAIN").html(result);
+	});
+}
+function jumpPageTo() {
+	var index = $("#pageTo").val();
+	index = parseInt(index);
+	if (index > 0) {
+		jumpPage(index);
+	}
+}
+function changePageSize() {
+	$("#pageSize").val($("#selePageSize").val());
+	$("#searchFormMain").ajaxSubmit(function(result) {
+		$("#contentPanel_MAIN").html(result);
+	});
+}
+
+$(function() {
+    $(".enterQuery").bind('keydown', function(event){
+    	if(event.keyCode==13){
+    		submitSearch_MAIN();
+    	}
+    });
+    $("#pageSize").val("20");
+    submitSearch_MAIN();
+});
+</script>

@@ -1,0 +1,65 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>编辑公告</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/fclub.validate.js"></script>
+<script type="text/javascript" src="/js/tpd/notice.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">#if($readOnly == 0) 编辑公告 #else 查看公告 #end</span>
+		<span class="right add_t"><a class="add" href="/notice/list/main.htm" >返回列表</a></span>
+	</div>
+	<div class="clear"></div>
+	<div class=" title_row dark_blue">
+		#if($readOnly == 2)
+		<span class="red_dian">公告已被使用，无法编辑</span>
+		#end
+		<form id="processForm" action="/notice/edit.htm" method="post" >
+		<input type="hidden" id="noticeId" name="noticeId" value="$notice.noticeId"/>
+		<table width="100%" cellspacing="1" cellpadding="3">
+			<tbody>
+			<tr>
+				<td class="label dark_blue">公告标题</td>
+				<td>
+					<input type="text"  class="inputBorder" value="$!notice.noticeTitle" name="noticeTitle" id="noticeTitle" />
+					<span id="noticeTitleTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">公告内容</td>
+				<td>
+                    <textarea cols="100" rows="15" validate="required" class="inputTextarea" name="content" id="content">$!notice.content</textarea>
+					<span class="red_dian">*</span>
+				</td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2"><br>
+					#if($readOnly == 0)
+					<input type="button" value=" 确定 " class="button" onclick="doSave();">
+					<input type="reset" value=" 重置 " class="button">
+					#end
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+<script type="text/javascript">
+$(function(){ 
+	if(${readOnly} != 0) {
+		$("#processForm :input").filter(".inputBorder").attr("readonly","readonly");
+		$("#processForm :input").filter(".inputBorder").addClass("inputBorder_readOnly");
+	}
+});
+</script>
+</body>
+</html>

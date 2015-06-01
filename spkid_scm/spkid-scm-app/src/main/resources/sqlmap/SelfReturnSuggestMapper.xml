@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.SelfReturnSuggestMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.SelfReturnSuggest">
+		<id column="rec_id" property="recId" jdbcType="INTEGER" />
+		<result column="apply_id" property="applyId" jdbcType="INTEGER" />
+		<result column="suggest_type" property="suggestType" jdbcType="TINYINT" />
+		<result column="suggest_content" property="suggestContent" jdbcType="LONGVARCHAR" />
+		<result column="create_id" property="createId" jdbcType="INTEGER" />
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.rec_id,
+		t.apply_id,
+		t.suggest_type,
+		t.suggest_content,
+		t.create_id,
+		t.create_date
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_apply_return_suggest t
+		where rec_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_apply_return_suggest t
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_apply_return_suggest
+		where rec_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.SelfReturnSuggest">
+		insert into ty_apply_return_suggest (
+			apply_id,
+			suggest_type,
+			suggest_content,
+			create_id,
+			create_date
+		)
+		values (
+			#{applyId,jdbcType=INTEGER},
+			#{suggestType,jdbcType=TINYINT},
+			#{suggestContent,jdbcType=LONGVARCHAR},
+			#{createId,jdbcType=INTEGER},
+			#{createDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.SelfReturnSuggest">
+		update ty_apply_return_suggest
+		<set>
+		<if test="applyId != null">
+		apply_id = #{applyId,jdbcType=INTEGER},
+		</if>
+		<if test="suggestType != null">
+		suggest_type = #{suggestType,jdbcType=TINYINT},
+		</if>
+		<if test="suggestContent != null">
+		suggest_content = #{suggestContent,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="createId != null">
+		create_id = #{createId,jdbcType=INTEGER},
+		</if>
+		<if test="createDate != null">
+		create_date = #{createDate,jdbcType=TIMESTAMP},
+		</if>
+		</set>
+		where rec_id = #{recId,jdbcType=INTEGER}
+	</update>
+</mapper>

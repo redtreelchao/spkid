@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ImportListMapper" >
+  <resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.ImportList" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="imp_batch_no" property="impBatchNo" jdbcType="VARCHAR" />
+    <result column="filename" property="fileName" jdbcType="VARCHAR" />
+    <result column="imp_type" property="impType" jdbcType="CHAR" />
+    <result column="imp_time" property="impTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="imp_id" property="impAid" jdbcType="INTEGER" />
+    <result column="log_file" property="logFile" jdbcType="VARCHAR" />
+    <result column="result_file" property="resultFile" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, imp_batch_no, filename, imp_type, imp_time, status, imp_id, log_file, result_file
+  </sql>
+  <select id="findGalleryByPage" resultMap="BaseResultMap" >
+    select 'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ty_scm_product_import_list
+    where imp_type='06'
+	<if test="param.crtUser != null"> and imp_id = #{param.crtUser,jdbcType=INTEGER}</if>
+	<if test="param.importDateBegin != null and param.importDateBegin !=''"> and imp_time <![CDATA[>=]]>str_to_date('${param.importDateBegin} 00:00:00','%Y-%m-%d %H:%i:%s')</if>
+	<if test="param.importDateEnd != null and param.importDateEnd !=''"> and imp_time <![CDATA[<=]]>str_to_date('${param.importDateEnd} 23:59:59','%Y-%m-%d %H:%i:%s')</if>
+	order by imp_time desc
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ty_scm_product_import_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByBatchNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  	select 'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ty_scm_product_import_list
+    where imp_batch_no = #{impBatchNo,jdbcType=VARCHAR}
+    order by imp_time desc
+  </select>
+  <select id="getLastByBatchNo" resultMap="BaseResultMap">
+ 	(select <include refid="Base_Column_List" />
+    FROM ty_scm_product_import_list
+	WHERE imp_batch_no = #{batchNo,jdbcType=VARCHAR}
+	    AND imp_type = #{type,jdbcType=VARCHAR}
+	ORDER BY id DESC
+	LIMIT 1 )
+		UNION ALL 
+	(SELECT <include refid="Base_Column_List" /> 
+	FROM ty_scm_product_import_list 
+	WHERE `status` ='02'
+		AND imp_type = #{type,jdbcType=VARCHAR} 
+		AND imp_batch_no != #{batchNo,jdbcType=VARCHAR}
+	ORDER BY imp_time desc)
+  </select>
+  <select id="getPageByBatchNo" resultMap="BaseResultMap">
+ 	select <include refid="Base_Column_List" />
+    FROM ty_scm_product_import_list
+	WHERE imp_batch_no = #{batchNo,jdbcType=VARCHAR}
+	    AND imp_type = #{type,jdbcType=VARCHAR}
+	order by id DESC
+  </select>
+  <select id="getLastByAdmin" resultMap="BaseResultMap">
+  	select 'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ty_scm_product_import_list
+    where imp_id = #{adminId,jdbcType=INTEGER}
+    and imp_type = #{type,jdbcType=VARCHAR}
+    order by imp_time desc
+    limit 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ty_scm_product_import_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fclub.tpd.dataobject.ImportList" >
+  	<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+    insert into ty_scm_product_import_list (id, imp_batch_no, filename, 
+      imp_type, imp_time, status, 
+      imp_id, log_file, result_file
+      )
+    values (#{id,jdbcType=INTEGER}, #{impBatchNo,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+      #{impType,jdbcType=CHAR}, NOW(), #{status,jdbcType=CHAR}, 
+      #{impAid,jdbcType=INTEGER}, #{logFile,jdbcType=VARCHAR}, #{resultFile,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fclub.tpd.dataobject.ImportList" >
+    update ty_scm_product_import_list
+    <set >
+      <if test="impBatchNo != null" >
+        imp_batch_no = #{impBatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        filename = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="impType != null" >
+        imp_type = #{impType,jdbcType=CHAR},
+      </if>
+      <if test="impTime != null" >
+        imp_time = #{impTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="impAid != null" >
+        imp_id = #{impAid,jdbcType=INTEGER},
+      </if>
+      <if test="logFile != null" >
+        log_file = #{logFile,jdbcType=VARCHAR},
+      </if>
+      <if test="resultFile != null" >
+        result_file = #{resultFile,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

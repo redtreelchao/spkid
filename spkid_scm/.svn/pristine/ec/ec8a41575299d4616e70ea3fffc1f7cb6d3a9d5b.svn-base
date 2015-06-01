@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title></title>
+		<link href="/css/common.css" rel="stylesheet" type="text/css"/>
+        <link href="/css/main.css" rel="stylesheet" type="text/css"/>
+		<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+        <script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+        <script type="text/javascript" src="/js/MaskLayer.js"></script>
+        <script type="text/javascript" src="/js/jquery.form.pack.js"></script>
+		<script type="text/javascript" src="/js/fclub.validate.js"></script>
+		<script type="text/javascript" src="/js/tpd/mamiTuan.js"></script>
+		<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+
+		<script type="text/javascript" src="/editor/kindeditor.js"></script>
+		<script type="text/javascript" src="/editor/lang/zh_CN.js"></script>
+		<script type="text/javascript" src="/editor/plugins/code/prettify.js"></script>
+		
+		<script type="text/javascript">
+        	var editor; 
+        	KindEditor.ready(function(K) {
+        		editor1 = K.create('textarea[name="tuanDesc"]', {
+        			cssPath : '/editor/plugins/code/prettify.css',
+        			uploadJson : '/editor/upload.htm',
+        			fileManagerJson : '/editor/show.htm',
+        			allowFileManager : true,
+        			afterCreate : function() {
+        				var self = this;
+        				self.sync();
+        			}
+        		});
+        		prettyPrint();
+        	});
+        </script>
+</head>
+<body >
+<div class="main">
+	<div class="main_title"><span class="left bold main_title_top dark_blue">团购申请</span>
+		<span class="right add_t"><a class="icon_Return" href="/mamituan/list/main.htm">返回列表</a></span>
+  </div>
+	<div id="title_msg_t" class="clear"></div>
+	<div class=" title_row dark_blue">
+		<form id="searchForm" name="" action="/mamituan/add/query.htm" method="post">
+		<input id="tuanId" type="hidden" name="tuanId" value="$!tuan.tuanId" />
+		商品款号：<input type="text" validate="required" name="goodsSn" class="inputBorder" value="$!goodsSn"/>
+		<input type="button" value=" 载入 " class="button" onClick="doSearch('searchForm')">
+        </form>
+	</div>
+	<div class="clear"></div>
+	<div id="detailDiv" class=" title_row dark_blue" style="display:none;">
+		<form id="processForm" enctype="multipart/form-data" name="" action="/mamituan/add.htm" method="post">
+		<input id="tuanId" type="hidden" name="tuanId" value="$!tuan.tuanId" />
+		<input id="productId" type="hidden" name="productId" value="$!tuan.productId"/>
+		<table width="100%" align="center" cellpadding="0" cellspacing="0">
+        	<tbody id="tbody">
+            	<tr>
+                    <td class="label2">团购名称</td>
+        			<td style="width:500px;">
+        				<input type="text" validate="required" name="tuanName" value="$!tuan.tuanName" class="inputBorder"/>
+        				<span class="red_dian">*</span>
+        			</td>
+        			<td class="dark_blue label2">购买人数</td>
+                    <td>
+        				<input type="text" validate="required" name="buyNum" value="$!tuan.buyNum" class="inputBorder"/>
+        				<span class="red_dian">*</span>
+        			</td>
+    			</tr>
+    			<tr>
+                    <td class="label2">团购时间</td>
+        			<td colspan="3">
+        				<input id="tuanOnlineTime" name="tuanOnlineTime" validate="required" type="text" size="15" class="enterQuery inputBorder black Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="$!dateTool.format('yyyy-MM-dd HH:mm:ss', $!tuan.tuanOnlineTime)"/>
+        				~
+        				<input id="tuanOfflineTime" name="tuanOfflineTime" validate="required" type="text" size="15" class="enterQuery inputBorder black Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="$!dateTool.format('yyyy-MM-dd HH:mm:ss', $!tuan.tuanOfflineTime)"/>
+        				<span class="red_dian">*</span>
+        			</td>
+    			</tr>
+    			<tr>
+    				<td class="label2">团购价</td>
+                    <td>
+        				<input type="text" validate="required" name="tuanPrice" value="$!tuan.tuanPrice" class="inputBorder"/>
+        				<span class="red_dian">*</span>
+        			</td>
+    				<td class="dark_blue label2">团购折扣</td>
+        			<td>
+        				<input type="text" validate="required" name="productDiscount" value="$!tuan.productDiscount" class="inputBorder"/>
+        				<span class="red_dian">*</span>
+        			</td>
+    			</tr>
+    			<tr>
+                    <td class="label2">团购首页商品图</td>
+        			<td colspan="3">
+        				<input type="file" name="file" />
+        				<span class="red_dian">*</span>
+						#if ($!tuan.tuanImg)
+						<a href="$!tpdHelper.getImageDomain()/$!tuan.tuanImg" target="_blank">
+    						<img src="$!tpdHelper.getImageDomain()/$!tuan.tuanImg" width="80" height="50">
+    					</a>
+						#end
+        			</td>
+    			</tr>
+    			<tr>
+        			<td class="label2">手工排序</td>
+                    <td colspan="3">
+        				<input type="text" validate="required" name="tuanSort" value="$!tuan.tuanSort" class="inputBorder"/>
+        				<span class="red_dian">*</span>
+        			</td>
+    			</tr>
+    			<tr>
+        			<td align="center" colspan="4">
+                    	温馨提示：自定义区域宽度不超过760像素。
+        				<textarea id="tuanDesc" name="tuanDesc" validate="required" cols="100" rows="8" style="width:1100px;height:500px;visibility:hidden;">$!tuan.tuanDesc</textarea>
+        			</td>
+        		</tr>
+            </tbody>
+        </table>
+		<div id="option_fir" style="text-align:center; padding:5px 0;">
+    		#if($readOnly==0)
+			<input type="button" value=" 保存 " class="button" onClick="doSave('processForm')">
+    		<input type="button" value=" 提交 " class="button" onClick="doSubmit('processForm')">
+    		<input type="reset" value=" 重置 " class="button">
+			#end
+    	</div>
+	</form>
+	</div>
+	<div class="clear"></div>
+</div>
+<script type="text/javascript">
+	doSearch('searchForm');
+</script>
+</body>
+</html>

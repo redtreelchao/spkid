@@ -1,0 +1,201 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>合作需知</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<style type="text/css">
+</style>
+<style type="text/css">
+.main_title{
+	margin-top:40px;padding:10px;height:auto;
+	background-image:none;background-color:#eee;
+	-webkit-transition:	background-color 1s ease;
+	-moz-transition:	background-color 1s ease;
+	transition:			background-color 1s ease;
+}
+.main_title.red{
+	background-color:#feb;
+	-webkit-transition:	background-color 0s ease;
+	-moz-transition:	background-color 0s ease;
+	transition:			background-color 0s ease;
+}
+.main_title a{
+	font:14px bold;font-weight:bold;color:#000;
+}
+.main_title2{padding:10px 0;font:20px '微软雅黑';text-align:center;border-top:1px dashed #aaa;border-bottom:1px dashed #aaa;}
+.main_txt{padding-right:10px;}
+.main_txt p{padding-left:20px;font-size:14px;}
+.main_txt p.pl40{padding-left:40px;}
+.main_txt p *{font-size:14px;color:red;font-weight:bold;}
+.main_txt p a:hover{text-decoration:underline;}
+.main_txt table{
+	border-top:1px solid #ccc;border-left:1px solid #ccc;margin-left:20px;
+	-webkit-box-shadow:	2px 2px 5px rgba(0,0,0,.3);
+	-moz-box-shadow:	2px 2px 5px rgba(0,0,0,.3);
+	-ms-box-shadow:		2px 2px 5px rgba(0,0,0,.3);
+	-o-box-shadow:		2px 2px 5px rgba(0,0,0,.3);
+}
+.main_txt table th,.main_txt table td{border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-align:center;}
+.main_txt table th{
+	background-color:#eee;
+}
+div.guide{
+	position:fixed;_position:absolute;top:100px;top:expression(eval(document.documentElement.scrollTop)+100);
+	right:0;width:100px;display:block;
+	-webkit-box-shadow:-2px 2px 5px rgba(0,0,0,.1);
+	-moz-box-shadow:-2px 2px 5px rgba(0,0,0,.1);
+	box-shadow:-2px 2px 5px rgba(0,0,0,.1);
+}
+div.guide:hover{
+	-webkit-box-shadow:-2px 2px 5px rgba(0,0,0,.3);
+	-moz-box-shadow:-2px 2px 5px rgba(0,0,0,.3);
+	box-shadow:-2px 2px 5px rgba(0,0,0,.3);
+}
+.guide .guide_top{background:#333;padding:5px 10px;text-align:center;color:#fff;font:16px '微软雅黑';}
+.guide dl{
+	-webkit-opacity:.2;
+	-moz-opacity:.2;
+	opacity:.2;
+	-webkit-transition:	-webkit-opacity .2s ease;
+	-moz-transition:	-moz-opacity .2s ease;
+	transition:			opacity .2s ease;
+}
+div.guide:hover dl{
+	-webkit-opacity:1;
+	-moz-opacity:1;
+	opacity:1;
+}
+.guide dl dt,.guide dl dd{color:#fff;font:14px '微软雅黑';line-height:16px;}
+.guide dl dt{background:#8b0101;padding:5px 10px;}
+.guide dl dd{background:#222;overflow:hidden;}
+.guide dl dd a{
+	color:#fff;display:block;float:left;padding-left:10px;width:90px;
+	background:#222;line-height:22px;cursor:default;
+	-webkit-transition:all .2s ease;
+	-moz-transition:all .2s ease;
+	transition:all .2s ease;
+}
+.guide dl dd a:hover{background:#eee;color:#333;}
+</style>
+</head>
+<body>
+<div class="main">
+	<div id="contentPanel">
+		<div class="main_block">
+			<div class="main_title2">合作需知</div>
+			<div class="main_title">
+				<a id="basicInfo">上线前：</a>
+			</div>
+			<div class="main_txt">
+				<p class="bold">1、商品信息的准确性：</p>
+				<p class="pl40">商品资料（包括商品描述、图片、颜色、尺码、价格）必须和实物一致。若错误率达到1%以上，需要处以每款sku 100元罚款。</p>
+				<p class="bold">2、必须上线前3个工作日完成准备工作（准备工作：商品资料录入、专场申请、添加限抢、虚库导入）。</p>
+				<p class="bold">3、锁定库存：</p>
+				<p class="pl40">上线前3个工作日锁定库存并导入系统虚库库存。库存需锁定到档期结束后的24小时。如订单发生缺货，需承担发货失败订单金额(F价)的50%。</p>
+				<p></p>
+			</div>
+			<div class="main_title">
+				<a id="basicInfo">上线后：</a>
+			</div>
+			<div class="main_txt">
+				<p class="bold red">1、订单发运要求：</p>
+				<p class="bold pl40">A、时间要求</p>
+				<p class="pl40">工作日要求：</p>
+				<p class="pl40">当日15点前客审的订单，必须当日24点前发货；当日15点以后客审的订单，必须在第二天24点前发货</p>
+				<p class="pl40">周末要求：</p>
+				<p class="pl40">周五15点后和周六15点前客审的订单，必须最晚在周日24点前发货；周六15点以后和周日当天客审的订单，必须最晚在周一24点前发货。</p>
+				<p class="pl40 red">备注：订单的发运时间以供应商导入系统发运的时间为准</p>
+				<p >订单发运时间要求，及未达标处理办法如下表：</p>
+				<table width="80%" cellspacing="0" cellpadding="3">
+					<tr>
+						<th>可拣货订单（客审时间）</th>
+						<th>发运时间</th>
+						<th>超时</th>
+						<th>每包裹扣款</th>
+					</tr>
+					<tr>
+						<td rowspan="3">工作日当日15点前</td>
+						<td rowspan="3">当天24点前发货</td>
+						<td>24小时之内</td>
+						<td>20%</td>
+					</tr>
+					<tr>
+						<td>24-48小时之内</td>
+						<td>30%</td>
+					</tr>
+					<tr>
+						<td>48小时取消订单</td>
+						<td>50%</td>
+					</tr>
+					<tr>
+						<td rowspan="3">工作日当日15点后</td>
+						<td rowspan="3">次日24点前发货</td>
+						<td>24小时之内</td>
+						<td>20%</td>
+					</tr>
+					<tr>
+						<td>24-48小时之内</td>
+						<td>30%</td>
+					</tr>
+					<tr>
+						<td>48小时取消订单</td>
+						<td>50%</td>
+					</tr>
+				</table>
+				<p class="red">备注：周末超时的扣款标准和工作日一样</p>
+				<p class="bold pl40">B、装箱要求</p>
+				<p class="pl40">发运给客户的包裹里，必须有《妈咪树直发包裹装箱单》（此单可直接在供应商平台上批量打印），若妈咪树发现包裹里没有《妈咪树直发包裹装箱单》，发现一个包裹，扣款整单F价的30%。</p>
+				<p class="bold">2、发运信息的准确性：</p>
+				<p class="pl40">物流发运信息必须反馈准确，允许错误率在2‰以内，错误率在2‰至5‰之间的，需处以每个包裹15%的扣款，若高于5‰，则重新考虑是否还继续此销售模式的合作。若包裹发出3天后还是查不到物流信息，除自然灾害原因外，需每单处以包裹金额的50%的扣款。</p>
+				<p class="bold">3、配货包裹的准确率</p>
+				<p class="pl40">由于乙方自身原因，包裹在配送中产生的多余费用，均由乙方自行承担。</p>
+				<p class="bold">4、配送态度</p>
+				<p class="pl40">不允许快递公司通知客户自提，每单扣款包裹金额的100（除偏远山区外）。</p>
+				<p class="bold">5、包裹无法送达情况</p>
+				<p class="pl40">包裹无法送达的，不要不经确认就允许快递公司退回来，请在系统里以工单的形式提交，妈咪树会尽快回复，请根据回复意见做出处理。包裹发出后，订单配送失败。配送失败率在3‰以内算正常，超过3‰，造成甲方或甲方顾客的损失，由乙方承担，扣款金额为包裹金额的50%。</p>
+				<p class="bold">6、客退包裹的反馈</p>
+				<p class="pl40">七天无条件退货：乙方应采取适合商品特点的运输和包装方式。如有退货问题，客户会在甲方站发起退货申请，如客户直接将货品退回给乙方，请乙方以工单形式反馈问题，甲方客服负责责任认定、登记确定处理方案并回复工单，乙方根据工单反馈进行退货处理。甲乙双方在活动期间，必须指派特定人员跟进销售过程中所有事项（特定人员包括：上线负责人、售后对接人）。客户退货的包裹，必须在收到之日起48小时内录入到平台系统，后继若出现退货包裹，乙方未及时反馈给到甲方导致客户催款、投诉等事宜的，每个包裹扣款30%。并且，超时未反馈的订单，甲方有权默认按照用户反馈进行退货，如有损失由乙方承担。</p>
+				<p class="bold">7、乙方原因导致的退货</p>
+				<p class="pl40">商品包装、质量、发错货、发货延误等乙方原因的问题，导致客户退货，客户的退货运费需要乙方承担。甲乙双方联合在线销售期过后，货品发出至客户方收到之日起由于质量问题产生的退货均由乙方承担，达到一定数量，重新评估合作关系。</p>
+			</div>
+			<div class="main_title">
+				<a id="basicInfo">其他：</a>
+			</div>
+			<div class="main_txt">
+				<p class="bold">1、假冒商品的说明</p>
+				<p class="pl40">假冒商品导致的客户投诉，导致我司赔偿的，赔偿后有权向乙方全额追偿损失。</p>
+				<p class="bold">2、商品本身的说明</p>
+				<p class="pl40">如乙方未对产品之前的价格标签进行处理，出现价格标签重叠、错粘及其他足以影响甲方商业信誉的问题，导致消费者对甲方售卖的商品存在任何负面性误解的或者造成甲方商业声誉受损或其他损害，乙方应当为甲方消除影响并承担赔偿责任。如因此造成甲方对第三人承担任何法律责任，甲方承担责任后有权向乙方追偿。</p>
+				<p class="bold">3、保证金</p>
+				<p class="pl40">基于货品由乙方发出对客户的发货承诺保障，甲方将按照不同的品类收取对应的保证金：</p>
+				<table width="60%" cellspacing="0" cellpadding="2">
+					<tr>
+						<th width="60%">品类</th>
+						<th width="40%">保证金</th>
+					</tr>
+					<tr>
+						<td>男装、女装、男女装</td>
+						<td>30000</td>
+					</tr>
+					<tr>
+						<td>鞋包</td>
+						<td>30000</td>
+					</tr>
+					<tr>
+						<td>配饰</td>
+						<td>10000</td>
+					</tr>
+					<tr>
+						<td>家居</td>
+						<td>10000</td>
+					</tr>
+				</table>
+				<br>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

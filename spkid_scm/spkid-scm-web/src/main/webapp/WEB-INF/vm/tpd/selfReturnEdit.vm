@@ -1,0 +1,149 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>自助退货明细</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/fclub.validate.js"></script>
+<script type="text/javascript" src="/js/tpd/selfReturn.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">#if($readOnly == 0) 自助退货明细 #else 查看自助退货 #end</span>
+		<span class="right add_t"><a class="add" href="/selfreturn/list/main.htm" >返回列表</a></span>
+	</div>
+	<div class="clear"></div>
+	<div class="clear"></div>
+	<div class="classified_title dark_blue">基本信息</div>
+	<div class="clear"></div>
+	<div class="dataTable dark_blue">
+		<table width="100%" align="center" cellspacing="0" cellpadding="0">
+			<tr>
+				<td class="bold" align="right" width="20%">申请单号：</td>
+				<td width="30%">$!selfReturn.applyId</td>
+				<td class="bold" align="right" width="20%">垫付运费：</td>
+				<td>$!selfReturn.shippingFee</td>
+			</tr>
+			<tr>
+				<td class="bold" align="right">申请人姓名：</td>
+				<td>$!selfReturn.sentUserName</td>
+				<td class="bold" align="right">快递公司：</td>
+				<td>$!selfReturn.shippingName</td>
+			</tr>
+			<tr>
+				<td class="bold" align="right">申请人联系方式（手机/座机）：</td>
+				<td>$!selfReturn.mobile  $!selfReturn.tel</td>
+				<td class="bold" align="right">快递运单号：</td>
+				<td>$!selfReturn.invoiceNo</td>
+			</tr>
+		</table>
+	</div>
+	<div class="clear"></div>
+	<div class="clear"></div>
+	<div class="classified_title dark_blue">商品信息</div>
+	<div class="clear"></div>
+	<div class="dataTable dark_blue">
+		<table width="100%" align="center" cellspacing="0" cellpadding="0">
+			<tr>
+				<th class="bold" align="center">商品名称【品牌】</th>
+				<th class="bold" align="center">商品款号</th>
+				<th class="bold" align="center">供应商货号</th>
+				<th class="bold" align="center">价格</th>
+				<th class="bold" align="center">可退数量</th>
+				<th class="bold" align="center">颜色尺码</th>
+				<th class="bold" align="center">退货原因</th>
+				<th class="bold" align="center">退货描述</th>
+			</tr>
+			#foreach($product in $!selfReturnProduct)
+			<tr>
+				<td>$!product.productName</td>
+				<td>$!product.productSn</td>
+				<td>$!product.providerProductcode</td>
+				<td>$!product.productPrice</td>
+				<td>$!product.productNumber</td>
+				<td>$!product.colorName/$!product.sizeName</td>
+				<td>#dictShow("SelfReturnGoods.returnReason" $!product.returnReason)</td>
+				<td>$!product.description</td>
+            </tr>
+			<tr>
+                <td colspan="1">质量图片：</td>
+				<td colspan="8">
+					#if($product.img)
+					#foreach($img in $!product.img.split(";"))
+					<a href="$tpdHelper.getImageDomain()/$img" target="_blank">
+						<img src="$tpdHelper.getImageDomain()/$img" width="50" height="50">
+					</a>
+					#end
+					#end
+					##<img src="$tpdHelper.getImageDomain()/$!product.img" width="50px" height="20px"/>
+				</td>
+            </tr>
+			#end
+		</table>
+	</div>
+	<div class="clear"></div>
+	#if($!selfReturn.providerStatus==0)
+    <div class="dataTable dark_blue">
+		<form id="processForm" action="/selfreturn/edit.htm" method="post" >
+		<input type="hidden" name="applyId" value="$!selfReturn.applyId" />
+		<table width="100%" align="center" cellspacing="0" cellpadding="0">
+			<tr>
+                <th>供应商意见：</th>
+                <td>
+					<textarea id="suggestContent" name="suggestContent" cols="100" rows="5" ></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					意见类型：#dictSelect("SelfReturnSuggest.suggestType" "suggestType" "" false false)
+                </td>
+            </tr>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="button" value=" 审核 " class="button" onclick="doSave($!selfReturn.applyId);">
+                </td>
+            </tr>
+            </tr>
+		</table>
+        </form>
+	</div>
+	<div class="clear"></div>
+	#end
+	#if($selfReturnSuggest.size() > 0)
+	<div class="dataTable dark_blue">
+	<table id="suggest" width="100%" align="center" cellspacing="0" cellpadding="0">
+		<tr>
+		   <th class="bold" align="center">状态</th>
+		   <th class="bold" align="center">创建人</th>
+		   <th class="bold" align="center">意见内容</th>
+		   <th class="bold" align="center">创建时间</th>
+		</tr>
+		#foreach($info in $!selfReturnSuggest)
+		<tr>
+		   <td align="center">
+				#dictShow("SelfReturnSuggest.suggestType" $!info.suggestType)
+		   </td> 
+		   <td align="center">$!info.createName</td>
+		   <td align="center">$!info.suggestContent</td>
+		   <td align="center">$!dateTool.format('yyyy-MM-dd HH:mm:ss',$info.createDate)</td>
+		</tr>
+		#end
+	</table>
+	</div>
+	<div class="clear"></div>
+	#end
+</div>
+<script type="text/javascript">
+$(function(){ 
+	if(${readOnly} != 0) {
+		$("#processForm :input").filter(".inputBorder").attr("readonly","readonly");
+		$("#processForm :input").filter(".inputBorder").addClass("inputBorder_readOnly");
+	}
+});
+</script>
+</body>
+</html>

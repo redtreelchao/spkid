@@ -1,0 +1,34 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<th width="200px;">公告标题</th>
+				<th width="130px;">发布时间</th>
+				<th >公告内容</th>
+				#if($!tpdHelper.isAdmin())
+					<th >操作</th>
+				#end
+			</tr>
+			#foreach( $info in $page.result) 
+			<tr>
+				<td align="center"> $!info.noticeTitle </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.auditTime)  </td>
+				<td align="left" style="padding: 0 10px;"> $!info.content </td>
+				#if($!tpdHelper.isAdmin())
+					<td align="center" style="width:120px;">
+						#if($!info.auditUser > 0)
+							<a class="edit" href="/notice/list/show.htm?id=$info.noticeId">查看</a>
+						#else
+    						<a class="edit" href="/notice/editTo.htm?id=$info.noticeId">编辑</a>
+        					<a class="del"  href="javascript:doAudit($info.noticeId)">审核</a>
+    						<a class="del"  href="javascript:doDelete($info.noticeId)">删除</a>
+						#end
+					</td>
+				#end
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>
+
+#page()

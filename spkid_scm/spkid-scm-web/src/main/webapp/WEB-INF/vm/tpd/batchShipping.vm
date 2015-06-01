@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>批量发货</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/jquery.form.import.js"></script>
+<script type="text/javascript" src="/js/fclub.validate.js"></script>
+<script type="text/javascript" src="/js/tpd/shippingWave.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">批量发货</span>
+	</div>
+	
+	<div class="clear"></div>
+	
+	<div id="searchPanel" class="search_row dark_blue">
+		<form id="importForm" action="/shippingwave/shipping/import.htm" method="post" enctype="multipart/form-data">
+			
+			订单类型：
+			#dictSelect("BatchShipping.type" "type" "" "required" true)
+			<input type="file" name="file" validate="required"/>
+			
+			<input type="button" class="button" value="导入" onclick="doImport();">
+			
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			下载模板：&nbsp;&nbsp;<a class="edit orange" href="/shippingwave/shipping/downloadshipping.htm">订单已发货模板</a>
+			&nbsp;&nbsp;
+			<a class="orange" style="text-decoration:underline;" href="/shippingwave/shipping/downloadshortage.htm">订单缺货模板</a>
+		</form>
+	</div>
+	<div class="clear"></div>
+	<div id="contentPanel"></div>
+	
+	<div class="search_row dark_blue" style="margin-top:20px;">
+    	<br>页面功能说明：<br><br>
+        1、已发货订单：在线下完全发运后的订单，按“已发货订单”模版格式导入相关数据；其中：订单号、物流公司编码、运单号为必填项；
+		<br>
+		2、缺货订单：订单存在部份缺货或完全缺货后，该订单的其他商品不能发货，按缺货订单处理；将缺货订单按“缺货”订单模版格式导入相关数据。
+		<br><br>
+    </div>
+</div>
+
+</body>
+</html>

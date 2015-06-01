@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.InnerProductMapper">
+	
+	<insert id="copyProductInfo">
+		INSERT INTO ty_product_info (
+			category_id, product_sn, product_name, brand_id, market_price, shop_price,
+			product_sex, is_onsale, provider_id, provider_productcode, 
+			product_desc_additional, product_desc_detail, scm_product_id,
+			create_admin, create_date, product_year, product_month, unit_name, 
+			is_audit, audit_admin, audit_date, limit_num, limit_day, 
+			promote_start_date, promote_end_date, keywords, product_desc,
+			goods_carelabel, size_image_id, stop_date, is_virtual, generate_method 
+		) SELECT 
+			cat_id, goods_sn, goods_name, brand_id, market_price, shop_price,
+			(CASE goods_sex WHEN 'm' THEN 0 WHEN 'w' THEN 1 ELSE 3 END) AS product_sex, 
+			0, provider_id, provider_goods, 
+			goods_desc_additional, goods_desc, goods_id,
+			#{adminId, jdbcType=INTEGER}, NOW(), goods_year, goods_month, unit_name, 
+			1, #{adminId, jdbcType=INTEGER}, NOW(), limit_num, limit_day, 
+			
+			'0000-00-00 00-00-00', '0000-00-00 00-00-00', '', '', 
+			'', 0, '0000-00-00 00-00-00', is_virtual, generate_method
+		FROM ty_scm_product_info 
+		WHERE goods_id = #{productId, jdbcType=INTEGER}
+	</insert>
+	
+	<insert id="copyProductType" parameterType="Integer">
+		INSERT INTO ty_product_type_link (
+			product_id, type_id 
+		) SELECT 
+			p.product_id, sl.type_id 
+		FROM ty_scm_product_type_link sl
+		INNER JOIN ty_product_info p ON p.scm_product_id = sl.goods_id 
+		WHERE goods_id = #{productId, jdbcType=INTEGER}
+	</insert>
+	
+	<insert id="copyProductSub">
+		INSERT INTO ty_product_sub (
+			product_id, color_id, size_id, gl_num, is_on_sale, consign_num, wait_num, 
+			sort_order, provider_barcode, create_admin, create_date, is_pic, scm_provider_barcode
+		) SELECT 
+			p.product_id, sp.color_id, sp.size_id, 0, 0, sp.consign_num, 0, 
+			sp.sort_order, sp.provider_barcode, #{adminId, jdbcType=INTEGER}, 
+			NOW(), 1, sp.tpd_provider_barcode  
+		FROM ty_scm_product_sub sp
+		INNER JOIN ty_product_info p ON p.scm_product_id = sp.goods_id 
+		WHERE sp.goods_id = #{productId, jdbcType=INTEGER}
+	</insert>
+	
+	<insert id="copyProductGallery">
+		INSERT INTO ty_product_gallery (
+			image_type, product_id, color_id, img_desc, sort_order, img_url, create_admin, create_date 
+		) SELECT 
+			pg.img_default AS image_type,
+			p.product_id AS product_id,
+			pg.color_id, pg.img_desc, pg.sort_order, pg.img_url, 
+			#{adminId, jdbcType=INTEGER} AS create_admin, 
+			NOW() AS create_date 
+		FROM ty_scm_product_gallery pg
+		INNER JOIN ty_product_info p ON p.scm_product_id = pg.goods_id 
+		WHERE goods_id = #{productId, jdbcType=INTEGER}
+	</insert>
+	
+	<insert id="copyProductCost">
+		INSERT INTO ty_product_cost(
+			batch_id, product_id, consign_price, cost_price, consign_rate, 
+			consign_type, create_admin, create_date, provider_id, product_cess
+		) SELECT 
+			#{batchId, jdbcType=INTEGER},
+			p.product_id, sp.consign_price, sp.cost_price, sp.consign_rate,
+			0, #{adminId, jdbcType=INTEGER}, NOW(),
+			#{providerId, jdbcType=INTEGER}, sp.consign_rate
+		FROM ty_scm_product_info sp
+		INNER JOIN ty_product_info p ON p.scm_product_id = sp.goods_id 
+		WHERE goods_id = #{productId, jdbcType=INTEGER}
+	</insert>
+
+
+	<update id="batchOnsale">
+		UPDATE ty_product_sub s
+		INNER JOIN ty_product_info p ON p.product_id = s.product_id 
+		SET is_on_sale = #{on, jdbcType=BOOLEAN} 
+		WHERE p.scm_product_id IN
+		<foreach collection="ids" item="productId" open="(" close=")" separator=",">
+			#{productId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+	<insert id="batchInsertOnsaleRecord">
+		INSERT INTO ty_product_onsale_record(
+			sub_id, sr_onsale, create_admin, create_date, onsale_memo
+		) SELECT 
+			s.sub_id, 
+			#{on, jdbcType=BOOLEAN} AS sr_onsale, 
+			#{adminId, jdbcType=INTEGER} AS create_admin, 
+			NOW() AS create_date, 
+			'供应商手工操作' AS onsale_memo
+		FROM ty_product_sub s 
+		INNER JOIN ty_product_info p ON p.product_id = s.product_id 
+		WHERE p.scm_product_id IN 
+		<foreach collection="ids" item="productId" open="(" close=")" separator=",">
+			#{productId, jdbcType=INTEGER}
+		</foreach>
+	</insert>
+
+
+	<!-- 批次查询与创建 -->
+	<select id="selectBatchId" resultType="Integer">
+		SELECT batch_id 
+		FROM ty_purchase_batch 
+		WHERE provider_id = #{providerId, jdbcType=INTEGER} 
+		AND brand_id = #{brandId, jdbcType=INTEGER} 
+		AND is_reckoned = 0 
+		ORDER BY batch_id DESC 
+		LIMIT 1 
+	</select>
+	
+	<insert id="insertBatch" parameterType="com.fclub.tpd.dataobject.Batch" 
+			useGeneratedKeys="true" keyProperty="batchId">
+		INSERT INTO ty_purchase_batch(
+			batch_code, provider_id, batch_status, batch_type, batch_name, 
+			create_admin, create_date, is_reckoned, is_consign, brand_id
+		) VALUES (
+			#{batchCode, jdbcType=VARCHAR},
+			#{providerId, jdbcType=INTEGER},
+			1, 4, '供应商直发-自动创建批次',
+			#{createAdmin, jdbcType=INTEGER},
+			NOW(), 0, 2,
+			#{brandId, jdbcType=INTEGER}
+		)
+	</insert>
+	
+	
+	
+	<resultMap id="ProductMap" type="com.fclub.tpd.dataobject.Product">
+		<id column="product_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="provider_id" property="providerId" jdbcType="INTEGER" />
+		<result column="scm_product_id" property="tpdGoodsId" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="ProductSubMap" type="com.fclub.tpd.dataobject.ProductSub">
+		<id column="sub_id" property="glId" jdbcType="INTEGER" />
+		<result column="product_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="color_id" property="colorId" jdbcType="INTEGER" />
+		<result column="size_id" property="sizeId" jdbcType="INTEGER" />
+		<result column="gl_id" property="tpdGlId" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<select id="selectProductBySn" parameterType="String" resultMap="ProductMap">
+		SELECT product_id, provider_id, scm_product_id 
+		FROM ty_product_info 
+		WHERE product_sn = #{productSn,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectProductSnById" parameterType="Integer" resultType="String">
+		SELECT product_sn FROM ty_product_info WHERE product_id = #{productId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectColorIdByName" parameterType="String" resultType="Integer">
+		SELECT color_id FROM ty_product_color WHERE color_name = #{colorName,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectSizeIdByName" parameterType="String" resultType="Integer">
+		SELECT size_id FROM ty_product_size WHERE size_name = #{sizeName,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectByPCSId" resultMap="ProductSubMap">
+		SELECT ps.sub_id, ps.product_id, ps.color_id, ps.size_id, sps.gl_id 
+		FROM ty_product_sub ps 
+		INNER JOIN ty_product_info p ON p.product_id = ps.product_id 
+		INNER JOIN ty_scm_product_sub sps ON sps.goods_id = p.scm_product_id AND sps.color_id = ps.color_id AND sps.size_id = ps.size_id 
+		WHERE ps.product_id = #{productId, jdbcType=INTEGER}
+		AND ps.color_id = #{colorId, jdbcType=INTEGER}
+		AND ps.size_id = #{sizeId, jdbcType=INTEGER}
+	</select>
+	
+	
+	<select id="selectProductSub" parameterType="Integer" resultMap="ProductSubMap">
+		SELECT ps.sub_id, ps.product_id, ps.color_id, ps.size_id, sps.gl_id 
+		FROM ty_product_sub ps 
+		INNER JOIN ty_product_info p ON p.product_id = ps.product_id 
+		INNER JOIN ty_scm_product_sub sps ON sps.goods_id = p.scm_product_id AND sps.color_id = ps.color_id AND sps.size_id = ps.size_id 
+		WHERE sps.gl_id = #{glId, jdbcType=INTEGER}
+	</select>
+	
+	<update id="batchUpdateConsignNum">
+		UPDATE ty_product_sub SET consign_num = CASE sub_id 
+		<foreach collection="list" item="sub">
+			WHEN #{sub.glId, jdbcType=INTEGER} THEN #{sub.consignNum, jdbcType=INTEGER} 
+		</foreach>
+		END WHERE sub_id IN 
+		<foreach collection="list" item="sub" open="(" close=")" separator=",">
+			#{sub.glId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+	<update id="updateByScmProdutId" parameterType="com.fclub.tpd.dataobject.Product">
+		UPDATE ty_product_info 
+		<set>
+			<if test="goodsName != null and goodsName != '' ">
+				product_name = #{goodsName, jdbcType=VARCHAR},
+			</if>
+			<if test="shopPrice != null">
+				shop_price = #{shopPrice, jdbcType=DECIMAL},
+			</if>
+			<if test="limitNum != null and limitNum >= 0">
+				limit_num = #{limitNum, jdbcType=INTEGER},
+			</if>
+			<if test="limitDay != null and limitDay >= 0">
+				limit_day = #{limitDay, jdbcType=INTEGER} 
+			</if>
+			<if test="goodsDesc != null and goodsDesc != '' ">
+				product_desc_detail = #{goodsDesc, jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE scm_product_id = #{goodsId, jdbcType=INTEGER}
+	</update>
+	
+	<update id="batchUpdateConsignNumByCard">
+		UPDATE ty_product_sub SET consign_num = consign_num + 1
+		WHERE sub_id IN 
+		<foreach collection="list" item="productCard" open="(" close=")" separator=",">
+			#{productCard.subId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+</mapper>

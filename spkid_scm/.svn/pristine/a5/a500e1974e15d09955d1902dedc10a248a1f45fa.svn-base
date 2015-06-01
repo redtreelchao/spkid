@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.DepotInSubMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.erp.DepotInSub">
+		<id column="depot_in_sub_id" property="depotInSubId" jdbcType="INTEGER" />
+		<result column="depot_in_id" property="depotInId" jdbcType="INTEGER" />
+		<result column="product_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="product_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="color_id" property="colorId" jdbcType="INTEGER" />
+		<result column="size_id" property="sizeId" jdbcType="INTEGER" />
+		
+		<result column="depot_id" property="depotId" jdbcType="INTEGER" />
+		<result column="location_id" property="locationId" jdbcType="INTEGER" />
+		
+		<result column="shop_price" property="salePrice" jdbcType="DECIMAL" />
+		<result column="product_number" property="goodsNumber" jdbcType="INTEGER" />
+		<result column="product_amount" property="goodsAmount" jdbcType="DECIMAL" />
+		<result column="create_admin" property="depotInAid" jdbcType="INTEGER" />
+		<result column="create_date" property="depotInTime" jdbcType="TIMESTAMP" />
+		
+		<result column="batch_id" property="batchId" jdbcType="INTEGER" />
+		<result column="product_finished_number" property="goodsFinishedNumber" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.erp.DepotInSub">
+		insert into ty_depot_in_sub (
+			depot_in_id,
+			product_id,
+			product_name,
+			color_id,
+			size_id,
+			depot_id,
+			location_id,
+			shop_price,
+			product_number,
+			product_amount,
+			create_admin,
+			create_date,
+			batch_id,
+			product_finished_number
+		) values (
+			#{depotInId,jdbcType=INTEGER},
+			#{goodsId,jdbcType=INTEGER},
+			#{goodsName,jdbcType=VARCHAR},
+			#{colorId,jdbcType=INTEGER},
+			#{sizeId,jdbcType=INTEGER},
+			#{depotId,jdbcType=INTEGER},
+			#{locationId,jdbcType=INTEGER},
+			#{salePrice,jdbcType=DECIMAL},
+			#{goodsNumber,jdbcType=INTEGER},
+			#{goodsAmount,jdbcType=DECIMAL},
+			#{depotInAid,jdbcType=INTEGER},
+			#{depotInTime,jdbcType=TIMESTAMP},
+			#{batchId,jdbcType=INTEGER},
+			#{goodsFinishedNumber,jdbcType=INTEGER}
+		)
+		<selectKey resultType="java.lang.Integer" keyProperty="depotInSubId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+</mapper>

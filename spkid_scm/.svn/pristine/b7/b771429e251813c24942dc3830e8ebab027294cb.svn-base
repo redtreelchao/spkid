@@ -1,0 +1,29 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/jquery.form.pack.js"></script>
+<script type="text/javascript" src="/js/page.js"></script>
+<script type="text/javascript" src="/js/tpd/category.js"></script>
+</head>
+<body >
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">商品分类管理</span>
+		<span class="right add_t">
+		</span>
+	</div>
+	<form id="searchForm" action="/goods/category/list/query.htm" method="post" style="margin: 0;">
+	</form>
+	<div class="clear"></div>
+	<div id="contentPanel"></div>
+	<div class="clear" style="height:30px;"></div>
+</div>
+#pageScript(20)
+</body>
+</html>

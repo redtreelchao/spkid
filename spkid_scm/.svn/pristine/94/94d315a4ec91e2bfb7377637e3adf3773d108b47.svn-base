@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>专场排期</title>
+        <link type="text/css" rel="stylesheet" href="/css/common.css" />
+        <link type="text/css" rel="stylesheet" href="/css/main.css" />
+        <link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+        <script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+        <script type="text/javascript" src="/js/fclub.validate.js"></script>
+        <script type="text/javascript" src="/js/jquery.form.import.js"></script>
+		<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+        <script type="text/javascript">
+            function doProcess(){
+            	var pdv = new Validate("processFrom");
+            	if (pdv.validate()) {
+                	$("#processFrom").ajaxSubmit(function(result) {
+                		if (result === 'success') {
+                			$("#result").html("<span style='color:green'>设置成功！</span>");
+							$("#gl_" + $("#glId").val()).html("<front style='color:blue'>"+$("#consignNum").val()+"</front>");
+							$("input[name='save']").attr("disabled","true").attr("class","none_color");
+                		} else {
+							$("#result").html("<span style='color:red'>"+result+"</span>");
+						}
+         				$("#result").show();
+                	});
+            	}
+            }
+        </script>
+    </head>
+    <body>
+        <div class="main">
+        	<div class="clear"></div>
+        	<div class="title_row dark_blue ">
+        		<form id="processFrom" name="processFrom" action="/goods/consign/update.htm" method="post">
+					<input type="hidden" id="glId" name="glId" value="$!{glId}" />
+                    <table width="100%" cellspacing="1" cellpadding="3" align="center" style="display:table;" class="config_tab">
+        				<tbody>
+        					<tr>
+        						<td align="right">虚库库存：</td>
+                                <td align="left">
+                                    <input type="text" class="inputBorder" value="" name="consignNum" id="consignNum" validate="required" />
+                                </td>
+                        	</tr>
+                   	 	</tbody>
+                	</table>
+					
+                    <div style="text-align:center; padding:5px 0;">
+                        <input type="button" name="save" value=" 保存 " class="button" onclick="doProcess();" />
+    				</div>
+        		</form>
+            </div>
+        	<div class="clear"></div>
+        	<div id="result" style="display:none;"></div>
+        </div>
+    </body>
+</html>
