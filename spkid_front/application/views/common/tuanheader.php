@@ -8,7 +8,7 @@
 <meta name="Keywords" content="<?=PAGE_KEYWORDS?>" />
 <meta name="Description" content="<?=PAGE_DESCRIPTION?>" />
 <title><?=@$page_title?><?=PAGE_TITLE_SITE_NAME?></title>
-<link href="<?=static_style_url("css/tuan.css")?>" type="text/css" rel="stylesheet" />
+<link href="<?=static_style_url("css/tuan2.css")?>" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="<?=static_style_url("js/jquery.js")?>"></script>
 <script type="text/javascript" src="<?=static_style_url("js/forBasic.js")?>?v=20130913"></script>
 <script type="text/javascript" src="<?=static_style_url("js/jquery.lazyload.min.js")?>"></script>

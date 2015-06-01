@@ -496,7 +496,7 @@ if (!function_exists('get_nav')) {
         $CI = &get_instance();
         $CI->load->model('product_model');
         $nav_list = $CI->cache->get('navigation_cate');
-        if (empty($onsale_last_goods)) {
+        if (empty($nav_list)) {
             $nav_list = $CI->product_model->get_category();
             $CI->cache->save('navigation_cate',$nav_list,CACHE_TIME_NAVIGATION);
         }

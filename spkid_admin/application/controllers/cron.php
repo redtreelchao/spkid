@@ -2,6 +2,8 @@
 #doc
 #	classname:	Cron
 #	scope:		PUBLIC
+# Usage: 在CRONTAB 中添加记录
+# 	1 3 * * * 路径/index.php cron 方法名
 #
 #/doc
 

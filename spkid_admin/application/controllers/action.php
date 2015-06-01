@@ -99,14 +99,15 @@ class Action extends CI_Controller {
         auth('action_del');
         $action_id = intval($action_id);
         $test = $this->input->post('test');
-        $check = $this->cps_model->filter(array('action_id' => $action_id));
+        $check = $this->action_model->filter(array('action_id' => $action_id));
+
         if (empty($check)) {
             sys_msg('记录不存在', 1);
             return;
         }
         if ($test)
             sys_msg('');
-        $this->cps_model->del(array('action_id' => $action_id));
+        $this->action_model->del(array('action_id' => $action_id));
         sys_msg('操作成功', 2, array(array('href' => 'action/index', 'text' => '返回列表页')));
     }
 

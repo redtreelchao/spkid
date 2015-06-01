@@ -1,4 +1,4 @@
-1432974301TS---><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+1433150454TS---><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn" xmls:og="http://opengraphprotocol.org/schema">
 <head id="ctl00_ctl00_Head2">
     <title>妈咪树_妈妈购物的最佳选择</title>
@@ -194,7 +194,7 @@ var pre_sid = 0;
 	<div id="content">
 		<!-- SLIDE : PROMOTION -->
                 <div id="ctl00_ctl00_MainContentHolder_MainContentHolder_topBnnr" class="bnnr_prmt">
-            <a href="www.baidu.com" target="_blank" onfocus="this.blur();">
+            <a href="http://www.baidu.com" target="_blank" onfocus="this.blur();">
             <img src="http://mmimg.redtravel.cn/front_ad/3ac9f10d8375d31693d1624a5c4177cf.png" width="980" height="80" border="0">
             </a>
         </div>

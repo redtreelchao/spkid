@@ -54,37 +54,30 @@
      </div>
      <div class="foot_center">
      	<dl id="buyTips">
-           <dd><a target="_blank" href="/help-47.html">购买流程</a></dd>
-           <dd><a target="_blank" href="/help-4.html">积分说明</a></dd>
-           <dd><a target="_blank" href="/help-5.html">会员制度</a></dd>
-           <dd><a target="_blank" href="/help-66.html">正品保障</a></dd>
+           <dd><a href="/help-2.html" target="_blank">购买流程</a></dd>
+           <dd><a href="/help-431.html" target="_blank">积分说明</a></dd>
+           <dd><a href="/help-436.html" target="_blank">会员制度</a></dd>
+           <dd><a href="/help-54.html" target="_blank">正品保障</a></dd>
         </dl>
         <dl id="sentWay">
-           <dd><a target="_blank" href="/help-12.html">配送规范</a></dd>
-           <dd><a target="_blank" href="/help-13.html">商品签收</a></dd>
-           <dd><a target="_blank" href="/help-14.html">配送费用</a></dd>
+           <dd><a href="/help-355.html" target="_blank">配送规范</a></dd>
+           <dd><a href="/help-354.html" target="_blank">商品签收</a></dd>
+           <dd><a href="/help-22.html" target="_blank">配送费用</a></dd>
         </dl>
         <dl id="payWay">
-           
-           <dd><a target="_blank" href="/help-17.html">货到付款</a></dd>
-           <dd><a target="_blank" href="/help-21.html">网上支付</a></dd>
-           <dd><a target="_blank" href="/help-74.html">银行转账</a></dd>
-           <dd><a target="_blank" href="/help-11.html">现金券支付</a></dd>
-           <dd><a target="_blank" href="/help-78.html">账户支付</a></dd>
+           <dd><a href="/help-730.html" target="_blank">网上支付</a></dd>
+           <dd><a href="/help-732.html" target="_blank">现金券支付</a></dd>
+           <dd><a href="/help-733.html" target="_blank">账户支付</a></dd>
         </dl>
         <dl id="saleSev">
-           
-           <dd><a target="_blank" href="/help-25.html">退货政策</a></dd>
-           <dd><a target="_blank" href="/help-26.html">退货流程</a></dd>
-
+           <dd><a href="/help-369.html" target="_blank">退货政策</a></dd>
+           <dd><a href="/help-13.html" target="_blank">退货流程</a></dd>
         </dl>
         <dl id="selfSev">
-           
-           <dd><a target="_blank" href="/help-76.html">补开发票</a></dd>
-           <dd><a target="_blank" href="/help-75.html">绑定手机/邮箱</a></dd>
-           <dd><a target="_blank" href="/help-70.html">联系客服</a></dd>
-           <dd><a target="_blank" href="/help-10.html">订单查询</a></dd>
-           <dd><a target="_blank" href="/help-2.html">常见问题</a></dd>
+           <dd><a href="/help-734.html" target="_blank">绑定手机/邮箱</a></dd>
+           <dd><a href="/help-432.html" target="_blank">联系客服</a></dd>
+           <dd><a href="/help-434.html" target="_blank">订单管理</a></dd>
+           <dd><a href="/help-9.html" target="_blank">常见问题</a></dd>
         </dl>	
      </div>
      <div class="foot_right">
@@ -113,23 +106,23 @@
     <a target="_blank" href="/article-39.html"><?php print SITE_NAME;?>简介</a> | <a target="_blank" href="/article-48.html">友情链接</a> | <a target="_blank" href="/article-72.html">联系我们</a> | <a target="_blank" href="/article-41.html">招贤纳士</a>  | <a target="_blank" href="/help-70.html">帮助中心</a>
    </div>
      <div class="f_us">
-        <span class="caaa">Copyright <font style="font-family:Arial;">&copy;</font> baobeigou.com 2011-2013 </span><a target="_blank" href="http://www.miibeian.gov.cn" class="lGray">沪ICP备13007471号-1</a>
+        <span class="caaa">Copyright <font style="font-family:Arial;">&copy;</font> redtravel.cn 2011-2013 </span><a target="_blank" href="http://www.miibeian.gov.cn" class="lGray">沪ICP备XXXX号-1</a>
      </div>
      <div style="display:none;" class="basicTail">
-     	<a href=""><img src="http://static1.baobeigou.com/img/toptail/bWeb.png"></a>
-        <a href=""><img src="http://static1.baobeigou.com/img/toptail/eWeb.png"></a>
-        <a href=""><img src="http://static2.baobeigou.com/img/toptail/payShop.png"></a>
-        <a href=""><img src="http://static2.baobeigou.com/img/toptail/shgs.png"></a>
-        <a href=""><img src="http://static1.baobeigou.com/img/toptail/360Web.png"></a>
-        <a href=""><img src="http://static1.baobeigou.com/img/toptail/etaoWeb.png"></a>
+     	<a href=""><img src="<?=static_style_url('/img/toptail/bWeb.png')?>"></a>
+        <a href=""><img src="<?=static_style_url('/img/toptail/eWeb.png')?>"></a>
+        <a href=""><img src="<?=static_style_url('/img/toptail/payShop.png')?>"></a>
+        <a href=""><img src="<?=static_style_url('/img/toptail/shgs.png')?>"></a>
+        <a href=""><img src="<?=static_style_url('/img/toptail/360Web.png')?>"></a>
+        <a href=""><img src="<?=static_style_url('/img/toptail/etaoWeb.png')?>"></a>
      </div>
      <div style="height:35px; line-height:35px;" class="basicTail">
-        <a title="上海网络警察" target="_blank" href="http://sh.cyberpolice.cn/infoCategoryListAction.do?act=initjpg"><img border="0" title="上海网络警察" src="http://static2.baobeigou.com/img/toptail/shNetCap.jpg"></a>
-        <a target="_blank" title="网络社会诚信网" href="http://www.zx110.org/"><img title="网络社会诚信网" src="http://static2.baobeigou.com/img/toptail/netSciHone.jpg"></a>
-        <a target="_blank" title="互联网违法和不良信息举报平台" href="http://www.net.china.com.cn/index.htm"><img title="互联网违法和不良信息举报平台" src="http://static2.baobeigou.com/img/toptail/3wInfo.jpg"></a>
-        <a target="_blank" href="https://search.szfw.org/cert/l/CX20130509002870002586" id="___szfw_logo___"><img title="诚信网站" src="http://static2.baobeigou.com/img/toptail/honest.jpg"></a>
-        <a title="一淘合作商家" target="_blank" href="http://s.etao.com/search?spm=1002.8.0.89.qyyBFd&amp;q=%B1%A6%B1%B4%B9%BA%B9%D9%CD%F8&amp;initiative_id=setao_20130428&amp;usearch=yes&amp;fseller=%B1%A6%B1%B4%B9%BA"><img alt="一淘合作商家" src="http://static2.baobeigou.com/img/toptail/etaoWeb.png"></a>
-        <a title="放心消费网站" target="_blank" href="http://kuaitousu.com/union/76.html"><img border="0" src="http://static2.baobeigou.com/img/toptail/fangxinxiaofei.png"></a>
+        <a title="上海网络警察" target="_blank" href="http://sh.cyberpolice.cn/infoCategoryListAction.do?act=initjpg"><img border="0" title="上海网络警察" src="<?=static_style_url('/img/toptail/shNetCap.jpg')?>"></a>
+        <a target="_blank" title="网络社会诚信网" href="http://www.zx110.org/"><img title="网络社会诚信网" src="<?=static_style_url('/img/toptail/netSciHone.jpg')?>"></a>
+        <a target="_blank" title="互联网违法和不良信息举报平台" href="http://www.net.china.com.cn/index.htm"><img title="互联网违法和不良信息举报平台" src="<?=static_style_url('/img/toptail/3wInfo.jpg')?>"></a>
+        <a target="_blank" href="https://search.szfw.org/cert/l/CX20130509002870002586" id="___szfw_logo___"><img title="诚信网站" src="<?=static_style_url('/img/toptail/honest.jpg')?>"></a>
+        <a title="一淘合作商家" target="_blank" href="http://s.etao.com/search?spm=1002.8.0.89.qyyBFd&amp;q=%B1%A6%B1%B4%B9%BA%B9%D9%CD%F8&amp;initiative_id=setao_20130428&amp;usearch=yes&amp;fseller=%B1%A6%B1%B4%B9%BA"><img alt="一淘合作商家" src="<?=static_style_url('/img/toptail/etaoWeb.png')?>"></a>
+        <a title="放心消费网站" target="_blank" href="http://kuaitousu.com/union/76.html"><img border="0" src="<?=static_style_url('/img/toptail/fangxinxiaofei.png')?>"></a>
     
      </div>
 </div>
