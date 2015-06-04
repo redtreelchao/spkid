@@ -1,3 +1,0 @@
-the lastest version: ${fclub.hudson.build.number}
-
-date:${fclub.hudson.build.id}
