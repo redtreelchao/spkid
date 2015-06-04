@@ -1,0 +1,46 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<th width="60px;">团购ID</th>
+				<th width="200px;">团购名称</th>
+				<th width="200px;">商品名称</th>
+				<th width="100px;">商品款号</th>
+				<th width="100px;">团购价格</th>
+				<th width="140px;">上线时间</th>
+				<th width="140px;">下线时间</th>
+				<th width="80px;">团购状态</th>
+				<th >操作</th>
+			</tr>
+			#foreach($info in $page.result) 
+			<tr>
+				<td align="center"> $!info.tuanId </td>
+				<td align="center"> $!info.tuanName </td>
+				<td align="center"> $!info.product.goodsName </td>
+				<td align="center"> $!info.product.goodsSn </td>
+				<td align="center"> $!info.tuanPrice </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.tuanOnlineTime) </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.tuanOfflineTime) </td>
+				<td align="center"> #if($!info.status==0)未审核#elseif($!info.status==1)已审核#elseif($!info.status==2)已停止#elseif($!info.status==3)已结束#elseif($!info.status==4)草稿#end </td>
+				<td align="center" style="width:120px;">
+					<a class="edit" href="/mamituan/list/show.htm?tuanId=$info.tuanId">查看</a>
+					#if($!info.status==4)
+					<a class="edit" href="/mamituan/editTo.htm?tuanId=$info.tuanId">编辑</a>
+					#end
+					#if($!info.status==0)
+					#if($!tpdHelper.isAdmin())
+					<a class="del"  href="javascript:doCheck($info.tuanId)">审核</a>
+					<a class="del"  href="javascript:doStop($info.tuanId)">停止</a>
+					#end
+					#end
+					#if($!info.status==4)
+					<a class="del"  href="javascript:doDelete($info.tuanId)">删除</a>
+					#end
+				</td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>
+
+#page()

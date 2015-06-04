@@ -1,0 +1,5 @@
+#set($ctx="http://localhost:9090")
+#set($ctxJs="http://localhost:9090")
+#set($ctxCss="http://localhost:9090")
+#set($ctxImg="http://localhost:9090")
+

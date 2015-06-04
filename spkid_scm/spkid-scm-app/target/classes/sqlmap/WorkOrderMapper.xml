@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.WorkOrderMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.WorkOrder">
+		<id column="wo_id" property="woId" jdbcType="INTEGER" />
+		<result column="wo_no" property="woNo" jdbcType="VARCHAR" />
+		<result column="wo_type" property="woType" jdbcType="VARCHAR" />
+		<result column="provider_id" property="providerId" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="wo_status" property="woStatus" jdbcType="VARCHAR" />
+		<result column="wo_file" property="woFile" jdbcType="VARCHAR" />
+		<result column="reply_user" property="replyUser" jdbcType="INTEGER" />
+		<result column="reply_option" property="replyOption" jdbcType="VARCHAR" />
+		<result column="reply_time" property="replyTime" jdbcType="TIMESTAMP" />
+		<result column="reply_file" property="replyFile" jdbcType="VARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="order_sn" property="orderSn" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap id="GoodsResultMap" type="com.fclub.tpd.dto.WorkOrderGoods">
+		<result column="product_sn" property="goodsSn" jdbcType="VARCHAR"/>
+		<result column="product_name" property="goodsName" jdbcType="VARCHAR"/>
+		<result column="provider_productcode" property="providerGoods" jdbcType="VARCHAR"/>
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR"/>
+		<result column="provider_id" property="providerId" jdbcType="INTEGER"/>
+		<result column="provider_code" property="providerCode" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.wo_id,
+		t.order_sn,
+		t.wo_no,
+		t.wo_type,
+		t.provider_id,
+		t.content,
+		t.wo_status,
+		t.wo_file,
+		t.reply_user,
+		t.reply_option,
+		t.reply_time,
+		t.reply_file,
+		t.create_user,
+		t.create_time,
+		t.update_user,
+		t.update_time
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_work_order t
+		where wo_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_work_order t 
+		where 1 
+		<if test="param.providerId != null and param.providerId > 0">
+			and t.provider_id = #{param.providerId,jdbcType=INTEGER} 
+			and ((t.wo_type='02') or (t.wo_type='01' and t.wo_status IN (1, 2)))
+		</if>
+		<if test="param.providerId == null or param.providerId == 0">
+			and ((t.wo_type='01') or (t.wo_type='02' and t.wo_status!=0))
+		</if>
+		
+		<if test="param.orderSn != null and param.orderSn != ''">
+			and t.order_sn like '%${param.orderSn}%'
+		</if>
+		<if test="param.woNo != null and param.woNo != ''">
+			and t.wo_no like '%${param.woNo}%'
+		</if>
+		<if test="param.woStatus != null and param.woStatus >= 0">
+			and t.wo_status = #{param.woStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="param.woType != null and param.woType > 0">
+			and t.wo_type = #{param.woType,jdbcType=VARCHAR}
+		</if>
+		<if test="param.startTime != null and param.startTime != ''">
+			<![CDATA[and t.create_time >= #{param.startTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="param.endTime != null and param.endTime != ''">
+			<![CDATA[and t.create_time <= DATE_ADD(#{param.endTime,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+		</if>
+		order by t.create_time desc
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_scm_work_order
+		where wo_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.WorkOrder">
+		insert into ty_scm_work_order (
+			    wo_no,
+			    wo_type,
+			    wo_status,
+			    provider_id,
+				content,
+				create_user,
+				create_time,
+				wo_file,
+				order_sn
+		)
+		values (
+			#{woNo,jdbcType=VARCHAR},
+			#{woType,jdbcType=VARCHAR},
+			#{woStatus,jdbcType=VARCHAR},
+			#{providerId,jdbcType=INTEGER},
+			#{content,jdbcType=VARCHAR},
+			#{createUser,jdbcType=INTEGER},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{woFile,jdbcType=VARCHAR},
+			#{orderSn,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.WorkOrder">
+		update ty_scm_work_order
+		<set>
+		<if test="woNo != null">
+		wo_no = #{woNo,jdbcType=VARCHAR},
+		</if>
+		<if test="orderSn != null">
+		order_sn = #{orderSn,jdbcType=VARCHAR},
+		</if>
+		<if test="woType != null">
+		wo_type = #{woType,jdbcType=VARCHAR},
+		</if>
+		<if test="providerId != null">
+		provider_id = #{providerId,jdbcType=INTEGER},
+		</if>
+		<if test="content != null">
+		content = #{content,jdbcType=VARCHAR},
+		</if>
+		<if test="woStatus != null">
+		wo_status = #{woStatus,jdbcType=VARCHAR},
+		</if>
+		<if test="woFile != null">
+		wo_file = #{woFile,jdbcType=VARCHAR},
+		</if>
+		<if test="replyUser != null">
+		reply_user = #{replyUser,jdbcType=INTEGER},
+		</if>
+		<if test="replyOption != null">
+		reply_option = #{replyOption,jdbcType=VARCHAR},
+		</if>
+		<if test="replyTime != null">
+		reply_time = #{replyTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="replyFile != null">
+		reply_file = #{replyFile,jdbcType=VARCHAR},
+		</if>
+		<if test="createUser != null">
+		create_user = #{createUser,jdbcType=INTEGER},
+		</if>
+		<if test="createTime != null">
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="updateUser != null">
+		update_user = #{updateUser,jdbcType=INTEGER},
+		</if>
+		<if test="updateTime != null">
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		</if>
+		</set>
+		where wo_id = #{woId,jdbcType=INTEGER}
+	</update>
+	<update id="replyUpdate" parameterType="com.fclub.tpd.dataobject.WorkOrder">
+		update ty_scm_work_order
+		<set>
+		reply_user   = #{replyUser,jdbcType=INTEGER},
+		reply_option = #{replyOption,jdbcType=VARCHAR},
+		reply_time   = #{replyTime,jdbcType=TIMESTAMP},
+		wo_status    = #{woStatus,jdbcType=VARCHAR},
+		<if test="replyFile != null">
+		reply_file   = #{replyFile,jdbcType=VARCHAR}
+		</if>
+		</set>
+		where wo_id = #{woId,jdbcType=INTEGER}
+	</update>
+	<update id="deleteImage">
+		update ty_scm_work_order
+		<set>
+		<if test="type == 1">
+		wo_file = null
+		</if>
+		<if test="type == 2">
+		reply_file = null
+		</if>
+		</set>
+		where wo_id = #{woId,jdbcType=INTEGER}
+	</update>
+	<select id="countByWoNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT count(1) from ty_scm_work_order 
+		where wo_no=#{woNo,jdbcType=VARCHAR} LIMIT 1
+	</select>
+	<select id="checkOrderSnExist" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT count(*) from ty_scm_shipping_packet p
+		left join ty_order_info o on p.order_id=o.order_id
+		where o.order_sn=#{orderSn,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getOrderGoodsInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT 
+			g.goods_sn,
+			p.provider_code,
+			p.provider_id 
+		from ty_order_info o
+		LEFT JOIN ty_order_product og ON o.order_id=og.order_id
+		LEFT JOIN ty_product_info g on g.product_id=og.product_id
+		LEFT JOIN ty_product_provider p ON g.provider_id=p.provider_id 
+		where o.order_sn=#{orderSn,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getOrderGoods" parameterType="java.lang.String" resultMap="GoodsResultMap">
+		SELECT 
+			g.product_sn,
+			g.product_name,
+			g.provider_productcode,
+			b.brand_name,
+			p.provider_code,
+			p.provider_id 
+		FROM ty_order_info o
+		LEFT JOIN ty_order_product og ON o.order_id=og.order_id
+		LEFT JOIN ty_product_info g on g.product_id=og.product_id 
+		LEFT JOIN ty_product_brand b ON g.brand_id=b.brand_id
+		LEFT JOIN ty_product_provider p ON g.provider_id=p.provider_id 
+		WHERE o.order_sn=#{orderSn,jdbcType=VARCHAR}
+	</select>
+	
+</mapper>

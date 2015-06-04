@@ -1,0 +1,57 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<link href="/css/common.css" rel="stylesheet" type="text/css"/>
+<link href="/css/main.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/jumpTo.js"></script>
+</head>
+<body >
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">提示信息</span>
+	</div>
+	<div class="clear"></div>
+	<div class="title_row dark_blue">
+		<table width="400" align="center">
+     		<tbody>
+            	<tr>
+        			<td width="50" valign="top">
+                    	<img width="32" height="32" border="0" alt="information" src="/img/information.png">
+                	</td>
+					<td class="font_size14 bold dark_blue">操作成功</td>
+      			</tr>
+      			<tr>
+        			<td></td>
+        			<td id="redirectionMsg">
+						#if($currentUrl)
+						#set($autourl=$currentUrl)
+						如果您不做出选择，将在 <span id="jumpTo">5</span> 秒后跳转到第一个链接地址。
+						#else
+						#set($autourl=$backUrl)
+						操作完成,将在 <span id="jumpTo">5</span> 秒后跳转到操作前页面。
+						#end
+					</td>
+      			</tr>
+      			<tr>
+        			<td></td>
+        			<td style="line-height:22px;">
+          				<ul style="margin:10px 0; padding:0 10px">
+							#if($currentUrl)
+                        	<li><a href="$currentUrl">继续操作</a></li>
+							#end
+                        	<li><a href="$backUrl">#if($backName) $backName #else 返回列表 #end</a></li>
+                    	</ul>
+					</td>
+      			</tr>
+    		</tbody>
+		</table>
+	</div>
+	<script type="text/javascript">countDown(5,"$autourl");</script>
+	<div class="clear"></div>
+	
+</div>
+
+</body>
+</html>

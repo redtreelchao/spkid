@@ -1,0 +1,140 @@
+<table width="100%" cellspacing="0" cellpadding="0" align="center" style="display:none;" class="config_tab">
+    <tbody>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="importTable">
+                    <tbody>
+                       <tr>
+                            <th align="left">
+                                 <font class="bold">批量导入流程</font>
+                               ## <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="center">
+                                <div class="buttonElement">
+                                    <input #if($br)class="none_color"#else onclick="optionBCS();"#end type="button" value="尺寸图" />
+									#if($br)
+									<div class="runing_color">
+                                        <div class="StatBarButtonDiv" id="BS_BAR" type="07"></div>
+                                    </div>
+									<script type="text/javascript">
+										roll("#BS_BAR");
+                                    </script>
+									#end
+								</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="clear"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="tips_row">
+                    <tbody>
+                        <tr>
+                            <th align="left">
+                                <font class="bold">导入流程说明</font>
+                                <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="left" class="tips_row_text dark_blue">
+								<div style="padding-left:10px;">
+									请将需要导入的商品尺寸图片，放入：[FTP根目录]${tpdHelper.getImageBcsInPath()} 目录下；目录不存在则创建此目录<br>
+									文件命名规则:文件以款号命名,请导入JPG格式文件。<br>
+            						导入完成后点击 "查看报告",显示商品尺寸图的导入状态(没有错误信息表示导入成功)  
+								</div>
+							</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+		<tr>
+			<td>
+                <div class="clear"></div>
+            </td>
+		</tr>
+		<tr>
+            <td>
+				<div class="search_row dark_blue">
+    				<form id="searchFormB" name="search" action="/batchImport/list/query.htm" method="post">
+            			<input type="hidden" id="batch_no07" name="type" value="07" />
+						<input type="hidden" id="pageSize07" name="pageSize" value="$!page.pageSize" />
+            			<input type="hidden" id="pageNo07" name="pageNo" value="$!page.pageNo" />
+            			<input type="hidden" id="order07" name="order" value="$!page.order" />
+            			<input type="hidden" id="orderBy07" name="orderBy" value="$!page.orderBy" />
+            			##<div class="search_row_element"><span>批次号：</span><input type="text" id="batchNo" name="batchNo" class="input"/></div>
+            			<div class="search_row_element">
+            				导入时间：<input type="text" name="importDateBegin" class="enterQuery input black Wdate" onClick="WdatePicker()" />
+            				- 
+            				<input type="text" name="importDateEnd" class="enterQuery input black Wdate" onClick="WdatePicker()" />
+            			</div>
+            			<div class="search_row_element"><input type="button" class="button" value="搜索" onclick="submitSearch_cs();"></div>
+            		</form>
+                </div>
+            </td>
+        </tr>
+        <tr>
+			<td>
+                <div class="clear"></div>
+            </td>
+		</tr>
+		<tr>
+			<td>
+				<div id="contentPanel_07"></div>
+			</td>
+		</tr>	
+    </tbody>
+</table>
+	
+<script type="text/javascript">
+function submitSearch_B() {
+	var pageNo = $("#pageNo07").val();
+	if(pageNo == null || pageNo < 1)
+		$("#pageNo07").val("1");
+	if($("#selePageSize").val()) {
+    	$("#pageSize07").val($("#selePageSize").val());
+	}
+	$("#searchFormB").ajaxSubmit(function(result) {
+		$("#contentPanel_07").html(result); 
+	});
+}
+function jumpPage_B(pageNo) {
+	$("#pageNo07").val(pageNo);
+	$("#pageSize07").val($("#selePageSize").val());
+	$("#searchFormB").ajaxSubmit(function(result) {
+		$("#contentPanel_07").html(result);
+	});
+}
+function jumpPageTo_B() {
+	var index = $("#pageTo").val();
+	index = parseInt(index);
+	if (index > 0) {
+		jumpPage_B(index);
+	}
+}
+function changePageSize_B() {
+	$("#pageSize06").val($("#selePageSize").val());
+	$("#searchFormB").ajaxSubmit(function(result) {
+		$("#contentPanel_07").html(result);
+	});
+}
+
+$(function() {
+    $(".enterQuery").bind('keydown', function(event){
+    	if(event.keyCode==13){
+    		submitSearch_B();
+    	}
+    });
+    $("#pageSize07").val("20");
+    submitSearch_B();
+});
+</script>

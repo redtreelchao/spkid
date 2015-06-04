@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ProductGalleryMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.ProductGallery">
+		<id column="img_id" property="imgId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="color_id" property="colorId" jdbcType="INTEGER" />
+		<result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+		<result column="img_desc" property="imgDesc" jdbcType="VARCHAR" />
+		<result column="thumb_url" property="thumbUrl" jdbcType="VARCHAR" />
+		<result column="middle_url" property="middleUrl" jdbcType="VARCHAR" />
+		<result column="big_url" property="bigUrl" jdbcType="VARCHAR" />
+		<result column="teeny_url" property="teenyUrl" jdbcType="VARCHAR" />
+		<result column="small_url" property="smallUrl" jdbcType="VARCHAR" />
+		<result column="img_original" property="imgOriginal" jdbcType="VARCHAR" />
+		<result column="img_default" property="imgDefault" jdbcType="VARCHAR" />
+		<result column="img_aid" property="imgAid" jdbcType="SMALLINT" />
+		<result column="img_time" property="imgTime" jdbcType="TIMESTAMP" />
+		<result column="url_120_160" property="url120160" jdbcType="VARCHAR" />
+		<result column="url_99_132" property="url99132" jdbcType="VARCHAR" />
+		<result column="url_480_640" property="url480640" jdbcType="VARCHAR" />
+		<result column="url_56_84" property="url5684" jdbcType="VARCHAR" />
+		<result column="url_222_296" property="url222296" jdbcType="VARCHAR" />
+		<result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+		<result column="url_342_455" property="url342455" jdbcType="VARCHAR" />
+		<result column="url_170_227" property="url170227" jdbcType="VARCHAR" />
+		<result column="url_135_180" property="url135180" jdbcType="VARCHAR" />
+		<result column="url_251_323" property="url251323" jdbcType="VARCHAR" />
+		<result column="url_502_646" property="url502646" jdbcType="VARCHAR" />
+		<result column="url_1200_1600" property="url12001600" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.img_id,
+		t.goods_id,
+		t.color_id,
+		t.img_url,
+		t.img_desc,
+		t.thumb_url,
+		t.middle_url,
+		t.big_url,
+		t.teeny_url,
+		t.small_url,
+		t.img_original,
+		t.img_default,
+		t.img_aid,
+		t.img_time,
+		t.url_120_160,
+		t.url_99_132,
+		t.url_480_640,
+		t.url_56_84,
+		t.url_222_296,
+		t.sort_order,
+		t.url_342_455,
+		t.url_170_227,
+		t.url_135_180,
+		t.url_251_323,
+		t.url_502_646,
+		t.url_1200_1600
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_product_gallery t
+		where img_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_product_gallery t
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_scm_product_gallery
+		where img_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.ProductGallery">
+		insert into ty_scm_product_gallery (
+			goods_id,
+			color_id,
+			img_url,
+			img_desc,
+			thumb_url,
+			middle_url,
+			big_url,
+			teeny_url,
+			small_url,
+			img_original,
+			img_default,
+			img_aid,
+			img_time,
+			url_120_160,
+			url_99_132,
+			url_480_640,
+			url_56_84,
+			url_222_296,
+			sort_order,
+			url_342_455,
+			url_170_227,
+			url_135_180,
+			url_251_323,
+			url_502_646,
+			url_1200_1600
+		)
+		values (
+			#{goodsId,jdbcType=INTEGER},
+			#{colorId,jdbcType=INTEGER},
+			#{imgUrl,jdbcType=VARCHAR},
+			#{imgDesc,jdbcType=VARCHAR},
+			#{thumbUrl,jdbcType=VARCHAR},
+			#{middleUrl,jdbcType=VARCHAR},
+			#{bigUrl,jdbcType=VARCHAR},
+			#{teenyUrl,jdbcType=VARCHAR},
+			#{smallUrl,jdbcType=VARCHAR},
+			#{imgOriginal,jdbcType=VARCHAR},
+			#{imgDefault,jdbcType=VARCHAR},
+			#{imgAid,jdbcType=SMALLINT},
+			#{imgTime,jdbcType=TIMESTAMP},
+			#{url120160,jdbcType=VARCHAR},
+			#{url99132,jdbcType=VARCHAR},
+			#{url480640,jdbcType=VARCHAR},
+			#{url5684,jdbcType=VARCHAR},
+			#{url222296,jdbcType=VARCHAR},
+			#{sortOrder,jdbcType=INTEGER},
+			#{url342455,jdbcType=VARCHAR},
+			#{url170227,jdbcType=VARCHAR},
+			#{url135180,jdbcType=VARCHAR},
+			#{url251323,jdbcType=VARCHAR},
+			#{url502646,jdbcType=VARCHAR},
+			#{url12001600,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.ProductGallery">
+		update ty_scm_product_gallery
+		<set>
+		<if test="goodsId != null">
+		goods_id = #{goodsId,jdbcType=INTEGER},
+		</if>
+		<if test="colorId != null">
+		color_id = #{colorId,jdbcType=INTEGER},
+		</if>
+		<if test="imgUrl != null">
+		img_url = #{imgUrl,jdbcType=VARCHAR},
+		</if>
+		<if test="imgDesc != null">
+		img_desc = #{imgDesc,jdbcType=VARCHAR},
+		</if>
+		<if test="thumbUrl != null">
+		thumb_url = #{thumbUrl,jdbcType=VARCHAR},
+		</if>
+		<if test="middleUrl != null">
+		middle_url = #{middleUrl,jdbcType=VARCHAR},
+		</if>
+		<if test="bigUrl != null">
+		big_url = #{bigUrl,jdbcType=VARCHAR},
+		</if>
+		<if test="teenyUrl != null">
+		teeny_url = #{teenyUrl,jdbcType=VARCHAR},
+		</if>
+		<if test="smallUrl != null">
+		small_url = #{smallUrl,jdbcType=VARCHAR},
+		</if>
+		<if test="imgOriginal != null">
+		img_original = #{imgOriginal,jdbcType=VARCHAR},
+		</if>
+		<if test="imgDefault != null">
+		img_default = #{imgDefault,jdbcType=VARCHAR},
+		</if>
+		<if test="imgAid != null">
+		img_aid = #{imgAid,jdbcType=SMALLINT},
+		</if>
+		<if test="imgTime != null">
+		img_time = #{imgTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="url120160 != null">
+		url_120_160 = #{url120160,jdbcType=VARCHAR},
+		</if>
+		<if test="url99132 != null">
+		url_99_132 = #{url99132,jdbcType=VARCHAR},
+		</if>
+		<if test="url480640 != null">
+		url_480_640 = #{url480640,jdbcType=VARCHAR},
+		</if>
+		<if test="url5684 != null">
+		url_56_84 = #{url5684,jdbcType=VARCHAR},
+		</if>
+		<if test="url222296 != null">
+		url_222_296 = #{url222296,jdbcType=VARCHAR},
+		</if>
+		<if test="sortOrder != null">
+		sort_order = #{sortOrder,jdbcType=INTEGER},
+		</if>
+		<if test="url342455 != null">
+		url_342_455 = #{url342455,jdbcType=VARCHAR},
+		</if>
+		<if test="url170227 != null">
+		url_170_227 = #{url170227,jdbcType=VARCHAR},
+		</if>
+		<if test="url135180 != null">
+		url_135_180 = #{url135180,jdbcType=VARCHAR},
+		</if>
+		<if test="url251323 != null">
+		url_251_323 = #{url251323,jdbcType=VARCHAR},
+		</if>
+		<if test="url502646 != null">
+		url_502_646 = #{url502646,jdbcType=VARCHAR},
+		</if>
+		<if test="url12001600 != null">
+		url_1200_1600 = #{url12001600,jdbcType=VARCHAR},
+		</if>
+		</set>
+		where img_id = #{imgId,jdbcType=INTEGER}
+	</update>
+	<select id="getDefaultGallery" resultMap="BaseResultMap">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_scm_product_gallery
+		where goods_id = #{goodsId,jdbcType=INTEGER}
+		AND img_default='default' LIMIT 1
+	</select>
+	<select id="selectByGoodsId" resultMap="BaseResultMap" parameterType="java.util.Map" >
+	  	select 'true' as QUERYID,
+	    	<include refid="Base_Column_List" />
+	    from ty_scm_product_gallery t
+	    where t.goods_id = #{goodsId,jdbcType=INTEGER}
+	    and t.color_id = #{colorId, jdbcType=INTEGER}
+	    order by t.color_id, t.sort_order desc
+    </select>
+    <delete id="deleteByGoodsId" parameterType="java.lang.Integer">
+		DELETE FROM ty_scm_product_gallery WHERE goods_id = #{goodsId,jdbcType=INTEGER}
+	</delete>
+	
+	<select id="getCountByGoodsColorImg" resultType="java.lang.Integer">
+		select count(img_id)
+		from ty_scm_product_gallery
+		where goods_id = #{goodsId,jdbcType=INTEGER}
+		and color_id = #{colorId,jdbcType=INTEGER}
+		<if test="imgDefault != null" >
+		and img_default = #{imgDefault,jdbcType=VARCHAR}
+		</if>
+	</select>
+	<select id="getByGoodsColor" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_product_gallery t
+		where t.goods_id = #{goodsId,jdbcType=INTEGER}
+		and t.color_id = #{colorId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByGoodsColor" >
+		DELETE FROM ty_scm_product_gallery WHERE goods_id = #{goodsId} and color_id = #{colorId}
+	</delete>
+	
+	<select id="selectGalleryByGoodsId" parameterType="Integer" resultType="com.fclub.tpd.dataobject.ProductGallery">
+		SELECT i.goods_sn AS goodsSn, i.provider_goods AS providerGoods, c.color_name AS colorName
+		FROM ty_scm_product_sub s  
+		LEFT JOIN ty_scm_product_info i ON i.goods_id = s.goods_id 
+		LEFT JOIn ty_product_color c ON c.color_id = s.color_id
+		WHERE s.goods_id = #{goodsId,jdbcType=INTEGER} 
+		GROUP BY s.goods_id, s.color_id
+	</select>
+	
+</mapper>

@@ -1,0 +1,175 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>商品表</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/jquery.form.pack.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/page.js"></script>
+<script type="text/javascript" src="/js/tpd/goodsManager.js"></script>
+<script type="text/javascript" src="/js/clickExpand.js"></script>
+<script type="text/javascript" src="/js/thickbox_plus.js"></script>
+<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+<script type="text/javascript">
+$(function () {
+	$(window).resize(function () {
+		var w=($('.main_title').width())/2-10;
+		$('.goods_color_size').parent().width(w);
+	});
+});
+</script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">商品表管理</span>
+	</div>
+	
+	<div class="clear"></div>
+	
+	<div id="searchPanel" class="search_row dark_blue">
+		<form id="searchForm" action="/goods/list/query.htm" method="post" style="margin: 0;">
+			<input type="hidden" id="pageSize" name="pageSize" value="$!page.pageSize" />
+			<input type="hidden" id="pageNo" name="pageNo" value="$!page.pageNo" />
+			<input type="hidden" id="order" name="order" value="$!page.order" />
+			<input type="hidden" id="orderBy" name="orderBy" value="$!page.orderBy" />
+			
+			##在此下面加搜索条件
+			##商品品牌
+			<div class="search_row_element">商品品牌：
+				<select id="brandId" name="brandId">
+                	<option value="0">请选择...</option>
+                	#foreach($brand in $brandList)
+                    <option value ="$brand.brandId">$brand.brandName</option>
+                	#end
+                </select>
+			</div>
+			##属性
+			<div class="search_row_element">供应商货号：<input type="text" class="inputBorder black" name="providerGoods" style="width:80px;" ></div>
+			<div class="search_row_element">供应商编码：<input type="text" class="inputBorder black" name="providerCode" style="width:80px;" ></div>
+			<div class="search_row_element">商品款号：<input type="text" class="inputBorder black" name="goodsSn" style="width:80px;" id="goodsSn"></div>
+			<div class="search_row_element">
+				状态：
+				<select id="tpdGoodsStatus" name="tpdGoodsStatus">
+                	 <option value="-1">请选择...</option>
+            		 <option value ="0">草稿</option>
+					 <option value ="1">待审核</option>
+					 <option value ="2">已审核</option>
+					 <option value ="3">已上架</option>
+                </select>
+			</div>
+			<div class="search_row_element">
+				限购：
+				<select id="limitNum" name="limitNum">
+                	 <option value="-1">请选择...</option>
+					 <option value ="0">未设置限购</option>
+            		 <option value ="1">已设置限购</option>
+                </select>
+			</div>
+			#*<div class="search_row_element">
+				虚拟商品：
+				<select id="isVirtual" name="isVirtual">
+                	 <option value="">请选择...</option>
+					 <option value ="0">实物商品</option>
+            		 <option value ="1">虚拟商品</option>
+                </select>
+			</div>*#
+			<div class="search_row_element">
+				<input type="button" class="button" value="搜索" onclick="doSeachForm();">
+				<input type="button" class="button57" value="导出Excel" onclick="exportExcel()"/>
+			</div>
+		</form>
+	</div>
+	<div class="clear"></div>
+	<div id="contentPanel"></div>
+	
+	<div class="clear"></div>
+	<div class="search_row dark_blue">
+    	<br>页面功能说明：<br><br>
+        导入进度：<span style="display:inline-block; width:15px; height:15px; background-color: #F00 "></span>主要信息已导入
+		<span style="display:inline-block; width:15px; height:15px; background-color: #FF0 "></span>颜色尺寸已导入
+		<span style="display:inline-block; width:15px; height:15px; background-color: #00F "></span>商品图已导入
+		##<span style="display:inline-block; width:15px; height:15px; background-color: #0F0 "></span>尺寸对照图已导入
+		<br><br>
+    </div>
+	<div class="clear"></div>
+</div>
+<script type="text/javascript"> 
+$(function(){ 
+	#if($catId) $("#catId").val($catId); #end
+	#if($goodsSn) $("#goodsSn").val($goodsSn); #end
+});
+
+//判断浏览器是非为IE6
+function isIE6() {
+	var version = navigator.userAgent.indexOf('MSIE 6.0')>-1;
+	return version;
+}
+$(function () {
+	//默认项鼠标移入时显示大分类
+	$('.search_row_select').hover(function () {
+		$('.search_row_select .searchRowSelectC').show();
+		if (isIE6()) {
+			var height = $('.searchRowSelectC').height(),
+				iframe = '<iframe scrolling="no" frameborder="0" style="width:140px;height:'+height+'px;left:0;background-color:transparent;position:absolute;z-index:-1;top:15px;"></iframe>';
+			$(this).append(iframe);
+		};
+	},function () {
+		if (isIE6()) {$(this).find('iframe').remove();};
+		$('.search_row_select .searchRowSelectC').hide();
+	});
+	//大分类鼠标移入时显示子分类
+	$('.SRSub').hover(function () {
+		var height = ($(this).find('.SRSubTitle').height())/2-($(this).find('.SRSubMain').height())/2,	//获取自分类的高度偏移距离
+			height2 = height;
+		if (height<0&&(-height)>$(this).offset().top) {
+			height=-$(this).offset().top;
+			//height2='0';
+		};
+		var iframe = '<iframe scrolling="no" frameborder="0" style="width:262px;height:30px;left:150px;background-color:transparent;position:absolute;z-index:-1;top:'+height2+'px;"></iframe>';
+		//ie6下创建iframe用于遮住select框
+		if (isIE6()) {$(this).append(iframe);};
+		$(this).find('.SRSubMain').css({'top':height});
+		$(this).find('.SRSubArrow').show();
+		$(this).find('.SRSubMain').show();
+		$(this).find('iframe').height($(this).find('.SRSubMain').height()-4);
+		$(this).find('.SRSubTitle').css({'color':'#fff','background-color':'#5EADFF'});
+	},function () {
+		//ie6下删除iframe
+		if (isIE6()) {$(this).find('iframe').remove();};
+		$(this).find('.SRSubArrow').hide();
+		$(this).find('.SRSubMain').hide();
+		$(this).find('.SRSubTitle').removeAttr('style');
+	});
+	//子分类鼠标移入时的效果
+	$('.SRSubInfo a').hover(function () {
+		$(this).addClass('hover');
+	},function () {
+		$(this).removeAttr('class');
+	});
+	//大分类点击后将数据提交给默认项
+	$('.SRSubTitle').click(function () {
+		var text = $(this).text(),
+			value = $(this).attr('value');
+		$('.searchRowSelectT').html(text);
+		$('#catId').attr('value',value);
+	});
+	//子分类点击后将数据提交给默认项
+	$('.SRSubInfo a').click(function () {
+		var text = $(this).text(),
+			type = $(this).parent().parent().parent().find('.SRSubTitle').text(),
+			value = $(this).attr('value');
+		$('.searchRowSelectT').html(type+' - '+text);
+		$('#catId').attr('value',value);
+	});
+});
+</script>
+
+#pageScript(20)
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>日志管理</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/jquery.form.pack.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">日志管理</span>
+	</div>
+	
+	<div class="clear"></div>
+	
+	<div id="searchPanel" class="search_row dark_blue">
+		<form id="searchForm" action="" method="post" style="margin: 0;">
+			<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+        		<tbody>
+        			<tr>
+        				<th >日志类型</th>
+        				<th >日志名称</th>
+        				<th >操作</th>
+        			</tr>
+        			<tr>
+        				<td align="center">Default日志</td>
+        				<td align="center">javaback_other_info.log</td>
+        				<td align="center">
+        					<a class="edit" href="/logfile/download.htm?name=javaback_other_info.log">下载</a>
+        				</td>
+        			</tr>
+					<tr>
+        				<td align="center">ERROR日志</td>
+        				<td align="center">javaback_error.log</td>
+        				<td align="center">
+        					<a class="edit" href="/logfile/download.htm?name=javaback_error.log">下载</a>
+        				</td>
+        			</tr>
+					<tr>
+        				<td align="center">性能监控日志</td>
+        				<td align="center">javaback_performance.log</td>
+        				<td align="center">
+        					<a class="edit" href="/logfile/download.htm?name=javaback_performance.log">下载</a>
+        				</td>
+        			</tr>
+					<tr>
+        				<td align="center">WEB日志</td>
+        				<td align="center">javaback_velocity.log</td>
+        				<td align="center">
+        					<a class="edit" href="/logfile/download.htm?name=javaback_velocity.log">下载</a>
+        				</td>
+        			</tr>
+					<tr>
+        				<td align="center">DAL日志</td>
+        				<td align="center">javaback_sql.log</td>
+        				<td align="center">
+        					<a class="edit" href="/logfile/download.htm?name=javaback_sql.log">下载</a>
+        				</td>
+        			</tr>
+					<tr>
+        				<td align="center">export日志</td>
+        				<td align="center">javaback_batch_export.log</td>
+        				<td align="center">
+        					<a class="edit" href="/logfile/download.htm?name=module/javaback_batch_export.log">下载</a>
+        				</td>
+        			</tr>
+					<tr>
+        				<td align="center">import日志</td>
+        				<td align="center">javaback_batch_import.log</td>
+        				<td align="center">
+        					<a class="edit" href="/logfile/download.htm?name=module/javaback_batch_import.log">下载</a>
+        				</td>
+        			</tr>
+					<tr>
+        				<td align="center">image-cat日志</td>
+        				<td align="center">javaback_imagecut.log</td>
+        				<td align="center">
+        					<a class="edit" href="/logfile/download.htm?name=module/javaback_imagecut.log">下载</a>
+        				</td>
+        			</tr>
+					<tr>
+        				<td align="center">其它日志</td>
+        				<td align="center">
+							<input type="text" class="enterQuery inputBorder" style="width:200px;" name="logName" />
+						</td>
+        				<td align="center">
+        					<a id="otherLog" class="edit" href="">下载</a>
+        				</td>
+        			</tr>
+        		</tbody>
+        	</table>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+<script type="text/javascript">
+$(function() {
+    $("#otherLog").bind('click', function(event){
+    	var logName = $("input[name=logName]").val();
+		if (logName.trim() == "") {
+			alert("日志名称不得为空！");
+			return false;
+		}
+		$("#otherLog").attr("href","/logfile/download.htm?name="+logName.trim()); 
+    });
+});
+</script>
+</body>
+</html>

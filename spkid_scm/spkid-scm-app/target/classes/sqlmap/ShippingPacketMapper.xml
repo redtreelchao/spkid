@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ShippingPacketMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.ShippingPacket">
+		<id column="packet_id" property="packetId" jdbcType="INTEGER" />
+		<result column="wave_sn" property="waveSn" jdbcType="VARCHAR" />
+		<result column="provider_id" property="providerId" jdbcType="INTEGER" />
+		<result column="order_id" property="orderId" jdbcType="INTEGER" />
+		<result column="op_id" property="opId" jdbcType="INTEGER" />
+		<result column="shipping_id" property="shippingId" jdbcType="SMALLINT" />
+		<result column="packet_sn" property="packetSn" jdbcType="VARCHAR" />
+		<result column="shipping_fee" property="shippingFee" jdbcType="DECIMAL" />
+		<result column="virtual_shipping" property="virtualShipping" jdbcType="BIT" />
+		<result column="status" property="status" jdbcType="SMALLINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="finish_time" property="finishTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="ExtResultMap" type="com.fclub.tpd.dataobject.ShippingPacket" extends="BaseResultMap">
+		<result column="shipping_name" property="shippingName" jdbcType="VARCHAR" />
+		<result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+		<result column="order_add_time" property="orderAddTime" jdbcType="TIMESTAMP" />
+		<result column="order_confirm_time" property="orderConfirmTime" jdbcType="TIMESTAMP" />
+		<result column="region" property="region" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="consignee" property="consignee" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="best_time" property="bestTime" jdbcType="VARCHAR" />
+		<result column="user_notice" property="userNotice" jdbcType="VARCHAR" />
+		<result column="paid_price" property="paidPrice" jdbcType="DECIMAL" />
+<!-- 		<result column="inv_required" property="invRequired" jdbcType="SMALLINT" /> -->
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="CountResultMap" type="com.fclub.tpd.dataobject.ShippingPacket" extends="BaseResultMap">
+		<result column="order_num" property="orderNum" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="ShippingProductMap" type="com.fclub.tpd.dataobject.ShippingProduct">
+		<result column="order_id" property="orderId" jdbcType="INTEGER" />
+		<result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+		<result column="product_sn" property="productSn" jdbcType="VARCHAR" />
+		<result column="sku" property="sku" jdbcType="VARCHAR" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="provider_productcode" property="providerProductcode" jdbcType="VARCHAR" />
+		<result column="color_name" property="colorName" jdbcType="VARCHAR" />
+		<result column="size_name" property="sizeName" jdbcType="VARCHAR" />
+		<result column="product_num" property="productNum" jdbcType="INTEGER" />
+		<result column="shop_price" property="shopPrice" jdbcType="DECIMAL" />
+		<result column="provider_barcode" property="oldProviderBarcode" jdbcType="VARCHAR" />
+		<result column="scm_provider_barcode" property="providerBarcode" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="ExportMap" type="com.fclub.tpd.dataobject.ShippingProduct">
+		<result column="order_id" property="orderId" jdbcType="INTEGER" />
+		<result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+		<result column="sku" property="sku" jdbcType="VARCHAR" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="provider_productcode" property="providerProductcode" jdbcType="VARCHAR" />
+		<result column="color_name" property="colorName" jdbcType="VARCHAR" />
+		<result column="size_name" property="sizeName" jdbcType="VARCHAR" />
+		<result column="product_num" property="productNum" jdbcType="INTEGER" />
+		<result column="shop_price" property="shopPrice" jdbcType="DECIMAL" />
+		<result column="provider_barcode" property="oldProviderBarcode" jdbcType="VARCHAR" />
+		<result column="scm_provider_barcode" property="providerBarcode" jdbcType="VARCHAR" />
+		<result column="shipping_name" property="shippingPacket.shippingName" jdbcType="VARCHAR" />
+		<result column="order_sn" property="shippingPacket.orderSn" jdbcType="VARCHAR" />
+		<result column="order_add_time" property="shippingPacket.orderAddTime" jdbcType="TIMESTAMP" />
+		<result column="order_confirm_time" property="shippingPacket.orderConfirmTime" jdbcType="TIMESTAMP" />
+		<result column="region" property="shippingPacket.region" jdbcType="VARCHAR" />
+		<result column="address" property="shippingPacket.address" jdbcType="VARCHAR" />
+		<result column="consignee" property="shippingPacket.consignee" jdbcType="VARCHAR" />
+		<result column="mobile" property="shippingPacket.mobile" jdbcType="VARCHAR" />
+		<result column="tel" property="shippingPacket.tel" jdbcType="VARCHAR" />
+		<result column="best_time" property="shippingPacket.bestTime" jdbcType="VARCHAR" />
+		<result column="user_notice" property="shippingPacket.userNotice" jdbcType="VARCHAR" />
+		<result column="paid_price" property="shippingPacket.paidPrice" jdbcType="DECIMAL" />
+<!-- 		<result column="inv_required" property="shippingPacket.invRequired" jdbcType="SMALLINT" /> -->
+		<result column="user_name" property="shippingPacket.userName" jdbcType="VARCHAR" />
+		
+		<association property="shippingPacket" resultMap="com.fclub.tpd.mapper.ShippingPacketMapper.ExtResultMap" />
+	</resultMap>
+	
+	<resultMap id="OrderMap" type="com.fclub.tpd.dataobject.ShippingPacket">
+		<result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+		<result column="shipping_status" property="shippingStatus" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="StatResultMap" type="com.fclub.tpd.dto.ShippingStatDTO" >
+		<result column="total_order_number" property="totalOrderNumber" jdbcType="INTEGER" />
+		<result column="total_order_amount" property="totalOrderAmount" jdbcType="DECIMAL" />
+		<result column="valid_order_number" property="validOrderNumber" jdbcType="INTEGER" />
+		<result column="valid_order_amount" property="validOrderAmount" jdbcType="DECIMAL" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.packet_id,
+		t.wave_sn,
+		t.provider_id,
+		t.order_id,
+		t.op_id,
+		t.shipping_id,
+		t.packet_sn,
+		t.shipping_fee,
+		t.virtual_shipping,
+		t.status,
+		t.create_time,
+		t.finish_time
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_shipping_packet t
+		where packet_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getProviderPacket" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_shipping_packet t
+		left join ty_order_info o on t.order_id=o.order_id
+		where t.provider_id = #{providerId,jdbcType=INTEGER}
+		and o.order_sn = #{orderSn,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getExportOrder" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT 
+			oi.order_id,oi.shipping_fee,og.op_id
+        FROM ty_order_info as oi 
+        LEFT JOIN ty_order_product as og ON og.order_id = oi.order_id 
+        LEFT JOIN ty_product_info as g ON g.product_id = og.product_id 
+        WHERE oi.order_status = 1 
+<!--         AND oi.sale_type = 2  -->
+        AND oi.shipping_status = 0 
+        AND oi.pay_status = 1 
+        AND oi.lock_admin = 0 
+        AND g.provider_id = #{providerId,jdbcType=INTEGER}
+        AND NOT EXISTS (
+        	SELECT 1 FROM ty_scm_shipping_packet as psp 
+        	WHERE psp.provider_id = #{providerId,jdbcType=INTEGER}
+        	AND psp.order_id = oi.order_id
+        )
+        ORDER BY oi.confirm_date ASC
+	</select>
+	
+	<select id="getExportOrderNum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		SELECT 
+			COUNT(DISTINCT og.order_id) 
+		FROM ty_order_product og 
+        LEFT JOIN ty_order_info oi ON oi.order_id = og.order_id
+		LEFT JOIN ty_product_info AS g ON g.product_id = og.product_id 
+		WHERE
+        	g.provider_id = #{providerId,jdbcType=INTEGER}
+	        AND oi.order_status = 1 
+<!-- 			AND oi.sale_type = 2  -->
+			AND oi.shipping_status = 0 
+			AND oi.pay_status = 1 
+			AND oi.lock_admin = 0 
+	        AND NOT EXISTS (
+				SELECT 1 FROM ty_scm_shipping_packet AS psp 
+				WHERE psp.provider_id = #{providerId,jdbcType=INTEGER} 
+				AND psp.order_id = og.order_id 
+			)
+	</select>
+	
+	<select id="getShippingPacket" resultMap="ExtResultMap" parameterType="com.fclub.tpd.dataobject.ShippingPacket">
+		SELECT 
+			oi.order_sn,
+<!-- 			oi.inv_required, -->
+			oi.address,
+			oi.confirm_date as order_confirm_time,
+			oi.consignee,oi.mobile,oi.tel,oi.best_time,oi.user_notice,
+			s.shipping_name,u.user_name,
+			CONCAT(r1.region_name,' ',r2.region_name,' ',r3.region_name,' ',r4.region_name) AS region,
+			<include refid="Base_Column_List" />
+		FROM ty_scm_shipping_packet as t 
+		LEFT JOIN ty_order_info as oi ON oi.order_id = t.order_id 
+		LEFT JOIN ty_shipping_info as s ON s.shipping_id = t.shipping_id 
+		LEFT JOIN ty_user_info u ON oi.user_id=u.user_id 
+		LEFT JOIN ty_region_info as r1 ON r1.region_id = oi.country 
+		LEFT JOIN ty_region_info as r2 ON r2.region_id = oi.province 
+		LEFT JOIN ty_region_info as r3 ON r3.region_id = oi.city 
+		LEFT JOIN ty_region_info as r4 ON r4.region_id = oi.district
+		WHERE t.provider_id=#{providerId,jdbcType=INTEGER}
+		<if test="waveSn != null and waveSn != ''">
+		AND t.wave_sn = #{waveSn,jdbcType=VARCHAR}
+		</if>
+		<if test="orderSn != null and orderSn != ''">
+		AND oi.order_sn LIKE '%${orderSn}%'
+		</if>
+		<if test="status != null and status >= 0 and status != 2">
+		AND t.`status` = #{status, jdbcType=INTEGER} AND t.virtual_shipping = 0
+		</if>
+		<if test="status == 2">
+		AND (t.`status` = #{status, jdbcType=INTEGER} OR t.virtual_shipping = 1)
+		</if>
+		GROUP BY t.order_id
+		ORDER BY t.order_id DESC
+	</select>
+	
+	<select id="getShippingGoods" resultMap="ShippingProductMap">
+		SELECT 
+			t.order_id,
+			oi.order_sn,
+			g.product_sn as sku,
+			g.product_sn,
+			g.product_name,
+			b.brand_name,
+			g.provider_productcode,
+			c.color_name,
+			si.size_name,
+			og.product_num,
+			g.shop_price,
+			gl.provider_barcode,
+			gl.scm_provider_barcode 
+        FROM ty_scm_shipping_packet as t 
+        LEFT JOIN ty_order_info as oi ON oi.order_id = t.order_id 
+        LEFT JOIN ty_order_product as og ON og.op_id = t.op_id 
+        LEFT JOIN ty_product_info as g ON g.product_id = og.product_id 
+        LEFT JOIN ty_product_brand as b ON b.brand_id = g.brand_id 
+        LEFT JOIN ty_product_color as c ON c.color_id = og.color_id 
+        LEFT JOIN ty_product_size as si ON si.size_id = og.size_id 
+        LEFT JOIN ty_product_sub as gl ON gl.product_id = og.product_id AND gl.color_id = og.color_id AND gl.size_id = og.size_id 
+        WHERE t.provider_id=#{providerId,jdbcType=INTEGER}
+        AND t.order_id in 
+		<foreach collection="orderIds" item="orderId"  open="(" separator="," close=")">  
+        #{orderId}
+		</foreach>
+	</select>
+	
+	<select id="getPacketCount" resultMap="CountResultMap" parameterType="java.util.Map">
+		SELECT wave_sn,`status`,COUNT(DISTINCT order_id) AS order_num
+		FROM ty_scm_shipping_packet 
+		WHERE wave_sn IN 
+		<foreach collection="list" item="waveSn"  open="(" separator="," close=")">  
+        #{waveSn}
+		</foreach>
+		GROUP BY wave_sn,`status`
+	</select>
+	
+	<select id="getCountByInvoiceNo" resultType="java.lang.Integer">
+		SELECT count(t.packet_id)
+		FROM ty_scm_shipping_packet t
+		LEFT JOIN ty_order_info o ON t.order_id=o.order_id
+		WHERE o.order_sn = #{orderSn,jdbcType=VARCHAR}
+		AND t.packet_sn = #{packetSn,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findPage" resultMap="ExtResultMap" parameterType="java.util.Map">
+		SELECT 
+			oi.order_sn, oi.create_date as order_add_time,
+			oi.address, oi.confirm_date as order_confirm_time,
+			oi.consignee,oi.mobile,oi.tel,oi.best_time,oi.user_notice,oi.paid_price,s.shipping_name,
+			CONCAT(r1.region_name,' ',r2.region_name,' ',r3.region_name,' ',r4.region_name) AS region,
+			<include refid="Base_Column_List" />
+		FROM ty_scm_shipping_packet as t 
+		LEFT JOIN ty_order_info as oi ON oi.order_id = t.order_id 
+		LEFT JOIN ty_shipping_info as s ON s.shipping_id = t.shipping_id 
+		LEFT JOIN ty_region_info as r1 ON r1.region_id = oi.country 
+		LEFT JOIN ty_region_info as r2 ON r2.region_id = oi.province 
+		LEFT JOIN ty_region_info as r3 ON r3.region_id = oi.city 
+		LEFT JOIN ty_region_info as r4 ON r4.region_id = oi.district
+		WHERE t.provider_id=#{param.providerId,jdbcType=INTEGER}
+		<if test="param.orderSn != null and param.orderSn != ''">
+		AND oi.order_sn LIKE '%${param.orderSn}%'
+		</if>
+		<if test="param.packetSn != null and param.packetSn != ''">
+		AND t.packet_sn LIKE '%${param.packetSn}%'
+		</if>
+		<if test="param.consignee != null and param.consignee != ''">
+		AND oi.consignee LIKE '%${param.consignee}%'
+		</if>
+		<if test="param.mobile != null and param.mobile != ''">
+		AND oi.mobile = #{param.mobile,jdbcType=VARCHAR}
+		</if>
+		<if test="param.providerProductcode != null and param.providerProductcode != ''">
+		AND EXISTS (
+			SELECT 1 FROM ty_order_product og LEFT JOIN ty_product_info g ON g.product_id = og.product_id 
+			WHERE og.op_id = t.op_id AND g.provider_productcode LIKE '%${param.providerProductcode}%' 
+		)
+		</if>
+		<if test="param.dateBegin != null and param.dateBegin != '' ">
+		<![CDATA[ and FROM_UNIXTIME(oi.confirm_time+28800, '%Y-%m-%d') >= #{param.dateBegin} ]]>
+		</if>
+		<if test="param.dateEnd != null and param.dateEnd != '' ">
+		<![CDATA[ and FROM_UNIXTIME(oi.confirm_time+28800, '%Y-%m-%d') <= #{param.dateEnd} ]]>
+		</if>
+		<if test="param.status != null and param.status >= 0 and param.status != 2">
+		AND t.`status` = #{param.status, jdbcType=INTEGER} AND t.virtual_shipping = 0
+		</if>
+		<if test="param.status == 2">
+		AND (t.`status` = #{param.status, jdbcType=INTEGER} OR t.virtual_shipping = 1)
+		</if>
+		GROUP BY t.order_id
+		ORDER BY t.order_id DESC
+	</select>
+	
+	<select id="findExport" resultMap="ExportMap" parameterType="com.fclub.tpd.dataobject.ShippingPacket">
+		SELECT 
+			t.order_id,
+			g.product_sn as sku,
+			g.product_name,
+			b.brand_name,
+			g.provider_productcode,
+			c.color_name,
+			si.size_name,
+			og.product_num,
+			g.shop_price,
+			gl.provider_barcode,
+			gl.scm_provider_barcode,
+			
+			oi.order_sn, oi.create_date as order_add_time,
+			oi.address, oi.confirm_date as order_confirm_time,
+			oi.consignee,oi.mobile,oi.tel,oi.best_time,oi.user_notice,s.shipping_name,
+			CONCAT(r1.region_name,' ',r2.region_name,' ',r3.region_name,' ',r4.region_name) AS region,
+			<include refid="Base_Column_List" />
+		FROM ty_scm_shipping_packet as t 
+		LEFT JOIN ty_order_info as oi ON oi.order_id = t.order_id 
+		LEFT JOIN ty_shipping_info as s ON s.shipping_id = t.shipping_id 
+		LEFT JOIN ty_region_info as r1 ON r1.region_id = oi.country 
+		LEFT JOIN ty_region_info as r2 ON r2.region_id = oi.province 
+		LEFT JOIN ty_region_info as r3 ON r3.region_id = oi.city 
+		LEFT JOIN ty_region_info as r4 ON r4.region_id = oi.district
+		
+        LEFT JOIN ty_order_product as og ON og.op_id = t.op_id 
+        LEFT JOIN ty_product_info as g ON g.product_id = og.product_id 
+        LEFT JOIN ty_product_brand as b ON b.brand_id = g.brand_id 
+        LEFT JOIN ty_product_color as c ON c.color_id = og.color_id 
+        LEFT JOIN ty_product_size as si ON si.size_id = og.size_id 
+        LEFT JOIN ty_product_sub as gl ON gl.product_id = og.product_id AND gl.color_id = og.color_id AND gl.size_id = og.size_id 
+		
+		WHERE t.provider_id=#{providerId,jdbcType=INTEGER}
+		<if test="waveSn != null and waveSn != ''">
+		AND t.wave_sn = #{waveSn,jdbcType=VARCHAR}
+		</if>
+		<if test="orderSn != null and orderSn != ''">
+		AND oi.order_sn LIKE '%${orderSn}%'
+		</if>
+		<if test="status != null and status >= 0 and status != 2">
+		AND t.`status` = #{status, jdbcType=INTEGER} AND t.virtual_shipping = 0
+		</if>
+		<if test="status == 2">
+		AND (t.`status` = #{status, jdbcType=INTEGER} OR t.virtual_shipping = 1)
+		</if>
+		<if test="orderSn != null and orderSn != ''">
+		AND oi.order_sn LIKE '%${orderSn}%'
+		</if>
+		<if test="packetSn != null and packetSn != ''">
+		AND t.packet_sn LIKE '%${packetSn}%'
+		</if>
+		<if test="consignee != null and consignee != ''">
+		AND oi.consignee = trim(#{consignee,jdbcType=VARCHAR})
+		</if>
+		<if test="mobile != null and mobile != ''">
+		AND oi.mobile = trim(#{mobile,jdbcType=VARCHAR})
+		</if>
+		<if test="providerProductcode != null and providerProductcode != ''">
+		AND g.provider_productcode = trim(#{providerProductcode,jdbcType=VARCHAR})
+		</if>
+		<if test="dateBegin != null and dateBegin != '' ">
+		<![CDATA[ and FROM_UNIXTIME(oi.confirm_time+28800, '%Y-%m-%d') >= #{dateBegin} ]]>
+		</if>
+		<if test="dateEnd != null and dateEnd != '' ">
+		<![CDATA[ and FROM_UNIXTIME(oi.confirm_time+28800, '%Y-%m-%d') <= #{dateEnd} ]]>
+		</if>
+		ORDER BY t.order_id DESC
+	</select>
+	
+	<select id="statOrder" resultMap="StatResultMap" parameterType="com.fclub.tpd.dataobject.ShippingPacket">
+		SELECT 
+			COUNT(DISTINCT t.order_id) as total_order_number, 
+			SUM(og.product_num * g.shop_price) total_order_amount
+		FROM ty_scm_shipping_packet AS t 
+		LEFT JOIN ty_order_info AS oi ON oi.order_id = t.order_id 
+		LEFT JOIN ty_order_product AS og ON t.op_id = og.op_id
+		LEFT JOIN ty_product_info AS g ON og.product_id = g.product_id
+		WHERE t.provider_id=#{providerId,jdbcType=INTEGER}
+		<if test="orderSn != null and orderSn != ''">
+		AND oi.order_sn LIKE '%${orderSn}%'
+		</if>
+		<if test="packetSn != null and packetSn != ''">
+		AND t.packet_sn LIKE '%${packetSn}%'
+		</if>
+		<if test="consignee != null and consignee != ''">
+		AND oi.consignee LIKE '%${consignee}%'
+		</if>
+		<if test="mobile != null and mobile != ''">
+		AND oi.mobile = #{mobile,jdbcType=VARCHAR}
+		</if>
+		<if test="providerProductcode != null and providerProductcode != ''">
+		AND g.provider_productcode LIKE '%${providerProductcode}%' 
+		</if>
+		<if test="dateBegin != null and dateBegin != '' ">
+		<![CDATA[ and FROM_UNIXTIME(oi.confirm_time+28800, '%Y-%m-%d') >= #{dateBegin} ]]>
+		</if>
+		<if test="dateEnd != null and dateEnd != '' ">
+		<![CDATA[ and FROM_UNIXTIME(oi.confirm_time+28800, '%Y-%m-%d') <= #{dateEnd} ]]>
+		</if>
+		<if test="status != null and status >= 0 and status != 2">
+		AND t.`status` = #{status, jdbcType=INTEGER} AND t.virtual_shipping = 0
+		</if>
+		<if test="status == 2">
+		AND (t.`status` = #{status, jdbcType=INTEGER} OR t.virtual_shipping = 1)
+		</if>
+	</select>
+	
+	<select id="statValidOrder" resultMap="StatResultMap" parameterType="com.fclub.tpd.dataobject.ShippingPacket">
+		SELECT 
+			COUNT(DISTINCT t.order_id) as valid_order_number, 
+			SUM(og.product_num * g.shop_price) valid_order_amount
+		FROM ty_scm_shipping_packet AS t 
+		LEFT JOIN ty_order_info AS oi ON oi.order_id = t.order_id 
+		LEFT JOIN ty_order_product AS og ON t.op_id = og.op_id
+		LEFT JOIN ty_product_info AS g ON og.product_id = g.product_id
+		WHERE t.provider_id=#{providerId,jdbcType=INTEGER}
+		<if test="orderSn != null and orderSn != ''">
+		AND oi.order_sn LIKE '%${orderSn}%'
+		</if>
+		<if test="packetSn != null and packetSn != ''">
+		AND t.packet_sn LIKE '%${packetSn}%'
+		</if>
+		<if test="consignee != null and consignee != ''">
+		AND oi.consignee LIKE '%${consignee}%'
+		</if>
+		<if test="mobile != null and mobile != ''">
+		AND oi.mobile = #{mobile,jdbcType=VARCHAR}
+		</if>
+		<if test="providerProductcode != null and providerProductcode != ''">
+		AND g.provider_productcode LIKE '%${providerProductcode}%' 
+		</if>
+		<if test="dateBegin != null and dateBegin != '' ">
+		<![CDATA[ and FROM_UNIXTIME(oi.confirm_time+28800, '%Y-%m-%d') >= #{dateBegin} ]]>
+		</if>
+		<if test="dateEnd != null and dateEnd != '' ">
+		<![CDATA[ and FROM_UNIXTIME(oi.confirm_time+28800, '%Y-%m-%d') <= #{dateEnd} ]]>
+		</if>
+		AND t.`status` = 1 AND t.virtual_shipping = 0
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_scm_shipping_packet
+		where packet_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.ShippingPacket">
+		insert into ty_scm_shipping_packet (
+			wave_sn,
+			provider_id,
+			order_id,
+			op_id,
+			shipping_id,
+			packet_sn,
+			shipping_fee,
+			virtual_shipping,
+			status,
+			create_time,
+			finish_time
+		)
+		values (
+			#{waveSn,jdbcType=VARCHAR},
+			#{providerId,jdbcType=INTEGER},
+			#{orderId,jdbcType=INTEGER},
+			#{opId,jdbcType=INTEGER},
+			#{shippingId,jdbcType=SMALLINT},
+			#{packetSn,jdbcType=VARCHAR},
+			#{shippingFee,jdbcType=DECIMAL},
+			#{virtualShipping,jdbcType=BIT},
+			#{status,jdbcType=SMALLINT},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{finishTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<insert id="batchInsertNotExists">
+		INSERT INTO ty_scm_shipping_packet (
+			wave_sn,
+			provider_id,
+			order_id,
+			op_id,
+			shipping_fee,
+			virtual_shipping,
+			status,
+			create_time
+		) SELECT 
+			#{waveSn,jdbcType=VARCHAR} as wave_sn, 
+			#{providerId,jdbcType=INTEGER} as provider_id,
+			oi.order_id, 
+			og.op_id, 
+			oi.shipping_fee, 
+			false as virtual_shipping,
+			0 as status, 
+			NOW() as create_time 
+	        FROM ty_order_info as oi 
+	        LEFT JOIN ty_order_product AS og ON og.order_id = oi.order_id 
+	        LEFT JOIN ty_product_info AS g ON g.product_id = og.product_id 
+	        WHERE g.provider_id = #{providerId,jdbcType=INTEGER} 
+	        AND oi.order_id IN 
+	        <foreach collection="orderIdList" item="orderId" open="(" separator="," close=")">  
+	        	#{orderId,jdbcType=INTEGER}
+			</foreach>
+	        AND NOT EXISTS (
+	        	SELECT 1 FROM ty_scm_shipping_packet as psp 
+	        	WHERE psp.provider_id = #{providerId,jdbcType=INTEGER}
+	        	AND psp.order_id = oi.order_id
+	        	AND psp.op_id = og.product_id
+	        )
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.ShippingPacket">
+		update ty_scm_shipping_packet
+		<set>
+		<if test="waveSn != null">
+		wave_sn = #{waveSn,jdbcType=VARCHAR},
+		</if>
+		<if test="providerId != null">
+		provider_id = #{providerId,jdbcType=INTEGER},
+		</if>
+		<if test="orderId != null">
+		order_id = #{orderId,jdbcType=INTEGER},
+		</if>
+		<if test="opId != null">
+		op_id = #{opId,jdbcType=INTEGER},
+		</if>
+		<if test="shippingId != null">
+		shipping_id = #{shippingId,jdbcType=SMALLINT},
+		</if>
+		<if test="packetSn != null">
+		packet_sn = #{packetSn,jdbcType=VARCHAR},
+		</if>
+		<if test="shippingFee != null">
+		shipping_fee = #{shippingFee,jdbcType=DECIMAL},
+		</if>
+		<if test="virtualShipping != null">
+		virtual_shipping = #{virtualShipping,jdbcType=BIT},
+		</if>
+		<if test="status != null ans status >= 0">
+		`status` = #{status,jdbcType=SMALLINT},
+		</if>
+		<if test="createTime != null">
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="finishTime != null">
+		finish_time = #{finishTime,jdbcType=TIMESTAMP},
+		</if>
+		</set>
+		where packet_id = #{packetId,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updatePacketShortage">
+		update ty_scm_shipping_packet
+		set `status` = 2 
+		where provider_id = #{providerId,jdbcType=INTEGER}
+		and order_id in 
+		<foreach collection="orderIds" item="orderId"  open="(" separator="," close=")">  
+        #{orderId}
+		</foreach>
+	</update>
+	
+	<update id="updatePacketShipping" parameterType="com.fclub.tpd.dataobject.ShippingPacket">
+		UPDATE ty_scm_shipping_packet
+		SET 
+		`status` = #{status,jdbcType=SMALLINT},
+		shipping_id = #{shippingId,jdbcType=INTEGER}, 
+		packet_sn = #{packetSn,jdbcType=VARCHAR}, 
+        shipping_fee = #{shippingFee,jdbcType=VARCHAR}, 
+        finish_time = #{finishTime,jdbcType=TIMESTAMP}
+		WHERE provider_id = #{providerId,jdbcType=INTEGER}
+		AND order_id = #{orderId,jdbcType=INTEGER}
+	</update>
+	
+</mapper>

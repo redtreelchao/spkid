@@ -1,0 +1,888 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ProductMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.Product">
+		<id column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="cat_id" property="catId" jdbcType="SMALLINT" />
+		<result column="pagecat_id" property="pagecatId" jdbcType="INTEGER" />
+		<result column="goods_sn" property="goodsSn" jdbcType="VARCHAR" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="goods_name_style" property="goodsNameStyle" jdbcType="VARCHAR" />
+		<result column="click_count" property="clickCount" jdbcType="INTEGER" />
+		<result column="brand_id" property="brandId" jdbcType="SMALLINT" />
+		<result column="provider_name" property="providerName" jdbcType="VARCHAR" />
+		<result column="goods_number" property="goodsNumber" jdbcType="SMALLINT" />
+		<result column="goods_weight" property="goodsWeight" jdbcType="DECIMAL" />
+		<result column="market_price" property="marketPrice" jdbcType="DECIMAL" />
+		<result column="shop_price" property="shopPrice" jdbcType="DECIMAL" />
+		<result column="promote_price" property="promotePrice" jdbcType="DECIMAL" />
+		<result column="consign_price" property="consignPrice" jdbcType="DECIMAL" />
+		<result column="cost_price" property="costPrice" jdbcType="DECIMAL" />
+		<result column="consign_rate" property="consignRate" jdbcType="DECIMAL" />
+		<result column="consign_type" property="consignType" jdbcType="SMALLINT" />
+		<result column="promote_start_date" property="promoteStartDate" jdbcType="INTEGER" />
+		<result column="promote_end_date" property="promoteEndDate" jdbcType="INTEGER" />
+		<result column="warn_number" property="warnNumber" jdbcType="TINYINT" />
+		<result column="keywords" property="keywords" jdbcType="VARCHAR" />
+		<result column="goods_brief" property="goodsBrief" jdbcType="VARCHAR" />
+		<result column="goods_desc" property="goodsDesc" jdbcType="LONGVARCHAR" />
+		<result column="goods_thumb" property="goodsThumb" jdbcType="VARCHAR" />
+		<result column="goods_img" property="goodsImg" jdbcType="VARCHAR" />
+		<result column="original_img" property="originalImg" jdbcType="VARCHAR" />
+		<result column="is_real" property="isReal" jdbcType="TINYINT" />
+		<result column="extension_code" property="extensionCode" jdbcType="VARCHAR" />
+		<result column="is_on_sale" property="isOnSale" jdbcType="BIT" />
+		<result column="is_alone_sale" property="isAloneSale" jdbcType="BIT" />
+		<result column="integral" property="integral" jdbcType="INTEGER" />
+		<result column="sort_order" property="sortOrder" jdbcType="SMALLINT" />
+		<result column="is_delete" property="isDelete" jdbcType="BIT" />
+		<result column="is_best" property="isBest" jdbcType="BIT" />
+		<result column="is_new" property="isNew" jdbcType="BIT" />
+		<result column="is_hot" property="isHot" jdbcType="BIT" />
+		<result column="is_promote" property="isPromote" jdbcType="BIT" />
+		<result column="is_offcode" property="isOffcode" jdbcType="SMALLINT" />
+		<result column="is_empty" property="isEmpty" jdbcType="SMALLINT" />
+		<result column="bonus_type_id" property="bonusTypeId" jdbcType="TINYINT" />
+		<result column="last_update" property="lastUpdate" jdbcType="INTEGER" />
+		<result column="goods_type" property="goodsType" jdbcType="SMALLINT" />
+		<result column="seller_note" property="sellerNote" jdbcType="VARCHAR" />
+		<result column="give_integral" property="giveIntegral" jdbcType="INTEGER" />
+		<result column="rank_integral" property="rankIntegral" jdbcType="INTEGER" />
+		<result column="style_id" property="styleId" jdbcType="INTEGER" />
+		<result column="season_id" property="seasonId" jdbcType="INTEGER" />
+		<result column="provider_id" property="providerId" jdbcType="INTEGER" />
+		<result column="coop_id" property="coopId" jdbcType="INTEGER" />
+		<result column="goods_stop" property="goodsStop" jdbcType="SMALLINT" />
+		<result column="provider_goods" property="providerGoods" jdbcType="VARCHAR" />
+		<result column="goods_year" property="goodsYear" jdbcType="VARCHAR" />
+		<result column="goods_month" property="goodsMonth" jdbcType="VARCHAR" />
+		<result column="goods_sex" property="goodsSex" jdbcType="VARCHAR" />
+		<result column="unit_id" property="unitId" jdbcType="INTEGER" />
+		<result column="goods_audit" property="goodsAudit" jdbcType="SMALLINT" />
+		<result column="goods_stuff" property="goodsStuff" jdbcType="LONGVARCHAR" />
+		<result column="goods_material" property="goodsMaterial" jdbcType="LONGVARCHAR" />
+		<result column="goods_material_new" property="goodsMaterialNew" jdbcType="VARCHAR" />
+		<result column="goods_audit_aid" property="goodsAuditAid" jdbcType="SMALLINT" />
+		<result column="goods_audit_time" property="goodsAuditTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="goods_aid" property="goodsAid" jdbcType="SMALLINT" />
+		<result column="goods_time" property="goodsTime" jdbcType="TIMESTAMP" />
+		<result column="area_id" property="areaId" jdbcType="SMALLINT" />
+		<result column="model_id" property="modelId" jdbcType="INTEGER" />
+		<result column="goods_cess" property="goodsCess" jdbcType="DECIMAL" />
+		<result column="sc_id" property="scId" jdbcType="INTEGER" />
+		<result column="sc_desc" property="scDesc" jdbcType="LONGVARCHAR" />
+		<result column="sc_image_content" property="scImageContent" jdbcType="LONGVARCHAR" />
+		<result column="goods_modelimg" property="goodsModelimg" jdbcType="VARCHAR" />
+		<result column="is_rush" property="isRush" jdbcType="SMALLINT" />
+		<result column="is_gifts" property="isGifts" jdbcType="TINYINT" />
+		<result column="goods_desc2" property="goodsDesc2" jdbcType="LONGVARCHAR" />
+		<result column="goods_desc_img" property="goodsDescImg" jdbcType="LONGVARCHAR" />
+		<result column="record_status" property="recordStatus" jdbcType="BIT" />
+		<result column="goods_desc_additional" property="goodsDescAdditional" jdbcType="LONGVARCHAR" />
+		<result column="limit_num" property="limitNum" jdbcType="INTEGER" />
+		<result column="limit_day" property="limitDay" jdbcType="INTEGER" />
+		<result column="diagram_code" property="diagramCode" jdbcType="VARCHAR" />
+		<result column="tpd_goods_id" property="tpdGoodsId" jdbcType="INTEGER" />
+		<result column="tpd_goods_status" property="tpdGoodsStatus" jdbcType="VARCHAR" />
+		
+		<result column="is_virtual" property="isVirtual" jdbcType="BOOLEAN" />
+		<result column="generate_method" property="generateMethod" jdbcType="BIT" />
+		
+		<result column="category_name" property="catName" jdbcType="VARCHAR" />
+		<result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+		<result column="thumb_url" property="thumbUrl" jdbcType="VARCHAR" />
+		<result column="url_120_160" property="url120160" jdbcType="VARCHAR" />
+		<result column="rg_id" property="rgId" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="ExtBaseResultMap" extends="BaseResultMap"
+		type="com.fclub.tpd.dataobject.Product">
+		<result column="category_name" property="catName" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+		<result column="fc_goods_id" property="fcGoodsId" jdbcType="INTEGER" />
+		<collection property="goodsLabors"
+			select="com.fclub.tpd.mapper.ProductSubMapper.selectByGoodsId"
+			column="goods_id" javaType="java.util.List" />
+	</resultMap>
+	
+	<resultMap id="ExportBaseResultMap" extends="BaseResultMap"
+		type="com.fclub.tpd.dataobject.Product">
+		<result column="category_name" property="catName" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="provider_barcode" property="providerBarcode" jdbcType="VARCHAR" />
+		<result column="type_name" property="typeCode" jdbcType="VARCHAR" />
+		<result column="color_name" property="colorName" jdbcType="VARCHAR" />
+		<result column="size_name" property="sizeName" jdbcType="VARCHAR" />
+		<result column="consign_num" property="consignNum" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.goods_id,
+		t.cat_id,
+		t.pagecat_id,
+		t.goods_sn,
+		t.goods_name,
+		t.goods_name_style,
+		t.click_count,
+		t.brand_id,
+		t.provider_name,
+		t.goods_number,
+		t.goods_weight,
+		t.market_price,
+		t.shop_price,
+		t.promote_price,
+		t.consign_price,
+		t.cost_price,
+		t.consign_rate,
+		t.consign_type,
+		t.promote_start_date,
+		t.promote_end_date,
+		t.warn_number,
+		t.keywords,
+		t.goods_brief,
+		t.goods_desc,
+		t.goods_thumb,
+		t.goods_img,
+		t.original_img,
+		t.is_real,
+		t.extension_code,
+		t.is_on_sale,
+		t.is_alone_sale,
+		t.integral,
+		t.sort_order,
+		t.is_delete,
+		t.is_best,
+		t.is_new,
+		t.is_hot,
+		t.is_promote,
+		t.is_offcode,
+		t.is_empty,
+		t.bonus_type_id,
+		t.last_update,
+		t.goods_type,
+		t.seller_note,
+		t.give_integral,
+		t.rank_integral,
+		t.style_id,
+		t.season_id,
+		t.provider_id,
+		t.coop_id,
+		t.goods_stop,
+		t.provider_goods,
+		t.goods_year,
+		t.goods_month,
+		t.goods_sex,
+		t.unit_id,
+		t.unit_name,
+		t.goods_audit,
+		t.goods_stuff,
+		t.goods_material,
+		t.goods_material_new,
+		t.goods_audit_aid,
+		t.goods_audit_time,
+		t.update_time,
+		t.goods_aid,
+		t.goods_time,
+		t.area_id,
+		t.model_id,
+		t.goods_cess,
+		t.sc_id,
+		t.sc_desc,
+		t.sc_image_content,
+		t.goods_modelimg,
+		t.is_rush,
+		t.is_gifts,
+		t.goods_desc2,
+		t.goods_desc_img,
+		t.record_status,
+		t.goods_desc_additional,
+		t.limit_num,
+		t.limit_day,
+		t.diagram_code,
+		t.tpd_goods_status,
+		t.is_virtual,
+		t.generate_method 
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_product_info t
+		where goods_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_scm_product_info t
+	</select>
+	<select id="findByGoodsSn" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select 
+		goods_id
+		from ty_scm_product_info t
+		where t.goods_sn = #{goodsSn,jdbcType=VARCHAR}
+	</select>
+	<select id="findMaxGoodsSn" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		select max(ceil(replace(UPPER(goods_sn), UPPER('${sn}'),
+		''))+10000)-10000 maxGoodsSn
+		from ty_scm_product_info where brand_id = #{brandId}
+		and cat_id =
+		#{catId} and season_id = #{seasonId}
+		and goods_year =
+		#{year,jdbcType=VARCHAR} and
+		goods_sn like '${sn}%' limit 1
+	</select>
+	<select id="getExtraGoodsBySn" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select goods_id,goods_desc_additional 
+		from ty_scm_product_info 
+		where goods_sn=#{goodsSn}
+	</select>
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_scm_product_info
+		where goods_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.Product">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="goodsId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into ty_scm_product_info (
+			cat_id,
+			pagecat_id,
+			goods_sn,
+			goods_name,
+			goods_name_style,
+			click_count,
+			brand_id,
+			provider_name,
+			goods_number,
+			goods_weight,
+			market_price,
+			shop_price,
+			promote_price,
+			consign_price,
+			cost_price,
+			consign_rate,
+			consign_type,
+			promote_start_date,
+			promote_end_date,
+			warn_number,
+			keywords,
+			goods_brief,
+			goods_desc,
+			goods_thumb,
+			goods_img,
+			original_img,
+			is_real,
+			extension_code,
+			is_on_sale,
+			is_alone_sale,
+			integral,
+			sort_order,
+			is_delete,
+			is_best,
+			is_new,
+			is_hot,
+			is_promote,
+			is_offcode,
+			is_empty,
+			bonus_type_id,
+			last_update,
+			goods_type,
+			seller_note,
+			give_integral,
+			rank_integral,
+			style_id,
+			season_id,
+			provider_id,
+			coop_id,
+			goods_stop,
+			provider_goods,
+			goods_year,
+			goods_month,
+			goods_sex,
+			unit_id,
+			unit_name,
+			goods_audit,
+			goods_stuff,
+			goods_material,
+			goods_material_new,
+			goods_audit_aid,
+			goods_audit_time,
+			update_time,
+			goods_aid,
+			goods_time,
+			area_id,
+			model_id,
+			goods_cess,
+			sc_id,
+			sc_desc,
+			sc_image_content,
+			goods_modelimg,
+			is_rush,
+			is_gifts,
+			goods_desc2,
+			goods_desc_img,
+			record_status,
+			goods_desc_additional,
+			limit_num,
+			limit_day,
+			diagram_code,
+			tpd_goods_status,
+			is_virtual,
+			generate_method
+		)
+		values (
+			#{catId,jdbcType=SMALLINT},
+			#{pagecatId,jdbcType=INTEGER},
+			#{goodsSn,jdbcType=VARCHAR},
+			#{goodsName,jdbcType=VARCHAR},
+			#{goodsNameStyle,jdbcType=VARCHAR},
+			#{clickCount,jdbcType=INTEGER},
+			#{brandId,jdbcType=SMALLINT},
+			#{providerName,jdbcType=VARCHAR},
+			#{goodsNumber,jdbcType=SMALLINT},
+			#{goodsWeight,jdbcType=DECIMAL},
+			#{marketPrice,jdbcType=DECIMAL},
+			#{shopPrice,jdbcType=DECIMAL},
+			#{promotePrice,jdbcType=DECIMAL},
+			#{consignPrice,jdbcType=DECIMAL},
+			#{costPrice,jdbcType=DECIMAL},
+			#{consignRate,jdbcType=DECIMAL},
+			#{consignType,jdbcType=SMALLINT},
+			#{promoteStartDate,jdbcType=INTEGER},
+			#{promoteEndDate,jdbcType=INTEGER},
+			#{warnNumber,jdbcType=TINYINT},
+			#{keywords,jdbcType=VARCHAR},
+			#{goodsBrief,jdbcType=VARCHAR},
+			#{goodsDesc,jdbcType=LONGVARCHAR},
+			#{goodsThumb,jdbcType=VARCHAR},
+			#{goodsImg,jdbcType=VARCHAR},
+			#{originalImg,jdbcType=VARCHAR},
+			#{isReal,jdbcType=TINYINT},
+			#{extensionCode,jdbcType=VARCHAR},
+			#{isOnSale,jdbcType=BIT},
+			#{isAloneSale,jdbcType=BIT},
+			#{integral,jdbcType=INTEGER},
+			#{sortOrder,jdbcType=SMALLINT},
+			#{isDelete,jdbcType=BIT},
+			#{isBest,jdbcType=BIT},
+			#{isNew,jdbcType=BIT},
+			#{isHot,jdbcType=BIT},
+			#{isPromote,jdbcType=BIT},
+			#{isOffcode,jdbcType=SMALLINT},
+			#{isEmpty,jdbcType=SMALLINT},
+			#{bonusTypeId,jdbcType=TINYINT},
+			#{lastUpdate,jdbcType=INTEGER},
+			#{goodsType,jdbcType=SMALLINT},
+			#{sellerNote,jdbcType=VARCHAR},
+			#{giveIntegral,jdbcType=INTEGER},
+			#{rankIntegral,jdbcType=INTEGER},
+			#{styleId,jdbcType=INTEGER},
+			#{seasonId,jdbcType=INTEGER},
+			#{providerId,jdbcType=INTEGER},
+			#{coopId,jdbcType=INTEGER},
+			#{goodsStop,jdbcType=SMALLINT},
+			#{providerGoods,jdbcType=VARCHAR},
+			#{goodsYear,jdbcType=VARCHAR},
+			#{goodsMonth,jdbcType=VARCHAR},
+			#{goodsSex,jdbcType=VARCHAR},
+			#{unitId,jdbcType=INTEGER},
+			#{unitName,jdbcType=VARCHAR},
+			#{goodsAudit,jdbcType=SMALLINT},
+			#{goodsStuff,jdbcType=LONGVARCHAR},
+			#{goodsMaterial,jdbcType=LONGVARCHAR},
+			#{goodsMaterialNew,jdbcType=VARCHAR},
+			#{goodsAuditAid,jdbcType=SMALLINT},
+			#{goodsAuditTime,jdbcType=TIMESTAMP},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{goodsAid,jdbcType=SMALLINT},
+			#{goodsTime,jdbcType=TIMESTAMP},
+			#{areaId,jdbcType=SMALLINT},
+			#{modelId,jdbcType=INTEGER},
+			#{goodsCess,jdbcType=DECIMAL},
+			#{scId,jdbcType=INTEGER},
+			#{scDesc,jdbcType=LONGVARCHAR},
+			#{scImageContent,jdbcType=LONGVARCHAR},
+			#{goodsModelimg,jdbcType=VARCHAR},
+			#{isRush,jdbcType=SMALLINT},
+			#{isGifts,jdbcType=TINYINT},
+			#{goodsDesc2,jdbcType=LONGVARCHAR},
+			#{goodsDescImg,jdbcType=LONGVARCHAR},
+			#{recordStatus,jdbcType=BIT},
+			#{goodsDescAdditional,jdbcType=LONGVARCHAR},
+			#{limitNum,jdbcType=INTEGER},
+			#{limitDay,jdbcType=INTEGER},
+			#{diagramCode,jdbcType=VARCHAR},
+			#{tpdGoodsStatus,jdbcType=VARCHAR},
+			#{isVirtual,jdbcType=BOOLEAN},
+			#{generateMethod,jdbcType=BIT}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.Product">
+		update ty_scm_product_info
+		<set>
+		<if test="catId != null">
+		cat_id = #{catId,jdbcType=SMALLINT},
+		</if>
+		<if test="pagecatId != null">
+		pagecat_id = #{pagecatId,jdbcType=INTEGER},
+		</if>
+		<if test="goodsSn != null">
+		goods_sn = #{goodsSn,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsName != null">
+		goods_name = #{goodsName,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsNameStyle != null">
+		goods_name_style = #{goodsNameStyle,jdbcType=VARCHAR},
+		</if>
+		<if test="clickCount != null">
+		click_count = #{clickCount,jdbcType=INTEGER},
+		</if>
+		<if test="brandId != null">
+		brand_id = #{brandId,jdbcType=SMALLINT},
+		</if>
+		<if test="providerName != null">
+		provider_name = #{providerName,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsNumber != null">
+		goods_number = #{goodsNumber,jdbcType=SMALLINT},
+		</if>
+		<if test="goodsWeight != null">
+		goods_weight = #{goodsWeight,jdbcType=DECIMAL},
+		</if>
+		<if test="marketPrice != null">
+		market_price = #{marketPrice,jdbcType=DECIMAL},
+		</if>
+		<if test="shopPrice != null">
+		shop_price = #{shopPrice,jdbcType=DECIMAL},
+		</if>
+		<if test="promotePrice != null">
+		promote_price = #{promotePrice,jdbcType=DECIMAL},
+		</if>
+		<if test="consignPrice != null">
+		consign_price = #{consignPrice,jdbcType=DECIMAL},
+		</if>
+		<if test="costPrice != null">
+		cost_price = #{costPrice,jdbcType=DECIMAL},
+		</if>
+		<if test="consignRate != null">
+		consign_rate = #{consignRate,jdbcType=DECIMAL},
+		</if>
+		<if test="consignType != null">
+		consign_type = #{consignType,jdbcType=SMALLINT},
+		</if>
+		<if test="promoteStartDate != null">
+		promote_start_date = #{promoteStartDate,jdbcType=INTEGER},
+		</if>
+		<if test="promoteEndDate != null">
+		promote_end_date = #{promoteEndDate,jdbcType=INTEGER},
+		</if>
+		<if test="warnNumber != null">
+		warn_number = #{warnNumber,jdbcType=TINYINT},
+		</if>
+		<if test="keywords != null">
+		keywords = #{keywords,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsBrief != null">
+		goods_brief = #{goodsBrief,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsDesc != null">
+		goods_desc = #{goodsDesc,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="goodsThumb != null">
+		goods_thumb = #{goodsThumb,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsImg != null">
+		goods_img = #{goodsImg,jdbcType=VARCHAR},
+		</if>
+		<if test="originalImg != null">
+		original_img = #{originalImg,jdbcType=VARCHAR},
+		</if>
+		<if test="isReal != null">
+		is_real = #{isReal,jdbcType=TINYINT},
+		</if>
+		<if test="extensionCode != null">
+		extension_code = #{extensionCode,jdbcType=VARCHAR},
+		</if>
+		<if test="isOnSale != null">
+		is_on_sale = #{isOnSale,jdbcType=BIT},
+		</if>
+		<if test="isAloneSale != null">
+		is_alone_sale = #{isAloneSale,jdbcType=BIT},
+		</if>
+		<if test="integral != null">
+		integral = #{integral,jdbcType=INTEGER},
+		</if>
+		<if test="sortOrder != null">
+		sort_order = #{sortOrder,jdbcType=SMALLINT},
+		</if>
+		<if test="isDelete != null">
+		is_delete = #{isDelete,jdbcType=BIT},
+		</if>
+		<if test="isBest != null">
+		is_best = #{isBest,jdbcType=BIT},
+		</if>
+		<if test="isNew != null">
+		is_new = #{isNew,jdbcType=BIT},
+		</if>
+		<if test="isHot != null">
+		is_hot = #{isHot,jdbcType=BIT},
+		</if>
+		<if test="isPromote != null">
+		is_promote = #{isPromote,jdbcType=BIT},
+		</if>
+		<if test="isOffcode != null">
+		is_offcode = #{isOffcode,jdbcType=SMALLINT},
+		</if>
+		<if test="isEmpty != null">
+		is_empty = #{isEmpty,jdbcType=SMALLINT},
+		</if>
+		<if test="bonusTypeId != null">
+		bonus_type_id = #{bonusTypeId,jdbcType=TINYINT},
+		</if>
+		<if test="lastUpdate != null">
+		last_update = #{lastUpdate,jdbcType=INTEGER},
+		</if>
+		<if test="goodsType != null">
+		goods_type = #{goodsType,jdbcType=SMALLINT},
+		</if>
+		<if test="sellerNote != null">
+		seller_note = #{sellerNote,jdbcType=VARCHAR},
+		</if>
+		<if test="giveIntegral != null">
+		give_integral = #{giveIntegral,jdbcType=INTEGER},
+		</if>
+		<if test="rankIntegral != null">
+		rank_integral = #{rankIntegral,jdbcType=INTEGER},
+		</if>
+		<if test="styleId != null">
+		style_id = #{styleId,jdbcType=INTEGER},
+		</if>
+		<if test="seasonId != null">
+		season_id = #{seasonId,jdbcType=INTEGER},
+		</if>
+		<if test="providerId != null">
+		provider_id = #{providerId,jdbcType=INTEGER},
+		</if>
+		<if test="coopId != null">
+		coop_id = #{coopId,jdbcType=INTEGER},
+		</if>
+		<if test="goodsStop != null">
+		goods_stop = #{goodsStop,jdbcType=SMALLINT},
+		</if>
+		<if test="providerGoods != null">
+		provider_goods = #{providerGoods,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsYear != null">
+		goods_year = #{goodsYear,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsMonth != null">
+		goods_month = #{goodsMonth,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsSex != null">
+		goods_sex = #{goodsSex,jdbcType=VARCHAR},
+		</if>
+		<if test="unitId != null">
+		unit_id = #{unitId,jdbcType=INTEGER},
+		</if>
+		<if test="unitName != null">
+		unit_name = #{unitName,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsAudit != null">
+		goods_audit = #{goodsAudit,jdbcType=SMALLINT},
+		</if>
+		<if test="goodsStuff != null">
+		goods_stuff = #{goodsStuff,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="goodsMaterial != null">
+		goods_material = #{goodsMaterial,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="goodsMaterialNew != null">
+		goods_material_new = #{goodsMaterialNew,jdbcType=VARCHAR},
+		</if>
+		<if test="goodsAuditAid != null">
+		goods_audit_aid = #{goodsAuditAid,jdbcType=SMALLINT},
+		</if>
+		<if test="goodsAuditTime != null">
+		goods_audit_time = #{goodsAuditTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="updateTime != null">
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="goodsAid != null">
+		goods_aid = #{goodsAid,jdbcType=SMALLINT},
+		</if>
+		<if test="goodsTime != null">
+		goods_time = #{goodsTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="areaId != null">
+		area_id = #{areaId,jdbcType=SMALLINT},
+		</if>
+		<if test="modelId != null">
+		model_id = #{modelId,jdbcType=INTEGER},
+		</if>
+		<if test="goodsCess != null">
+		goods_cess = #{goodsCess,jdbcType=DECIMAL},
+		</if>
+		<if test="scId != null">
+		sc_id = #{scId,jdbcType=INTEGER},
+		</if>
+		<if test="scDesc != null">
+		sc_desc = #{scDesc,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="scImageContent != null">
+		sc_image_content = #{scImageContent,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="goodsModelimg != null">
+		goods_modelimg = #{goodsModelimg,jdbcType=VARCHAR},
+		</if>
+		<if test="isRush != null">
+		is_rush = #{isRush,jdbcType=SMALLINT},
+		</if>
+		<if test="isGifts != null">
+		is_gifts = #{isGifts,jdbcType=TINYINT},
+		</if>
+		<if test="goodsDesc2 != null">
+		goods_desc2 = #{goodsDesc2,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="goodsDescImg != null">
+		goods_desc_img = #{goodsDescImg,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="recordStatus != null">
+		record_status = #{recordStatus,jdbcType=BIT},
+		</if>
+		<if test="goodsDescAdditional != null">
+		goods_desc_additional = #{goodsDescAdditional,jdbcType=LONGVARCHAR},
+		</if>
+		<if test="limitNum != null and limitNum >= 0">
+		limit_num = #{limitNum,jdbcType=INTEGER},
+		</if>
+		<if test="limitNum != null and limitDay >= 0">
+		limit_day = #{limitDay,jdbcType=INTEGER},
+		</if>
+		<if test="diagramCode != null">
+		diagram_code = #{diagramCode,jdbcType=VARCHAR},
+		</if>
+		<if test="tpdGoodsStatus != null">
+		tpd_goods_status = #{tpdGoodsStatus,jdbcType=VARCHAR},
+		</if>
+		</set>
+		where goods_id = #{goodsId,jdbcType=INTEGER}
+	</update>
+
+	<select id="findGoodsTypePage" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		g.goods_id,
+		g.goods_sn,
+		g.goods_name,
+		g.goods_sex,
+		c.category_name,
+		b.brand_name,
+		group_concat(gt.type_id) AS type_ids,
+		group_concat(gt.type_name separator '/') AS type_names
+		from ty_scm_product_info g
+		left join ty_product_category c on g.cat_id=c.category_id
+		left join ty_product_brand b on g.brand_id=b.brand_id
+		left join ty_scm_product_type_link gtl on gtl.goods_id=g.goods_id 
+		left join ty_product_type gt on gtl.type_id=gt.type_id
+		where g.is_delete=0
+		<if test="param.goodsSn != '' ">
+			and g.goods_sn like '${param.goodsSn}%'
+		</if>
+		<if test="param.goodsName != '' ">
+			and g.goods_name like '${param.goodsName}%'
+		</if>
+		<if test="param.catIds != null">
+		    AND g.cat_id IN
+		   	<foreach collection="param.catIds" item="catId" open="("
+					close=")" separator=",">
+			${catId}
+			</foreach>
+		</if>
+		<if test="param.goodsTypeId != -1 ">
+			and gt.type_id = #{param.goodsTypeId,jdbcType=INTEGER}
+		</if>
+		<if test="param.goodsSex != '' ">
+			and g.goods_sex = #{param.goodsSex,jdbcType=VARCHAR}
+		</if>
+		<if test="param.brandId != null ">
+			and g.brand_id = #{param.brandId,jdbcType=INTEGER}
+		</if>
+		<if test="param.isLinked == 'on' ">
+			and not exists (select 1 from ty_Product_type_link a
+			where g.goods_id=a.goods_id)
+		</if>
+		group by g.goods_id
+		order by g.goods_id desc
+	</select>
+	
+	<select id="queryGoodsByPage" resultMap="ExtBaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />,
+		category_name, brand_name, season_name, g.product_id as fc_goods_id
+		from ty_scm_product_info t
+		left join ty_product_category c on c.category_id = t.cat_id
+		left join ty_product_brand b on b.brand_id = t.brand_id
+		left join ty_product_season s on s.season_id = t.season_id
+		left join ty_product_info g on g.product_sn = t.goods_sn
+		<if test="param.providerCode != null and param.providerCode != '' ">
+			left join ty_product_provider p on p.provider_id = t.provider_id 
+		</if>
+		where 1
+		<if test="param.brandId != null and param.brandId > 0 "> 
+			and t.brand_id= #{param.brandId,jdbcType=INTEGER} 
+		</if>
+		<if test="param.providerGoods != null and param.providerGoods != ''">
+			and t.provider_goods like '${param.providerGoods}%'
+		</if>
+		<if test="param.providerCode != null and param.providerCode != '' ">
+			and p.provider_code like '${param.providerCode}%'
+		</if>
+		<if test="param.goodsSn != null and param.goodsSn != '' ">
+			and t.goods_sn like '${param.goodsSn}%'
+		</if>
+		<if test="param.tpdGoodsStatus != null and param.tpdGoodsStatus != '-1' ">
+			and t.tpd_goods_status = #{param.tpdGoodsStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="param.providerId != null and param.providerId > 0 "> 
+			and t.provider_id= #{param.providerId,jdbcType=INTEGER} 
+		</if>
+		<if test="param.limitNum != null and param.limitNum >= 0 "> 
+			<if test="param.limitNum == 0 ">
+				and t.limit_num = 0  
+			</if>
+			<if test="param.limitNum > 0 ">
+				and t.limit_num > 0 
+			</if>
+		</if>
+		<if test="param.isVirtual != null"> 
+			and t.is_virtual = #{param.isVirtual,jdbcType=INTEGER}   
+		</if>
+		order by t.goods_id desc
+	</select>
+	
+	<select id="selectExtGoodsById" resultMap="ExtBaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />,
+		category_name, brand_name, season_name
+		from ty_scm_product_info t
+		left join ty_product_category c on c.category_id = t.cat_id
+		left join ty_product_brand b on b.brand_id = t.brand_id
+		left join ty_product_season s on s.season_id = t.season_id
+		where t.goods_id = #{goodId, jdbcType=INTEGER}
+	</select>
+	<!-- 导出商品颜色尺寸数据 -->
+	<!-- 导出商品颜色尺寸信息 和采购单 -->
+	<resultMap id="goodsDataMap" type="com.fclub.tpd.batch.importing.dto.GoodsData">
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="goods_sn" property="goodsSn" jdbcType="VARCHAR" />
+		<result column="provider_goods" property="providerGoods"
+			jdbcType="VARCHAR" />
+		<result column="color_code" property="colorCode" jdbcType="VARCHAR" />
+		<result column="size_code" property="sizeCode" jdbcType="VARCHAR" />
+		<result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="getGoodsColorSizeDataList" resultMap="goodsDataMap">
+		SELECT fg.goods_id AS goods_id,fg.goods_sn AS goods_sn,
+		fg.provider_goods AS provider_goods,fc.color_code AS color_code,
+		fs.size_code AS size_code ,fl.tpd_provider_barcode AS bar_code
+		FROM
+		ty_scm_product_info fg
+		LEFT JOIN ty_scm_product_sub fl ON fg.goods_id=fl.goods_id
+		LEFT JOIN ty_product_color fc ON fl.color_id=fc.color_id
+		LEFT JOIN
+		ty_product_size fs ON fl.size_id=fs.size_id
+		WHERE fg.goods_id IN
+		<foreach collection="array" item="goodsId" open="(" separator="," close=")">
+			${goodsId}
+		</foreach>
+	</select>
+	
+	<select id="getGoodsDataList" resultMap="goodsDataMap">
+		SELECT fg.goods_id AS goods_id,fg.goods_sn AS goods_sn,
+		fg.provider_goods AS provider_goods
+		FROM
+		ty_scm_product_info fg
+		WHERE fg.goods_id IN
+		<foreach collection="array" item="goodsId" open="(" separator=","
+			close=")">
+			${goodsId}
+		</foreach>
+	</select>
+	
+	
+	<!--  ty_scm_product_info  -->
+	<select id="findTpdGoodsBySn" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select goods_id, provider_id, tpd_goods_status, is_virtual 
+		from ty_scm_product_info 
+		where goods_sn = #{goodsSn,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="queryExportGoodsData" resultMap="ExportBaseResultMap" parameterType="com.fclub.tpd.dataobject.Product">
+		select
+		<include refid="Base_Column_List" />,
+		category_name, brand_name, provider_code, tpd_provider_barcode as provider_barcode, color_name, size_name, consign_num, type_name
+		from ty_scm_product_info t
+		left join ty_product_category c on c.category_id = t.cat_id
+		left join ty_product_brand b on b.brand_id = t.brand_id
+		left join ty_product_provider p on p.provider_id = t.provider_id
+		left join ty_scm_product_sub l on l.goods_id = t.goods_id 
+		left join ty_product_color as color on color.color_id=l.color_id 
+		left join ty_product_size as s on s.size_id=l.size_id
+		left join ty_scm_product_type_link tl on tl.goods_id = t.goods_id
+		left join ty_product_type gt on gt.type_id = tl.type_id
+		where 1
+		<if test="brandId != null and brandId > 0 "> 
+			and t.brand_id= #{brandId,jdbcType=INTEGER} 
+		</if>
+		<if test="providerId != null and providerId > 0">
+			and t.provider_id = #{providerId,jdbcType=INTEGER}
+		</if>
+		<if test="providerGoods != null and providerGoods != ''">
+			and t.provider_goods like '${providerGoods}%'
+		</if>
+		<if test="providerBarcode != null and providerBarcode != '' ">
+			and l.provider_barcode like '${providerBarcode}%'
+		</if>
+		<if test="goodsSn != null and goodsSn != '' ">
+			and t.goods_sn like '${goodsSn}%'
+		</if>
+		<if test="tpdGoodsStatus != null and tpdGoodsStatus != '-1' ">
+			and t.tpd_goods_status = #{tpdGoodsStatus,jdbcType=VARCHAR}
+		</if>
+		order by t.goods_id desc
+	</select>
+	
+	<update id="updateByBcsImp" parameterType="com.fclub.tpd.dataobject.Product">
+		update ty_scm_product_info
+		<set>
+		<if test="scDesc != null">
+		sc_desc = #{scDesc,jdbcType=LONGVARCHAR},
+		</if>
+		</set>
+		where cat_id = #{catId,jdbcType=INTEGER}
+		  and brand_id = #{brandId,jdbcType=INTEGER}
+		  and goods_sex = #{goodsSex,jdbcType=VARCHAR}
+		  and tpd_goods_status = 0
+	</update>
+	
+	<update id="batchOnsale">
+		UPDATE ty_scm_product_info 
+		SET tpd_goods_status = <if test="on"> '3' </if> <if test="!on"> '2' </if>
+		WHERE goods_id IN 
+		<foreach collection="ids" item="goodsId" open="(" close=")" separator=",">
+			#{goodsId, jdbcType=INTEGER}
+		</foreach>
+	</update>
+	
+</mapper>

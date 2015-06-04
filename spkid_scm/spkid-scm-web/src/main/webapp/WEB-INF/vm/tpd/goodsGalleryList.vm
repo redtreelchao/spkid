@@ -1,0 +1,69 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+								<th ></th>
+				<th >颜色id</th>
+				<th >原图相同-用来使用的(可能加水印)</th>
+				<th ></th>
+				<th >缩略图(72*96)</th>
+				<th >600*800 图</th>
+				<th >1200*1600 图</th>
+				<th >30*40 图</th>
+				<th >180*240 图</th>
+				<th >原始图片</th>
+				<th >default 默认,part 局部,tonal 色片</th>
+				<th ></th>
+				<th ></th>
+				<th >102*160</th>
+				<th >99*132</th>
+				<th >480*640</th>
+				<th >63*84</th>
+				<th ></th>
+				<th ></th>
+				<th >342*455</th>
+				<th >170*227</th>
+				<th >iphone3终端商品列表图</th>
+				<th >iphone3终端商品详情大图</th>
+				<th >ipad终端商品详情大图</th>
+				<th >1200*1600 详情放大镜</th>
+				<th >操作</th>
+			</tr>
+			#foreach( $info in $page.result) 
+			<tr>
+				<td align="center"> $!info.goodsId </td>
+				<td align="center"> $!info.colorId </td>
+				<td align="center"> $!info.imgUrl </td>
+				<td align="center"> $!info.imgDesc </td>
+				<td align="center"> $!info.thumbUrl </td>
+				<td align="center"> $!info.middleUrl </td>
+				<td align="center"> $!info.bigUrl </td>
+				<td align="center"> $!info.teenyUrl </td>
+				<td align="center"> $!info.smallUrl </td>
+				<td align="center"> $!info.imgOriginal </td>
+				<td align="center"> $!info.imgDefault </td>
+				<td align="center"> $!info.imgAid </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd hh:mm:ss',$!info.imgTime)  </td>
+				<td align="center"> $!info.url120160 </td>
+				<td align="center"> $!info.url99132 </td>
+				<td align="center"> $!info.url480640 </td>
+				<td align="center"> $!info.url5684 </td>
+				<td align="center"> $!info.url222296 </td>
+				<td align="center"> $!info.sortOrder </td>
+				<td align="center"> $!info.url342455 </td>
+				<td align="center"> $!info.url170227 </td>
+				<td align="center"> $!info.url135180 </td>
+				<td align="center"> $!info.url251323 </td>
+				<td align="center"> $!info.url502646 </td>
+				<td align="center"> $!info.url12001600 </td>
+				<td align="center">
+					<a class="edit" href="/goodsgallery/editTo.htm?id=$info.imgId">编辑</a>
+					<a class="del" href="javascript:doDelete($info.imgId)">删除</a>
+				</td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>
+
+#page()

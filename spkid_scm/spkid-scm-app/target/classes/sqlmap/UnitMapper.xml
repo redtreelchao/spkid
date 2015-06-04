@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.UnitMapper">
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.Unit">
+		<id column="unit_id" property="unitId" jdbcType="INTEGER" />
+		<result column="unit_code" property="unitCode" jdbcType="VARCHAR" />
+		<result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+		<result column="unit_aid" property="unitAid" jdbcType="SMALLINT" />
+		<result column="unit_time" property="unitTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		unit_id, unit_code, unit_name, unit_aid, unit_time
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from fc_flc_unit
+		where not exists(select goods_id from fc_goods
+		where
+		unit_id=#{unitId,jdbcType=INTEGER})
+	</select>
+
+	<select id="selectByUnitCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from fc_flc_unit
+		where unit_code = #{unitCode,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectByUnitName" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from fc_flc_unit
+		where unit_name = #{unitName,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectUnitByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.fclub.tpd.dataobject.Unit">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from fc_flc_unit
+		where unit_id = #{unitId,jdbcType=INTEGER}
+	</select>
+
+	<!-- <select id="selectAllUnit" resultMap="BaseResultMap"> select 'true' 
+		as QUERYID, <include refid="Base_Column_List" /> from fc_flc_unit </select> -->
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		fc_flc_unit
+		where unit_id = #{unitId,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insertSelective" parameterType="com.fclub.tpd.dataobject.Unit">
+		insert into
+		fc_flc_unit(unit_code,unit_name,unit_aid,unit_time)
+		values(#{unitCode,jdbcType=VARCHAR},#{unitName,jdbcType=VARCHAR},#{unitAid,jdbcType=SMALLINT},
+		#{unitTime,jdbcType=TIMESTAMP})
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.fclub.tpd.dataobject.Unit">
+		update
+		fc_flc_unit
+		set unit_code = #{unitCode,jdbcType=VARCHAR},
+		unit_name =
+		#{unitName,jdbcType=VARCHAR},
+		unit_aid = #{unitAid,jdbcType=SMALLINT},
+		unit_time = #{unitTime,jdbcType=TIMESTAMP}
+		where unit_id =
+		#{unitId,jdbcType=INTEGER}
+	</update>
+
+	<select id="confirmBeingUsed" resultType="java.lang.Boolean"
+		parameterType="java.lang.Integer">
+		SELECT CASE WHEN t.co > 0 THEN TRUE ELSE FALSE END FROM
+		(
+		SELECT COUNT(*) AS co FROM fc_goods g WHERE
+		g.unit_id=#{unitId,jdbcType=INTEGER}
+		)AS t
+	</select>
+
+	<select id="selectUnitCodeWithOutId" resultMap="BaseResultMap"
+		parameterType="com.fclub.tpd.dataobject.Unit">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from fc_flc_unit
+		where unit_id &#60;&#62; #{unitId,jdbcType=INTEGER}
+		and unit_code = #{unitCode,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectUnitNameWithOutId" resultMap="BaseResultMap"
+		parameterType="com.fclub.tpd.dataobject.Unit">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from fc_flc_unit
+		where unit_id &#60;&#62; #{unitId,jdbcType=INTEGER}
+		and unit_name = #{unitName,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 查询并且分页 -->
+	<select id="selectUnitList" resultMap="BaseResultMap"
+		parameterType="com.fclub.tpd.dataobject.Unit">
+		select
+		<include refid="Base_Column_List" />
+		from fc_flc_unit
+		where 1=1
+		<if test="param.unitCode != '' ">
+			and unit_code like '${param.unitCode}%'
+		</if>
+		<if test="param.unitName != '' ">
+			and unit_name like '${param.unitName}%'
+		</if>
+		order by unit_time desc
+	</select>
+	<select id="queryAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from fc_flc_unit
+		order by unit_code desc
+	</select>
+	
+	<!-- 查询单个的unitId -->
+	<select id="getUnitIdByCode" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select unit_id
+		from fc_flc_unit
+		where unit_code=#{unitCode}
+		limit 1
+	</select>
+	
+</mapper>

@@ -1,0 +1,49 @@
+<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <th width="5%"></th>
+            <th width="15%">导入时间</th>
+            <th width="15%">查看报告</th>
+        </tr>
+    	#if($page.result)
+    		#foreach($item in $page.result)
+            <tr>
+                <td align="center">
+        			#if($item.importStatus == "RUNING")
+        				<span class="icon_successAnime"></span>
+        			#elseif($item.importStatus == "FAIL")
+        				<span class="icon_fail"></span>
+        			#else
+        				<span class="icon_success"></span>
+        			#end
+                </td>
+                <td align="center">&nbsp;
+    				$!dateTool.format('yyyy-MM-dd HH:mm:ss',$item.impTime)
+    				#if($item.importStatus == "RUNING")<div class="runing_color_list" >
+                        <div class="StatBarButtonDiv" id="_BAR_$item.id" type="$type" iden="$item.impBatchNo"></div>
+                    </div>
+    				<script type="text/javascript">
+    					rollOf2("#_BAR_$item.id");
+                    </script>
+    				#end
+    			</td>
+                <td align="center">
+        			#if($stringUtil.notEquals($item.impType.name(),"GOODS_VERIFY"))
+            			#if($stringUtil.notEquals($item.importStatus.name(), "RUNING"))
+            				#if($item.resultFile)<a href="/batchImport/resultData.htm?listId=$!item.id" target="_blank" class="icon_viewReport"></a>#end
+            			#end
+    				#end
+    				#if($item.importType =="GOODS_GALLERY")
+    					#if($stringUtil.equals($item.importStatus.name(), "RUNING"))
+    						<a href="javascript:void(0);" onclick="forceStopGoodsGallery('$item.id')" class="edit">手工中止</a>
+    					#end
+    				#end
+                </td>
+            </tr>
+    		#end
+    	#else
+        <tr><td align="center" colspan="4" style="color:red">无操作记录</td></tr>
+		#end
+    </tbody>
+</table>
+#page()

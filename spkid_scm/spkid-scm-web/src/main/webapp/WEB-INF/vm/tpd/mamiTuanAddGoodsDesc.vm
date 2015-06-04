@@ -1,0 +1,37 @@
+<table style="border-collapse:collapse;display:table;padding:0;width:100%;">
+	<tbody>
+		<tr>
+			<td colspan="4" style="border:1px solid #ccc;border-collapse:collapse;height:23px;line-height:23px;padding:6px 0;color:#000;font-size:14px;font-weight:bold;text-align:center;">商品描述（新）</td>
+		</tr>
+		<tr>
+            <td style="border:1px solid #ccc;border-collapse:collapse;height:23px;line-height:23px;padding:6px 0;background:#BDBDC1;color:#000;font-size:14px;font-weight:bold;text-align:center;width:145px;">成分</td>
+            <td style="border:1px solid #ccc;border-collapse:collapse;color:#000;font-size:12px;height:23px;line-height:23px;padding:6px 0;background:#F2F2F2;padding-left:8px;padding-right:8px;text-align:left;">
+				$!goodsDescVo.desc_composition
+			</td>
+            <td style="border:1px solid #ccc;border-collapse:collapse;height:23px;line-height:23px;padding:6px 0;background:#BDBDC1;color:#000;font-size:14px;font-weight:bold;text-align:center;width:145px;">尺寸规格</td>
+            <td style="border:1px solid #ccc;border-collapse:collapse;color:#000;font-size:12px;height:23px;line-height:23px;padding:6px 0;background:#F2F2F2;padding-left:8px;padding-right:8px;text-align:left;">
+				$!goodsDescVo.desc_dimensions
+			</td>
+        </tr>
+		<tr>
+            <td style="border:1px solid #ccc;border-collapse:collapse;height:23px;line-height:23px;padding:6px 0;background:#BDBDC1;color:#000;font-size:14px;font-weight:bold;text-align:center;width:145px;">材质</td>
+            <td style="border:1px solid #ccc;border-collapse:collapse;color:#000;font-size:12px;height:23px;line-height:23px;padding:6px 0;background:#F2F2F2;padding-left:8px;padding-right:8px;text-align:left;">
+				$!goodsDescVo.desc_material
+			</td>
+            <td style="border:1px solid #ccc;border-collapse:collapse;height:23px;line-height:23px;padding:6px 0;background:#BDBDC1;color:#000;font-size:14px;font-weight:bold;text-align:center;width:145px;">防水性</td>
+            <td style="border:1px solid #ccc;border-collapse:collapse;color:#000;font-size:12px;height:23px;line-height:23px;padding:6px 0;background:#F2F2F2;padding-left:8px;padding-right:8px;text-align:left;">
+				$!goodsDescVo.desc_waterproof
+			</td>
+        </tr>
+		<tr>
+            <td style="border:1px solid #ccc;border-collapse:collapse;height:23px;line-height:23px;padding:6px 0;background:#BDBDC1;color:#000;font-size:14px;font-weight:bold;text-align:center;width:145px;">适合人群</td>
+            <td style="border:1px solid #ccc;border-collapse:collapse;color:#000;font-size:12px;height:23px;line-height:23px;padding:6px 0;background:#F2F2F2;padding-left:8px;padding-right:8px;text-align:left;">
+				$!goodsDescVo.desc_crowd
+			</td>
+            <td style="border:1px solid #ccc;border-collapse:collapse;height:23px;line-height:23px;padding:6px 0;background:#BDBDC1;color:#000;font-size:14px;font-weight:bold;text-align:center;width:145px;">温馨提示</td>
+            <td style="border:1px solid #ccc;border-collapse:collapse;color:#000;font-size:12px;height:23px;line-height:23px;padding:6px 0;background:#F2F2F2;padding-left:8px;padding-right:8px;text-align:left;">
+				$!goodsDescVo.desc_notes
+			</td>
+        </tr>
+	</tbody>
+</table>

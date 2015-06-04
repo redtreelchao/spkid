@@ -1,0 +1,34 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<th >品牌</th>
+				<th >款号</th>
+				<th >颜色</th>
+				<th >尺码</th>
+				<th >件数</th>
+				<th >销售额</th>
+			</tr>
+			#foreach( $info in $page.result) 
+			<tr>
+				<td align="center"> $!info.brandName </td>
+				<td align="center"> $!info.goodsSn </td>
+				<td align="center"> $!info.colorName  </td>
+				<td align="center"> $!info.sizeName </td>
+				<td align="center"> $!info.goodsNumber </td>
+				<td align="center"> $!info.goodsAmount </td>
+			</tr>
+			#end
+			<tr>
+				<td align="center">总计</td>
+				<td align="center"></td>
+				<td align="center"></td>
+				<td align="center"></td>
+				<td align="center">$!totalReport.totalGoodsNum</td>
+				<td align="center">$!totalReport.totalGoodsAmt</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+#page()

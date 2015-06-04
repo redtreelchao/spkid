@@ -1,0 +1,29 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+								<th >合作须知</th>
+				<th ></th>
+				<th ></th>
+				<th ></th>
+				<th ></th>
+				<th >操作</th>
+			</tr>
+			#foreach( $info in $page.result) 
+			<tr>
+				<td align="center"> $!info.content </td>
+				<td align="center"> $!info.createUser </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd hh:mm:ss',$!info.createTime)  </td>
+				<td align="center"> $!info.updateUser </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd hh:mm:ss',$!info.updateTime)  </td>
+				<td align="center">
+					<a class="edit" href="/cooperationtips/editTo.htm?id=$info.ctId">编辑</a>
+					<a class="del" href="javascript:doDelete($info.ctId)">删除</a>
+				</td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>
+
+#page()

@@ -1,0 +1,67 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" style="table-layout: fixed;" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<th width="8%">短信编码</th>
+				#if($!tpdHelper.isAdmin())
+				<th width="10%">供应商编码</th>
+				#end
+				<th width="10%">提交日期</th>
+				<th width="10%">发送日期</th>
+				<th>短信内容</th>
+				<th>短信价格（元/条）</th>
+				<th width="8%">状态</th>
+				<th width="20%">备注</th>
+				<th>操作</th>
+			</tr>
+			#foreach( $info in $page.result) 
+			<tr>
+				<td align="center"> $!info.smsId </td>
+				#if($!tpdHelper.isAdmin())
+				<td align="center"> $!info.providerCode </td>
+				#end
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.commitTime) </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.sendTime) </td>
+				<td align="left" class="chill-tip" title="$!info.content"> 
+    				<div class="ellipsisDiv" >
+    				$!info.content
+                    </div>
+				</td>
+				<td align="center"> $!info.smsPrice </td>
+				<td align="center">
+					#if($!info.status == 0)草稿 #elseif($!info.status == 1)待审核#elseif($!info.status == 2)已审核#elseif($!info.status == 3)已发送#elseif($!info.status == 4)已作废#elseif($!info.status == 5)发送中#end
+				</td>
+				<td align="left" class="chill-tip" title="$!info.memo"> 
+    				<div class="ellipsisDiv" >
+    				$!info.memo
+                    </div>
+				</td>
+				<td align="center">
+				<!--
+					<a class="edit"  href="/sms/list/show.htm?smsId=$info.smsId">查看</a>
+				-->
+					#if($!tpdHelper.isAdmin())
+						#if($info.status == 1)
+						<!--
+							<a class="edit" href="/sms/addTo.htm?smsId=$info.smsId">编辑</a>
+						-->
+							<a class="edit" href="javascript:doCheck($info.smsId)">审核</a>
+							<a class="edit" href="javascript:showReject($info.smsId)">驳回</a>
+						#elseif($info.status == 2)
+							<a class="del" href="javascript:doCancel($info.smsId)">作废</a>
+						#end
+					#else
+						#if($info.status == 0)
+							<a class="edit" href="/sms/addTo.htm?smsId=$info.smsId">编辑</a>
+							<a class="del" href="javascript:doDelete($info.smsId)">删除</a>					
+						#end
+					#end
+					<a class="edit"  href="/sms/list/showDetail.htm?smsId=$info.smsId" target="_blank">查看详情</a>
+				</td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>
+
+#page()

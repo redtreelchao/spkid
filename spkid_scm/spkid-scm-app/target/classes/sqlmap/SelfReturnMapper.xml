@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.SelfReturnMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.SelfReturn">
+		<id column="apply_id" property="applyId" jdbcType="INTEGER" />
+		<result column="order_id" property="orderId" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="DECIMAL" />
+		<result column="provider_id" property="providerId" jdbcType="INTEGER" />
+		<result column="shipping_name" property="shippingName" jdbcType="VARCHAR" />
+		<result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+		<result column="sent_user_name" property="sentUserName" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="shipping_fee" property="shippingFee" jdbcType="DECIMAL" />
+		<result column="back_address" property="backAddress" jdbcType="VARCHAR" />
+		<result column="product_number" property="productNumber" jdbcType="INTEGER" />
+		<result column="apply_status" property="applyStatus" jdbcType="TINYINT" />
+		<result column="provider_status" property="providerStatus" jdbcType="TINYINT" />
+		<result column="order_type" property="orderType" jdbcType="TINYINT" />
+		<result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+		<result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP" />
+		<result column="order_sn" property="orderSn" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="SelfReturnProduct" type="com.fclub.tpd.dataobject.SelfReturnProduct">
+		<id column="rec_id" property="recId" jdbcType="INTEGER"/>
+		<result column="apply_id" property="applyId" jdbcType="INTEGER"/>
+		<result column="product_id" property="productId" jdbcType="INTEGER"/>
+		<result column="color_id" property="colorId" jdbcType="INTEGER"/>
+		<result column="size_id" property="sizeId" jdbcType="INTEGER"/>
+		<result column="product_price" property="productPrice" jdbcType="DECIMAL"/>
+		<result column="product_sn" property="productSn" jdbcType="VARCHAR"/>
+		<result column="product_name" property="productName" jdbcType="VARCHAR"/>
+		<result column="provider_productcode" property="providerProductcode" jdbcType="VARCHAR"/>
+		<result column="product_number" property="productNumber" jdbcType="INTEGER"/>
+		<result column="return_reason" property="returnReason" jdbcType="VARCHAR"/>
+		<result column="description" property="desc" jdbcType="VARCHAR"/>
+		<result column="color_name" property="colorName" jdbcType="VARCHAR"/>
+		<result column="size_name" property="sizeName" jdbcType="VARCHAR"/>
+		<result column="img" property="img" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="SelfReturnSuggest" type="com.fclub.tpd.dataobject.SelfReturnSuggest" >
+		<result column="apply_id" property="applyId" jdbcType="INTEGER"/>
+		<result column="suggest_type" property="suggestType" jdbcType="INTEGER"/>
+		<result column="suggest_content" property="suggestContent" jdbcType="VARCHAR"/>
+		<result column="create_id" property="createId" jdbcType="INTEGER"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="create_name" property="createName" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		t.apply_id,
+		t.order_id,
+		t.user_id,
+		t.provider_id,
+		t.shipping_name,
+		t.invoice_no,
+		t.sent_user_name,
+		t.mobile,
+		t.tel,
+		t.shipping_fee,
+		t.back_address,
+		t.product_number,
+		t.apply_status,
+		t.provider_status,
+		t.order_type,
+		t.apply_time,
+		t.cancel_time
+	</sql>
+	
+	<sql id="productInfo">
+		t.rec_id,
+		t.apply_id,
+		t.product_name,
+       	t.product_sn,
+        p.provider_productcode,
+        t.product_price,
+        t.product_number,
+        c.color_name,
+        s.size_name,
+        t.return_reason,
+        t.description,
+        t.img
+	</sql>
+	<select id="getSelfReturnSuggest" resultMap="SelfReturnSuggest" parameterType="java.lang.Integer">
+		SELECT 
+			p.user_name AS create_name,
+			t.create_id,
+			t.create_date,
+			t.suggest_content,
+			t.suggest_type 
+		FROM ty_apply_return_suggest t
+		LEFT JOIN ty_product_provider p ON t.create_id=p.provider_id
+		WHERE t.apply_id=#{id,jdbcType=INTEGER}
+		AND t.suggest_type IN (1,2)
+	</select>
+	<select id="getSelfReturnProduct" resultMap="SelfReturnProduct" parameterType="java.lang.Integer">
+		SELECT 
+		<include refid="productInfo"/>
+		  from ty_apply_return_product t
+		  LEFT JOIN ty_product_info p
+		    on t.product_id = p.product_id
+		  LEFT JOIN ty_product_color c
+		    on t.color_id = c.color_id
+		  LEFT JOIN ty_product_size s
+		    on t.size_id = s.size_id
+		 where apply_id = #{id,jdbcType=INTEGER}
+		
+	</select>
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_apply_return_info t
+		where apply_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+			o.order_sn,
+		<include refid="Base_Column_List" />
+		from ty_apply_return_info t
+		left join ty_order_info o on t.order_id=o.order_id
+		where 1 
+		and t.provider_id=#{param.providerId,jdbcType=INTEGER}
+		and t.apply_status != 3
+		and t.order_type = 1
+		<if test="param.orderSn != null and param.orderSn != ''">
+			and o.order_sn like '%${param.orderSn}%'
+		</if>
+		<if test="param.sentUserName != null and param.sentUserName != ''">
+			and t.sent_user_name like '%${param.sentUserName}%'
+		</if>
+		<if test="param.startTime != null and param.startTime != ''">
+			<![CDATA[and t.apply_time >= #{param.startTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="param.endTime  != null  and param.endTime != ''">
+			<![CDATA[and t.apply_time <= DATE_ADD(#{param.endTime,jdbcType=TIMESTAMP},INTERVAL 1 DAY)]]>
+		</if>
+		<if test="param.invoiceNo != null and param.invoiceNo != ''">
+			and t.invoice_no like '%${param.invoiceNo}%'
+		</if>
+		<if test="param.providerStatus != null and param.providerStatus > 0 ">
+			and t.provider_status = #{param.providerStatus,jdbcType=TINYINT}
+		</if>
+		<if test="param.applyId != null and param.applyId != ''">
+			and t.apply_id = #{param.applyId,jdbcType=INTEGER}
+		</if>
+		order by t.apply_id desc
+	</select>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.SelfReturn">
+		update ty_apply_return_info
+		<set>
+		<if test="orderId != null">
+		order_id = #{orderId,jdbcType=INTEGER},
+		</if>
+		<if test="userId != null">
+		user_id = #{userId,jdbcType=DECIMAL},
+		</if>
+		<if test="providerId != null">
+		provider_id = #{providerId,jdbcType=INTEGER},
+		</if>
+		<if test="shippingName != null">
+		shipping_name = #{shippingName,jdbcType=VARCHAR},
+		</if>
+		<if test="invoiceNo != null">
+		invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+		</if>
+		<if test="sentUserName != null">
+		sent_user_name = #{sentUserName,jdbcType=VARCHAR},
+		</if>
+		<if test="mobile != null">
+		mobile = #{mobile,jdbcType=VARCHAR},
+		</if>
+		<if test="tel != null">
+		tel = #{tel,jdbcType=VARCHAR},
+		</if>
+		<if test="shippingFee != null">
+		shipping_fee = #{shippingFee,jdbcType=DECIMAL},
+		</if>
+		<if test="backAddress != null">
+		back_address = #{backAddress,jdbcType=VARCHAR},
+		</if>
+		<if test="productNumber != null">
+		product_number = #{productNumber,jdbcType=INTEGER},
+		</if>
+		<if test="applyStatus != null">
+		apply_status = #{applyStatus,jdbcType=TINYINT},
+		</if>
+		<if test="providerStatus != null and providerStatus >= 0 ">
+		provider_status = #{providerStatus,jdbcType=TINYINT},
+		</if>
+		<if test="orderType != null">
+		order_type = #{orderType,jdbcType=TINYINT},
+		</if>
+		<if test="applyTime != null">
+		apply_time = #{applyTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="cancelTime != null">
+		cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+		</if>
+		</set>
+		where apply_id = #{applyId,jdbcType=INTEGER}
+	</update>
+</mapper>

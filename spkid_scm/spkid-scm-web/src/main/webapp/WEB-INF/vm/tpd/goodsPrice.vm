@@ -1,0 +1,50 @@
+##商品价格TAB
+<table width="90%" align="center" cellpadding="3" cellspacing="3" id="product_price" style="display:none;" class="config_tab">
+	<tbody>
+    	<tr>
+			<td align="left" colspan="4"><div class="main_title bold center">商品价格</div></td>
+		</tr>
+		<tr>
+        	<td class="labal">市场价:</td>
+            <td>
+				#if($!readOnly == 1)
+				<input type="text" validate="required" name="marketPrice" class="inputBorder_readOnly" value="$!goods.marketPrice" readonly/>
+				#else
+				<input type="text" validate="required" name="marketPrice" class="input" value="$!goods.marketPrice"/><span class="red_dian">*</span>
+				#end
+			</td>
+        </tr>
+		<tr>
+        	<td width="400" class="labal">妈咪价:</td>
+            <td width="800">
+				#if($!readOnly == 1)
+				<input type="text" validate="required" name="shopPrice" class="inputBorder_readOnly" value="$!goods.shopPrice" readonly/>
+				#else
+				<input type="text" validate="required" name="shopPrice" class="input" value="$!goods.shopPrice"/><span class="red_dian">*</span>
+				#end
+			</td>
+        </tr>
+		#*
+        <tr>
+        	<td class="labal">代销价:</td>
+            <td>
+				#if($!readOnly == 1)
+				<input type="text" validate="required" name="consignPrice" class="inputBorder_readOnly" value="$!goods.consignPrice" readonly/>
+				#else
+				<input type="text" validate="required" name="consignPrice" class="input" value="$!goods.consignPrice"/><span class="red_dian">*</span>
+				#end
+			</td>
+        </tr>
+		<tr>
+			<td class="labal"> 税率 </td>
+			<td>
+				#if($!readOnly == 1)
+				<input type="text" name="goodsCess" #if($!goods.goodsCess==0)value="0.00"#else value="$!goods.goodsCess" #end class="inputBorder_readOnly" readonly/>
+				#else
+				<input type="text" name="goodsCess" #if($!goods.goodsCess==0)value="0.00"#else value="$!goods.goodsCess" #end class="inputBorder"/>
+				#end
+			</td>
+		</tr>
+		*#
+    </tbody>
+</table>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.BatchImportMapper">
+	<resultMap id="BaseResultMap"
+		type="com.fclub.tpd.dataobject.BatchImport">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="imp_batch_no" property="impBatchNo" jdbcType="VARCHAR" />
+		<result column="maindata_filename" property="maindataFilename"
+			jdbcType="VARCHAR" />
+		<result column="is_impmain" property="isImpmain" jdbcType="CHAR" />
+		<result column="is_impcolorsize" property="isImpcolorsize"
+			jdbcType="CHAR" />
+		<result column="is_audit" property="isAudit" jdbcType="CHAR" />
+		<result column="audit_id" property="auditId" jdbcType="INTEGER" />
+		<result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+		<result column="is_imppurchase" property="isImppurchase"
+			jdbcType="CHAR" />
+		<result column="is_impsecinfo" property="isImpsecinfo"
+			jdbcType="CHAR" />
+		<result column="is_impbcsimg" property="isImpbcsimg" jdbcType="CHAR" />
+		<result column="is_imppic" property="isImppic" jdbcType="CHAR" />
+		<result column="crtuser" property="crtUser" jdbcType="INTEGER" />
+		<result column="provider_id" property="providerId" jdbcType="INTEGER" />
+		<result column="crttime" property="crtTime" jdbcType="TIMESTAMP" />
+		<result column="uptuser" property="uptUser" jdbcType="INTEGER" />
+		<result column="upttime" property="uptTime" jdbcType="TIMESTAMP" />
+		<result column="upttype" property="uptType" jdbcType="CHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.fclub.tpd.dataobject.BatchImport" extends="BaseResultMap">
+		<result column="imp_goods_ids" property="impGoodsIds" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, imp_batch_no, maindata_filename, is_impmain, is_impcolorsize,
+		is_audit, audit_id,
+		audit_time, is_imppurchase, is_impsecinfo, is_impbcsimg, is_imppic,
+		crtuser,crttime,uptuser, upttime, upttype,provider_id
+	</sql>
+	<sql id="Blob_Column_List">
+		imp_goods_ids
+	</sql>
+	<select id="selectByBatchNo" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from ty_scm_product_batch_import
+		where imp_batch_no = #{impBatchNo,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from ty_scm_product_batch_import
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.BatchImport">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into ty_scm_product_batch_import (id, imp_batch_no,
+		maindata_filename,
+		is_impmain, is_impcolorsize, is_audit,
+		audit_id, audit_time, is_imppurchase,
+		is_impsecinfo, is_impbcsimg, is_imppic,
+		crtuser, crttime , uptuser,
+		upttime, upttype,provider_id, imp_goods_ids
+		)
+		values (#{id,jdbcType=INTEGER}, #{impBatchNo,jdbcType=VARCHAR},
+		#{maindataFilename,jdbcType=VARCHAR},
+		#{isImpmain,jdbcType=CHAR}, #{isImpcolorsize,jdbcType=BIT}, #{isAudit,jdbcType=BIT},
+		#{auditId,jdbcType=INTEGER}, #{auditTime,jdbcType=TIMESTAMP},
+		#{isImppurchase,jdbcType=BIT},
+		#{isImpsecinfo,jdbcType=BIT}, #{isImpbcsimg,jdbcType=BIT}, #{isImppic,jdbcType=BIT},
+		#{crtUser,jdbcType=INTEGER}, now(),
+		#{uptUser,jdbcType=INTEGER},
+		#{uptTime,jdbcType=TIMESTAMP}, #{uptType,jdbcType=CHAR},#{providerId,jdbcType=CHAR}, #{impGoodsIds,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+
+	<select id="checkBatchNoExsits" parameterType="java.lang.String"
+		resultType="java.lang.Boolean">
+		select CASE WHEN count(*)> 0 THEN TRUE ELSE FALSE END from
+		ty_scm_product_batch_import where imp_batch_no = #{batchNo,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap">
+		select 'true' as QUERYID,
+		t.id, t.imp_batch_no, t.maindata_filename, t.crtTime, 
+		(CASE WHEN il.status = '06' THEN TRUE ELSE FALSE END) is_impmain
+		from ty_scm_product_batch_import t
+		left join ty_scm_product_import_list il on t.imp_batch_no = il.imp_batch_no 
+		where 1
+		<if test="param.crtUser != null"> and t.provider_id = #{param.crtUser,jdbcType=INTEGER}</if>
+		<if test="param.importDateBegin != null and param.importDateBegin !=''"> and t.crtTime <![CDATA[>=]]>str_to_date('${param.importDateBegin} 00:00:00','%Y-%m-%d %H:%i:%s')</if>
+		<if test="param.importDateEnd != null and param.importDateEnd !=''"> and t.crtTime <![CDATA[<=]]>str_to_date('${param.importDateEnd} 23:59:59','%Y-%m-%d %H:%i:%s')</if>
+		order by id desc
+	</select>
+	<update id="activate" parameterType="com.fclub.tpd.dataobject.BatchImport">
+		UPDATE ty_scm_product_batch_import 
+		SET 
+	       uptuser = #{uptUser,jdbcType=INTEGER},
+	       upttype = #{uptType,jdbcType=CHAR},
+	       upttime=NOW()
+	    WHERE imp_batch_no =#{impBatchNo,jdbcType=VARCHAR}
+	</update>
+	<update id="finish" parameterType="com.fclub.tpd.dataobject.BatchImport">
+		UPDATE ty_scm_product_batch_import 
+		 SET 
+		  <if test="impGoodsIds != null and impGoodsIds != ''" >
+	        imp_goods_ids = #{impGoodsIds,jdbcType=LONGVARCHAR},
+	      </if>
+		  <if test="isImpcolorsize != null" >
+	        is_impcolorsize = #{isImpcolorsize,jdbcType=CHAR},
+	      </if>
+	      <if test="isAudit != null" >
+	        is_audit = #{isAudit,jdbcType=CHAR},
+	        audit_id = #{auditId,jdbcType=INTEGER},
+	        audit_time = NOW(),
+	      </if>
+	      <if test="isImppurchase != null" >
+	        is_imppurchase = #{isImppurchase,jdbcType=CHAR},
+	      </if>
+	      <if test="isImpsecinfo != null" >
+	        is_impsecinfo = #{isImpsecinfo,jdbcType=CHAR},
+	      </if>
+	      <if test="isImpbcsimg != null" >
+	        is_impbcsimg = #{isImpbcsimg,jdbcType=CHAR},
+	      </if>
+	      <if test="isImppic != null" >
+	        is_imppic = #{isImppic,jdbcType=CHAR},
+	      </if>
+	      <if test="isImpmain != null" >
+	       	is_impmain = #{isImpmain,jdbcType=CHAR},
+	       </if>
+	       uptuser = #{uptUser,jdbcType=INTEGER},
+	       upttype = #{uptType,jdbcType=CHAR},
+	       upttime=NOW()
+	    WHERE
+	    <choose>
+			<when test="id != null">
+				id = #{id,jdbcType=INTEGER}
+			</when>
+			<otherwise>
+				<if test="impBatchNo != null">
+					 imp_batch_no =#{impBatchNo,jdbcType=VARCHAR}
+				</if>
+			</otherwise>
+		</choose>
+	</update>
+</mapper>

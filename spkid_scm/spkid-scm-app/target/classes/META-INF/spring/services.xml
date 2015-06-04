@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="GBK"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:webflow="http://www.springframework.org/schema/webflow-config"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/util	        http://www.springframework.org/schema/util/spring-util-3.0.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.xsd
+         http://cxf.apache.org/jaxws  http://cxf.apache.org/schemas/jaxws.xsd"
+	default-autowire="byName">
+	<!-- Import services begin-->
+	<util:map id="importTask">
+		<description>import Task define</description>
+		<entry key="GOODS_MAIN_INFORMATION" value="goodsMainImportTask" />
+		<entry key="GOODS_COLOR_SIZE" value="goodsColorSizeImportTask" />
+<!-- 		<entry key="GOODS_VERIFY" value="unitiveAuditTask" /> -->
+<!-- 		<entry key="GOODS_SUB_INFORMATION" value="goodsSubImportTask" /> -->
+<!-- 		<entry key="PURCHASE_ORDER" value="purchaseImportTask" /> -->
+		<entry key="GOODS_GALLERY" value="goodsGalleryImportTask" />
+		<entry key="GOODS_BCS_IMAGE" value="goodsBcsImageImportTask" />
+		<entry key="GOODS_CONSIGN" value="goodsConsignImportTask" />
+	</util:map>
+	<bean id="importServiceImpl" class="com.fclub.tpd.batch.importing.impl.ImportServiceImpl" scope="prototype" />
+	<bean id="goodsMainImportTask" class="com.fclub.tpd.batch.importing.goods.GoodsMainImportTask" scope="prototype"/>
+	<bean id="goodsColorSizeImportTask" class="com.fclub.tpd.batch.importing.goods.GoodsColorSizeImportTask" scope="prototype"/>
+<!-- 	<bean id="unitiveAuditTask" class="com.fclub.erp.biz.importing.goods.UnitiveAuditTask" scope="prototype"/> -->
+<!-- 	<bean id="goodsSubImportTask" class="com.fclub.erp.biz.importing.goods.GoodsSubImportTask" scope="prototype"/> -->
+<!-- 	<bean id="purchaseImportTask" class="com.fclub.erp.biz.importing.goods.PurchaseImportTask" scope="prototype"/> -->
+	<bean id="goodsGalleryImportTask" class="com.fclub.tpd.batch.importing.goods.GoodsGalleryImportTask" scope="prototype"/>
+	<bean id="goodsBcsImageImportTask" class="com.fclub.tpd.batch.importing.goods.GoodsBcsImageImportTask" scope="prototype"/>
+	<bean id="goodsConsignImportTask" class="com.fclub.tpd.batch.importing.goods.GoodsConsignImportTask" scope="prototype"/>
+	
+    
+    <bean id="cacheDriver" class="com.fclub.cache.spring.CacheDriverFactoryBean">
+    	<property name="className" value="${fclub.cache.class.name}" />
+    	<property name="cacheId" value="${fclub.cache.id}" />
+    	<property name="configLocation" value="${fclub.cache.config.location}" />
+    	<property name="threadPoolSize" value="${fclub.cache.thread.pool.size}" />
+    </bean>
+</beans>

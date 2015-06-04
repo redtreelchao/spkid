@@ -1,0 +1,98 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>编辑尺寸图导入</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/fclub.validate.js"></script>
+<script type="text/javascript" src="/js/tpd/bcsImp.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">#if($readOnly == 0) 编辑尺寸图导入 #else 查看尺寸图导入 #end</span>
+		<span class="right add_t"><a class="add" href="/bcsimp/list/main.htm" >返回列表</a></span>
+	</div>
+	<div class="clear"></div>
+	<div class=" title_row dark_blue">
+		#if($readOnly == 2)
+		<span class="red_dian">尺寸图导入已被使用，无法编辑</span>
+		#end
+		<form id="processForm" action="/bcsimp/edit.htm" method="post" enctype="multipart/form-data">
+		<input type="hidden" id="impId" name="impId" value="$bcsImp.impId"/>
+		<table width="100%" cellspacing="1" cellpadding="3">
+			<tbody>
+			<tr>
+				<td class="label dark_blue">商品品牌：</td>
+				<td>
+					<select validate="required" id="brandId" name="brandId" disabled="true">
+                    	<option value="">请选择...</option>
+                    	#foreach($brand in $brandList)
+                        <option value ="$brand.brandId" #if($brand.brandId==$bcsImp.brandId)selected#end>$brand.brandName</option>
+                    	#end
+                    </select>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">分类：</td>
+				<td>
+					<select validate="required" id="catId" name="catId" disabled="true">
+                    	<option value="">请选择...</option>
+                    	#foreach($item in $categoryList)
+                    		##<option value ="$item.categoryId" #if($item.categoryId==$bcsImp.catId)selected#end>$item.categoryName</option>
+                    		#foreach($info in $item.getSubCategoryList())
+                    			<option value ="$info.categoryId" #if($info.categoryId==$bcsImp.catId)selected#end>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$info.categoryName</option>
+                    		#end
+                    	 #end
+                    </select>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">性别：</td>
+				<td>
+					<select validate="required" id="sex" name="sex" disabled="true">
+                    	<option value="">请选择...</option>
+                    	 #foreach($item in $sexMap.keySet())
+                    		#set($val=$sexMap.get($item))
+                    		<option value ="$item" #if($item==$bcsImp.sex)selected#end>$val</option>
+                    	 #end
+                    </select>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">尺寸图：</td>
+				<td>
+					<input validate="required" type="file" id="upload_file" name="file" />
+					<span class="red_dian">*</span>
+					#if($!bcsImp.imageUrl)
+					<img src="${tpdHelper.getImageDomain()}$bcsImp.imageUrl" width="50px" height="50px"/>
+					#end
+				</td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2"><br>
+					#if($readOnly == 0)
+					<input type="button" value=" 确定 " class="button" onclick="doSave();">
+					<input type="reset" value=" 重置 " class="button">
+					#end
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+<script type="text/javascript">
+$(function(){ 
+	if(${readOnly} != 0) {
+		$("#processForm :input").filter(".inputBorder").attr("readonly","readonly");
+		$("#processForm :input").filter(".inputBorder").addClass("inputBorder_readOnly");
+	}
+});
+</script>
+</body>
+</html>

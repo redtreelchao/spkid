@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+##set($adminDomain = ${constants.getAdminDomain()})
+##set($imageDomain = ${constants.getImageDomain()})
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>登录-妈咪树-供应商平台管理系统</title>
+<link href="/css/common.css" rel="stylesheet" type="text/css"/>
+<link href="/css/login.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/fclub.validate.js"></script>
+<script type="text/javascript" src="/js/login.js"></script>
+<script type="text/javascript">
+if (top.location != self.location){
+    top.location=self.location;     
+}
+</script>
+</head>
+<body>
+<div id="loginBox" class="loginBox">
+    <div class="login-main">
+        <div class="login_title">
+            <span style="font-size:26px; font-family:'微软雅黑';">SCM-供应商管理系统</span>
+        </div>
+        <form id="loginForm" name="loginForm" action="/login.htm" method="post">
+            <div id="login_input" class="login_input">
+                <div class="login_inputBox">
+                    <div class="title">用户名</div>
+                    <div class="input">
+                        <input type="text" validate="required" id="userName" name="userName">
+                    </div>
+                </div>
+                <div class="login_inputBox">
+                    <div class="title">密&nbsp;&nbsp;&nbsp;码</div>
+                    <div class="input">
+                        <input type="password" id="password" validate="required" name="password">
+                    </div>
+                </div>
+				<div class="login_inputBox login_yanzheng">
+					<div class="title">验证码</div>
+					<div class="input">
+                        <input type="text" validate="required" id="captcha" name="captcha">
+                    </div>
+                    <img src="/login/captcha.htm" alt="验证码图片" title="验证码图片" onclick="changeCaptcha(this);">
+				</div>
+                <div class="autoLoginBox">
+                    ##<input type="checkbox" id="autoLogin" name="autoLogin" value="true" style="border:none;">
+                    ##<label id="validateBox" for="autoLogin">下次自动登录(2周内有效)</label>
+					<input type="checkbox" id="adminLogin" name="adminLogin" value="1" style="border:none;" />
+                    <label id="validateBox" for="adminLogin">管理员登录</label>
+                </div>
+            </div>
+            <div class="login-button" onclick="doLogin();">登录</div>
+            <div class="ieMsg">
+                <span>推荐使用chrome,firefox浏览器,以达到最佳浏览效果.</span>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+$(document).keydown(function(event){
+	if(event.keyCode == 13) {
+	   doLogin();
+	}
+});
+$(function () {
+    $('.login_title').addClass('show');
+    $('#loginForm').addClass('show');
+    $('.login-bg img').mousedown(function (event) {
+        stopDef(event);
+    });
+    // 显示ie提示信息
+    if (navigator.userAgent.indexOf('MSIE')>-1) $('.ieMsg').show();
+});
+function stopDef(event) {
+    if (event.preventDefault) {event.preventDefault();}
+    else {event.returnValue = false;}
+}
+</script>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ReportFormMapper">
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.ReportForm">
+		<id column="goods_sn" property="goodsSn" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="confirm_time" property="confirmTime" jdbcType="VARCHAR" />
+		<result column="color_name" property="colorName" jdbcType="VARCHAR" />
+		<result column="size_name" property="sizeName" jdbcType="VARCHAR" />
+		<result column="goods_amount" property="goodsAmount" jdbcType="DECIMAL" />
+		<result column="goods_number" property="goodsNumber" jdbcType="INTEGER" />
+		<result column="brand_id" property="brandId" jdbcType="INTEGER" />
+		<result column="goods_num" property="totalGoodsNum" jdbcType="INTEGER" />
+		<result column="goods_amt" property="totalGoodsAmt" jdbcType="DOUBLE" />
+	</resultMap>
+	
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+	select fg.goods_sn,b.brand_name,FROM_UNIXTIME(oi.confirm_time+28800)
+	confirm_time
+	,fc.color_name,fs.size_name,sum(og.goods_price*og.goods_number) goods_amount,sum(og.goods_number)
+	goods_number
+	from fclub.fc_order_info oi
+	left join fclub.fc_order_goods og on oi.order_id=og.order_id
+	left join fclub.fc_goods fg on fg.goods_id=og.goods_id
+	left join fclub.fc_brand b on b.brand_id=fg.brand_id
+	left join fclub.fc_flc_color fc on og.color_id=fc.color_id
+	left join fclub.fc_flc_size fs on og.size_id=fs.size_id
+	where 1=1
+	and oi.order_status!=4
+	 <if test="param.brandId != 0 ">
+		and b.brand_id =#{param.brandId}
+		</if>
+		<if test="param.providerId != null ">
+		and fg.provider_id = #{param.providerId}
+		</if>
+		<if test="param.createDateBegin != null and param.createDateBegin != '' ">
+		<![CDATA[ and oi.confirm_time>=UNIX_TIMESTAMP(#{param.createDateBegin})-28800  ]]>
+		</if>
+		<if test="param.createDateEnd != null and param.createDateEnd != '' ">
+		<![CDATA[ and oi.confirm_time<=UNIX_TIMESTAMP(#{param.createDateEnd})-28800 ]]>
+		</if>
+		GROUP BY og.goods_id,og.color_id,og.size_id 
+		ORDER BY b.brand_id,og.goods_id,og.color_id,og.size_id
+	</select>
+	
+	
+	<select id="queryExportReportData" resultMap="BaseResultMap" parameterType="com.fclub.tpd.dataobject.ReportForm">
+	select fg.goods_sn,b.brand_name,FROM_UNIXTIME(oi.confirm_time+28800)
+	confirm_time
+	,fc.color_name,fs.size_name,sum(og.goods_price*og.goods_number) goods_amount,sum(og.goods_number)
+	goods_number
+	from fclub.fc_order_info oi
+	left join fclub.fc_order_goods og on oi.order_id=og.order_id
+	left join fclub.fc_goods fg on fg.goods_id=og.goods_id
+	left join fclub.fc_brand b on b.brand_id=fg.brand_id
+	left join fclub.fc_flc_color fc on og.color_id=fc.color_id
+	left join fclub.fc_flc_size fs on og.size_id=fs.size_id
+	where 1=1
+	and oi.order_status!=4
+		<if test="brandId != 0 ">
+		and b.brand_id =#{brandId}
+		</if>
+		<if test="providerId != null ">
+		and fg.provider_id = #{providerId}
+		</if>
+		<if test="createDateBegin != null and createDateBegin != '' ">
+		<![CDATA[ and oi.confirm_time>=UNIX_TIMESTAMP(#{createDateBegin})-28800  ]]>
+		</if>
+		<if test="createDateEnd != null and createDateEnd != '' ">
+		<![CDATA[ and oi.confirm_time<=UNIX_TIMESTAMP(#{createDateEnd})-28800 ]]>
+		</if>
+		GROUP BY og.goods_id,og.color_id,og.size_id 
+		ORDER BY b.brand_id,og.goods_id,og.color_id,og.size_id
+	</select>
+	
+	
+	
+	<select id="resultTotal" resultMap="BaseResultMap" parameterType="com.fclub.tpd.dataobject.ReportForm" >
+	select sum(og.goods_number)
+	goods_num,sum(og.goods_number*og.goods_price) goods_amt from
+	fclub.fc_order_info oi
+	left join fclub.fc_order_goods og on oi.order_id=og.order_id
+	left join fclub.fc_goods fg on fg.goods_id=og.goods_id
+	left join fclub.fc_brand b on b.brand_id=fg.brand_id
+	where 1=1
+	and oi.order_status!=4
+	 <if test="brandId != 0 ">
+		and b.brand_id =#{brandId}
+		</if>
+		<if test="providerId != null ">
+		and fg.provider_id = #{providerId}
+		</if>
+		<if test="createDateBegin != null and createDateBegin != '' ">
+		<![CDATA[ and oi.confirm_time>=UNIX_TIMESTAMP(#{createDateBegin})-28800  ]]>
+		</if>
+		<if test="createDateEnd != null and createDateEnd != '' ">
+		<![CDATA[ and oi.confirm_time<=UNIX_TIMESTAMP(#{createDateEnd})-28800 ]]>
+		</if>
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

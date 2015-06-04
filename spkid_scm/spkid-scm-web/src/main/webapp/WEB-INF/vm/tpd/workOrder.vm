@@ -1,0 +1,63 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>工单</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/jquery.form.pack.js"></script>
+<script type="text/javascript" src="/js/chilltip.js"></script>
+<script type="text/javascript" src="/js/page.js"></script>
+<script type="text/javascript" src="/js/tpd/workOrder.js"></script>
+<script type="text/javascript" src="/js/datepicker/WdatePicker.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">工单管理</span>
+		<span class="right add_t"><a class="add" href="/workorder/addTo.htm" >新增</a></span>
+	</div>
+	
+	<div class="clear"></div>
+	
+	<div id="searchPanel" class="search_row dark_blue">
+		<form id="searchForm" action="/workorder/list/query.htm" method="post" style="margin: 0;">
+			<input type="hidden" id="pageSize" name="pageSize" value="$!page.pageSize" />
+			<input type="hidden" id="pageNo" name="pageNo" value="$!page.pageNo" />
+			<input type="hidden" id="order" name="order" value="$!page.order" />
+			<input type="hidden" id="orderBy" name="orderBy" value="$!page.orderBy" />
+			
+			##在此下面加搜索条件
+			发起方:    
+			#dictSelect("WorkOrder.woType" "woType" "" false true)
+			工单状态：  
+			<select id="woStatus" name="woStatus">
+        		<option value="-1">---请选择---</option>
+    			<option value="0">草稿</option>
+        		<option value="1">待处理</option>
+        		<option value="2">已处理</option>
+				#if($!tpdHelper.isAdmin())
+        		<option value="3">待审核</option>
+        		<option value="4">已作废</option>
+				#end
+        	</select>
+			##dictSelect("WorkOrder.woStatus" "woStatus" "" false true)
+			订单号：        <input type="text" class="enterQuery inputBorder" name="orderSn" />
+			工单号：        <input type="text" class="enterQuery inputBorder" name="woNo" />
+			创建时间:  
+			<input type="text" class="enterQuery input black Wdate" name="startTime"  onClick="WdatePicker()" />--
+			<input type="text" class="enterQuery input black Wdate" name="endTime"  onClick="WdatePicker()" />
+			
+			<input type="button" class="button" value="搜索" onclick="submitSearch();">
+		</form>
+	</div>
+	<div class="clear"></div>
+	<div id="contentPanel"></div>
+</div>
+
+#pageScript(20)
+
+</body>
+</html>

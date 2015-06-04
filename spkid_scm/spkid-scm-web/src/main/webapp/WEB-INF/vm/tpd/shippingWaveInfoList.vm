@@ -1,0 +1,68 @@
+<div id="listDiv">
+	#foreach( $info in $shippingPackets) 
+	<div class="listBlockBox">
+	<table id="dataTableA" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<th >订单号</th>
+				<th >运单号</th>
+				<th >物流公司</th>
+				<th >订单客审时间</th>
+				<th >订单导出时间</th>
+				<th >订单发货时间</th>
+				<th >发货状态</th>
+				<th >送货地址</th>
+				<th >配送地址</th>
+				<th >收件人</th>
+				<th >手机号码</th>
+				<th >电话号码</th>
+				<th >预约送货时间</th>
+				<th >客户备注</th>
+			</tr>
+			<tr>
+				<td align="center"> $!info.orderSn </td>
+				<td align="center"> $!info.packetSn </td>
+				<td align="center"> $!info.shippingName </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.orderConfirmTime)  </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.createTime)  </td>
+				<td align="center"> $!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.finishTime)  </td>
+				<td align="center"> #dictShow("ShippingPacket.status" $!info.status) 
+					#if($info.virtualShipping)[<span style="color:red;">虚</span>]#end 
+				</td>
+				<td align="center"> $!info.region </td>
+				<td align="center"> $!info.address </td>
+				<td align="center"> $!info.consignee </td>
+				<td align="center"> $!info.mobile </td>
+				<td align="center"> $!info.tel </td>
+				<td align="center"> $!info.bestTime </td>
+				<td align="center"> $!info.postscript </td>
+			</tr>
+		</tbody>
+	</table>
+	<table id="dataTableB" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+		<tr>
+			<th >商品款号</th>
+			<th >商品名称</th>
+			<th >品牌</th>
+			<th >供应商货号</th>
+			<th >颜色-尺码</th>
+			<th >商品数量</th>
+			<th >单价</th>
+			<th >商品条码</th>
+		</tr>
+		#foreach($goods in $info.productList)
+		<tr>
+			<td align="center"> $!goods.sku </td>
+			<td align="center"> $!goods.productName </td>
+			<td align="center"> $!goods.brandName </td>
+			<td align="center"> $!goods.providerProductcode </td>
+			<td align="center"> $!goods.colorName - $!goods.sizeName </td>
+			<td align="center"> $!goods.productNum </td>
+			<td align="center"> $!goods.shopPrice </td>
+			<td align="center"> $!goods.providerBarcode </td>
+		</tr>
+		#end
+    </table>
+    </div>
+	#end
+</div>

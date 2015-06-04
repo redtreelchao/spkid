@@ -1,0 +1,54 @@
+<div id="listDiv">
+	<table id="dataTable" class="dataTable" width="100%" layoutH="138" cellpadding="0" cellspacing="0">
+		<tbody>
+			<tr>
+				<th width="20" style="display:none">ID</th>
+				<th width="2%">&nbsp;</th>
+				<th width="6%">文件名</th>
+				<th	width="10%">导入时间</th>
+				<th width="3%">查看结果</th>
+				<th width="8%">操作</th>
+			</tr>
+			#foreach($info in $page.result)
+			<tr >
+				<td style="display:none">$info.id</td>
+				<td align="center">
+					#if($info.isImpmain() == true)<span class="icon_success"></span>#else<span class="icon_fail"></span>#end
+				</td>
+				<td >&nbsp;$!info.maindataFilename</td>
+				<td >&nbsp;$!dateTool.format('yyyy-MM-dd HH:mm:ss',$!info.crtTime)</td>
+				<td align="center">
+                    <a href="/batchImport/resultDatas.htm?batchNo=$!{info.impBatchNo}&type=01" target="_blank" class="icon_viewReport" /></label>
+				</td>
+				<td >
+					<a href="/batchImport/downloadColorSize.htm?batchNo=$info.impBatchNo" target="_blank">下载颜色尺寸导入模板</a>
+					| <a href="/batchImport/exportImageDir.htm?batchNo=$info.impBatchNo" target="_blank">导出商品图片上传目录</a>
+                </td>
+			</tr>
+			#end
+		</tbody>
+	</table>
+</div>
+#page()
+<script type="text/javascript">
+    $("a.thickbox_LAS").click(function(){
+      var t = this.title;
+	  var url = this.href;
+	  var currDate = new Date();
+	  url += "&v="+currDate.getTime();
+	  url += Math.random();
+      TB_show(t,url,submitSearch_MAIN);
+      this.blur();
+      return false;
+    });
+	
+	function toExportImageDir(batchNo) {
+		var url = "/batchImport/toExportImageDir.htm";
+    	var data = "batchNo=" + batchNo + "&height=120&width=450";
+    	var href=url + "?" + data; 
+    	
+    	var title = "导出商品图片上传目录";
+        TB_show(title, href);
+        this.blur();
+	}
+</script>

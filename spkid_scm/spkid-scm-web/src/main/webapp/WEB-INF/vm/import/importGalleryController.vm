@@ -1,0 +1,146 @@
+<table width="100%" cellspacing="0" cellpadding="0" align="center" style="display:none;" class="config_tab">
+    <tbody>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="importTable">
+                    <tbody>
+                       <tr>
+                            <th align="left">
+                                 <font class="bold">批量导入流程</font>
+                               ## <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="center">
+                               <div class="buttonElement">
+                                    <input #if($gr)class="none_color"#else onclick="optionGallery();"#end type="button" value="商品图"/>
+									#if($gr)
+									<div class="runing_color">
+                                        <div class="StatBarButtonDiv" id="GS_BAR" type="06"></div>
+                                    </div>
+									<script type="text/javascript">
+										roll("#GS_BAR");
+                                    </script>
+									#end
+							   </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="clear"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" cellspacing="0" cellpadding="3" align="center" class="tips_row">
+                    <tbody>
+                        <tr>
+                            <th align="left">
+                                <font class="bold">导入流程说明</font>
+                                <font class="close">隐藏/展开</font>
+                            </th>
+                        </tr>
+                        <tr class="flow">
+                            <td align="left" class="tips_row_text dark_blue">
+								<div style="padding-left:10px;">
+								请将需要导入的商品图片，放入：[FTP根目录]${tpdHelper.getImageInPath()} 目录下；目录不存在则创建此目录
+                                <br>
+								文件夹命名规则：货号-颜色名称-款号;图片按顺序命名，如：1.jpg, 2.jpg；图片为方图，规格：850*850像素。
+								<br>
+            					导入完成后点击 "查看报告",显示商品图片的导入状态(没有错误信息表示导入成功)
+								<br>
+								商品图片目录可从"主要信息导入"中的"导出商品图片上传目录"中下载。
+								<br>
+								<a class="edit orange" href='/cachefile/FileZilla_3.7.3_win32-setup.exe' target="_blank">下载FTP工具</a>
+								</div>
+							</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+		<tr>
+			<td>
+                <div class="clear"></div>
+            </td>
+		</tr>
+		<tr>
+            <td>
+				<div class="search_row dark_blue">
+    				<form id="searchFormGallery" name="search" action="/batchImport/list/query.htm" method="post">
+            			<input type="hidden" id="batch_no06" name="type" value="06" />
+						<input type="hidden" id="pageSize06" name="pageSize" value="$!page.pageSize" />
+            			<input type="hidden" id="pageNo06" name="pageNo" value="$!page.pageNo" />
+            			<input type="hidden" id="order06" name="order" value="$!page.order" />
+            			<input type="hidden" id="orderBy06" name="orderBy" value="$!page.orderBy" />
+            			##<div class="search_row_element"><span>批次号：</span><input type="text" id="batchNo" name="batchNo" class="input"/></div>
+            			<div class="search_row_element">
+            				导入时间：<input type="text" name="importDateBegin" class="enterQuery input black Wdate" onClick="WdatePicker()" />
+            				- 
+            				<input type="text" name="importDateEnd" class="enterQuery input black Wdate" onClick="WdatePicker()" />
+            			</div>
+            			<div class="search_row_element"><input type="button" class="button" value="搜索" onclick="submitSearch_cs();"></div>
+            		</form>
+                </div>
+            </td>
+        </tr>
+        <tr>
+			<td>
+                <div class="clear"></div>
+            </td>
+		</tr>
+		<tr>
+			<td>
+				<div id="contentPanel_06"></div>
+			</td>
+		</tr>	
+    </tbody>
+</table>
+	
+<script type="text/javascript">
+function submitSearch_gallery() {
+	var pageNo = $("#pageNo06").val();
+	if(pageNo == null || pageNo < 1)
+		$("#pageNo06").val("1");
+	if($("#selePageSize").val()) {
+    	$("#pageSize06").val($("#selePageSize").val());
+	}
+	$("#searchFormGallery").ajaxSubmit(function(result) {
+		$("#contentPanel_06").html(result); 
+	});
+}
+function jumpPage_g(pageNo) {
+	$("#pageNo06").val(pageNo);
+	$("#pageSize06").val($("#selePageSize").val());
+	$("#searchFormGallery").ajaxSubmit(function(result) {
+		$("#contentPanel_06").html(result);
+	});
+}
+function jumpPageTo_g() {
+	var index = $("#pageTo").val();
+	index = parseInt(index);
+	if (index > 0) {
+		jumpPage_g(index);
+	}
+}
+function changePageSize_g() {
+	$("#pageSize06").val($("#selePageSize").val());
+	$("#searchFormGallery").ajaxSubmit(function(result) {
+		$("#contentPanel_06").html(result);
+	});
+}
+
+$(function() {
+    $(".enterQuery").bind('keydown', function(event){
+    	if(event.keyCode==13){
+    		submitSearch_gallery();
+    	}
+    });
+    $("#pageSize06").val("20");
+    submitSearch_gallery();
+});
+</script>

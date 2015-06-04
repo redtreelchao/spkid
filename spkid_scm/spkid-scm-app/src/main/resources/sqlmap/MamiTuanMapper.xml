@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.MamiTuanMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.MamiTuan">
+		<id column="tuan_id" property="tuanId" jdbcType="INTEGER" />
+		<result column="tuan_name" property="tuanName" jdbcType="VARCHAR" />
+		<result column="buy_num" property="buyNum" jdbcType="INTEGER" />
+		<result column="tuan_price" property="tuanPrice" jdbcType="DECIMAL" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="tuan_online_time" property="tuanOnlineTime" jdbcType="TIMESTAMP" />
+		<result column="tuan_offline_time" property="tuanOfflineTime" jdbcType="TIMESTAMP" />
+		<result column="tuan_desc" property="tuanDesc" jdbcType="VARCHAR" />
+		<result column="userdefine1" property="userDefine1" jdbcType="VARCHAR" />
+		<result column="userdefine2" property="userDefine2" jdbcType="VARCHAR" />
+		<result column="userdefine3" property="userDefine3" jdbcType="VARCHAR" />
+		<result column="img_315_207" property="img315207" jdbcType="VARCHAR" />
+		<result column="img_168_110" property="img168110" jdbcType="VARCHAR" />
+		<result column="img_500_450" property="img500450" jdbcType="VARCHAR" />
+		<result column="product_discount" property="productDiscount" jdbcType="DECIMAL" />
+		<result column="tuan_sort" property="tuanSort" jdbcType="INTEGER" />
+		<result column="op_stop_aid" property="opStopAid" jdbcType="INTEGER" />
+		<result column="op_stop_time" property="opStopTime" jdbcType="TIMESTAMP" />
+		<result column="op_add_aid" property="opAddAid" jdbcType="INTEGER" />
+		<result column="op_add_time" property="opAddTime" jdbcType="TIMESTAMP" />
+		<result column="op_check_aid" property="opCheckAid" jdbcType="INTEGER" />
+		<result column="op_check_time" property="opCheckTime" jdbcType="TIMESTAMP" />
+		<result column="op_update_aid" property="opUpdateAid" jdbcType="INTEGER" />
+		<result column="op_update_time" property="opUpdateTime" jdbcType="TIMESTAMP" />	
+		<result column="tuan_img" property="tuanImg" jdbcType="VARCHAR" />
+		
+		<result column="product_id" property="productId" jdbcType="INTEGER" />
+		<association property="product" resultMap="com.fclub.tpd.mapper.ProductMapper.BaseResultMap" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.tuan_id, t.product_id, t.tuan_name, t.buy_num, t.tuan_price, t.status, t.tuan_online_time, t.tuan_offline_time, t.tuan_desc, 
+		t.userdefine1, t.userdefine2, t.userdefine3, t.img_315_207, t.img_168_110, t.img_500_450, t.tuan_img, t.product_discount, t.tuan_sort, 
+		t.op_stop_aid, t.op_stop_time, t.op_add_aid, t.op_add_time, t.op_check_aid, t.op_check_time, t.op_update_aid, t.op_update_time  
+	</sql>
+	
+	<select id="get" parameterType="Integer" resultMap="BaseResultMap">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM ty_mami_tuan t 
+		WHERE t.tuan_id = #{tuanId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByName" parameterType="String" resultMap="BaseResultMap">
+		SELECT 
+			<include refid="Base_Column_List" /> 
+		FROM ty_mami_tuan t 
+		WHERE t.tuan_name = #{tuanName,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.MamiTuan" >
+		INSERT INTO ty_mami_tuan (
+			product_id, 
+			tuan_name, 
+			buy_num,
+			tuan_price, 
+			status, 
+			tuan_online_time, 
+			tuan_offline_time, 
+			tuan_desc, 
+			userdefine1, 
+			userdefine2, 
+			userdefine3, 
+			tuan_img, 
+			product_discount, 
+			tuan_sort, 
+			op_add_aid, 
+			op_add_time
+		) values (
+			#{productId,jdbcType=INTEGER}, 
+			#{tuanName,jdbcType=VARCHAR},
+			#{buyNum,jdbcType=INTEGER}, 
+			#{tuanPrice,jdbcType=DECIMAL}, 
+			#{status,jdbcType=INTEGER}, 
+			#{tuanOnlineTime,jdbcType=TIMESTAMP}, 
+			#{tuanOfflineTime,jdbcType=TIMESTAMP}, 
+			#{tuanDesc,jdbcType=VARCHAR}, 
+			#{userDefine1,jdbcType=VARCHAR}, 
+			#{userDefine2,jdbcType=VARCHAR}, 
+			#{userDefine3,jdbcType=VARCHAR}, 
+			#{tuanImg,jdbcType=VARCHAR}, 
+			#{productDiscount,jdbcType=DECIMAL}, 
+			#{tuanSort,jdbcType=INTEGER}, 
+			#{opAddAid,jdbcType=INTEGER}, 
+			#{opAddTime,jdbcType=TIMESTAMP} 
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.MamiTuan" >
+		update ty_mami_tuan 
+		set 
+		<if test="productId != null">
+			product_id = #{productId,jdbcType=INTEGER},
+		</if>
+		<if test="tuanName != null">
+			tuan_name = #{tuanName,jdbcType=VARCHAR},
+		</if>
+		<if test="buyNum != null">
+			buy_num = #{buyNum,jdbcType=INTEGER},
+		</if>
+		<if test="tuanPrice != null">
+			tuan_price = #{tuanPrice,jdbcType=DECIMAL},
+		</if>
+		<if test="status != null">
+			status = #{status,jdbcType=INTEGER},
+		</if>
+		<if test="tuanOnlineTime != null">
+			tuan_online_time = #{tuanOnlineTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="tuanOfflineTime != null">
+			tuan_offline_time = #{tuanOfflineTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="tuanDesc != null">
+			tuan_desc = #{tuanDesc,jdbcType=VARCHAR},
+		</if>
+		<if test="tuanImg != null">
+			tuan_img = #{tuanImg,jdbcType=VARCHAR},
+		</if>
+		<if test="productDiscount != null">
+			product_discount = #{productDiscount,jdbcType=DECIMAL},
+		</if>
+		<if test="tuanSort != null">
+			tuan_sort = #{tuanSort,jdbcType=INTEGER},
+		</if>
+		<if test="opStopAid != null and opStopAid > 0">
+			op_stop_aid = #{opStopAid,jdbcType=INTEGER},
+			op_stop_time = NOW(), 
+		</if>
+		<if test="opCheckAid != null and opCheckAid > 0">
+			op_check_aid = #{opCheckAid,jdbcType=INTEGER},
+			op_check_time = NOW(),
+		</if>
+		<if test="opUpdateAid != null and opUpdateAid > 0">
+			op_update_aid = #{opUpdateAid,jdbcType=INTEGER},
+			op_update_time = NOW()
+		</if>
+		where tuan_id = #{tuanId,jdbcType=INTEGER}
+	</update>
+	
+	<delete id="delete" parameterType="Integer">
+		DELETE FROM ty_mami_tuan WHERE tuan_id = #{tuanId,jdbcType=INTEGER}
+	</delete>
+	
+	<select id="findPage" resultMap="BaseResultMap">
+		SELECT 
+			<include refid="Base_Column_List" />,
+			p.product_name AS goods_name, p.product_sn AS goods_sn  
+		FROM ty_mami_tuan t 
+		INNER JOIN ty_product_info p ON p.product_id = t.product_id 
+		<where>
+			<if test="param.provider != null">
+				p.provider_id = #{param.provider.providerId,jdbcType=INTEGER} 
+			</if>
+			<if test="param.tuanName != null and param.tuanName != '' ">
+				AND t.tuan_name LIKE '%${param.tuanName}%' 
+			</if>
+			<if test="param.product != null and param.product != '' ">
+				AND p.product_sn LIKE '%${param.product.goodsSn}%' 
+			</if>
+		</where>
+	</select>
+	
+	<select id="getCountByProductId" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(1)
+		FROM ty_mami_tuan t
+		WHERE t.product_id = #{productId,jdbcType=INTEGER}
+		  AND t.status IN (0,1,4)
+	</select>
+	
+</mapper>

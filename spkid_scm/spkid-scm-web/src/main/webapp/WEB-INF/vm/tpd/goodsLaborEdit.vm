@@ -1,0 +1,113 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>编辑商品二级表</title>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/main.css" />
+<link type="text/css" rel="stylesheet" href="/css/plugins/thickbox.css" />
+<script type="text/javascript" src="/js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="/js/MaskLayer.js"></script>
+<script type="text/javascript" src="/js/fclub.validate.js"></script>
+<script type="text/javascript" src="/js/tpd/goodsLabor.js"></script>
+</head>
+<body>
+<div class="main">
+	<div class="main_title">
+		<span class="left bold main_title_top dark_blue">#if($readOnly == 0) 编辑商品二级表 #else 查看商品二级表 #end</span>
+		<span class="right add_t"><a class="add" href="/goodslabor/list/main.htm" >返回列表</a></span>
+	</div>
+	<div class="clear"></div>
+	<div class=" title_row dark_blue">
+		#if($readOnly == 2)
+		<span class="red_dian">商品二级表已被使用，无法编辑</span>
+		#end
+		<form id="processForm" action="/goodslabor/edit.htm" method="post" >
+		<input type="hidden" id="glId" name="glId" value="$goodsLabor.glId"/>
+		<table width="100%" cellspacing="1" cellpadding="3">
+			<tbody>
+			<tr>
+				<td class="label dark_blue">商品ID</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" value="$!goodsLabor.goodsId" name="goodsId" id="goodsId" />
+					<span class="red_dian">*</span>
+					<span id="goodsIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">颜色ID</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" value="$!goodsLabor.colorId" name="colorId" id="colorId" />
+					<span class="red_dian">*</span>
+					<span id="colorIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">尺寸ID</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" value="$!goodsLabor.sizeId" name="sizeId" id="sizeId" />
+					<span class="red_dian">*</span>
+					<span id="sizeIdTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">是否拍摄</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" value="$!goodsLabor.isPic" name="isPic" id="isPic" />
+					<span class="red_dian">*</span>
+					<span id="isPicTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">代销库存:-2--不限量代销;-1:不代销;>=0限量代销</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" value="$!goodsLabor.consignNum" name="consignNum" id="consignNum" />
+					<span class="red_dian">*</span>
+					<span id="consignNumTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">大的在前面</td>
+				<td>
+					<input type="text" validate="required" class="inputBorder" value="$!goodsLabor.sortOrder" name="sortOrder" id="sortOrder" />
+					<span class="red_dian">*</span>
+					<span id="sortOrderTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">供应商条码(妈咪树条码)</td>
+				<td>
+					<input type="text"  class="inputBorder" value="$!goodsLabor.providerBarcode" name="providerBarcode" id="providerBarcode" />
+					<span id="providerBarcodeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label dark_blue">供应商条码</td>
+				<td>
+					<input type="text"  class="inputBorder" value="$!goodsLabor.tpdProviderBarcode" name="tpdProviderBarcode" id="tpdProviderBarcode" />
+					<span id="tpdProviderBarcodeTip" style="display:none" class="red_dian"></span>
+				</td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2"><br>
+					#if($readOnly == 0)
+					<input type="button" value=" 确定 " class="button" onclick="doSave();">
+					<input type="reset" value=" 重置 " class="button">
+					#end
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+<script type="text/javascript">
+$(function(){ 
+	if(${readOnly} != 0) {
+		$("#processForm :input").filter(".inputBorder").attr("readonly","readonly");
+		$("#processForm :input").filter(".inputBorder").addClass("inputBorder_readOnly");
+	}
+});
+</script>
+</body>
+</html>

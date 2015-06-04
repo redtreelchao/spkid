@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ImportImgRecordMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.ImportImgRecord">
+		<id column="id" property="irId" jdbcType="INTEGER" />
+		<result column="product_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="product_sn" property="goodsSn" jdbcType="VARCHAR" />
+		<result column="color_id" property="colorId" jdbcType="INTEGER" />
+		<result column="color_sn" property="colorCode" jdbcType="VARCHAR" />
+		<result column="create_admin" property="irAid" jdbcType="INTEGER" />
+		<result column="create_date" property="irTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap type="com.fclub.tpd.dataobject.erp.Admin" id="admin">
+		<id column="admin_id" property="adminId" />
+		<result column="admin_name" property="userName" />
+	</resultMap>
+	
+	<select id="findBatchImportAdmin" resultMap="admin">
+		select distinct
+		admin_id, admin_name from 
+		ty_product_gallery_imp_record
+		left join
+		ty_admin_info on create_admin = admin_id order by create_admin desc
+	</select>
+	
+	<sql id="Base_Column_List">
+		id,
+		product_id,
+		product_sn,
+		color_id,
+		color_sn,
+		create_admin,
+		create_date
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_product_gallery_imp_record
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_product_gallery_imp_record
+		where 1=1
+		<if test="param.startTime != null and param.startTime != '' ">
+			and create_date <![CDATA[>=]]> str_to_date('${param.startTime} 00:00:00', '%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="param.endTime != null and param.endTime != '' ">
+			and create_date <![CDATA[<=]]> str_to_date('${param.endTime} 23:59:59', '%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="param.irAid != null and param.irAid != 0">
+			and create_admin = ${param.irAid}
+		</if>
+		<if test="param.goodsIdList != null">
+			and product_id in
+			<foreach collection="param.goodsIdList" item="goodsId" open="(" separator="," close=")">
+				${goodsId}
+			</foreach>
+		</if>
+		order by id desc
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ty_product_gallery_imp_record
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.ImportImgRecord">
+		insert into ty_product_gallery_imp_record (
+			product_id,
+			product_sn,
+			color_id,
+			color_sn,
+			create_admin,
+			create_date
+		)
+		values (
+			#{goodsId,jdbcType=INTEGER},
+			#{goodsSn,jdbcType=VARCHAR},
+			#{colorId,jdbcType=INTEGER},
+			#{colorCode,jdbcType=VARCHAR},
+			#{irAid,jdbcType=INTEGER},
+			#{irTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.ImportImgRecord">
+		update ty_product_gallery_imp_record
+		<set>
+		<if test="goodsId != null">
+		product_id = #{goodsId,jdbcType=INTEGER},
+		</if>
+		<if test="goodsSn != null">
+		product_sn = #{goodsSn,jdbcType=VARCHAR},
+		</if>
+		<if test="colorId != null">
+		color_id = #{colorId,jdbcType=INTEGER},
+		</if>
+		<if test="colorCode != null">
+		color_sn = #{colorCode,jdbcType=VARCHAR},
+		</if>
+		<if test="irAid != null">
+		create_admin = #{irAid,jdbcType=INTEGER},
+		</if>
+		<if test="irTime != null">
+		create_date = #{irTime,jdbcType=TIMESTAMP}
+		</if>
+		</set>
+		where id = #{irId,jdbcType=INTEGER}
+	</update>
+</mapper>

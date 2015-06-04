@@ -1,0 +1,249 @@
+<div id="listDiv">
+		<table id="dataTable" class="dataTable goodsList" width="100%" cellpadding="0" cellspacing="0">
+			<tbody>
+				<tr>
+					<th width="20" style="min-width:20px;">
+						##<input type="checkbox" name="ck_check_all" onClick="selectAll();">
+					</th>
+					<th width="14%">
+                    	<a>商品款号</a><br />
+						<a>商品名称</a><br />
+						<a>供应商货号</a><br />
+                    </th>
+					<th width="12%">
+                    	<a>分类</a><br />
+						<a>品牌</a><br />
+						##<a>季节</a><br />
+						<a>性别</a><br />
+                    </th>
+					<th width="7%">
+						<a>市场价</a><br />
+						##<a>代销价</a><br />
+						<a>妈咪价</a><br />
+                        <a>最后更新时间</a><br />
+                    </th>
+					<th width="5%">状态</th>
+					<th width="10%">
+						导入进度
+					</th>
+                    <th width="5%">操作</th>
+                    <th>尺寸颜色</th>
+				</tr>
+				#foreach($vos in $list)
+					#set($item=$vos)
+					<tr #if($i%2>0)class="list_bg_color_gary" #end>
+    					<td align="center">
+							#if(($!tpdHelper.isAdmin() && $!item.tpdGoodsStatus=='1') || (!$!tpdHelper.isAdmin() && $!item.tpdGoodsStatus != '1'))
+    							<input type="checkbox" name="goodsIds" value="$!item.goodsId">
+							#end
+    					</td>
+    					<td align="center" class="crzTip">
+                            #if($!item.isVirtual) <span style="color:#ff7300;">$!item.goodsSn</span> 
+							#else $!item.goodsSn 
+							#end <br>
+							#click2Expand($!item.goodsName $!item.goodsId "/goods/editGoodsName.htm")<br>
+                            $!item.providerGoods<br>
+    					</td>
+    					<td align="center">
+                        	$!item.catName<br>
+							$!item.brandName<br>
+                            ##$!item.seasonName<br>
+                            #if($!item.goodsSex)#if($!item.goodsSex == 'm')男#elseif($!item.goodsSex == 'w')女#elseif($!item.goodsSex == 'a')中性#end#end
+                        </td>
+    					<td align="center">
+                            $!item.marketPrice<br>
+                            ##<span class="bold" style="color:#FF33FF">$!item.consignPrice</span><br>
+                            <span class="bold" style="color:#FF33FF">
+								#click2Expand($!item.shopPrice $!item.goodsId "/goods/editShopPrice.htm")
+							</span>
+							#if ($!item.updateTime)
+							$dateTool.format('yyyy-MM-dd HH:mm:ss',$!item.updateTime)
+							#else
+							0000-00-00 00:00:00
+							#end
+                        </td>
+						<td align="center">
+							#if($!item.tpdGoodsStatus)#if($!item.tpdGoodsStatus == '0')草稿#elseif($!item.tpdGoodsStatus == '1')待审核#elseif($!item.tpdGoodsStatus == '2')已审核#elseif($!item.tpdGoodsStatus == '3')已上架#end#end
+    					</td>
+						<td align="center">
+							#if($!item.importStatus)#if($!item.importStatus=='Red')#showColor("#F00")#elseif($!item.importStatus=='Yellow')#showColor("#FF0")#elseif($!item.importStatus=='Blue')#showColor("#00F")#elseif($!item.importStatus=='Green')#showColor("#0F0")#end#end
+    					</td>
+                        <td align="center">
+							#if($!item.tpdGoodsStatus == '0')
+								#if($!tpdHelper.isAdmin())
+									<a class="edit" href="/goods/list/show.htm?goodsId=$!item.goodsId" title="查看">查看</a><br>
+								#else
+									<a class="edit" href="/goods/editTo.htm?goodsId=$!item.goodsId" title="编辑">编辑</a><br>
+        							<a class="del" href="javascript:doDelete($!item.goodsId);" title="删除">删除</a><br>
+								#end
+							#elseif($!item.tpdGoodsStatus == '1')
+								<a class="edit" href="/goods/list/show.htm?goodsId=$!item.goodsId" title="查看">查看</a><br>
+								#if($!tpdHelper.isAdmin())
+    								<a class="edit" href="javascript:doCheck($!item.goodsId);" title="审核">审核</a><br>
+    								<a class="edit" href="javascript:doReject($!item.goodsId);" title="驳回">驳回</a><br>
+								#end
+							#elseif($!item.tpdGoodsStatus == '2')
+								<a class="edit" href="/goods/list/show.htm?goodsId=$!item.goodsId" title="查看">查看</a><br>
+								<a class="view" href="http://www.mammytree.com/product-$!{item.fcGoodsId}.html?is_preview=1" target="_blank" title="预览">预览</a><br>
+								#if($!item.isVirtual)
+								<a class="view" href="/productcard/list/main.htm?productSn=$!item.goodsSn" target="_blank" title="查看卡密">查看卡密</a><br>
+								#end
+								#if(!$!tpdHelper.isAdmin())
+									<a class="edit" href="javascript:doOnline($!item.goodsId);" title="上架">上架</a><br>
+								#end
+							#elseif($!item.tpdGoodsStatus == '3')
+								<a class="edit" href="/goods/list/show.htm?goodsId=$!item.goodsId" title="查看">查看</a><br>
+								<a class="view" href="http://www.mammytree.com/product-$!{item.fcGoodsId}.html?is_preview=1" target="_blank" title="预览">预览</a><br>
+								#if(!$!tpdHelper.isAdmin())
+        							<a class="edit" href="javascript:doOffline($!item.goodsId);" title="下架">下架</a><br>
+								#end
+							#end
+							<a class="edit" href="javascript:showLimit($!item.goodsId);" title="限购设置">限购</a>
+    					</td>
+                        <td>
+							#if($!vos.colorVos)
+							<div style="overflow:auto;overflow-y:hidden;">
+                            	<div class="goods_color_size" style="margin:5px;overflow: hidden;white-space: nowrap;#if($!vos.colorVos.size()==0)border-left:none;#end" >
+    									##用于控制换行
+    									#set($c=0)
+    									##用作控制供应商条形码列的展示
+    									#set($flag=false)
+    									#foreach($colotVos in $vos.colorVos)
+    											<div>
+                                                    <table cellpadding="0" cellspacing="0">
+    													<tbody>
+                                                            <tr>
+                                                            	<th colspan="$!colotVos.sizeCount" style="background:none;border:none;" >
+    																<table width="100%" class="goods_color_size_top" cellpadding="0" cellspacing="0"> <tr><th>
+    																$!colotVos.colorName
+                													</th></tr></table>
+    															</th>
+    														</tr>
+    														<tr>
+    															#if($colotVos.sizeList)
+    																#foreach($size in $colotVos.sizeList)
+    																	#set($c=$c+1)
+    																	<td style="border:0px;">
+    																	<table class="goods_color_size_bottom" cellpadding="0" cellspacing="0" >
+                														<tbody>
+    																		<tr name="$!item.goodsId" style="display:none;" height="25">
+    																			<td align="center" style="*border-top:0px;"><div class="providerBarcode">#if($size.providerBarcode && $size.providerBarcode != '')#set($flag=true)$size.providerBarcode#end</div></td>
+    																		</tr>
+                                                                            <tr>
+    																			<td align="center">$!size.sizeName</td>
+    																	   </tr>
+																		   <tr>
+    																			<td align="center" id="gl_$!size.glId">
+																						#if($!item.tpdGoodsStatus == '2')
+																						#click2Expand($!size.consignNum $!size.glId "/goods/consign/update.htm")
+																						#else
+																						$!size.consignNum
+																						#end
+																				</td>
+    																	   </tr>
+                														</tbody>
+    																	</table>
+    																	</td>
+    																#end
+    															#end
+                                                            </tr>
+    													</tbody>
+    												</table>
+    											</div>
+                                        ##if($c>7) #set($c=0)<br />#end
+    									#end
+    									#if($flag)
+    									<script type="text/javascript">$('tr [name=$!item.goodsId]').show();</script>
+    									#end
+								</div>
+							</div>
+							#end
+    					</td>
+    				</tr>
+				#end
+				<tr>
+    				<td align="center">
+						<input type="checkbox" name="ck_check_all" onClick="selectAll();" title="全选">
+    				</td>
+					<td align="center" colspan="7">
+						<div class="clear"></div>
+						#if($!tpdHelper.isAdmin())
+							<input type="button" value=" 批量审核 " class="button57" onclick="doBatchCheck('goodsIds');" />
+							<input type="button" value=" 批量驳回 " class="button57" onclick="doBatchReject('goodsIds');" />
+						#else
+        					<input type="button" value=" 批量提交 " class="button57" onclick="doBatchSubmit('goodsIds');" />
+    						<input type="button" value=" 批量删除 " class="button57" onclick="doBatchDelete('goodsIds');" />
+							<input type="button" value=" 批量上架 " class="button57" onclick="doBatchOnline('goodsIds');" />
+    						<input type="button" value=" 批量下架 " class="button57" onclick="doBatchOffline('goodsIds');" />
+						#end
+						<div class="clear"></div>
+    				</td>
+    			</tr>
+		</tbody>
+	</table>
+</div>
+##自定义商品分页
+<div id="pageDiv" class="list_b">
+	<div class="left">
+		第
+		<span class="bold red">$page.pageNo</span>
+		页，共
+		<span class="bold red" id="totalPages">$page.totalPages</span>
+		页，
+		<span class="bold red">$page.totalCount</span>
+		条，
+		每页显示
+		<select id="selePageSize" onchange="changePageSize();">
+			<option value="10" #if($page.pageSize==10) selected #end >10</option>
+			<option value="20" #if($page.pageSize==20) selected #end >20</option>
+			<option value="50" #if($page.pageSize==50) selected #end >50</option>
+			<option value="100" #if($page.pageSize==100) selected #end >100</option>
+		</select>
+	</div>
+	<div class="right list_bottom list_b">
+    	<a #if(!$page.hasPre) class="gray" #else href="javascript:jumpPage(1)" #end >首页</a>
+		<a #if(!$page.hasPre) class="gray" #else href="javascript:jumpPage($page.prePage)" #end >上一页</a>
+        <a #if(!$page.hasNext) class="gray" #else href="javascript:jumpPage($page.nextPage)" #end >下一页</a>
+		<a #if(!$page.hasNext) class="gray" #else href="javascript:jumpPage($page.totalPages)" #end >尾页</a>
+        <input type="text" class="input" id="pageTo" style="width:30px;">
+    	<a href="javascript:jumpPageTo()" class="button">GO</a>
+	</div>
+</div>
+<script type="text/javascript"> 
+  //获取尺码对照表宽度
+    $('.goods_color_size').each(function () {
+		var tdWidth = 0;
+        $(this).children('div').each(function () {
+            tdWidth += $(this).width();
+        });
+        $(this).width(tdWidth);
+    });
+	//颜色尺寸出现自适应滚动条
+    var w=($('.main_title').width())*0.5-10;
+    $('.goods_color_size').parent().width(w);
+	
+	
+	// 修改虚库
+	function toUpdateConsignNum(glId) {
+		var url = "/goods/consign/toUpdate.htm";
+    	var data = "glId=" + glId + "&height=150&width=600";
+    	var href=url + "?" + data; 
+    	
+    	var title = "更新商品虚库库存";
+        TB_show(title, href);
+        this.blur();
+	}
+	
+	// 设置商品限购
+	function showLimit(goodsId) {
+    	var url = "/goods/limit/show.htm";
+    	var data = "goodsId=" + goodsId + "&height=80&width=380";
+    	var href=url + "?" + data; 
+    	
+    	var title = "商品限购设置";
+        TB_show(title, href);
+        this.blur();
+    }
+
+	
+</script>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.TransactionMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.erp.Transaction">
+		<id column="transaction_id" property="transactionId" jdbcType="INTEGER" />
+		<result column="trans_type" property="transType" jdbcType="SMALLINT" />
+		<result column="trans_status" property="transStatus" jdbcType="SMALLINT" />
+		<result column="trans_sn" property="transSn" jdbcType="VARCHAR" />
+		<result column="product_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="color_id" property="colorId" jdbcType="INTEGER" />
+		<result column="size_id" property="sizeId" jdbcType="INTEGER" />
+		<result column="product_number" property="goodsNumber" jdbcType="INTEGER" />
+		<result column="depot_id" property="depotId" jdbcType="INTEGER" />
+		<result column="location_id" property="packetId" jdbcType="INTEGER" />
+		<result column="create_date" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="create_admin" property="addAid" jdbcType="INTEGER" />
+		<result column="update_date" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_admin" property="updateAid" jdbcType="INTEGER" />
+		<result column="trans_direction" property="transDirection" jdbcType="SMALLINT" />
+		<result column="sub_id" property="subId" jdbcType="INTEGER" />
+		<result column="finance_check_date" property="financeCheckTime" jdbcType="TIMESTAMP" />
+		<result column="finance_check_admin" property="financeCheckAid" jdbcType="INTEGER" />
+		<result column="related_id" property="relatedId" jdbcType="INTEGER" />
+		<result column="batch_id" property="batchId" jdbcType="INTEGER" />
+		
+		<result column="shop_price" property="shopPrice" jdbcType="DECIMAL" />
+		<result column="consign_price" property="consignPrice" jdbcType="DECIMAL" />
+		<result column="cost_price" property="costPrice" jdbcType="DECIMAL" />
+		<result column="consign_rate" property="consignRate" jdbcType="DECIMAL" />
+		<result column="product_cess" property="productCess" jdbcType="DECIMAL" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.erp.Transaction">
+		insert into ty_transaction_info (
+			trans_type,
+			trans_status,
+			trans_sn,
+			product_id,
+			color_id,
+			size_id,
+			product_number,
+			depot_id,
+			location_id,
+			batch_id,
+			trans_direction,
+			sub_id,
+			shop_price,
+			consign_price,
+			cost_price,
+			consign_rate,
+			product_cess,
+			create_date,
+			create_admin,
+			update_date,
+			update_admin
+		)
+		values (
+			#{transType,jdbcType=SMALLINT},
+			#{transStatus,jdbcType=SMALLINT},
+			#{transSn,jdbcType=VARCHAR},
+			#{goodsId,jdbcType=INTEGER},
+			#{colorId,jdbcType=INTEGER},
+			#{sizeId,jdbcType=INTEGER},
+			#{goodsNumber,jdbcType=INTEGER},
+			#{depotId,jdbcType=INTEGER},
+			#{packetId,jdbcType=INTEGER},
+			#{batchId,jdbcType=INTEGER},
+			#{transDirection,jdbcType=INTEGER},
+			#{subId,jdbcType=INTEGER},
+			#{shopPrice,jdbcType=DECIMAL},
+			#{consignPrice,jdbcType=DECIMAL},
+			#{costPrice,jdbcType=DECIMAL},
+			#{consignRate,jdbcType=DECIMAL},
+			#{productCess,jdbcType=DECIMAL},
+			#{addTime, jdbcType=TIMESTAMP},
+			#{addAid,jdbcType=INTEGER},
+			#{updateTime, jdbcType=TIMESTAMP},
+			#{updateAid,jdbcType=INTEGER}
+		)
+	</insert>
+	
+</mapper>

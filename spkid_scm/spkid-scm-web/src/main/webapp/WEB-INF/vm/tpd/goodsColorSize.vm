@@ -1,0 +1,63 @@
+##商品颜色尺寸TAB
+<table id="allDatas" width="90%" align="center" cellpadding="0" cellspacing="0" style="display:none;" class="config_tab">
+	<tbody id="tbody">
+    	<tr><td></td></tr>
+        <tr>
+        	<td>
+				<div id="common-template">
+                	#foreach($colotVos in $goods.colorVos)
+					<div>
+                		<table >
+                		##商品颜色展示项
+                        <tr id="color_template">
+                        	<td>
+                            	<table width="100%" cellpadding="0" cellspacing="0" class="color_add">
+                                    <tr>
+                                    	<th colspan="2" align="center" width="100%">
+                                        	<span id="colorName" class="bold">$!colotVos.colorName</span>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                    	<td flg="size">
+                                            ##商品尺寸展示项
+                                            #foreach($size in $colotVos.sizeList)
+											<div id="size_template" class="size_template">
+                                            	尺码：<span id="size_name" class="bold">${size.sizeName}</span><br>
+												<span>供应商条码：#if(${size.providerBarcode})${size.providerBarcode}#end</span>
+                                            </div>
+											#end
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    	<td flg="img" width="3200"  style="word-wrap:break-word">
+                    						##商品图片展示项
+                                            #foreach($gallery in $colotVos.galleryList)
+											<div id="img_template_${gallery.imgId}" class="img_template"><center>
+                                                <span id="type_name" class="bold">#if($!gallery.imgDefault == 'default')默认#elseif($!gallery.imgDefault == 'part')局部#elseif($!gallery.imgDefault == 'tonal')色片#end</span>
+												#if ($!readOnly != 1 || ($stringUtil.isNotEmpty($goods.tpdGoodsStatus) && $goods.tpdGoodsStatus == '0'))
+												<a onclick="javascript:deleteGallery(${gallery.imgId});" class="del"></a>
+												#end<br />
+												#if($stringUtil.isNotBlank($gallery.url8585))
+                                    			<a href="${tpdHelper.getImageDomain()}/$gallery.url8585" target="_blank">
+                                    				<img src="${tpdHelper.getImageDomain()}/$gallery.url8585" alt="$gallery.imgDesc" border="0"/>
+                                    			</a>
+                                    			#end<br />
+                        						排序号：$!gallery.sortOrder</center>
+                                            </div>
+											#end
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        </table>
+                	</div>
+					#end
+                	<div id="large"></div> 
+                </div>
+            </td>
+        </tr>
+        <tr><td></td></tr>
+        ##此处自动增加颜色展示
+    </tbody>
+</table>

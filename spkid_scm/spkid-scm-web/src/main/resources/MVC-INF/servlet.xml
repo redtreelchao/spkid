@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<bean class="com.fclub.common.spring.SpringContextHolder" lazy-init="false" />
+	<!-- MVC层组件扫描，only with @Controller -->
+	<context:component-scan base-package="com.fclub" >
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	</context:component-scan>
+	<!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+<!-- 		<property name="webBindingInitializer">   -->
+<!--             <bean class="com.fclub.erp.web.spring.DateInitializer" />   -->
+<!--         </property> -->
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+	<!-- 支持注解和配置同时生效 -->
+		<mvc:annotation-driven />
+		<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+	 
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="20480000" />
+	</bean>
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+		<property name="prefix" value="" />
+		<property name="suffix" value=".vm" />
+		<property name="layoutUrl" value="layout/empty.vm" />
+		<property name="dateToolAttribute" value="dateTool" /><!--日期函数名称 -->
+		<property name="numberToolAttribute" value="numberTool" /><!--数字函数名称 -->
+		<property name="contentType" value="text/html;charset=UTF-8" />
+		<property name="exposeSpringMacroHelpers" value="true" /><!--是否使用spring对宏定义的支持 -->
+		<property name="exposeRequestAttributes" value="true" /><!--是否开放request属性 -->
+		<property name="requestContextAttribute" value="req" /><!--request属性引用名称 -->
+		<property name="exposeSessionAttributes" value="true" /><!--是否开放session属性 -->
+		<property name="viewClass" value="com.fclub.web.servlet.view.velocity.FclubVelocityLayoutView"/>
+	</bean>
+	<bean id="velocityConfigurer"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath">
+			<value>/WEB-INF/vm</value>
+		</property>
+		<property name="configLocation" value="/WEB-INF/velocity.properties" />
+		<!-- Velocity属性配置 -->
+		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">UTF-8</prop><!-- 指定模板引擎进行模板处理的编码 -->
+				<prop key="output.encoding">UTF-8</prop><!-- 指定输出流的编码 -->
+				<prop key="contentType">text/html;charset=UTF-8</prop><!-- contentType -->
+				<prop key="velocimacro.library">macro/macros.vm,macro/common.vm</prop><!-- Velocimacro 模板库的列表 -->
+				<prop key="eventhandler.referenceinsertion.class">com.fclub.web.escape.reference.NoEscapeHtmlReference
+				</prop>
+				<prop key="eventhandler.noescape.html.match">/(?:screen_content)|(?:noescape_.*)/</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="exceptionResolver" class="com.fclub.web.servlet.handler.FclubExceptionResolver">
+		<property name="defaultErrorView" value="/error" />
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.Exception">/error</prop>
+				<prop key="com.fclub.common.lang.FclubException">/commonError</prop>
+				<prop key="com.fclub.common.lang.SystemException">/systemError</prop>
+				<prop key="com.fclub.common.lang.BizException">/bizError</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="bean2VeclocityContextTool" class="com.fclub.web.servlet.view.velocity.Bean2VeclocityContextTool">
+		<property name="sourceBeansMap">
+			<map>
+				<entry key="stringUtil" value-ref="stringUtil"/>
+				<entry key="arrayUtil" value-ref="arrayUtil"/>
+				<entry key="dictUtil" value-ref="dictUtil"/>
+				<entry key="tpdHelper" value-ref="componentHelper"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="stringUtil" class="com.fclub.common.lang.utils.StringUtil" />
+	<bean id="arrayUtil" class="com.fclub.common.lang.utils.ArrayUtil" />
+	<bean id="dictUtil" class="com.fclub.tpd.common.DictUtil" />
+	<bean id="componentHelper" class="com.fclub.tpd.helper.ComponentHelper" />
+</beans>

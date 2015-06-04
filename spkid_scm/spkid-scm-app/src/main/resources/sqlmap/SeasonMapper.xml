@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.SeasonMapper">
+	<resultMap id="seasonMap" type="com.fclub.tpd.dataobject.Season">
+		<id column="season_id" property="seasonId" jdbcType="INTEGER" />
+		<result column="season_code" property="seasonCode" jdbcType="VARCHAR" />
+		<result column="season_name" property="seasonName" jdbcType="VARCHAR" />
+		<result column="season_sort" property="seasonSort" jdbcType="INTEGER" />
+		<result column="season_aid" property="seasonAid" jdbcType="SMALLINT" />
+		<result column="season_time" property="seasonTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		season_id, season_code, season_name, season_sort,
+		season_aid, season_time
+	</sql>
+	<select id="findPage" resultMap="seasonMap">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_season
+		order by season_time desc
+	</select>
+	<select id="queryAll" resultMap="seasonMap">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_season
+		order by season_sort desc
+	</select>
+	<select id="selectByPrimaryKey" parameterType="int" resultMap="seasonMap">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_season
+		where season_id = #{seasonId,jdbcType=INTEGER}
+	</select>
+	<select id="confirmBeingUsed" resultType="java.lang.Boolean"
+		parameterType="java.lang.Integer">
+		SELECT CASE WHEN t.co > 0 THEN TRUE ELSE FALSE END FROM
+		(
+		SELECT COUNT(*) AS co FROM ty_product_info g WHERE
+		g.season_id=#{seasonId,jdbcType=INTEGER}
+		)AS t
+	</select>
+	<select id="selectByUniqueKey1" parameterType="java.util.Map" resultMap="seasonMap">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_season
+		where season_code = #{seasonCode,jdbcType=VARCHAR}
+		<if test="seasonId != null">
+		AND season_id != #{seasonId,jdbcType=INTEGER}
+		</if>
+	</select>
+	<select id="selectByUniqueKey2" parameterType="java.util.Map" resultMap="seasonMap">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_season
+		where season_name = #{seasonName,jdbcType=VARCHAR}
+		<if test="seasonId != null">
+		AND season_id != #{seasonId,jdbcType=INTEGER}
+		</if>
+	</select>	
+	<select id="selectUniqueKey1WithoutPrimaryKey" parameterType="com.fclub.tpd.dataobject.Season" resultMap="seasonMap">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_season
+		where season_id != #{seasonId, jdbcType=INTEGER} AND season_code = #{seasonCode, jdbcType=VARCHAR}
+	</select>
+	<select id="selectUniqueKey2WithoutPrimaryKey" parameterType="com.fclub.tpd.dataobject.Season" resultMap="seasonMap">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from ty_product_season
+		where season_id <![CDATA[<>]]> #{seasonId, jdbcType=INTEGER} AND season_name = #{seasonName, jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="int">
+		delete from
+		ty_product_season
+		where season_id = #{seasonId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.Season" >
+	    insert into ty_product_season
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="seasonId != null" >
+	        season_id,
+	      </if>
+	      <if test="seasonCode != null" >
+	        season_code,
+	      </if>
+	      <if test="seasonName != null" >
+	        season_name,
+	      </if>
+	      <if test="seasonSort != null" >
+	        season_sort,
+	      </if>
+	      <if test="seasonAid != null" >
+	        season_aid,
+	      </if>
+	      <if test="seasonTime != null" >
+	        season_time,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="seasonId != null" >
+	        #{seasonId,jdbcType=INTEGER},
+	      </if>
+	      <if test="seasonCode != null" >
+	        #{seasonCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="seasonName != null" >
+	        #{seasonName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="seasonSort != null" >
+	        #{seasonSort,jdbcType=INTEGER},
+	      </if>
+	      <if test="seasonAid != null" >
+	        #{seasonAid,jdbcType=SMALLINT},
+	      </if>
+	      <if test="seasonTime != null" >
+	        #{seasonTime,jdbcType=TIMESTAMP},
+	      </if>
+	    </trim>
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.fclub.tpd.dataobject.Season">
+		update ty_product_season
+    <set >
+      <if test="seasonCode != null" >
+        season_code = #{seasonCode,jdbcType=VARCHAR},
+      </if>
+      <if test="seasonName != null" >
+        season_name = #{seasonName,jdbcType=VARCHAR},
+      </if>
+      <if test="seasonSort != null" >
+        season_sort = #{seasonSort,jdbcType=INTEGER},
+      </if>
+      <if test="seasonAid != null" >
+        season_aid = #{seasonAid,jdbcType=SMALLINT},
+      </if>
+      <if test="seasonTime != null" >
+        season_time = #{seasonTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where season_id = #{seasonId,jdbcType=INTEGER}
+	</update>
+	<select id="findBySeasonCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select season_id from ty_product_season
+		where season_code = #{seasonCode,jdbcType=VARCHAR}
+	</select>
+</mapper>

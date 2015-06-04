@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.CooperationMapper" >
+  <resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.Cooperation" >
+    <id column="coop_id" property="coopId" jdbcType="INTEGER" />
+    <result column="coop_code" property="coopCode" jdbcType="VARCHAR" />
+    <result column="coop_name" property="coopName" jdbcType="VARCHAR" />
+    <result column="coop_aid" property="coopAid" jdbcType="SMALLINT" />
+    <result column="coop_time" property="coopTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    coop_id, coop_code, coop_name, coop_aid, coop_time
+  </sql>
+  <select id="selectCooperationByPage" resultMap="BaseResultMap">
+  	select 'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ty_product_cooperation
+    order by coop_time desc
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ty_product_cooperation
+    where coop_id = #{coopId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ty_product_cooperation
+    where coop_id = #{coopId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fclub.tpd.dataobject.Cooperation" >
+    insert into ty_product_cooperation (coop_id, coop_code, coop_name, 
+      coop_aid, coop_time)
+    values (#{coopId,jdbcType=INTEGER}, #{coopCode,jdbcType=VARCHAR}, #{coopName,jdbcType=VARCHAR}, 
+      #{coopAid,jdbcType=SMALLINT}, #{coopTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fclub.tpd.dataobject.Cooperation" >
+    insert into ty_product_cooperation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="coopId != null" >
+        coop_id,
+      </if>
+      <if test="coopCode != null" >
+        coop_code,
+      </if>
+      <if test="coopName != null" >
+        coop_name,
+      </if>
+      <if test="coopAid != null" >
+        coop_aid,
+      </if>
+      <if test="coopTime != null" >
+        coop_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="coopId != null" >
+        #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="coopCode != null" >
+        #{coopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="coopName != null" >
+        #{coopName,jdbcType=VARCHAR},
+      </if>
+      <if test="coopAid != null" >
+        #{coopAid,jdbcType=SMALLINT},
+      </if>
+      <if test="coopTime != null" >
+       #{coopTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fclub.tpd.dataobject.Cooperation" >
+    update ty_product_cooperation
+    <set >
+      <if test="coopCode != null" >
+        coop_code = #{coopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="coopName != null" >
+        coop_name = #{coopName,jdbcType=VARCHAR},
+      </if>
+      <if test="coopAid != null" >
+        coop_aid = #{coopAid,jdbcType=SMALLINT},
+      </if>
+      <if test="coopTime != null" >
+        coop_time =#{coopTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where coop_id = #{coopId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fclub.tpd.dataobject.Cooperation" >
+    update ty_product_cooperation
+    set coop_code = #{coopCode,jdbcType=VARCHAR},
+      coop_name = #{coopName,jdbcType=VARCHAR},
+      coop_aid = #{coopAid,jdbcType=SMALLINT},
+      coop_time = #{coopTime,jdbcType=TIMESTAMP}
+    where coop_id = #{coopId,jdbcType=INTEGER}
+  </update>
+  <select id="confirmBeingUsed" resultType="java.lang.Boolean"
+		parameterType="java.lang.Integer">
+			SELECT  CASE WHEN t.co > 0 THEN TRUE  ELSE FALSE END FROM (
+			SELECT COUNT(*) AS co FROM ty_product_info g WHERE g.coop_id=#{coopId,jdbcType=INTEGER}
+			)AS t
+  </select>
+    <select id="selectByCoopCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select 'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ty_product_cooperation
+    where coop_code=#{coopCode,jdbcType=VARCHAR}
+     <if test="coopId != null" >
+        and coop_id &#60;&#62; #{coopId,jdbcType=INTEGER}
+      </if>
+  </select>
+      <select id="selectByCoopName" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select 'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ty_product_cooperation
+    where coop_name = #{coopName,jdbcType=VARCHAR}
+     <if test="coopId != null" >
+        and coop_id &#60;&#62; #{coopId,jdbcType=INTEGER}
+      </if>
+  </select>
+  <select id="findByCoopCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select coop_id from ty_product_cooperation
+  	where coop_code = #{coopCode}
+  </select>
+</mapper>

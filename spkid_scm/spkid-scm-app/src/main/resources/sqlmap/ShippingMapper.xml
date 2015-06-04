@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.ShippingMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.Shipping">
+		<id column="shipping_id" property="shippingId" jdbcType="TINYINT" />
+		<result column="shipping_code" property="shippingCode" jdbcType="VARCHAR" />
+		<result column="shipping_name" property="shippingName" jdbcType="VARCHAR" />
+		<result column="shipping_desc" property="shippingDesc" jdbcType="VARCHAR" />
+		<result column="in_use" property="is_use" jdbcType="BOOLEAN" />
+		<result column="track_name" property="trackName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.shipping_id,
+		t.shipping_code,
+		t.shipping_name,
+		t.shipping_desc,
+		t.is_use,
+		t.track_name
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_shipping_info t
+		where shipping_id = #{id,jdbcType=TINYINT}
+	</select>
+	
+	<select id="findAll" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_shipping_info t
+<!-- 		WHERE t.shipping_id != 4 -->
+<!-- 		AND NOT EXISTS (SELECT 1 FROM ty_shipping_users su WHERE su.shipping_id = t.shipping_id) -->
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+		<include refid="Base_Column_List" />
+		from ty_shipping_info t
+	</select>
+	
+</mapper>

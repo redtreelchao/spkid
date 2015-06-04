@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fclub.tpd.mapper.DepotInLeafMapper">
+	
+	<resultMap id="BaseResultMap" type="com.fclub.tpd.dataobject.erp.DepotInLeaf">
+		<id column="depot_in_leaf_id" property="depotInLeafId" jdbcType="INTEGER" />
+		<result column="depot_in_id" property="depotInId" jdbcType="INTEGER" />
+		<result column="depot_in_sub_id" property="depotInSubId" jdbcType="INTEGER" />
+		<result column="color_id" property="colorId" jdbcType="INTEGER" />
+		<result column="size_id" property="sizeId" jdbcType="INTEGER" />
+		<result column="goods_number" property="goodsNumber" jdbcType="INTEGER" />
+		<result column="depot_in_leaf_aid" property="depotInLeafAid" jdbcType="INTEGER" />
+		<result column="depot_in_leaf_time" property="depotInLeafTime" jdbcType="TIMESTAMP" />
+		<result column="goods_finished_number" property="goodsFinishedNumber" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		t.depot_in_leaf_id,
+		t.depot_in_id,
+		t.depot_in_sub_id,
+		t.color_id,
+		t.size_id,
+		t.goods_number,
+		t.depot_in_leaf_aid,
+		t.depot_in_leaf_time,
+		t.goods_finished_number
+	</sql>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from fc_flc_depot_in_leaf t
+		where depot_in_leaf_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select 
+		<include refid="Base_Column_List" />
+		from fc_flc_depot_in_leaf t
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from fc_flc_depot_in_leaf
+		where depot_in_leaf_id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.fclub.tpd.dataobject.erp.DepotInLeaf">
+		insert into fc_flc_depot_in_leaf (
+			depot_in_id,
+			depot_in_sub_id,
+			color_id,
+			size_id,
+			goods_number,
+			depot_in_leaf_aid,
+			depot_in_leaf_time,
+			goods_finished_number
+		)
+		values (
+			#{depotInId,jdbcType=INTEGER},
+			#{depotInSubId,jdbcType=INTEGER},
+			#{colorId,jdbcType=INTEGER},
+			#{sizeId,jdbcType=INTEGER},
+			#{goodsNumber,jdbcType=INTEGER},
+			#{depotInLeafAid,jdbcType=INTEGER},
+			#{depotInLeafTime,jdbcType=TIMESTAMP},
+			#{goodsFinishedNumber,jdbcType=INTEGER}
+		)
+		<selectKey resultType="java.lang.Integer" keyProperty="depotInLeafId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="com.fclub.tpd.dataobject.erp.DepotInLeaf">
+		update fc_flc_depot_in_leaf
+		<set>
+		<if test="depotInId != null">
+		depot_in_id = #{depotInId,jdbcType=INTEGER},
+		</if>
+		<if test="depotInSubId != null">
+		depot_in_sub_id = #{depotInSubId,jdbcType=INTEGER},
+		</if>
+		<if test="colorId != null">
+		color_id = #{colorId,jdbcType=INTEGER},
+		</if>
+		<if test="sizeId != null">
+		size_id = #{sizeId,jdbcType=INTEGER},
+		</if>
+		<if test="goodsNumber != null">
+		goods_number = #{goodsNumber,jdbcType=INTEGER},
+		</if>
+		<if test="depotInLeafAid != null">
+		depot_in_leaf_aid = #{depotInLeafAid,jdbcType=INTEGER},
+		</if>
+		<if test="depotInLeafTime != null">
+		depot_in_leaf_time = #{depotInLeafTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="goodsFinishedNumber != null">
+		goods_finished_number = #{goodsFinishedNumber,jdbcType=INTEGER},
+		</if>
+		</set>
+		where depot_in_leaf_id = #{depotInLeafId,jdbcType=INTEGER}
+	</update>
+</mapper>

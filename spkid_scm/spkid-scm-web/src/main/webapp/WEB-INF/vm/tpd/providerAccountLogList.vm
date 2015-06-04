@@ -1,0 +1,51 @@
+<div id="listDiv">
+<table id="dataTable" class="dataTable" width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<th>序号</th>
+				<th>变动类型</th>
+				<th>变动金额（元）</th>
+				<th>状态</th>
+				<th>操作时间</th>
+			</tr>
+			#set ($i = 1)
+			#foreach($providerAccountLog in $page.result)
+			<tr>
+				<td align="center">$i</td>	
+				#if($!providerAccountLog.changeType == 0)			
+				<td align="center">充值</td>
+				<td align="center">$!providerAccountLog.changePrice</td>
+				#if($!providerAccountLog.operateStatus == 0)		
+				<td align="center">待付款</td>
+				#elseif($!providerAccountLog.operateStatus == 1)
+				<td align="center">已付款</td>
+				#end
+				#elseif($!providerAccountLog.changeType == 1)
+				<td align="center">提现</td>
+				<td align="center">$!providerAccountLog.changePrice</td>
+				#if($!providerAccountLog.operateStatus == 0)		
+				<td align="center">待审核</td>
+				#elseif($!providerAccountLog.operateStatus == 1)
+				<td align="center">已提现</td>
+				#end
+				#elseif($!providerAccountLog.changeType == 2)
+				<td align="center">短信消费</td>
+				<td align="center">$!providerAccountLog.changePrice</td>
+				#if($!providerAccountLog.operateStatus == 0 && $!providerAccountLog.status != 3)		
+				<td align="center">已付款待发送</td>
+				#elseif($!providerAccountLog.operateStatus == 0 && $!providerAccountLog.status == 3)
+				<td align="center">已付款已发送</td>
+				#end
+				#elseif($!providerAccountLog.changeType ==3)
+				<td align="center">短信返款</td>
+				<td align="center">$!providerAccountLog.changePrice</td>
+				<td align="center">已返款</td>
+				#end
+				
+				<td align="center">$!dateTool.format('yyyy-MM-dd HH:mm:ss',$!providerAccountLog.operateTime)</td>
+			</tr>
+			#set ($i = $i + 1)
+			#end			
+		</table>
+</div>
+
+#page()

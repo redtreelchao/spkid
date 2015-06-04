@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="GBK"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/util	        http://www.springframework.org/schema/util/spring-util-3.0.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+	default-autowire="byName">
+
+	<!-- 定义受环境影响易变的变量 -->
+	<bean class="com.fclub.common.spring.FclubPropertyLoader">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<!-- 本地开发环境配置 -->
+				<value>classpath*:spkid.properties</value>
+				<!-- 服务器生产环境配置 -->
+				<value>file:${env}/spkid.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- DBCP数据库连接池的默认配置 -->
+	<bean id="abstractDataSource" abstract="true" class="org.apache.commons.dbcp.BasicDataSource">
+		<!-- MySQL数据源驱动类 -->
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<!-- <property name="url" value="" />
+		<property name="username" value="" />
+		<property name="password" value="" /> -->
+		
+		<!-- 连接池创建的连接的默认的auto-commit状态 -->
+		<property name="defaultAutoCommit" value="true" />
+		<!-- 连接池创建的连接的默认的read-only状态. 如果没有设置则setReadOnly方法将不会被调用 -->
+		<!-- <property name="defaultReadOnly" value="" /> -->
+		<!-- 连接池创建的连接的默认的事务隔离级别:NONE/READ_COMMITTED/READ_UNCOMMITTED/REPEATABLE_READ/SERIALIZABLE -->
+		<!-- <property name="defaultTransactionIsolation" value="" /> -->
+		<!-- 连接池创建的连接的默认的catalog -->
+		<!-- <property name="defaultCatalog" value="" /> -->
+
+		<!-- 初始化连接数 -->
+		<property name="initialSize" value="0" />
+		<!-- 最大活动连接数 -->
+		<property name="maxActive" value="8" />
+		<!-- 最大空闲连接数 -->
+		<property name="maxIdle" value="8" />
+		<!-- 最小空闲连接数 -->
+		<property name="minIdle" value="0" />
+		<!-- 没有可用连接时的最大等待时间，单位毫秒，-1无限等待 -->
+		<property name="maxWait" value="-1" />
+		
+		<!-- The SQL query that will be used to validate connections from this pool before returning them to the caller. If specified, this query MUST be an SQL SELECT statement that returns at least one row.  -->
+		<!-- <property name="validationQuery" value="SELECT 1 FROM DUAL" /> -->
+		<!-- 是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个（生效需validationQuery为非空字符串） -->
+		<!-- <property name="testOnBorrow" value="true" /> -->
+		<!-- 连接是否在归还到池中前进行检验（生效需validationQuery为非空字符串） -->
+		<!-- <property name="testOnReturn" value="false" /> -->
+		<!-- 连接是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除（生效需validationQuery为非空字符串） -->
+		<!-- <property name="testWhileIdle" value="false" /> -->
+		
+		<!-- 在空闲连接回收器线程运行期间休眠的时间值,以毫秒为单位. 如果设置为非正数,则不运行空闲连接回收器线程 -->
+		<property name="timeBetweenEvictionRunsMillis" value="-1" />
+		<!-- 在每次空闲连接回收器线程(如果有)运行时检查的连接数量 -->
+		<property name="numTestsPerEvictionRun" value="3" />
+		<!-- 连接在池中保持空闲而不被空闲连接回收器线程(如果有)回收的最小时间值，单位毫秒（注意：此值必须小于DB wait_timeout，否则连接将会超时失效。） -->
+		<!-- show variables like 'wait_timeout'; (MYSQL默认值: 28800 秒！)-->
+		<property name="minEvictableIdleTimeMillis" value="1800000" />
+	</bean>
+	
+	<bean id="defaultdataSource" parent="abstractDataSource">
+		<property name="driverClassName" value="${default.jdbc.driver}" />
+		<property name="url" value="${default.jdbc.url}" />
+		<property name="username" value="${default.jdbc.username}" />
+		<property name="password" value="${default.jdbc.password}" />
+		
+		<property name="initialSize" value="${default.dbcp.initialSize}" />
+		<property name="maxActive" value="${default.dbcp.maxActive}" />
+		<property name="maxIdle" value="${default.dbcp.maxIdle}" />
+		<property name="minIdle" value="${default.dbcp.minIdle}" />
+		<property name="maxWait" value="${default.dbcp.maxWait}" />
+		
+		<property name="timeBetweenEvictionRunsMillis" value="${default.dbcp.timeBetweenEvictionRunsMillis}" />
+		<property name="numTestsPerEvictionRun" value="${default.dbcp.numTestsPerEvictionRun}" />
+		<property name="minEvictableIdleTimeMillis" value="${default.dbcp.minEvictableIdleTimeMillis}" />
+	</bean>
+	
+	<bean id="queryDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${query.jdbc.driver}" />
+		<property name="url" value="${query.jdbc.url}" />
+		<property name="username" value="${query.jdbc.username}" />
+		<property name="password" value="${query.jdbc.password}" />
+		
+		<property name="initialSize" value="${query.dbcp.initialSize}" />
+		<property name="maxActive" value="${query.dbcp.maxActive}" />
+		<property name="maxIdle" value="${query.dbcp.maxIdle}" />
+		<property name="minIdle" value="${query.dbcp.minIdle}" />
+		<property name="maxWait" value="${query.dbcp.maxWait}" />
+		
+		<property name="timeBetweenEvictionRunsMillis" value="${query.dbcp.timeBetweenEvictionRunsMillis}" />
+		<property name="numTestsPerEvictionRun" value="${query.dbcp.numTestsPerEvictionRun}" />
+		<property name="minEvictableIdleTimeMillis" value="${query.dbcp.minEvictableIdleTimeMillis}" />
+	</bean>
+
+	<bean id="dataSource" class="com.fclub.common.dal.datasource.MultiDataSource">
+		<property name="targetDataSources">
+			<map>
+				<entry key="defaultdataSource" value-ref="defaultdataSource" />
+				<entry key="queryDataSource" value-ref="queryDataSource" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="defaultdataSource" />
+	</bean>
+	
+	<!--Mybatis的SqlSessionFactory工厂Bean,次方法可以自动查询sqlmap,但不能做排除处理 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:META-INF/mybatis/mybatisConfig.xml"></property>
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath*:sqlmap/**/*.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!--Mybatis的映射器Mapper工厂Bean ,Mybtis3处理方式 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.fclub.tpd.mapper" />
+	</bean>
+
+	<!-- ================================事务相关控制================================================= -->
+	<bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" /> 
+	
+	<!-- Service层组件扫描，not with @Controller -->
+	<context:component-scan base-package="com.fclub" >
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<!-- 启用AOP注解(默认代理:JDK) -->
+	<aop:aspectj-autoproxy proxy-target-class="false" />
+	
+</beans>
