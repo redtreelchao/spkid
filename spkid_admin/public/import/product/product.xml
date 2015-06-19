@@ -35,7 +35,7 @@
   </Style>
  </Styles>
  <Worksheet ss:Name="Sheet1">
-  <Table ss:ExpandedColumnCount="18" ss:ExpandedRowCount="3" x:FullColumns="1"
+  <Table ss:ExpandedColumnCount="18" ss:ExpandedRowCount="4" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
    <Column ss:Width="83.25"/>
    <Column ss:AutoFitWidth="0" ss:Width="82.5"/>
@@ -70,16 +70,31 @@
     <Cell><Data ss:Type="String">最大年龄（月）</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell><Data ss:Type="String">MB20130311</Data></Cell>
-    <Cell><Data ss:Type="String">PP87964979</Data></Cell>
-    <Cell><Data ss:Type="Number">10</Data></Cell>
-    <Cell><Data ss:Type="String">托马斯＆朋友[Thomas &amp; Friends]</Data></Cell>
-    <Cell><Data ss:Type="Number">123.22</Data></Cell>
-    <Cell><Data ss:Type="Number">200</Data></Cell>
+    <Cell><Data ss:Type="String">MMG000004</Data></Cell>
+    <Cell><Data ss:Type="String">PH02</Data></Cell>
+    <Cell><Data ss:Type="Number">12</Data></Cell>
+    <Cell><Data ss:Type="String">云南白药</Data></Cell>
+    <Cell><Data ss:Type="Number">34</Data></Cell>
+    <Cell><Data ss:Type="Number">24</Data></Cell>
     <Cell><Data ss:Type="String">春季</Data></Cell>
     <Cell><Data ss:Type="String">中国</Data></Cell>
-    <Cell><Data ss:Type="String">bbg_6</Data></Cell>
-    <Cell><Data ss:Type="Number">2013</Data></Cell>
+    <Cell><Data ss:Type="String">MM-F00001</Data></Cell>
+    <Cell><Data ss:Type="Number">2015</Data></Cell>
+    <Cell><Data ss:Type="Number">3</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">108</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">MMG000005</Data></Cell>
+    <Cell><Data ss:Type="String">PH03</Data></Cell>
+    <Cell><Data ss:Type="Number">12</Data></Cell>
+    <Cell><Data ss:Type="String">云南白药</Data></Cell>
+    <Cell><Data ss:Type="Number">15</Data></Cell>
+    <Cell><Data ss:Type="Number">5</Data></Cell>
+    <Cell><Data ss:Type="String">春季</Data></Cell>
+    <Cell><Data ss:Type="String">中国</Data></Cell>
+    <Cell><Data ss:Type="String">MM-F00001</Data></Cell>
+    <Cell><Data ss:Type="Number">2015</Data></Cell>
     <Cell><Data ss:Type="Number">3</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">108</Data></Cell>
@@ -97,8 +112,8 @@
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>6</ActiveRow>
-     <ActiveCol>2</ActiveCol>
+     <ActiveRow>4</ActiveRow>
+     <ActiveCol>4</ActiveCol>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>
