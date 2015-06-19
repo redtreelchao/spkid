@@ -179,14 +179,14 @@ define('FRONT_FOCUS_IMAGE_HTML_KEY','front_focus_image_html');
 define('TUAN_FRONT_FOCUS_IMAGE_HTML_KEY','tuan_front_focus_image_html');
 
 //前台url地址
-define('FRONT_URL','mmtree.redtravel.cn');
-define("IMG_URL", 'http://mmimg.redtravel.cn');
+define('FRONT_URL','f.test.com');
+define("IMG_URL", 'http://img.test.com');
 define("PUBLIC_DATA_IMAGES", "public/data/images/");
 
 /*
  * 后台域名
  */
-define("ERP_HOST", "http://mmadmin.redtravel.cm");
+define("ERP_HOST", "http://b.redtravel.cm");
 
 //上传根目录
 define('UPLOAD_PATH_BATH', CREATE_IMAGE_PATH );
@@ -294,7 +294,7 @@ define('ZHUANTI_HTML_PATH', CREATE_HTML_PATH.'zhuanti/');
 define('SHIPPING_HTML_PATH', CREATE_HTML_PATH.'shipping/');
 
 //前台静态服务器 HOST 定义
-$static_host_arr=array('http://mmstatic.redtravel.cn','http://mmstatic.redtravel.cn');
+$static_host_arr=array('http://s.test.com','http://s.test.com');
 $rand_index=rand(0,count($static_host_arr)-1);
 define('STATIC_HOST',$static_host_arr[$rand_index]);
 
@@ -306,7 +306,7 @@ define('BY_SYSTEM_LOG', true);
 define("SSO_COOKIE_USERNAME", "_username");
 define("SSO_COOKIE_PASSWORD", "_password");
 define("SSO_COOKIE_EXPRIE", 60 * 60 * 24 * 14);
-define("SSO_COOKIE_DOMAIN", ".redtravel.cn");
+define("SSO_COOKIE_DOMAIN", ".test.com");
 
 /*
  * 快递100 

@@ -39,14 +39,13 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 /**
  * 各服务器host定义
  */
-define('STATIC_HOST_CONFIG','$static_host_arr=array("http://mmstatic.redtravel.cn","http://mmstatic.redtravel.cn");');
-//define('STATIC_HOST_CONFIG','$static_host_arr=array("http://www.bgsty_762.cn/");');
+define('STATIC_HOST_CONFIG','$static_host_arr=array("http://s.test.com","http://s.test.com");');
 
 define('MAX_SALE_NUM', 99);//商品最大可售数
 define('MIN_SALE_CUE_NUM', 2);//库存紧张数
 
 define("BASE_URL", "/");
-define('SHOP_NAME','妈咪树');
+define('SHOP_NAME','test shop');
 // 事务状态常量定义
 define('TRANS_STAT_AWAIT_OUT',	1);
 define('TRANS_STAT_OUT',	2);
@@ -203,17 +202,17 @@ define('IMG_ERROR_URL','img/common/error_t.png');//错误提示图
 define('LIST_PAGE_SIZE',60);
 
 //seo
-define('SITE_NAME', '妈咪树');
-define('PAGE_KEYWORDS' , SITE_NAME.'，儿童品牌特卖网，女性名品打折网，食品折扣网品牌特卖网，名品折扣，妈妈好帮手，婴童专卖');
-define('PAGE_DESCRIPTION' , SITE_NAME.'是一家专门为妈妈提供服务的品牌折扣网站，选择妈咪树，我们将会给您最棒的购物体验！');
-define('PAGE_TITLE_SITE_NAME' , SITE_NAME.'_妈妈购物的最佳选择');
+define('SITE_NAME', 'TEST.com');
+define('PAGE_KEYWORDS' , SITE_NAME.'，keywords content.');
+define('PAGE_DESCRIPTION' , SITE_NAME.'description content！');
+define('PAGE_TITLE_SITE_NAME' , SITE_NAME.'_site_name_here');
 
 //预计发货时间
 define('EXPECTED_SHIPPING_DATE','当天16:00点');
 define('MEMCACHE_ADMIN_USERNAME','admin'); 	// Admin Username
-define('MEMCACHE_ADMIN_PASSWORD','admin@baobeigou.com');  	// Admin Password
+define('MEMCACHE_ADMIN_PASSWORD','admin@test.com');  	// Admin Password
 
-define("SEND_MAIL", "services@mammytree.com");
+define("SEND_MAIL", "services@test.com");
 define('SESS_CHANGE_SID_PERTIME', false);
 define("SESS_KEEP_IP_MAX_NUM",5);
 
@@ -223,7 +222,7 @@ define("CACHE_HTML_LIST", 3);
 define("CACHE_HTML_INFO", 5);
 
 //公司退包地址
-//define('COMPANY_RETURN_ADDRESS', '上海市<br/> 收件人:妈咪树退包组&nbsp;&nbsp;联系电话:4000966021');
+//define('COMPANY_RETURN_ADDRESS', '上海市<br/> ....');
 //自助退货理由
 define('APPLY_RETURN_REASON', '$return_reason_arr=array(5=>"商品质量有问题",0=>"尺寸偏大",1=>"尺寸偏小",2=>"款式不喜欢",
                     3=>"配送错误",4=>"其他");');
