@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '127.0.0.1';
-$db['default']['username'] = 'lichao';
+$db['default']['hostname'] = '192.168.20.239';
+$db['default']['username'] = 'root';
 $db['default']['password'] = '123456';
-$db['default']['database'] = 'mammy_tree';
+$db['default']['database'] = 'yyw';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = 'ty_';
 $db['default']['pconnect'] = TRUE;
@@ -64,10 +64,10 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
-$db['default_r']['hostname'] = '127.0.0.1';
-$db['default_r']['username'] = 'lichao';
+$db['default_r']['hostname'] = '192.168.20.239';
+$db['default_r']['username'] = 'root';
 $db['default_r']['password'] = '123456';
-$db['default_r']['database'] = 'mammy_tree';
+$db['default_r']['database'] = 'yyw';
 $db['default_r']['dbdriver'] = 'mysqli';
 $db['default_r']['dbprefix'] = 'ty_';
 $db['default_r']['pconnect'] = TRUE;

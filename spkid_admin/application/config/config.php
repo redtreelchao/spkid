@@ -266,7 +266,7 @@ $config['sess_time_to_update']	= 300;
 |
 */
 $config['cookie_prefix']	= "";
-$config['cookie_domain']	= "redtravel.cn";
+$config['cookie_domain']	= "test.com";
 $config['cookie_path']		= "/";
 $config['cookie_secure']	= FALSE;
 
@@ -361,8 +361,8 @@ $config['proxy_ips'] = '';
 /**
  * 前后台域名
  */
-define('IMG_HOST', 'http://mmimg.redtravel.cn');
-define('FRONT_HOST', 'http://mmtree.redtravel.cn');
+define('IMG_HOST', 'http://img.test.com');
+define('FRONT_HOST', 'http://img.test.com');
 
 $config['memcache'] = array(
 	array('hostname'=>'127.0.0.1','port'=>11211,'weight'=>1)
