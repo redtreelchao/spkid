@@ -77,7 +77,7 @@
 						<br/>注2：模特文件命名："model"+模特编码.txt(文件的内容为空)，如model321.txt。
 					</td>
 					<td>
-						<!--<a href="import/gallery" onclick="if(confirm('确定执行该操作？')) $(this).hide(); else return false;">执行导入</a>-->
+						<a href="import/gallery" onclick="if(confirm('确定执行该操作？')) $(this).hide(); else return false;">执行导入</a>
 						<a href="import/gallery_result">查看结果</a>
 					</td>
 				</tr>

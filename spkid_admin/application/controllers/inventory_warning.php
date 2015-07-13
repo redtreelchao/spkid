@@ -150,7 +150,7 @@ class Inventory_warning extends CI_Controller {
         $update['warn_status'] = 1;
         
         $warning_id = $this->inventory_model->insert_inventory_warning($update);
-        sys_msg('操作成功！',0 , array(array('text'=>'查看', 'href'=>'/inventory_warning/warning_edit/'.$warning_id)));
+        sys_msg('操作成功！',0 , array(array('text'=>'查看', 'href'=>'/inventory_warning/edit_warning_info/'.$warning_id)));
     }
     
     public function edit_warning_info ($warning_id = 0)

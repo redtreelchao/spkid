@@ -201,7 +201,7 @@ class Pick_model extends CI_Model
 		array_multisort($list,SORT_ASC);
 		foreach($list as $row){
 			$this->db->trans_start();
-			if(substr(strtoupper($row->sn),0,2)=='DD'){
+			if(substr(strtoupper($row->sn),0,2)=='MM'){
 				//对于订单的处理
 				$row->order_sn=$row->sn;
 				$order=$this->order_model->lock_order($row->id);
@@ -210,7 +210,7 @@ class Pick_model extends CI_Model
 					continue;
 				}
 				//取出订单商品表
-				$sql="SELECT op.*,sub.sub_id,info.finance_date
+				$sql="SELECT op.*,sub.sub_id,info.finance_date, info.finance_admin 
 					FROM ty_order_product AS op
 					LEFT JOIN ty_product_sub AS sub ON sub.product_id=op.product_id AND sub.color_id=op.color_id AND sub.size_id=op.size_id
 					LEFT JOIN ty_order_info info ON op.order_id = info.order_id

@@ -139,6 +139,7 @@ define('IMPORT_PATH_RELATIVE','public/import/'); //导入目录的相对路径
 define('IMPORT_PATH_BATH', ROOT_PATH . IMPORT_PATH_RELATIVE); //导入主目录
 define('IMPORT_PATH_PURCHASE', IMPORT_PATH_BATH . 'purchase/'); //采购单目录
 define('IMPORT_PATH_PRO_COST', IMPORT_PATH_BATH . 'product_cost/'); //商品成本价目录
+define('IMPORT_PATH_PRO_PRICE', IMPORT_PATH_BATH . 'product_price/'); //商品销售价目录
 define('IMPORT_PATH_RESULT', IMPORT_PATH_BATH . '_result/'); //导入结果文件目录
 define('IMPORT_PATH_PROVIDER_BARCODE', IMPORT_PATH_BATH . 'provider_barcode/'); //修改条形码目录
 
@@ -186,7 +187,7 @@ define("PUBLIC_DATA_IMAGES", "public/data/images/");
 /*
  * 后台域名
  */
-define("ERP_HOST", "http://mmadmin.redtravel.cm");
+define("ERP_HOST", "http://mmadmin.redtravel.cn");
 
 //上传根目录
 define('UPLOAD_PATH_BATH', CREATE_IMAGE_PATH );

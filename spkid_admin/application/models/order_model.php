@@ -709,6 +709,7 @@ class Order_model extends CI_Model
             'create_admin'=>$this->admin_id,
             'create_date'=>"'{$this->time}'",
             'trans_direction'=>0,
+            'finance_check_admin' => $sub->finance_admin, 
             'finance_check_date' => empty($sub->finance_date) ? null : "'$sub->finance_date'"
             );
         foreach($trans as $t){
@@ -740,7 +741,7 @@ class Order_model extends CI_Model
     public function insert_trans_batch($updates)
     {
         $keys = array('trans_type','trans_status','trans_sn','product_id','color_id','size_id','sub_id','create_admin','create_date','trans_direction','depot_id','location_id','product_number',
-                'batch_id','shop_price','consign_price','consign_rate','cost_price','product_cess','update_admin','update_date', 'finance_check_date');
+                'batch_id','shop_price','consign_price','consign_rate','cost_price','product_cess','update_admin','update_date', 'finance_check_date', 'finance_check_admin');
         $sql = "INSERT INTO ".$this->db->dbprefix('transaction_info');
                 //." (".implode(',',$keys).") VALUES ";
         $result = array();
