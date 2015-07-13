@@ -224,8 +224,8 @@ $config['cache_path'] = '';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = '52kid';
-$config['mcrypt_key'] = 'baby';
+$config['encryption_key'] = 'hello';
+$config['mcrypt_key'] = 'hello';
 
 /*
 |--------------------------------------------------------------------------
@@ -269,7 +269,7 @@ $config['sess_time_to_update']	= 1200;
 |
 */
 $config['cookie_prefix']	= "";
-$config['cookie_domain']	= ".redtravel.cn";
+$config['cookie_domain']	= ".test.com";
 $config['cookie_path']		= "/";
 $config['cookie_secure']	= FALSE;
 
@@ -361,9 +361,9 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 //====================danger config begin=================================
-define('FRONT_HOST', 'http://mmtree.redtravel.cn');
-$config['IMG_HOSTS']=array('http://mmimg.redtravel.cn','http://mmimg.redtravel.cn','http://mmimg.redtravel.cn',
-                    'http://mmimg.redtravel.cn','http://mmimg.redtravel.cn');
+define('FRONT_HOST', 'http://f.test.com');
+$config['IMG_HOSTS']=array('http://img.test.com','http://img.test.com','http://img.test.com',
+                    'http://img.test.com','http://img.test.com');
 
 // memcache设置
 $config['memcache'] = array(
