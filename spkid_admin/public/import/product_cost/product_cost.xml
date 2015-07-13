@@ -101,7 +101,7 @@
     <Cell><Data ss:Type="String">供应商编码</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell><Data ss:Type="String">BT20150701000</Data></Cell>
+    <Cell><Data ss:Type="String">BT20150713000</Data></Cell>
     <Cell><Data ss:Type="String">YY-001</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0" ss:Height="14.25">
@@ -114,10 +114,10 @@
     <Cell ss:StyleID="s65"><Data ss:Type="String">税率</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:StyleID="s66"><Data ss:Type="String">MMG000003</Data></Cell>
-    <Cell ss:StyleID="s67"><Data ss:Type="String">AD102-45-咖啡</Data></Cell>
-    <Cell ss:StyleID="s66"><Data ss:Type="String">AMMEX/爱马斯 一次性使用医用丁腈检查手套</Data></Cell>
-    <Cell ss:StyleID="s68"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="s66"><Data ss:Type="String">MMG000006</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="String">PH04</Data></Cell>
+    <Cell ss:StyleID="s66"><Data ss:Type="String">贺利氏 NF新配方藻酸盐 秋叶黄</Data></Cell>
+    <Cell ss:StyleID="s68"><Data ss:Type="Number">10</Data></Cell>
     <Cell ss:StyleID="s68"><Data ss:Type="Number">0</Data></Cell>
     <Cell ss:StyleID="s68"><Data ss:Type="Number">0</Data></Cell>
     <Cell ss:StyleID="s68"><Data ss:Type="Number">0.03</Data></Cell>
@@ -140,7 +140,8 @@
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>1</ActiveRow>
+     <ActiveRow>7</ActiveRow>
+     <ActiveCol>3</ActiveCol>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>

@@ -55,7 +55,7 @@
     <Cell><Data ss:Type="String">虚库数量</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell><Data ss:Type="String">MMG000003</Data><NamedCell
+    <Cell><Data ss:Type="String">MMG000006</Data><NamedCell
       ss:Name="_FilterDatabase"/></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">0101</Data><NamedCell
       ss:Name="_FilterDatabase"/></Cell>
