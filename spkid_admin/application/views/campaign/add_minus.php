@@ -25,7 +25,18 @@
 		validator.required('end_time', '请填写结束时间');
 		return validator.passed();
 	}
-		
+function check_product_valid(t){
+	$.ajax({
+		   type: "POST",
+		   url: "campaign/check_product",
+		   data: "name="+t+'&content='+$('#product_ids').val(),
+		   dataType: "JSON",
+		   success: function(msg){
+					$('#check_result').text("["+msg.type+"]:"+msg.content);
+			}
+		});
+
+}
 	function sel(te,c, cb){
 		$('select[name='+cb+']')[0].options.length = 1;
 		$.ajax({
@@ -52,64 +63,66 @@
 		});
 	}
 
+
 	//]]>
 </script>
 <div class="main">
-	<div class="main_title"><span class="l">活动管理 >> 编辑</span><a href="campaign/index" class="return r">返回列表</a></div>
+	<div class="main_title"><span class="l">活动管理 >> 新增满减 </span><a href="campaign/index" class="return r">返回列表</a></div>
 	<div class="blank5"></div>
-	<?php print form_open_multipart('campaign/proc_edit/'.$cam_arr->campaign_id,array('name'=>'mainForm','onsubmit'=>'return check_form()'));?>
+	<?php print form_open_multipart('campaign/proc_add',array('name'=>'mainForm','onsubmit'=>'return check_form()'));?>
 		<table class="form" cellpadding=0 cellspacing=0>
 			<tr>
 				<td colspan=2 class="topTd"></td>
 			</tr>
 			<tr>
 				<td class="item_title" width="100">活动名称:</td>
-				<td class="item_input"><?php print form_input(array('name'=> 'campaign_name','class'=> 'textbox require' , 'value' => $cam_arr->campaign_name));?></td>
+				<td class="item_input"><?php print form_input(array('name'=> 'campaign_name','class'=> 'textbox require'));?></td>
 			</tr>
 			<tr>
-				<td class="item_title">活动类型:</td>
-				<td class="item_input"><?php echo $campaign_types[$cam_arr->campaign_type];?></td>
-			</tr>
-			<tr>
-				<td class="item_title">品牌名称:</td>
-				<td class="item_input"><?php echo $brand_arr->brand_name?></td>
+				<td class="item_title" width="100">活动类型:</td>
+				<td class="item_input"><?php print form_dropdown('campaign_type',$campaign_types['minus']);?></td>
 			</tr>
 			<tr>
 				<td class="item_title">最小金额:</td>
-				<td class="item_input"><?php print form_input(array('name'=> 'limit_price','class'=> 'textbox require', 'value' => $cam_arr->limit_price));?></td>
+				<td class="item_input"><?php print form_input(array('name'=> 'limit_price','class'=> 'textbox require'));?></td>
 			</tr>
-			<?php if( isset($pro_arr) ):?>
-			<tr>
-				<td class="item_title">赠送商品:</td>
-				<td class="item_input">                
-				<input name="pro" type="text" id="pro" value="" size="20" onblur="return sel(this.value,'product','tag_id');"  />
-				<select name="tag_id" id="tag_id">
-				    <option selected='selected' value="<?php echo $cam_arr->promote_value?>"><?php echo $pro_arr->product_name?></option>
-		        </select>可输入商品名称、编码搜索</td>
-			</tr>
-			<?php else:?>
 			<tr>
 				<td class="item_title">减金额:</td>
-				<td class="item_input"><?php print form_input(array('name'=> 'tag_id','class'=> 'textbox require', 'value' => $cam_arr->promote_value));?>金额为正值</td>
+				<td class="item_input"><?php print form_input(array('name'=> 'tag_id','class'=> 'textbox require'));?>金额为正值</td>
 			</tr>
-			<?php endif;?>
+			<tr>
+				<td class="item_title">选择品牌:</td>
+				<td class="item_input">                
+				<input name="brand" type="text" id="brand" value="" size="20" onblur="return sel(this.value,'brand','brand_id');"  />
+				<select name="brand_id" id="brand_id">
+				    <option value="0">--请选择--</option>
+				    </select>可输入品牌名称搜索
+				</td>
+			</tr>
 			<tr>
 				<td class="item_title">开始时间:</td>
 				<td class="item_input">
-					<input type="text" name="start_time" id="start_time" value="<?php echo $cam_arr->start_date?>" />
+					<input type="text" name="start_time" id="start_time" />
 				</td>
 			</tr>
 			<tr>
 			  <td class="item_title">结束时间:</td>
-			  <td class="item_input"><input type="text" name="end_time" id="end_time" value="<?php echo $cam_arr->end_date?>" /></td>
-		  </tr>
+			  <td class="item_input"><input type="text" name="end_time" id="end_time" /></td>
+			</tr>
+			<tr>
+			  <td class="item_title">单品列表:<br/>《单品满减》时有用</td>
+			  <td class="item_input"><?php print form_textarea(array('id'=>'product_ids','name'=>'product_ids','rows'=>5,'cols'=>80,'placehold'=>'abc'));?>
+					<?php print form_button(array('name'=>'check_id','class'=>'button','content'=>'验证商品ID','onclick'=>"javascript:check_product_valid('product_id')"));?>
+					<?php print form_button(array('name'=>'check_code','class'=>'button','content'=>'验证商品编号','onclick'=>"javascript:check_product_valid('product_sn')"));?>验证结果：<span id="check_result"></span>
+					</td>
+			</tr>
 			<tr>
 				<td class="item_title">状态:</td>
 				<td class="item_input">
-                    <label><input type="radio"  name="is_use" <?php echo $cam_arr->is_use == 0 ? 'checked="checked"' : '';?> value="0" >禁用</label>
-                    <label><input type="radio" name="is_use" <?php echo $cam_arr->is_use == 1 ? 'checked="checked"' : '';?> value="1">启用</label>
-                    <label><input type="radio" name="is_use" <?php echo $cam_arr->is_use == 2 ? 'checked="checked"' : '';?> value="2">停止</label>
-			  </td>
+					<label><?php print form_radio(array('name'=>'is_use', 'value'=>0,'checked'=>TRUE)); ?>禁用</label>
+                    <label><?php print form_radio(array('name'=>'is_use', 'value'=>1)); ?>启用</label>
+					
+				</td>
 			</tr>
 			<tr>
 				<td class="item_title"></td>

@@ -39,7 +39,9 @@
 		//]]>
 	</script>
 	<div class="main">
-		<div class="main_title"><span class="l">活动列表</span><span class="r"><a href="campaign/add" class="add">新增</a></span></div>
+		<div class="main_title">
+			<span class="l">活动列表</span><span class="r"><a href="campaign/add" class="add">新增满赠</a></span>
+			<span class="r"><a href="campaign/add_minus" class="add">新增满减</a></span></div>
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
 			活动名称：<input type="text" class="ts" name="campaign_name" value="" style="width:100px;" />
@@ -60,7 +62,7 @@
 				  </th>
 					<th width="68">活动名称</th>
 					<th width="68">最小金额</th>
-					<th width="85">赠送的商品</th>
+					<th width="85">促销内容</th>
 					<th width="69">开始时间</th>
 					<th>结束时间</th>
 					<th width="45">启用</th>
@@ -69,9 +71,9 @@
 				<?php foreach($list as $row): ?>
 				<tr class="row">
 					<td><?php echo $row->campaign_id?></td>
-					<td><?php echo $row->campaign_name?></td>
+					<td><?php echo "[".$campaign_types[$row->campaign_type]."] ".$row->campaign_name?></td>
 					<td><?php echo $row->limit_price?></td>
-					<td><?php echo $row->product_name .' '. $row->product_sn?></td>
+					<td><?php if ( in_array($row->campaign_type, array(1,3,5)) ){ echo $row->product_name .' '. $row->product_sn;} else { echo '减'.$row->promote_value.'￥';}?></td>
 					<td><?php echo $row->start_date?></td>
 					<td width="90" align="center"><?php echo $row->end_date?></td>
 					<td><?php if($row->is_use == 0){echo '未启用';}elseif($row->is_use == 1){echo '启用';}else{echo '停止';}?></td>
