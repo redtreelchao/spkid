@@ -6,6 +6,7 @@
 <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <script type="text/javascript" src="public/js/jui/core.min.js"></script>
 <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
+<script type="text/javascript" src="public/js/campaign.js"></script>
 <script type="text/javascript">
 	//<![CDATA[
 	$(function(){
@@ -103,6 +104,13 @@
 			  <td class="item_title">结束时间:</td>
 			  <td class="item_input"><input type="text" name="end_time" id="end_time" value="<?php echo $cam_arr->end_date?>" /></td>
 		  </tr>
+			<tr>
+			  <td class="item_title">单品列表:<br/>《单品满减》时有用</td>
+			  <td class="item_input"><?php print form_textarea(array('id'=>'product_sns','name'=>'product_sns','rows'=>5,'cols'=>80),isset($cam_arr->limits['product_sns'])?$cam_arr->limits['product_sns']:'');?>
+					<?php //print form_button(array('name'=>'check_id','class'=>'button','content'=>'验证商品ID','onclick'=>"javascript:check_product_valid('product_id')"));?>
+					<?php print form_button(array('name'=>'check_code','class'=>'button','content'=>'验证商品编号','onclick'=>"javascript:check_product_valid('product_sn')"));?>验证结果：<span id="check_result"></span>
+					</td>
+			</tr>
 			<tr>
 				<td class="item_title">状态:</td>
 				<td class="item_input">

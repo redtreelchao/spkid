@@ -106,7 +106,7 @@ class Campaign extends CI_Controller
 		if (!$this->form_validation->run()) {
 			sys_msg(validation_errors(), 1);
 		}
-		$update = array();
+		$update = array(); $limits = array();
 		$update['campaign_type'] = $this->input->post('campaign_type');
                 $update['campaign_name'] = $this->input->post('campaign_name');
 		$update['limit_price'] = $this->input->post('limit_price');
@@ -117,6 +117,9 @@ class Campaign extends CI_Controller
 		$update['is_use'] = intval($this->input->post('is_use'));
 		$update['create_admin'] = $this->admin_id;
 		$update['create_date'] = date('Y-m-d H:i:s');
+		$product_sns = $this->trim_val($this->input->post('product_sns'));
+		$limits['product_sns'] = implode(',',$product_sns);
+		$update['limits'] = serialize($limits);
 
 		$campaign_id = $this->campaign_model->insert($update);
 		sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'campaign/edit/'.$campaign_id), array('text'=>'返回列表','href'=>'campaign/index')));
@@ -130,6 +133,9 @@ class Campaign extends CI_Controller
 		if (!$campaign) {
 			sys_msg('记录不存在', 1);
 		}
+		if( !empty($campaign->limits) ) $campaign->limits = unserialize($campaign->limits); 
+		else $campaign->limits = array();
+
 		// 满赠要 加载赠品
 		if( in_array( $campaign->campaign_type, array_keys( $this->campaign_types_send ) )){
 			$this->load->model('product_model');
@@ -146,12 +152,16 @@ class Campaign extends CI_Controller
 		$this->load->vars('campaign_types', $this->campaign_types);
 		$this->load->view('campaign/edit');
 	}
+	private function trim_val( $product_ids_content ){
+		if( empty($product_ids_content) ) return Array();
+		$product_ids_content = preg_split("/[,，\n]+/", $product_ids_content);
+		if( is_array($product_ids_content) ) $product_ids_content = array_map( 'trim', $product_ids_content );
+		return $product_ids_content;
+	}
 	public function check_product(){
                 auth(array('campaign_edit'));
                 $product_ids_name = $this->input->post('name');
-                $product_ids_content = $this->input->post('content');
-		$product_ids_content = preg_split("/[,，\n]+/", $product_ids_content);
-		if( is_array($product_ids_content) ) $product_ids_content = array_map( 'trim', $product_ids_content );
+                $product_ids_content = $this->trim_val($this->input->post('content'));
 		$result = $this->campaign_model->check_product_valid($product_ids_name, $product_ids_content);
 		$result = $result[0];
 		$result['total'] = sizeof($product_ids_content);
@@ -171,14 +181,17 @@ class Campaign extends CI_Controller
 		if (!$this->form_validation->run()) {
 			sys_msg(validation_errors(), 1);
 		}
-		$update = array();
+		$update = array(); $limits = array();
                 $update['campaign_name'] = $this->input->post('campaign_name');
 		$update['limit_price'] = $this->input->post('limit_price');
 		$update['promote_value'] = $this->input->post('tag_id');
-		//$update['brand_id'] = $this->input->post('brand_id');
 		$update['start_date'] = $this->input->post('start_time');
                 $update['end_date'] = $this->input->post('end_time');
 		$update['is_use'] = intval($this->input->post('is_use'));
+		$product_sns = $this->trim_val($this->input->post('product_sns'));
+		$limits['product_sns'] = implode(',',$product_sns);
+		$update['limits'] = serialize($limits);
+
 
 		$this->campaign_model->update($update,$campaign_id);
 		sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'campaign/edit/'.$campaign_id), array('text'=>'返回列表','href'=>'campaign/index')));

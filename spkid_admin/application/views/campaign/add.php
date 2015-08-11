@@ -6,6 +6,7 @@
 <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <script type="text/javascript" src="public/js/jui/core.min.js"></script>
 <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
+<script type="text/javascript" src="public/js/campaign.js"></script>
 <script type="text/javascript">
 	//<![CDATA[
 	$(function(){
@@ -26,32 +27,6 @@
 		return validator.passed();
 	}
 	
-	function sel(te,c, cb){
-		$('select[name='+cb+']')[0].options.length = 1;
-		$.ajax({
-		   type: "POST",
-		   url: "campaign/sel_"+c,
-		   data: "cb="+cb+"&class="+c+"&val="+te,
-		   dataType: "JSON",
-		   success: function(msg){
-			 	if(msg.type == 1){
-					if( msg.cb == 'tag_id' )
-					for(i in msg.list){
-						$('select[name='+msg.cb+']')[0].options.add(new Option(msg.list[i].product_name+' '+msg.list[i].product_sn+' '+msg.list[i].provider_name , msg.list[i].product_id));
-					}
-					if( msg.cb == 'brand_id' )
-					for(i in msg.list){
-						$('select[name='+msg.cb+']')[0].options.add(new Option(msg.list[i].brand_name, msg.list[i].brand_id));
-					}
-				}
-			 	if(msg.type == 3){
-					alert('没搜索到相关记录');
-					return false;
-				}
-			}
-		});
-	}
-
 	//]]>
 </script>
 <div class="main">
@@ -95,13 +70,20 @@
 			<tr>
 				<td class="item_title">开始时间:</td>
 				<td class="item_input">
-					<input type="text" name="start_time" id="start_time" />
+					<input type="text" name="start_time" id="start_time" /> 0点
 				</td>
 			</tr>
 			<tr>
 			  <td class="item_title">结束时间:</td>
-			  <td class="item_input"><input type="text" name="end_time" id="end_time" /></td>
+			  <td class="item_input"><input type="text" name="end_time" id="end_time" />0点</td>
 		  </tr>
+			<tr>
+			  <td class="item_title">单品列表:<br/>《单品满减》时有用</td>
+			  <td class="item_input"><?php print form_textarea(array('id'=>'product_sns','name'=>'product_sns','rows'=>5,'cols'=>80));?>
+					<?php //print form_button(array('name'=>'check_id','class'=>'button','content'=>'验证商品ID','onclick'=>"javascript:check_product_valid('product_id')"));?>
+					<?php print form_button(array('name'=>'check_code','class'=>'button','content'=>'验证商品编号','onclick'=>"javascript:check_product_valid('product_sn')"));?>验证结果：<span id="check_result"></span>
+					</td>
+			</tr>
 			<tr>
 				<td class="item_title">状态:</td>
 				<td class="item_input">
