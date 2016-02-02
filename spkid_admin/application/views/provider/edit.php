@@ -14,23 +14,47 @@
 	//]]>
 </script>
 <div class="main">
-	<div class="main_title"><span class="l">供应商管理 >> 编辑 </span><a href="provider/index" class="return r">返回列表</a></div>
+	<div class="main_title">
+		<?php if(!empty($parent)){ ?>
+			<span class="l">发货商管理 >> 编辑 </span><a href="provider/scm_index/<?php print $parent->provider_id;?>" class="return r">返回列表</a>
+		<?php }else{ ?>
+			<span class="l">供应商管理 >> 编辑 </span><a href="provider/index" class="return r">返回列表</a>
+		<?php } ?>
+	</div>
 	<div class="blank5"></div>
 	<?php print form_open_multipart('provider/proc_edit',array('name'=>'mainForm','onsubmit'=>'return check_form()'),array('provider_id'=>$row->provider_id));?>
 		<table class="form" cellpadding=0 cellspacing=0>
 			<tr>
 				<td colspan=2 class="topTd"></td>
 			</tr>
+			<?php if(!empty($parent)){ ?> 
+			<tr>
+				<td class="item_title">上级供应商:</td>
+                <td class="item_input"><?php echo $parent->provider_name;?><input type="hidden" name="parent_id" value="<?php print $parent->provider_id;?>"></td>
+			</tr>
+			<?php } ?>
                         <tr>
-				<td class="item_title">供应商代码:</td>
+				<?php if(!empty($parent)){?>
+					<td class="item_title">发货商代码:</td>
+				<?php }else{ ?>
+					<td class="item_title">供应商代码:</td>
+				<?php } ?>	
 				<td class="item_input"><?php print form_input('provider_code',$row->provider_code,'class="textbox require wd280" disabled');?></td>
 			</tr>	
                         <tr>
-				<td class="item_title">供应商名称:</td>
+				<?php if(!empty($parent)){?>
+					<td class="item_title">发货商名称:</td>
+				<?php }else{ ?>
+					<td class="item_title">供应商名称:</td>
+				<?php } ?>
 				<td class="item_input"><?php print form_input('provider_name',$row->provider_name,'class="textbox require wd280" '.($perm_edit?'':'disabled'));?></td>
 			</tr>	
 			<tr>
-				<td class="item_title">供应商合作方式:</td>
+				<?php if(!empty($parent)){?>
+					<td class="item_title">发货商合作方式:</td>
+				<?php }else{ ?>
+					<td class="item_title">供应商合作方式:</td>
+				<?php } ?>
 				<td class="item_input"><?php print form_dropdown('provider_cooperation', get_pair($all_cooperation,'cooperation_id','cooperation_name'), $row->provider_cooperation, 'disabled');?></td>
 			</tr>	
 			<tr>
@@ -87,7 +111,7 @@
 				<tr>
 					<td class="item_title"></td>
 					<td class="item_input">
-						<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+						<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 					</td>
 				</tr>
 			<?php endif ?>

@@ -104,7 +104,7 @@ class Depot_model extends CI_Model
 
 		if (!empty($filter['location_name']))
 		{
-			$where .= " AND a.location_name LIKE ? OR CONCAT(a.location_code1,'-',a.location_code2,'-',a.location_code3,'-',a.location_code4) LIKE ? ";
+			$where .= " AND a.location_name LIKE ? OR CONCAT(a.location_code1,'-',a.location_code2,'-',a.location_code3,'-',a.location_code4,'-',a.location_code5) LIKE ? ";
 			$param[] = '%' . $filter['location_name'] . '%';
 			$param[] = '%' . $filter['location_name'] . '%';
 		}
@@ -199,7 +199,7 @@ class Depot_model extends CI_Model
 
 	public function sel_location_list ($depot_id=0)
 	{
-		$sql = "SELECT a.location_id,a.location_code1,a.location_code2,a.location_code3,a.location_code4,a.location_name FROM ".$this->db->dbprefix('location_info')." a WHERE a.is_use = 1";
+		$sql = "SELECT a.location_id,a.location_code1,a.location_code2,a.location_code3,a.location_code4,a.location_code5,a.location_name FROM ".$this->db->dbprefix('location_info')." a WHERE a.is_use = 1";
 		if ($depot_id > 0)
 		{
 			$sql .= " AND a.depot_id = '".$depot_id."'";
@@ -210,7 +210,7 @@ class Depot_model extends CI_Model
 		$rs = array();
 		foreach ($list as $row)
 		{
-			$tmp = $row->location_code1.'-'.$row->location_code2.'-'.$row->location_code3.'-'.$row->location_code4;
+			$tmp = $row->location_code1.'-'.$row->location_code2.'-'.$row->location_code3.'-'.$row->location_code4.'-'.$row->location_code5;
 			$rs[$row->location_id."::::".$tmp] = $tmp;
 		}
 		return $rs;
@@ -263,7 +263,7 @@ class Depot_model extends CI_Model
 
 	public function sel_provider_list ()
 	{
-		$sql = "SELECT a.provider_id,a.provider_code FROM ".$this->db->dbprefix('product_provider')." a WHERE a.is_use = 1 ORDER BY provider_code ASC";
+		$sql = "SELECT a.provider_id,a.provider_code,a.provider_name FROM ".$this->db->dbprefix('product_provider')." a WHERE a.is_use = 1 ORDER BY provider_code ASC";
 		$query = $this->db->query($sql);
 		$list = $query->result();
 		$query->free_result();
@@ -271,7 +271,7 @@ class Depot_model extends CI_Model
 		$rs[0] = "请选择";
 		foreach ($list as $row)
 		{
-			$rs[$row->provider_id] = $row->provider_code;
+			$rs[$row->provider_id] = $row->provider_code.'-'.$row->provider_name;
 		}
 		return $rs;
 	}
@@ -540,7 +540,7 @@ class Depot_model extends CI_Model
 			$param[] = $filter['provider_productcode'];
 		}
                 
-                if ($filter['overtime5'] == 1)
+                if (isset($filter['overtime5']) && $filter['overtime5'] == 1)
                 {
                         $where .= " AND a.purchase_check_date <> '0000-00-00 00:00:00' AND a.purchase_break_date = '0000-00-00 00:00:00' AND a.purchase_check_date <= DATE_SUB(CURDATE(), INTERVAL 5 DAY)  ";
                 }
@@ -668,7 +668,7 @@ class Depot_model extends CI_Model
 //		}
 
 		$sql = "SELECT a.*,b.product_sn,c.provider_name,c.provider_code,b.provider_productcode,b.is_audit,b.is_onsale,b.is_stop,b.product_name as b_product_name," .
-				" b.shop_price,b.promote_price," .
+				" b.shop_price,b.promote_price,b.unit_name, IF(pc.consign_price > 0, pc.consign_price, pc.cost_price) AS cost_price," .
 				" c.provider_code,d.brand_name,e.color_name,e.color_sn,f.size_name,f.size_sn,s.provider_barcode,SUM(ps.over_num) as finish_product_number" .
 				" FROM ".$this->db_r->dbprefix('purchase_sub')." a" .
 				" LEFT JOIN ".$this->db_r->dbprefix('product_info')." b ON b.product_id = a.product_id" .
@@ -678,6 +678,7 @@ class Depot_model extends CI_Model
 				" LEFT JOIN ".$this->db_r->dbprefix('product_color')." e ON e.color_id = a.color_id" .
 				" LEFT JOIN ".$this->db_r->dbprefix('product_size')." f ON f.size_id = a.size_id" .
 				" LEFT JOIN ".$this->db_r->dbprefix('product_sub')." s ON s.product_id = a.product_id AND s.color_id = a.color_id AND s.size_id = a.size_id " .
+                                " LEFT JOIN ".$this->db_r->dbprefix('product_cost')." pc ON pm.`batch_id` = pc.`batch_id` AND a.`product_id` = pc.`product_id` " .
 				"LEFT JOIN ".$this->db_r->dbprefix('purchase_box_main')." pb ON pb.purchase_code=pm.purchase_code" .
 				" LEFT JOIN ".$this->db_r->dbprefix('purchase_box_sub')." ps ON ps.product_id = a.product_id AND ps.color_id = a.color_id AND ps.size_id = a.size_id AND ps.box_id = pb.box_id" .
 				" WHERE a.purchase_id = ? GROUP BY a.product_id,a.color_id,a.size_id";
@@ -931,8 +932,13 @@ class Depot_model extends CI_Model
 
 	public function update_purchase_total ($purchase_id)
 	{
-		$sql = "SELECT SUM(product_number) AS product_number_t,SUM(product_amount) AS product_amount_t,SUM(product_finished_number) AS product_finished_number_t " .
-				"FROM ".$this->db->dbprefix('purchase_sub')." WHERE purchase_id = ? ";
+		//$sql = "SELECT SUM(product_number) AS product_number_t,SUM(product_amount) AS product_amount_t,SUM(product_finished_number) AS product_finished_number_t " .
+		//		"FROM ".$this->db->dbprefix('purchase_sub')." WHERE purchase_id = ? ";
+                $sql = "SELECT SUM(ps.product_number) AS product_number_t, SUM(ps.product_finished_number) AS product_finished_number_t, SUM(GREATEST(pc.consign_price, pc.cost_price)*ps.product_number) AS product_amount_t  
+                        FROM `ty_purchase_main` pm 
+                        LEFT JOIN ty_purchase_sub ps ON pm.purchase_id = ps.purchase_id 
+                        LEFT JOIN ty_product_cost pc ON pm.batch_id = pc.batch_id AND ps.product_id = pc.product_id 
+                        WHERE pm.purchase_id = ?";
 		$param = array();
 		$param[] = $purchase_id;
 		$query = $this->db->query($sql, $param);
@@ -1019,11 +1025,28 @@ class Depot_model extends CI_Model
 	}
     
 	public function finished_summly_purchase($purchase_id){
-	    $sql = " UPDATE ty_purchase_main a SET a.purchase_amount = (";
-	    $sql .= " SELECT SUM(t.product_amount) FROM ty_purchase_sub t WHERE t.purchase_id = $purchase_id";
+            $sql2 = "SELECT SUM(GREATEST(pc.consign_price, pc.cost_price)*ps.product_number) AS price FROM `ty_purchase_main` pm 
+LEFT JOIN ty_purchase_sub ps ON pm.purchase_id = ps.purchase_id 
+LEFT JOIN ty_product_cost pc ON pm.batch_id = pc.batch_id AND ps.product_id = pc.product_id 
+WHERE pm.purchase_id = ".$purchase_id;
+            $row2 = $this->db->query($sql2)->row();
+            $sql3 = "SELECT SUM(ps.product_number) as num FROM `ty_purchase_main` pm 
+                LEFT JOIN ty_purchase_sub ps ON pm.purchase_id = ps.purchase_id 
+                LEFT JOIN ty_product_cost pc ON pm.batch_id = pc.batch_id AND ps.product_id = pc.product_id 
+                WHERE pm.purchase_id = ".$purchase_id;
+            $row3 = $this->db->query($sql3)->row();
+	    /*$sql = " UPDATE ty_purchase_main a SET a.purchase_amount = (";
+	    $sql .= $sql2;
 	    $sql .= " ),a.purchase_number=(";
-	    $sql .= " SELECT SUM(t.product_number) FROM ty_purchase_sub t WHERE t.purchase_id = $purchase_id";
+	    $sql .= $sql3;
+	    $sql .= " ) WHERE a.purchase_id = $purchase_id";*/
+	    
+	    $sql = " UPDATE ty_purchase_main a SET a.purchase_amount = (";
+	    $sql .= $row2->price;
+	    $sql .= " ),a.purchase_number=(";
+	    $sql .= $row3->num;
 	    $sql .= " ) WHERE a.purchase_id = $purchase_id";
+	    
 	    $this->db->query($sql);
 	}
 
@@ -1090,7 +1113,7 @@ class Depot_model extends CI_Model
 
 	public function check_depot_location($depot_id,$location_code)
 	{
-		$sql = "SELECT location_id FROM ".$this->db->dbprefix('location_info')." WHERE depot_id = ? AND CONCAT(location_code1,'-',location_code2,'-',location_code3,'-',location_code4) = ? ";
+		$sql = "SELECT location_id FROM ".$this->db->dbprefix('location_info')." WHERE depot_id = ? AND CONCAT(location_code1,'-',location_code2,'-',location_code3,'-',location_code4,'-',location_code5) = ? ";
 		$param = array();
 		$param[] = $depot_id;
 		$param[] = $location_code;

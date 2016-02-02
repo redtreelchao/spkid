@@ -13,7 +13,7 @@
                 <p>感谢您的使用,订购已完成.</p>
                 <p>可在 <a href="/user/order">我的订单</a>中查询和确认订购及运送情况.</p>
                 <?php if ($order_amount): ?>
-                <p>您还需要在线支付<span style="font-weight: bold; color:#f9221d;"><?php print fix_price($order_amount);?></span>元 <a class="btnToPay" href="/order/pay/<?php print implode('-', array_keys($order_list)); ?>">立即支付</a></p>
+                <p>您还需要在线支付<span style="font-weight: bold; color:#f9221d;"><?php print fix_price($order_amount);?></span>元 <a class="btnToPay external" href="/order/pay/<?php print implode('-', array_keys($order_list)); ?>">立即支付</a></p>
                 <?php endif; ?>
             </div>
             <h3 class="top">订购信息 </h3>

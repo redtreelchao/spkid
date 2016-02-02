@@ -48,10 +48,10 @@ function form_product_category($form_name, $arr, $selected_id=0, $ext="", $heade
 	}
 	foreach($arr as $group){
 		if($group->sub_items){
-			$output .= "\t<optgroup label=\"{$group->category_name}\">\n";
+			$output .= "\t<optgroup label=\"{$group->cate_code}{$group->category_name}\">\n";
 				foreach ($group->sub_items as $v) {
 					$selected = $v->category_id == $selected_id?'selected':'';
-					$output .= "\t\t<option value=\"{$v->category_id}\" {$selected}>{$v->category_name}</option>\n";
+					$output .= "\t\t<option value=\"{$v->category_id}\" {$selected}>{$v->cate_code}{$v->category_name}</option>\n";
 				}
 
 			$output .= "\t</optgroup>\n";

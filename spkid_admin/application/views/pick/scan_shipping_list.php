@@ -1,11 +1,7 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-	<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
 		<script type="text/javascript">
 		//<![CDATA[
 		  $(function(){
@@ -83,8 +79,8 @@
             <input type="radio" name="create_date_radio" onclick="selectRadio('create_','<?php echo date("Y-m-d"); ?>','<?php echo date("Y-m-d",mktime(0,0,0,date("m"),date("d")-13,date("Y"))); ?>');">近2周
             <input type="radio" name="create_date_radio" onclick="selectRadio('create_','<?php echo date("Y-m-d"); ?>','<?php echo date("Y-m-d",mktime(0,0,0,date("m"),date("d")-20,date("Y"))); ?>');">近3周
 			<br>
-            <input type="button" class="button" value="搜索" onclick="javascript:search();" />
-            <input type="submit" name="export" class="button" value="导出"/>
+            <input type="button" class="am-btn am-btn-primary" value="搜索" onclick="javascript:search();" />
+            <input type="submit" name="export" class="am-btn am-btn-primary" value="导出"/>
 			</form>
 		</div>
 		<div class="blank5"></div>

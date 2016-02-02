@@ -85,6 +85,10 @@
 			  <td class="item_title">评论内容:</td>
 			  <td class="item_input"><textarea name="comment_content" cols="60" rows="5" id="comment_content"></textarea></td>
 		  </tr>
+		  <tr>
+			  <td class="item_title">星级:</td>
+			  <td class="item_input"><input name="grade" type="text" id="grade" value="" size="10"  /></td>
+		  </tr>
 			<tr>
 			  <td class="item_title">身高(cm):</td>
 			  <td class="item_input"><input name="height" type="text" id="height" value="" size="60"  /></td>
@@ -122,7 +126,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<tr>

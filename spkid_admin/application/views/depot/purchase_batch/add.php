@@ -1,10 +1,6 @@
 <?php include(APPPATH.'views/common/header.php');?>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
     <script type="text/javascript" src="public/js/listtable.js"></script>
     <script type="text/javascript" src="public/js/utils.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-    <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
     <script type="text/javascript" src="public/js/validator.js"></script>
     <script type="text/javascript">
         //<![CDATA[
@@ -64,9 +60,9 @@
 			<tr>
                             <td class="item_title">供应商:</td>
                             <td class="item_input">
-                                <select id="provider_id" name="provider_id">
+                                <select id="provider_id" name="provider_id" data-am-selected="{searchBox: 1,maxHeight: 300}">
                                     <option value="">供应商</option>
-                                    <?php foreach($provider_list as $provider) print "<option value='{$provider->provider_id}'>[{$provider->provider_code}]-{$provider->provider_name}</option>"?>
+                                    <?php foreach($provider_list as $provider) print "<option value='{$provider->provider_id}'>{$provider->provider_code}-{$provider->provider_name}</option>"?>
                                 </select>
                             </td>
 			</tr>
@@ -100,7 +96,7 @@
 			<tr>
                             <td class="item_title"></td>
                             <td class="item_input">
-                                <?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+                                <?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
                             </td>
 			</tr>
 			<tr>

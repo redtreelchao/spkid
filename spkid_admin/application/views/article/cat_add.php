@@ -62,7 +62,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'添加'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'添加'));?>
 				</td>
 			</tr>
 			<tr>

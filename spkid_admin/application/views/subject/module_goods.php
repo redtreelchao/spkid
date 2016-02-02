@@ -27,7 +27,7 @@
                     row += '<td>' + $('td[name=provider_productcode_'+goods_id+']').text() + '</td>';
                     row += '<td>' + $('td[name=shop_price_'+goods_id+']').text() + '</td>';
                     row += '<td><input type="text" class="textbox" style="width:60px;text-align:center;" name="added_sort_order[]" value="0" /></td>';
-                    row += '<td><input type="button" value="删除" onclick="javascript:doDeleteSelectedGoods('+goods_id+');" /></td>';
+                    row += '<td><input type="button" class="am-btn am-btn-secondary" value="删除" onclick="javascript:doDeleteSelectedGoods('+goods_id+');" /></td>';
                     row += '</tr>';
                     $('#goodsDataTable').append(row);
                 }
@@ -79,8 +79,8 @@
             </select>
             排序值：<input type="text" class="ts" name="sort_order" value="<?=$row->sort_order?>" style="width:70px;" />
             显示数量：<input type="text" class="ts" name="product_num" value="<?=$row->product_num?>" style="width:70px;" />（0为全部显示）
-            <?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'保存'));?>
-            <?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'重置'));?>
+            <?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'保存'));?>
+            <?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'重置'));?>
             
             <br/>已添加的商品：
             <table id="goodsDataTable" class="dataTable" cellpadding=0 cellspacing=0>
@@ -104,7 +104,7 @@
                         <td><?=$p->provider_productcode; ?></td>
                         <td><?=$p->shop_price; ?></td>
                         <td><input type="text" class="textbox" style="width:60px;text-align:center;" name="added_sort_order[]" value="<?=$p->sort_order; ?>" /></td>
-                        <td><input type="button" value="删除" onclick="javascript:doDeleteSelectedGoods(<?=$p->product_id; ?>);" /></td>
+                        <td><input type="button" class="am-btn am-btn-secondary" value="删除" onclick="javascript:doDeleteSelectedGoods(<?=$p->product_id; ?>);" /></td>
                     </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -153,7 +153,7 @@
             <input type="text" class="ts" name="min_gl_num" value="" style="width:100px;" />
             - <input type="text" class="ts" name="max_gl_num" value="" style="width:100px;" />
             
-            <input type="submit" value="搜索" />
+            <input type="submit" class="am-btn am-btn-secondary" value="搜索" />
         </form>
     </div>
     

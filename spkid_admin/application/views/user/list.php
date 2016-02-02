@@ -1,26 +1,41 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <script type="text/javascript" src="public/js/listtable.js"></script>
 <script type="text/javascript" src="public/js/utils.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
+<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.js"></script>
 
 <script type="text/javascript">
     $(function(){
     $('input[type=text][name=start_time]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:'', yearRange:'-100:+10'});
     $('input[type=text][name=end_time]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:'', yearRange:'-100:+10'});
+    $('.change_discount').click(function(e){
+        e.preventDefault();
+        var uid = $(this).attr('href').substring(1);
+        $.dialog({ id:'panel',height:150,width:300,maxBtn:false, lock:true, title:'修改会员折扣',iconTitle:false,cover:true,content: 'url:user/ajax_get_user_discount/'+uid,cache:false,ok:function(){
+            var value = this.content.document.getElementById('discount').value;
+            $.post('user/ajax_change_discount', {uid:uid, discount:value}, function(msg){
+                if (1 == msg){
+                    $.dialog({content:'修改成功!'});
+                } else if(0 == msg){
+                    $.dialog({content:'修改失败!'});
+                } else{
+                    $.dialog.alert(msg);
+                }
+                
+            })
+        }
+        });
     });
-
+    });
     //<![CDATA[
     listTable.filter.page_count = '<?php echo $filter['page_count']; ?>';
     listTable.filter.page = '<?php echo $filter['page']; ?>';
     listTable.url = 'user/index';
     function search(){
 		listTable.filter['user_type'] = $.trim($('select[name=user_type]').val());
-		listTable.filter['mobile'] = $.trim($('input[name=mobile]').val());
-		listTable.filter['email'] = $.trim($('input[name=email]').val());
+        listTable.filter['mobile'] = $.trim($('input[name=mobile]').val());
+        listTable.filter['user_name'] = $.trim($('#user_name').val());
+	    listTable.filter['email'] = $.trim($('input[name=email]').val());
 		listTable.filter['is_use'] = $.trim($('select[name=is_use]').val());
 		listTable.filter['email_validated'] = $.trim($('select[name=email_validated]').val());
 		listTable.filter['mobile_checked'] = $.trim($('select[name=mobile_checked]').val());
@@ -28,7 +43,6 @@
         listTable.filter['end_time'] = $.trim($('input[name=end_time]').val());
         listTable.loadList();
     }
-    
     //]]>
 </script>
 	<div class="main">
@@ -38,6 +52,8 @@
 			<form name="search" action="javascript:search(); ">
 			  手机号：
 			    <input name="mobile" type="text" id="mobile" size="15" />
+            用户名：
+			    <input name="user_name" type="text" id="user_name" size="15" />
               用户类型：
 <select name="user_type" id="user_type">
 	    <option value="">--请选择--</option>
@@ -67,7 +83,7 @@ Email是否验证：
 			  </select>			  创建时间：
 			  <input name="start_time" type="text" id="start_time" size="15" />
 			  <input name="end_time" type="text" id="end_time" size="15" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 		</form>
 </div>
 		<div class="blank5"></div>
@@ -118,11 +134,14 @@ Email是否验证：
 					?>  
                     <a  href="user_account_log/index/<?php echo $item->user_id;?>" title="明细">明细</a>
                     <?php endif;?> 
+<?php if($perm_change_discount):?>
+ <a class="change_discount" href="#<?php echo $item->user_id?>" >修改折扣</a>
+<?php endif;?> 
                     </td>
 				</tr>
 		<?php endforeach;?>
 			    <tr>
-					<td colspan="15" class="bottomTd"> </td>
+					<td colspan="15" class="bottomTd"></td>
 				</tr>
 			</table>
   <div class="blank5"></div>

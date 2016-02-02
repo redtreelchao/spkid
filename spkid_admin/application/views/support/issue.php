@@ -24,10 +24,10 @@
 	<tr>
 		<td>
 			<textarea name="message_box" class="message_box" rows="3"></textarea><br/>						
-			<input name="btn_sender" class="btn_sender" type="button" value="发送"/>
-			<input name="btn_assign" class="btn_assign" type="button" value="转出"/>
-			<input name="btn_close" class="btn_close" type="button" value="关闭"/>
-			<input name="btn_log" class="btn_log" type="button" value="备注"/>
+			<input name="btn_sender" class="btn_sender" type="button" class="am-btn am-btn-secondary" value="发送"/>
+			<input name="btn_assign" class="btn_assign" type="button" class="am-btn am-btn-secondary" value="转出"/>
+			<input name="btn_close" class="btn_close" type="button" class="am-btn am-btn-secondary" value="关闭"/>
+			<input name="btn_log" class="btn_log" type="button" class="am-btn am-btn-secondary" value="备注"/>
 		</td>
 		<td align="center"><span class="btn_history">查看历史记录</span><div class="page"></div></td>
 		<td></td>

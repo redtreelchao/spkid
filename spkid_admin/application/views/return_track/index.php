@@ -2,10 +2,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/utils.js"></script>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<script type="text/javascript">
 		//<![CDATA[
 		$(function(){
@@ -48,7 +44,7 @@
                         <input type="radio" name="searchType" value="1" style="vertical-align: middle;">待天猫申请退货列表
                         <input type="radio" name="searchType" value="2" style="vertical-align: middle;">退单待收货列表
                         <input type="radio" name="searchType" value="3" style="vertical-align: middle;">退单待返款列表
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
                     </form>
 		</div>
 		<div class="blank5"></div>

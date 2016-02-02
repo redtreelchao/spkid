@@ -141,6 +141,9 @@ class purchase_model extends CI_Model{
         if (!empty($filter['product_sn'])) {
             $where .= " AND pi.product_sn = '".$filter['product_sn']."'";
         }
+        if (!empty($filter['provider_barcode'])) {
+            $where .= " AND ps.provider_barcode = '".$filter['provider_barcode']."'";
+        }
         $where .= " group by ti.product_id, ti.color_id, ti.size_id ";
         
         $sql = "select count(1) ct from (select ti.product_id, ti.color_id, ti.size_id " .$from .$where .") t";
@@ -155,6 +158,7 @@ class purchase_model extends CI_Model{
         }
         
         $sql = "select ti.product_id " .$from .$where . " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'];
+			       
         $res = $this->db_r->query($sql)->result();
         
         $product_id_ary = array();
@@ -167,7 +171,7 @@ class purchase_model extends CI_Model{
                        pst.style_name, pss.season_name, pi.product_sex, pi.product_year,
                        pi.product_month, pi.is_promote, pi.shop_price, pi.market_price,
                        pi.promote_start_date, pi.promote_end_date, pi.promote_price, pi.keywords,
-                       ps.color_id, ps.size_id, ps.gl_num, ps.consign_num, t.product_number, psi.size_name, pc.color_name, pca.category_name
+                       ps.color_id, ps.size_id, ps.gl_num, ps.consign_num,ps.provider_barcode, t.product_number, psi.size_name, pc.color_name, pca.category_name, t.batch_codes
                from ty_product_sub ps
                left join ty_product_info pi on ps.product_id = pi.product_id
                left join ty_product_style pst on pi.style_id = pst.style_id
@@ -178,8 +182,9 @@ class purchase_model extends CI_Model{
                left join ty_product_size psi on ps.size_id = psi.size_id
                left join ty_product_category pca on pca.category_id = pi.category_id
                inner join (
-                       select product_id, color_id, size_id, depot_id, batch_id, sum(product_number) as product_number
-                       from ty_transaction_info 
+                       select ti.product_id, ti.color_id, ti.size_id, ti.depot_id, ti.batch_id, sum(ti.product_number) as product_number,group_concat(distinct pba.batch_code) batch_codes
+                       from ty_transaction_info ti
+                left join ty_purchase_batch pba on pba.batch_id = ti.batch_id
                        where trans_status IN (1,2,4) 
                        group by product_id, color_id, size_id
                ) as t on ps.product_id = t.product_id and ps.color_id = t.color_id and ps.size_id = t.size_id
@@ -188,6 +193,35 @@ class purchase_model extends CI_Model{
         
         return array('list' => $res, 'filter' => $filter);
     }
+public function get_export_inventory(){
+        $sql = "select pi.product_id, pi.product_name, pi.product_sn, pi.provider_productcode, pb.brand_name, 
+                       pst.style_name, pss.season_name, pi.product_sex, pi.product_year,
+                       pi.product_month, pi.is_promote, pi.shop_price, pi.market_price,
+                       pi.promote_start_date, pi.promote_end_date, pi.promote_price, pi.keywords,
+                       ps.color_id, ps.size_id, ps.gl_num, ps.consign_num,ps.provider_barcode, t.product_number, psi.size_name, pc.color_name, pca.category_name, t.batch_code,t.location_name
+               from ty_product_sub ps
+               left join ty_product_info pi on ps.product_id = pi.product_id
+               left join ty_product_style pst on pi.style_id = pst.style_id
+               left join ty_product_provider pp on pi.provider_id = pp.provider_id
+               left join ty_product_brand pb on pi.brand_id = pb.brand_id
+               left join ty_product_season pss on pi.season_id = pss.season_id
+               left join ty_product_color pc on ps.color_id = pc.color_id
+               left join ty_product_size psi on ps.size_id = psi.size_id
+               left join ty_product_category pca on pca.category_id = pi.category_id
+               INNER JOIN (
+                       select ti.product_id, ti.color_id, ti.size_id, ti.depot_id, ti.batch_id, pba.batch_code, SUM(ti.product_number) AS product_number ,li.`location_name`
+                       from ty_transaction_info ti
+                LEFT JOIN ty_purchase_batch pba on pba.batch_id = ti.batch_id
+		LEFT JOIN ty_location_info AS li ON ti.`location_id`=li.`location_id`
+                       where trans_status IN (1,2,4) 
+                       group by product_id, color_id, size_id, ti.batch_id,ti.`location_id`
+		       HAVING product_number >0 
+               ) as t on ps.product_id = t.product_id and ps.color_id = t.color_id and ps.size_id = t.size_id
+                where 1 ";
+        $res = $this->db_r->query($sql)->result();
+        
+        return array('list' => $res, 'filter' => $filter);
+}
     
     public function get_inventory_batch($provider_id)
     {
@@ -224,6 +258,44 @@ class purchase_model extends CI_Model{
             $list = $query->result();
             $query->free_result();
             return $list;
+    }
+    
+    public function get_product_location($product_id, $color_id, $size_id){
+        $sql = "SELECT 
+  di.`depot_name`,
+  li.`location_name`,
+pba.batch_code,
+  SUM(ti.product_number) AS num 
+FROM
+  `ty_transaction_info` ti 
+  LEFT JOIN ty_depot_info di 
+    ON ti.depot_id = di.depot_id 
+  LEFT JOIN ty_location_info li 
+    ON ti.location_id = li.`location_id` 
+left join ty_purchase_batch pba on pba.batch_id = ti.batch_id
+WHERE product_id = ".$product_id." 
+  AND color_id = ".$color_id." 
+  AND size_id = ".$size_id." 
+  AND trans_status IN (1, 2, 4) 
+GROUP BY ti.batch_id,ti.location_id 
+HAVING num > 0";
+        $query = $this->db_r->query($sql);
+        $list = $query->result();
+        $query->free_result();
+        return array('list' => $list);
+    }
+    
+    public function get_purchase_sub($purchase_id, $product_id){
+        $sql = "SELECT ps.* FROM ty_purchase_main pm "
+                . "INNER JOIN ty_purchase_sub ps ON pm.purchase_id = ps.purchase_id "
+                . "WHERE ps.purchase_id = ? AND ps.product_id = ?";
+        $row = $this->db_r->query($sql , array($purchase_id , $product_id) )->row();
+        return $row;
+    }
+    
+    public function update_purchase_sub($purchase_id, $purchase_sub_id, $update){
+        //$sql = "UPDATE ty_purchase_sub SET expire_date = '".$exdate."' WHERE purchase_sub_id = '".$purchase_sub_id."' AND purchase_id = '".$purchase_id."'";
+        $this->db->update('purchase_sub', $update, array('purchase_id' => $purchase_id, 'purchase_sub_id' => $purchase_sub_id));    
     }
     
 }

@@ -15,7 +15,7 @@
 <div class="main">
 	<div class="main_title">
         <span class="l">首页焦点图>> 新增</span>
-        <a href="front_focus_image/index" class="return r">返回列表</a></div>
+        <a href="front_focus_image/index/<?php echo $search_type?>" class="return r">返回列表</a></div>
 	<div class="blank5"></div>
 	<?php print form_open_multipart('front_focus_image/proc_add',array('name'=>'mainForm','onsubmit'=>'return check_form()'));?>
 		<table class="form" cellpadding=0 cellspacing=0>
@@ -44,17 +44,35 @@
                             'class'=> 'textbox require'));?>链接必须以http://开头
                 </td>
 				
+            </tr>
+            <tr>
+				<td class="item_title">小图:</td>
+				<td class="item_input">
+                    <input type="file" name="small_image">
+                </td>
 			</tr>
             <tr>
 				<td class="item_title">图片:</td>
 				<td class="item_input">
                     <input type="file" name="focus_image">
                 </td>
-			</tr>
+            </tr>
+            <tr>
+				<td class="item_title">开始时间:</td>
+				<td class="item_input">
+                    <input type="text" name="start_time" class="am-form-field" placeholder="开始时间" data-am-datepicker readonly/>
+                </td>
+            </tr>
+            <tr>
+<td class="item_title">结束时间:</td>
+<td class="item_input">
+                    <input type="text" name="end_time" class="am-form-field" placeholder="结束时间" data-am-datepicker readonly/>
+                </td>
+</tr>
 		    <tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<tr>

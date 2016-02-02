@@ -46,7 +46,8 @@ function add_color () {
 	html_str += '</tr>';
 	html_str += '<tr><td class="access_left" style="text-align:left" class="cs_table_3">';
 	html_str += '<form id="cs_upload_'+color_id+'" action="product_api/add_gallery" method="POST" enctype="multipart/form_data">';
-	html_str += '<label><input type="radio" name="cs_upload_image_type" value="default">默认</label><br><label><input type="radio" name="cs_upload_image_type" value="part">局部</label><br><label><input type="radio" name="cs_upload_image_type" value="tonal">色片</label><br>';
+	//html_str += '<label><input type="radio" name="cs_upload_image_type" value="default">默认</label><br><label><input type="radio" name="cs_upload_image_type" value="part">局部</label><br><label><input type="radio" name="cs_upload_image_type" value="tonal">色片</label><br>';
+	html_str += '<label><input type="radio" name="cs_upload_image_type" value="default">默认</label><br><label><input type="radio" name="cs_upload_image_type" value="part">局部</label><br>';
 	html_str += '<input type="file" name="cs_upload_image"><br>';
 	html_str += '<input type="hidden" name="cs_upload_color_id" value="'+color_id+'">';
 	html_str += '<input type="hidden" name="cs_upload_product_id" value="'+product_id+'">';
@@ -175,6 +176,12 @@ function add_size (color_id) {
 		alert('商品条形码不能为空');
 		return false;
 	}
+        
+        if (provider_barcode.length > 16){
+            alert('商品条形码长度不能超过16位');
+            return false;
+        }
+        
 	$.ajax({
 		url:'product_api/add_sub',
 		data:{product_id:product_id,color_id:color_id,size_id:size_id,provider_barcode:provider_barcode,rnd:new Date().getTime()},

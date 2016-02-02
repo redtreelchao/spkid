@@ -1,7 +1,4 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
-	<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-	<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
 	<script type="text/javascript">
 		//<![CDATA[
 		var index = <?echo $index ?>;
@@ -122,7 +119,7 @@
 		    <div id="file_model" style="display: none">
 			<form action="/product/batch_check_provider_barcode" method="post" enctype="multipart/form-data" >
 			上传文件：<input type="file" name="data_file" />
-			<input type="submit" class="button" value="提交确认"/>
+			<input type="submit" class="am-btn am-btn-primary" value="提交确认"/>
 			[<a href="public/import/_template/provider_barcode.xml">下载模板_右键另存</a>]
 			</form>
 		    </div>

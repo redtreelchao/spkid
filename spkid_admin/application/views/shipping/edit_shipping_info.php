@@ -52,13 +52,13 @@
 		  </tr>
 			<tr>
 				<td class="item_title">排序号:</td>
-				<td class="item_input"><input <?php echo $perms['shipping_edit'] == 2 ? 'disabled="disabled"' : '';?> name="sort_order" class="textbox" value="<?php echo $shipping->sort_order?>" id="sort_order" /></td>
+				<td class="item_input"><input <?php echo $perms['shipping_edit'] == 2 ? 'disabled="disabled"' : '';?> name="sort_order" class="textbox" value="<?php echo $shipping->sort_order?>" id="sort_order" />小的优先级高</td>
 			</tr>
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
                 <?php if($perms['shipping_edit'] == 1):?>
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
                     <?php endif;?>
 				</td>
 			</tr>

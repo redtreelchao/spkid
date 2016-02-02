@@ -49,6 +49,12 @@ class CI_Model {
 	{
 		$CI =& get_instance();
                 switch ($key) {
+                    case "db_wp":
+                        if (empty($CI->db_wp)) {
+                            $CI->db_wp = $CI->load->database('wordpress', TRUE, TRUE);
+                        }
+                        return $CI->db_wp;
+                        break;
                     case "db_r":
                         if (empty($CI->db_r)) {
                             $CI->db_r = $CI->load->database('default_r', TRUE, TRUE);

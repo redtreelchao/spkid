@@ -2,11 +2,7 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/utils.js"></script>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
     <script type="text/javascript" src="public/js/utils.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-    <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
 	<script type="text/javascript">
         $(function(){
             $('input[type=text][name=check_date_start]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:'', yearRange:'-100:+10'});
@@ -78,7 +74,7 @@
                 创建日期：
                 <input type="text" name="check_date_start" readonly id="check_date_start" />
                 <input type="text" name="check_date_end" readonly id="check_date_end" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

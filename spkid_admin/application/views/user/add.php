@@ -1,10 +1,6 @@
 <?php include(APPPATH.'views/common/header.php');?>
-<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
 <script type="text/javascript" src="public/js/listtable.js"></script>
 
 
@@ -183,6 +179,24 @@
 			  <td class="item_title">护照号:</td>
 			  <td class="item_input"><?php print form_input(array('name' => 'passport_code','class' => 'textbox')); ?></td>
 		  </tr>
+		  	<tr>
+		  		<td class="item_title">单位名称:</td>
+			  	<td class="item_input"><?php print form_input(array('name' => 'company_name','class' => 'textbox')); ?></td>
+			</tr>
+			<tr>
+		  		<td class="item_title">单位性质:</td>
+			  	<td class="item_input">
+					<select name="company_type">
+		                <?php foreach($company_type_list as $key => $type):?>
+		                <option value="<?php echo $key;?>"><?php echo $type;?></option>
+						<?php endforeach;?>
+				     </select>
+			  	</td>
+			</tr>
+			<tr>
+		  		<td class="item_title">单位职务:</td>
+			  	<td class="item_input"><?php print form_input(array('name' => 'company_position','class' => 'textbox')); ?></td>
+			</tr>
 			<tr>
 			  <td class="item_title">&nbsp;</td>
 			  <td class="item_input"><span class="item_title">*联系地址（请填写完整，如果不完整将不记录数据）</span></td>
@@ -232,7 +246,7 @@
 			<tr>
 				<td class="item_title">&nbsp;</td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<tr>

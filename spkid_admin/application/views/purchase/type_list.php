@@ -16,13 +16,13 @@
 		<div class="main_title">采购类型列表</div>
 		<div class="blank5"></div>
 		<div class="button_row">
-			<input type="button" class="button" value="新增" onclick="location.href='purchase/add_type';"; />
+			<input type="button" class="am-btn am-btn-primary" value="新增" onclick="location.href='purchase/add_type';"; />
 		</div>
 		<div class="blank5"></div>
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
 			采购类型名称：<input type="text" class="ts" name="purchase_type_name" value="" style="width:100px;" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

@@ -1,7 +1,5 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
     <script type="text/javascript" src="public/js/utils.js"></script>
 	<div class="main">
 		<div class="main_title">
@@ -29,9 +27,9 @@
                     </tr>
                     <tr>
                         <td colspan="6" style="text-align:center">
-					        <?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交扫描'));?>
-                        	<input type="button" class="button" value="重置" name="myreset" id="myreset" onclick="location.reload();"/>
-                                <input type="button" class="button" value="标记为异常订单" name="unusual_order" id="unusual_order"/>
+					        <?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交扫描'));?>
+                        	<input type="button" class="am-btn am-btn-primary" value="重置" name="myreset" id="myreset" onclick="location.reload();"/>
+                                <input type="button" class="am-btn am-btn-primary" value="标记为异常订单" name="unusual_order" id="unusual_order"/>
                         <td>
                     </tr>
                 </table>

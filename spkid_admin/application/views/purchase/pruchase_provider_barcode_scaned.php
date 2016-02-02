@@ -1,20 +1,16 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
     <script type="text/javascript" src="public/js/listtable.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-    <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
     <script>
 	$(function(){
-	    $(':checkbox[name=check_all_box]').attr('checked',true);
-	    $(':checkbox[flg=product_id]').attr('checked',true);
-	    $(':checkbox[name=check_all_box]').click(function(){check_all();});
+	    $(':checkbox[name=check_all_box]').prop('checked',true);
+	    $(':checkbox[flg=product_id]').prop('checked',true);
+	    $(':checkbox[name=check_all_box]').prop(function(){check_all();});
 	});
 	function check_all() {
-	    if($(':checkbox[name=check_all_box]').attr('checked'))
-		    $(':checkbox[flg=product_id]').attr('checked',true);
+	    if($(':checkbox[name=check_all_box]').prop('checked'))
+		    $(':checkbox[flg=product_id]').prop('checked',true);
 	    else
-		    $(':checkbox[flg=product_id]').attr('checked',false);
+		    $(':checkbox[flg=product_id]').prop('checked',false);
 	}
 	function _print(){
 	    $("#action_form").attr("action","purchase_box/print_provider_barcode");
@@ -41,8 +37,8 @@
 		    <input name="purchase_code"  type="hidden" value="<?=$purchase->purchase_code?>"/>
 		    <input name="type"  type="hidden" value="scaned"/>
 		    <br />
-		    <input type="button" class="button" value="提交打印" onclick ="_print();"/>
-		    <input type="button" class="button"  value="导出Excel" onclick="_export();"/>
+		    <input type="button" class="am-btn am-btn-primary" value="提交打印" onclick ="_print();"/>
+		    <input type="button" class="am-btn am-btn-primary"  value="导出Excel" onclick="_export();"/>
 		    <table id="dataTable" class="dataTable" cellpadding=0 cellspacing=0>
 			    <tr>
                                 <td colspan="7" class="topTd"> </td>
@@ -54,7 +50,7 @@
 			      <th>名称</th>
 			      <th>货号</th>
 			      <th>颜色</th>
-			      <th>尺寸</th>
+			      <th>规格</th>
 			      <th>条码</th>
 			      <th>打印条码数</th>
 			    </tr>
@@ -85,8 +81,8 @@
 				<td colspan="7" class="bottomTd"> </td>
 			    </tr>
 		    </table>
-		    <input type="button" class="button" value="提交打印" onclick="_print();"/>
-		    <input type="button" class="button"  value="导出Excel" onclick="_export();"/>
+		    <input type="button" class="am-btn am-btn-primary" value="提交打印" onclick="_print();"/>
+		    <input type="button" class="am-btn am-btn-primary"  value="导出Excel" onclick="_export();"/>
 		    </form>
 		    <div class="blank5"></div>
 	    </div>

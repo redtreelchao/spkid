@@ -74,7 +74,7 @@
 				<td class="item_title"></td>
 				<td class="item_input">
                 <?php if($perms['art_cat_edit'] == 1):?>
-				<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'编辑'));?>
+				<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'编辑'));?>
                 <?php endif;?>
 				</td>
 			</tr>

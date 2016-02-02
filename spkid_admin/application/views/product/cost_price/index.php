@@ -3,12 +3,6 @@
 	<script type="text/javascript" src="public/js/utils.js"></script>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/cluetip.js"></script>
-	<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 	<script type="text/javascript">
 		//<![CDATA[
@@ -32,7 +26,7 @@
 			商品款号：<input type="text" class="ts" name="product_sn"   value="" style="width:100px;" />
 			批次号：  <input type="text" class="ts" name="batch_code"   value="" style="width:100px;" />
 			<?php print form_dropdown('brand_id',get_pair($all_brand,'brand_id','brand_name', array(''=>'品牌'))); ?>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

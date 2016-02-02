@@ -54,7 +54,7 @@
 		    </select>-->
                         <label><input type="checkbox" name="odd" value="1" />问题单</label>
                         <label><input type="checkbox" name="pick" value="1" />拣货中</label>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

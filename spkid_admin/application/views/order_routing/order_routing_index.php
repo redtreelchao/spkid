@@ -6,8 +6,8 @@
 	<script type="text/javascript">
     	
 		//<![CDATA[
-		//listTable.filter.page_count = '<?php echo $filter['page_count']; ?>';
-		//listTable.filter.page = '<?php echo $filter['page']; ?>';
+		//listTable.filter.page_count = '<?php //echo $filter['page_count']; ?>';
+		//listTable.filter.page = '<?php //echo $filter['page']; ?>';
 		listTable.url = '/order_routing';
 		function search() {
 			listTable.filter['source_id'] = $.trim($('select[name=source_id]').val());
@@ -116,7 +116,7 @@
 				<?php print form_dropdown('source_id',get_pair($all_source,'source_id','source_name', array(''=>'订单来源'))); ?>
 				<?php print form_dropdown('shipping_id',get_pair($all_shipping,'shipping_id','shipping_name', array(''=>'配送方式'))); ?>
 				<?php print form_dropdown('pay_id',get_pair($all_payment,'pay_id','pay_name', array(''=>'支付方式'))); ?>
-				<input type="submit" class="button" value="搜索" />
+				<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		
@@ -130,7 +130,7 @@
 			<?php print form_dropdown('a_pay_id',get_pair($all_payment,'pay_id','pay_name', array(''=>'支付方式'))); ?>
 			<?php print form_dropdown('a_show_type',$all_show_type); ?>
 			<?php print form_dropdown('a_routing',$all_routing); ?>
-		    <input type="button" class="button" onclick="add();" value="添加" name="add">
+		    <input type="button" class="am-btn am-btn-primary" onclick="add();" value="添加" name="add">
 		</div>
 		
 		<div class="blank5"></div>

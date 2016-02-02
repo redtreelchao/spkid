@@ -13,13 +13,19 @@ class Product_type_model extends CI_Model
                     left join ".$this->db_r->dbprefix('product_type')." AS pt2
                         on pt.parent_id2=pt2.type_id
                     left join ".$this->db_r->dbprefix('product_category')." AS c
-                        on pt.category_id=c.category_id                        
+                        on pt.category_id=c.category_id
+                    left join ".$this->db_r->dbprefix('product_genre')." AS g
+                        on pt.genre_id=g.id                         
                     ";
 		$where = " WHERE 1 ";
 		$param = array();
         if(!empty($filter['key_word']))
         {
             $where.="and (pt.type_code like '%$filter[key_word]%' or pt.type_name like '%$filter[key_word]%')";
+        }
+        if(!empty($filter['genre_id']))
+        {
+            $where.=" and pt.genre_id=$filter[genre_id]";
         }
         if(!empty($filter['first_type_id']))
         {
@@ -48,7 +54,7 @@ class Product_type_model extends CI_Model
 		}
 		$sql = "SELECT pt.type_id,pt.type_code,pt.type_name,pt.parent_id,pt.parent_id2,
                     pt.is_show_cat,pt.sort_order,pt1.type_name as p1_type_name,
-                    pt2.type_name as p2_type_name, c.category_name"
+                    pt2.type_name as p2_type_name, c.category_name,g.name "
 				. $from . $where . " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order']
 				. " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'];
 		$query = $this->db_r->query($sql, $param);

@@ -101,7 +101,7 @@ class Voucher extends CI_Controller
 		$this->load->vars('all_status', $this->campaign_status_list);
 		$this->load->vars('all_category', category_tree($this->category_model->all_category()));
 		$this->load->vars('all_brand', $this->brand_model->all_brand());
-                $this->load->vars('all_provider', $this->provider_model->all_provider());
+        $this->load->vars('all_provider', $this->provider_model->all_provider_coop());
 		$this->load->view('voucher/add');
 	}
 
@@ -120,7 +120,8 @@ class Voucher extends CI_Controller
 		$brand_ids = $this->input->post('brand_ids');
 		$update['brand'] = is_array($brand_ids) ? implode(',',$brand_ids):'';
                 $provider_ids = $this->input->post('provider_ids');
-		$update['provider'] = is_array($provider_ids) ? implode(',',$provider_ids):'';
+		//$update['provider'] = is_array($provider_ids) ? implode(',',$provider_ids):'';
+                $update['provider'] = $provider_ids;
 		$product_ids = $this->input->post('product_ids');
 		$update['product'] = is_array($product_ids) ? implode(',',$product_ids):'';
 		if($update['product']) $update['category'] = $update['brand'] = $update['provider'] = '';
@@ -153,6 +154,8 @@ class Voucher extends CI_Controller
 		$campaign->category = explode(',',$campaign->category);
 		$campaign->brand = explode(',',$campaign->brand);
 		$campaign->product = explode(',',$campaign->product);
+        //$campaign->provider = explode(',',$campaign->provider);
+                $campaign->provider = $campaign->provider;
 		$product_list = $this->voucher_model->product_list($campaign->product);
 		attach_gallery($product_list);
 		attach_sub($product_list);
@@ -170,7 +173,7 @@ class Voucher extends CI_Controller
 		$this->load->vars('all_status', $this->campaign_status_list);
 		$this->load->vars('all_category', category_tree($this->category_model->all_category()));
 		$this->load->vars('all_brand', $this->brand_model->all_brand());
-                $this->load->vars('all_provider', $this->provider_model->all_provider());
+        $this->load->vars('all_provider', $this->provider_model->all_provider_coop());
 		$this->load->vars('product_list', $product_list);
 		$this->load->vars('all_admin', $this->admin_model->all_admin(array('admin_id'=>$admin_ids)));
 		$this->load->vars('release_list', $release_list);
@@ -198,7 +201,8 @@ class Voucher extends CI_Controller
 		$brand_ids = $this->input->post('brand_ids');
 		$update['brand'] = is_array($brand_ids) ? implode(',',$brand_ids):'';
                 $provider_ids = $this->input->post('provider_ids');
-		$update['provider'] = is_array($provider_ids) ? implode(',',$provider_ids):'';
+                $update['provider'] = $provider_ids;
+		//$update['provider'] = is_array($provider_ids) ? implode(',',$provider_ids):'';
 		if($campaign->product) $update['category'] = $update['brand'] = $update['provider'] = '';
 
 		$this->voucher_model->update_campaign($update, $campaign_id);

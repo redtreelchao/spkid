@@ -12,6 +12,7 @@ th{ font-weight:normal;}
 a:hover{ text-decoration:underline;}
 /*--comment--*/
 html,body{height:100%; font:12px/22px Arial, Helvetica, sans-serif;background-color:#fff;}
+.item-hide{ display:none }
 .ts,.tm,.tl{ border:1px solid #7F9DB9; height:18px; line-height:18px; background-color:#FFF;}
 .ts{ width:80px;}
 .tm{ width:120px;}
@@ -59,7 +60,7 @@ _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../images/blue_
 .nosel{ background:url(img/blue_x_l.png) no-repeat left center;}
 .sel{ background:url(img/blue_x_r.png) no-repeat left center;}
 /*--=main css--*/
-.main{ width:98%; height:100%; margin:0 auto;}
+.main{ width:98%; margin:0 auto;}
 .main_title{ padding-left:30px; height:22px; background:url(img/bline.png) 10px center no-repeat; font-size:14px; margin-bottom:5px;}
 .search_row{ background:url(img/blue_searchbg.png) #fff repeat-x; padding:10px; border:1px solid #7f9db9; line-height:30px; clear:both;}
 .area_o{ margin-top:10px;  }

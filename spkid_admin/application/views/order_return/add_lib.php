@@ -158,7 +158,7 @@
         <!-- 添加退货时选择是否退还用户运费 -->
 	<tr>
 	<td height="40" align="center">&nbsp;</td>
-	<td colspan="3" align="left"><input type="submit" name="post_add" value="提交申请" class="button"  /></td>
+	<td colspan="3" align="left"><input type="submit" name="post_add" value="提交申请" class="am-btn am-btn-primary"  /></td>
 	</tr>
 
 </table>

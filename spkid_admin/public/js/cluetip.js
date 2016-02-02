@@ -233,7 +233,8 @@
                   imgCount--;
                 }
               }
-              if (imgCount && !$.browser.opera) {
+              // if (imgCount && !$.browser.opera) {
+              if (imgCount) {
                 $(imgs).bind('load error', function() {
                   imgCount--;
                   if (imgCount<1) {

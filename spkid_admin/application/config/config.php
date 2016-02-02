@@ -362,13 +362,11 @@ $config['proxy_ips'] = '';
  * 前后台域名
  */
 define('IMG_HOST', 'http://img.test.com');
-define('FRONT_HOST', 'http://img.test.com');
+define('FRONT_HOST', 'http://f.test.com');
+define('STATIC_HOST', 'http://s.test.com');
 
-$config['memcache'] = array(
-	array('hostname'=>'127.0.0.1','port'=>11211,'weight'=>1)
-);
+$config['memcache'] = array(array('hostname'=>'192.168.20.204','port'=>11211,'weight'=>1));
 $config['memcache_prefix'] = '';
-
 //==================================danger config over======================
 /* End of file config.php */
 /* Location: ./application/config/config.php */

@@ -3,8 +3,6 @@
 <script type="text/javascript" src="public/js/validator.js"></script>
 <script type="text/javascript" src="public/js/brand.js"></script>
 <script type="text/javascript" src="public/js/cluetip.js"></script>
-<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
 <link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 <script type="text/javascript">
 	//<![CDATA[
@@ -86,7 +84,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="item_title">国旗:</td>
+				<td class="item_title">产地:</td>
 				<td class="item_input">
 					<select name="flag_id" onChange="show_flag()" <?php print $perm_edit?'':'disabled'?>>
 					<?php foreach ($all_flag as $flag): ?>
@@ -100,7 +98,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<?php endif;?>

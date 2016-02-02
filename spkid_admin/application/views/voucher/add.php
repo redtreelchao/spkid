@@ -3,10 +3,6 @@
 <script type="text/javascript" src="public/js/validator.js"></script>
 <script type="text/javascript" src="public/js/voucher.js"></script>
 <script type="text/javascript" src="public/js/listtable.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <script type="text/javascript">
 	//<![CDATA[
 	listTable.url = 'voucher/search_product';
@@ -15,6 +11,7 @@
 		validator.required('campaign_name', '请填写活动名称');
 		validator.reg('start_date',/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/,'请填写开始日期');
 		validator.reg('end_date',/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/,'请填写结束日期');
+                validator.required('provider_ids', '请选择供应商');
 		return validator.passed();
 	}
 	
@@ -68,7 +65,7 @@
 				<td class="item_input" colspan="2">
 					<?php foreach ($all_provider as $provider): ?>
 					<div style="float:left; width:200px; text-align:left;">
-						<label><input type="checkbox" name="provider_ids[]" value="<?php print $provider->provider_id; ?>"><?php print $provider->provider_name; ?></label>
+						<label><input type="radio" name="provider_ids" value="<?php print $provider->provider_id; ?>"><?php print $provider->provider_name; ?></label>
                                         </div>
 					<?php endforeach;?>
 				</td>
@@ -122,7 +119,7 @@
 							<input type="text" class="ts" name="min_price" value="" style="width:100px;" />
 							-
 							<input type="text" class="ts" name="max_price" value="" style="width:100px;" />
-							<input type="button" value="搜索" onclick="search_product();" />
+							<input type="button" class="am-btn am-btn-secondary" value="搜索" onclick="search_product();" />
 					</div>
 				</td>
 			</tr>
@@ -136,7 +133,7 @@
 			<tr>
 				<td class="item_title">&nbsp;</td>
 				<td class="item_input">
-					<?php print form_submit('mysubmit','提交','class="button"');?>
+					<?php print form_submit('mysubmit','提交','class="am-btn am-btn-primary"');?>
 				</td>
 			</tr>
 			<tr>

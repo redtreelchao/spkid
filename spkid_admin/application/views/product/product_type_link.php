@@ -3,9 +3,7 @@
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/listtable.js"></script>
 <script type="text/javascript" src="public/js/cluetip.js"></script>
-<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
-<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.min.js"></script>
+<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.js"></script>
 <link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 <script type="text/javascript">
     //<![CDATA[
@@ -136,7 +134,7 @@
 	款号：<input type="text" class="ts" name="product_sn" />
 	名称：<input type="text" class="ts" name="product_name" />
 	<label><?php print form_checkbox('skip_set', 1, FALSE)?>过滤掉已设置</label>
-	<input type="submit" class="button" value="搜索" />
+	<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 	</form>
     </div>
     <div class="blank5"></div>

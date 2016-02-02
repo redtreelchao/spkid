@@ -5,13 +5,13 @@
 	//<![CDATA[
 	function check_form(){
 		var validator = new Validator('mainForm');
-			validator.required('flag_name', '请填写国旗名称');
+			validator.required('flag_name', '请填写产地名称');
 			return validator.passed();
 	}
 	//]]>
 </script>
 <div class="main">
-	<div class="main_title"><span class="l">国旗管理 >> 新增 </span><a href="flag/index" class="return r">返回列表</a></div>
+	<div class="main_title"><span class="l">产地管理 >> 新增 </span><a href="flag/index" class="return r">返回列表</a></div>
 	<div class="blank5"></div>
 	<?php print form_open_multipart('flag/proc_add',array('name'=>'mainForm','onsubmit'=>'return check_form()'));?>
 		<table class="form" cellpadding=0 cellspacing=0>
@@ -19,7 +19,7 @@
 				<td colspan=2 class="topTd"></td>
 			</tr>
 			<tr>
-				<td class="item_title">国旗名称:</td>
+				<td class="item_title">产地名称:</td>
 				<td class="item_input"><?php print form_input(array('name'=> 'flag_name','class'=> 'textbox require'));?></td>
 			</tr>
 			<tr>
@@ -44,7 +44,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<tr>

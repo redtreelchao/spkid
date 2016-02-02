@@ -242,11 +242,12 @@ class Purchase_box extends CI_Controller
           {
               $product = $product_list[0];
               $is_consign = $is_consign_array[$i];
-              if ($is_consign==1 && $product->p_number<$product->product_finished_number+$number)
+              //取消虚库销售类型，预期收货数量必须与实际收货数量一致的限制
+              /*if ($is_consign==1 && $product->p_number<$product->product_finished_number+$number)
               {
                   echo false;
                   return;
-              }
+              }*/
           }
 	  
            $scan_info_arr[]=array('provider_barcode'=>$provider_barcode

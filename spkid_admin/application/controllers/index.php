@@ -37,7 +37,9 @@ class Index extends CI_Controller
 			$captcha = trim($this->input->post('captcha'));
 			if(strtoupper(trim($this->input->post('captcha'))) != $this->session->userdata('captcha')) sys_msg('验证码错误',1,array(array('href'=>'index/login','text'=>'返回')));
 		}
+
 		$admin = $this->admin_model->filter($filter);
+
 		if( empty($admin) ){
 			$this->session->set_userdata('login_err_times', $login_err_times+1);
 			sys_msg('登录失败',1,array(array('href'=>'index/login','text'=>'返回')));
@@ -45,6 +47,7 @@ class Index extends CI_Controller
 		$this->session->set_userdata(array(
 			'admin_id' => $admin->admin_id,
 			'admin_name' => $admin->admin_name,
+			'realname' => $admin->realname,
 			'action_list' => $admin->action_list,
 			'is_online' => $admin->is_online
 		));
@@ -54,6 +57,7 @@ class Index extends CI_Controller
 			'last_login' => date('Y-m-d H:i:s'),
 
 		);
+
 		$this->admin_model->update($update, $admin->admin_id);
                 $this->input->set_cookie(SSO_COOKIE_USERNAME, $admin->admin_id, SSO_COOKIE_EXPRIE, SSO_COOKIE_DOMAIN);
                 $this->input->set_cookie(SSO_COOKIE_PASSWORD, MD5($filter['admin_password']), SSO_COOKIE_EXPRIE, SSO_COOKIE_DOMAIN);
@@ -75,23 +79,29 @@ class Index extends CI_Controller
 		if ( ! $this->admin_id ) { 
                     $filter['admin_id'] = $this->input->cookie(SSO_COOKIE_USERNAME);
                     $admin_password = $this->input->cookie(SSO_COOKIE_PASSWORD);
+		    
                     $filter['user_status'] = 1;
+
                     if (empty($filter['admin_name']) || empty($admin_password)) {
+
+			
                         redirect('index/login');    
                     }
                     $this->load->model('admin_model');
                     $admin = $this->admin_model->filter($filter);
                     if( ! $admin ){
-                            
+                            				
                             $this->session->set_userdata('login_err_times', $login_err_times+1);
                             sys_msg('登录失败',1,array(array('href'=>'index/login','text'=>'返回')));
                     }
                     if (MD5($admin->admin_password) != $admin_password) {
+		    					
                             sys_msg('登录失败',1,array(array('href'=>'index/login','text'=>'返回')));
                     }
                     $this->session->set_userdata(array(
                             'admin_id' => $admin->admin_id,
                             'admin_name' => $admin->admin_name,
+                            'realname' => $admin->realname,
                             'action_list' => $admin->action_list,
                             'is_online' => $admin->is_online
                     ));

@@ -7,8 +7,6 @@
 	$describe = "调拨";
     }
 ?>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
     <script type="text/javascript" src="public/js/utils.js"></script>
 	<div class="main">
 	    <div class="main_title"><span class="l">装箱详情单</span></div>
@@ -55,9 +53,9 @@
 						    &nbsp;&nbsp;扫描时间：<?php print $rows->scan_starttime; ?>
 						</td>
 						<td rowspan="<?=count($rows->detail_list)+1?>">
-						    <input type="button" class="button" onclick="redirect('pick_out/print_box_order/<?php print $rows->box_id; ?>');" value="打印装箱单" style="margin: 2px;"/>
+						    <input type="button" class="am-btn am-btn-primary" onclick="redirect('pick_out/print_box_order/<?php print $rows->box_id; ?>');" value="打印装箱单" style="margin: 2px;"/>
 						    <?php if(($doc_type == 1 && check_perm('cancel_depot_out_box_pick'))||($doc_type == 2 && check_perm('cancel_depot_out_box_pick'))):?>
-						    <input type="button" class="button" onclick="cancel_box(<?php print $rows->box_id; ?>);" value="取消此箱拣货" style="margin: 2px;"/>
+						    <input type="button" class="am-btn am-btn-primary" onclick="cancel_box(<?php print $rows->box_id; ?>);" value="取消此箱拣货" style="margin: 2px;"/>
 						    <? endif;?>
 						</td>
 					    </tr>

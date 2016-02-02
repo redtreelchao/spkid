@@ -2,10 +2,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/utils.js"></script>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<script type="text/javascript">
 		//<![CDATA[
 		$(function(){
@@ -28,7 +24,7 @@
 			<form name="search" action="javascript:search(); ">
 			时间从：<input type="text" class="ts" name="start_date" value="" style="width:100px;" />
 			到：<input type="text" class="ts" name="end_date" value="" style="width:100px;" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

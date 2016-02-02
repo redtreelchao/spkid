@@ -24,6 +24,7 @@ class Product extends CI_Controller
 		$this->config->load('product');
         $this->load->model('tmall_model');
 		$filter = $this->uri->uri_to_assoc(3);
+		$filter['product_id'] = trim($this->input->post('product_id'));
 		$filter['product_sn'] = trim($this->input->post('product_sn'));
 		$filter['product_name'] = trim($this->input->post('product_name'));
 		$filter['provider_productcode'] = trim($this->input->post('provider_productcode'));
@@ -35,7 +36,11 @@ class Product extends CI_Controller
 		$filter['product_status'] = trim($this->input->post('product_status'));
 		$filter['provider_id'] = intval($this->input->post('provider_id'));
 		$filter['batch_code'] = trim($this->input->post('batch_code'));
-		
+		$filter['medical1_id'] = trim($this->input->post('medical1_id'));
+		$filter['medical2_id'] = trim($this->input->post('medical2_id'));
+		$filter['is_on_sale'] = trim($this->input->post('is_on_sale'));
+		$filter['genre_id'] = trim($this->input->post('genre_id'));
+
 		$filter = get_pager_param($filter);
 		$data = $this->product_model->product_list($filter);
 		attach_sub($data['list']);
@@ -61,22 +66,31 @@ class Product extends CI_Controller
 		$this->load->model('season_model');
 		$this->load->model('style_model');
 		$this->load->model('purchase_batch_model');
+		$this->load->model('register_model');
 		$this->load->helper('category');
+        $this->load->model('product_genre_model');
 
 		$this->load->vars('all_brand', $this->brand_model->all_brand());
 		$this->load->vars('all_provider', $this->provider_model->all_provider(array('is_use'=>1),'provider_code ASC'));
 		$this->load->vars('all_cooperation', $this->cooperation_model->all_cooperation());
 		$this->load->vars('all_style', $this->style_model->all_style());
 		$this->load->vars('all_season', $this->season_model->all_season());
+		$this->load->vars('all_medical1', $this->register_model->medical_list('medical_device_class'));
+		$this->load->vars('all_medical2', $this->register_model->medical_list('medical_device'));
 		$this->load->vars('all_category',category_flatten(category_tree($this->category_model->all_category()),'-- '));
+        $this->load->vars('all_genres', $this->product_genre_model->all_genre());
 		
 		$this->load->view('product/index', $data);
 	}
 
-	public function add()
+	public function add($genre_id)
 	{
 		auth('pro_edit');
+        if( empty($genre_id) ){ sys_msg('参数错误', 1); }
+
+		$this->load->model('product_genre_model');
 		$this->load->model('brand_model');
+		$this->load->model('register_model');
 		$this->load->model('category_model');
 		$this->load->model('carelabel_model');
 		$this->load->model('cooperation_model');
@@ -90,26 +104,47 @@ class Product extends CI_Controller
 		$this->load->library('ckeditor');
 		$this->config->load('product');
 
+        $genre = $this->product_genre_model->filter( array('id'=>$genre_id) );
+        if( empty($genre) ) { sys_msg('无法取得产品类型', 1); }
+        $filter = array( 'genre_id'=> $genre_id );
+        
+		$this->load->vars('all_genre', get_pair($this->product_genre_model->all_genre(),'id','name'));
 		$this->load->vars('all_brand', $this->brand_model->all_brand());
+		$this->load->vars('all_register', $this->register_model->all_register());
 		$this->load->vars('all_provider', $this->provider_model->all_provider());
+		$this->load->vars('all_provider_coop', $this->provider_model->all_provider_coop());
 		$this->load->vars('all_cooperation', $this->cooperation_model->all_cooperation());
 		$this->load->vars('all_style', $this->style_model->all_style());
 		$this->load->vars('all_season', $this->season_model->all_season());
 		$this->load->vars('all_model', $this->model_model->all_model());
 		$this->load->vars('all_flag', $this->flag_model->all_flag());
 		$this->load->vars('all_carelabel', $this->carelabel_model->all_carelabel());
-		$this->load->vars('all_category',category_tree($this->category_model->all_category()));
+		$this->load->vars('all_category',category_tree($this->category_model->all_category($filter)));
 		$this->load->vars('all_age',$this->config->item('product_age'));
+		$this->load->vars('genre_id',$genre_id);
+
+		$this->load->vars('genre_field_map_js',get_field_map_js($genre->product_name_map));
+
+        if( $genre_id == GENRE_COURSE_ID ){
+            $this->load->vars('default_register_no',DEFAULT_REGISTER_NO);
+            $this->load->vars('self_shop',SELF_SHOP);
+            $this->load->vars('default_provider',SELF_SHOP);
+            $this->load->vars('default_brand_id',DEFAULT_BRAND_ID);
+        }else{
+            $this->load->vars('default_register_no',0);
+            $this->load->vars('self_shop',0);
+            $this->load->vars('default_provider',0);
+            $this->load->vars('default_brand_id',0);
+        }
 		$this->load->view('product/add');
 	}
-
 	public function proc_add()
 	{
 		auth('pro_edit');
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('product_name', '商品名称', 'trim|required');
-		$this->form_validation->set_rules('product_sn', '商品款号', 'trim|required');
-		$this->form_validation->set_rules('provider_productcode', '供应商货号', 'trim|required');
+		//$this->form_validation->set_rules('product_sn', '商品款号', 'trim|required');
+		// $this->form_validation->set_rules('provider_productcode', '供应商货号', 'trim|required');
 		$this->form_validation->set_rules('unit_name', '计量单位', 'trim|required');
 		$this->form_validation->set_rules('shop_price', '本站价', 'trim|required');
 		$this->form_validation->set_rules('market_price', '市场价', 'trim|required');	
@@ -119,6 +154,7 @@ class Product extends CI_Controller
 
 		$this->load->model('brand_model');
 		$this->load->model('category_model');
+		//$this->load->model('factory_model');
 		$this->load->model('carelabel_model');
 		$this->load->model('cooperation_model');
 		$this->load->model('flag_model');
@@ -133,7 +169,21 @@ class Product extends CI_Controller
 
 		$now = date('Y-m-d H:i:s');
 		$update = array();
+		$update['genre_id'] = $this->input->post('genre_id');
 		$update['product_name'] = $this->input->post('product_name');
+		//注册证号
+		$update["register_code_id"] = trim($this->input->post('register_id'));
+		//商品内容来源
+		$update["content_source"] = trim($this->input->post('content_source'));
+		//可询价
+		$update["price_show"] = trim($this->input->post('price_show'));
+		//店铺
+		$update["shop_id"] = trim($this->input->post('shop_id'));
+		//访问量
+		$update["pv_num"] = trim($this->input->post('pv_num'));
+		//销售量
+		$update["ps_num"] = trim($this->input->post('ps_num'));
+
 		$update['product_sn'] = strtoupper($this->input->post('product_sn'));
 		$update['provider_productcode'] = $this->input->post('provider_productcode');
 		$update['is_best'] = intval($this->input->post('is_best'))?1:0;
@@ -149,7 +199,15 @@ class Product extends CI_Controller
 
 		$update['sort_order'] = intval($this->input->post('sort_order'));
 
+		//品牌
 		$update['brand_id'] = intval($this->input->post('brand_id'));
+		$brand_name = $this->brand_model->all_brand($filter = array(),$update['brand_id']);
+		$update['brand_name'] = $brand_name[0]->brand_name;
+
+		$update['package_name'] = $this->input->post('package_name');
+		$update['subhead'] = $this->input->post('subhead');
+                $update['pack_method'] = $this->input->post('pack_method');
+
 		$update['category_id'] = intval($this->input->post('category_id'));
 		$update['provider_id'] = intval($this->input->post('provider_id'));
 		$update['style_id'] = intval($this->input->post('style_id'));
@@ -173,6 +231,11 @@ class Product extends CI_Controller
 		$update['goods_carelabel'] = implode(',',(array)$this->input->post('goods_carelabel'));
 		$update['product_desc'] = trim($this->input->post('product_desc'));
 		$update['product_desc_detail'] = trim($this->input->post('product_desc_detail'));
+		// 新增逻辑，主要针对课程和产品的修改
+		$update['detail1'] = trim($this->input->post('detail1') ? $this->input->post('detail1') : '');
+		$update['detail2'] = trim($this->input->post('detail2') ? $this->input->post('detail2') : '');
+		$update['detail3'] = trim($this->input->post('detail3') ? $this->input->post('detail3') : '');
+		$update['detail4'] = trim($this->input->post('detail4') ? $this->input->post('detail4') : '');
 
 		$update['create_admin'] = $this->admin_id;
 		$update['create_date'] = $now;
@@ -199,40 +262,49 @@ class Product extends CI_Controller
                 $desc_array["desc_use_explain"] = $this->input->post('desc_use_explain');
 		$desc_array["desc_function_explain"] = $this->input->post('desc_function_explain');
 		$update["product_desc_additional"] = json_encode($desc_array);
-		
-		if(!preg_match('/^[0-9a-zA-z]{1,10}$/',$update['product_sn'])){
-			sys_msg('商品款号格式错误');
+
+		// if(!preg_match('/^[0-9a-zA-z]{1,10}$/',$update['product_sn'])){
+		// 	sys_msg('商品款号格式错误');
+		// }
+                $brand_obj = $this->brand_model->filter(array('brand_id'=>$update['brand_id']));
+		if (!$brand_obj) {
+			sys_msg('所选品牌不存在');
+		}
+                $cate_obj = $this->category_model->filter(array('category_id'=>$update['category_id']));
+		if (!$cate_obj) {
+			sys_msg('所选分类不存在');
 		}
 
+		if (!$this->provider_model->filter(array('provider_id'=>$update['provider_id']))) {
+			sys_msg('所选分销商不存在');
+		}
+		// if (!$this->style_model->filter(array('style_id'=>$update['style_id']))) {
+		// 	sys_msg('所选样式不存在');
+		// }
+		// if (!$this->season_model->filter(array('season_id'=>$update['season_id']))) {
+		// 	sys_msg('所选季节不存在');
+		// }
+		// if ($update['model_id'] && !$this->model_model->filter(array('model_id'=>$update['model_id']))) {
+		// 	sys_msg('所选模特不存在');
+		// }
+		if (!$this->flag_model->filter(array('flag_id'=>$update['flag_id']))) {
+			sys_msg('所选国旗不存在');
+		}
+                
+        if (empty($update['product_sn'])){
+            $update['product_sn'] = $this->product_model->gen_p_sn($brand_obj->brand_initial, $cate_obj->cate_code);
+            if (empty($update['product_sn'])){
+                sys_msg('没有可用商品款号，请联系技术部');
+            }
+        }
 		$check_product = $this->product_model->filter(array('product_sn'=>$update['product_sn']));
 		if ($check_product) {
 			sys_msg('商品款号重复', 1);
 		}
-
-		if (!$this->brand_model->filter(array('brand_id'=>$update['brand_id']))) {
-			sys_msg('所选品牌不存在');
-		}
-		if (!$this->category_model->filter(array('category_id'=>$update['category_id']))) {
-			sys_msg('所选分类不存在');
-		}
-		if (!$this->provider_model->filter(array('provider_id'=>$update['provider_id']))) {
-			sys_msg('所选分销商不存在');
-		}
-		if (!$this->style_model->filter(array('style_id'=>$update['style_id']))) {
-			sys_msg('所选样式不存在');
-		}
-		if (!$this->season_model->filter(array('season_id'=>$update['season_id']))) {
-			sys_msg('所选季节不存在');
-		}
-		if ($update['model_id'] && !$this->model_model->filter(array('model_id'=>$update['model_id']))) {
-			sys_msg('所选模特不存在');
-		}
-		if (!$this->flag_model->filter(array('flag_id'=>$update['flag_id']))) {
-			sys_msg('所选国旗不存在');
-		}
+                
 		$size_image = $this->size_model->filter_image(array('category_id'=>$update['category_id'],'brand_id'=>$update['brand_id'],'sex'=>$update['product_sex']));
 		$update['size_image_id'] = $size_image?$size_image->size_image_id:0;
-		
+
 		$product_id = $this->product_model->insert($update);
 		//上传图片
 		$this->upload->initialize(array(
@@ -289,6 +361,7 @@ class Product extends CI_Controller
 		}
 		$this->load->model('brand_model');
 		$this->load->model('category_model');
+		$this->load->model('register_model');
 		$this->load->model('carelabel_model');
 		$this->load->model('cooperation_model');
 		$this->load->model('flag_model');
@@ -302,16 +375,25 @@ class Product extends CI_Controller
 		$this->load->helper('product');
 		$this->load->library('ckeditor');
 		$this->config->load('product');
+		$this->load->model('product_genre_model');
 
+        // fetch genre
+        $genre = $this->product_genre_model->filter( array('id'=>$product->genre_id) );
+        if( empty($genre) ) { sys_msg('无法取得产品类型', 1); }
+        $filter = array( 'genre_id'=> $product->genre_id );
+
+		$this->load->vars('all_genre', $this->product_genre_model->all_genre());
 		$this->load->vars('all_brand', $this->brand_model->all_brand());
+		$this->load->vars('all_register', $this->register_model->all_register());
 		$this->load->vars('all_provider', $this->provider_model->all_provider());
+		$this->load->vars('all_provider_coop', $this->provider_model->all_provider_coop());
 		$this->load->vars('all_cooperation', $this->cooperation_model->all_cooperation());
 		$this->load->vars('all_style', $this->style_model->all_style());
 		$this->load->vars('all_season', $this->season_model->all_season());
 		$this->load->vars('all_model', $this->model_model->all_model());
 		$this->load->vars('all_flag', $this->flag_model->all_flag());
 		$this->load->vars('all_carelabel', $this->carelabel_model->all_carelabel());
-		$this->load->vars('all_category',category_tree($this->category_model->all_category()));
+		$this->load->vars('all_category',category_tree($this->category_model->all_category($filter)));
 		$this->load->vars('all_color_group',$this->color_model->all_group());
 		$this->load->vars('all_color',$this->color_model->all_color());
 		$this->load->vars('all_size',$this->size_model->all_size());
@@ -331,6 +413,8 @@ class Product extends CI_Controller
 		$this->load->vars('link_product', $link_product);
 		$this->load->vars('link_by_product', $link_by_product);
 
+		$this->load->vars('genre_field_map_js',get_field_map_js($genre->product_name_map));
+
 		$this->load->vars('row', $product);
 		$this->load->view('product/edit');
 	}
@@ -349,8 +433,8 @@ class Product extends CI_Controller
 		$this->form_validation->set_rules('market_price', '市场价', 'trim|required');	
 		$this->form_validation->set_rules('product_name', '合作名称', 'trim|required');
 		if(!$product->is_audit){
-			$this->form_validation->set_rules('product_sn', '商品款号', 'trim|required');
-			$this->form_validation->set_rules('provider_productcode', '供应商货号', 'trim|required');
+			//$this->form_validation->set_rules('product_sn', '商品款号', 'trim|required');
+			// $this->form_validation->set_rules('provider_productcode', '供应商货号', 'trim|required');
 			$this->form_validation->set_rules('unit_name', '计量单位', 'trim|required');
 		}
 		if (!$this->form_validation->run()) {
@@ -375,17 +459,38 @@ class Product extends CI_Controller
 		$update = array();
 		if (!$product->is_audit) {
 			$update['product_sn'] = strtoupper($this->input->post('product_sn'));
+		}            
 			$update['provider_productcode'] = $this->input->post('provider_productcode');
 
+			//品牌
 			$update['brand_id'] = intval($this->input->post('brand_id'));
+			$brand_name = $this->brand_model->all_brand($filter = array(),$update['brand_id']);
+			$update['brand_name'] = $brand_name[0]->brand_name;
 			$update['category_id'] = intval($this->input->post('category_id'));
 			$update['provider_id'] = intval($this->input->post('provider_id'));
 
 			$update['unit_name'] = trim($this->input->post('unit_name'));
-			if(!preg_match('/^[0-9a-zA-z]{1,10}$/',$update['product_sn'])){
-				sys_msg('商品款号格式错误');
-			}
-		}
+			// if(!preg_match('/^[0-9a-zA-z]{1,10}$/',$update['product_sn'])){
+			// 	sys_msg('商品款号格式错误');
+			// }
+		//商品所属大类
+		$update['genre_id'] = intval($this->input->post('genre_id'));
+		//注册证号
+		$update['register_code_id'] = intval($this->input->post('register_id'));
+		//商品内容来源
+		$update["content_source"] = trim($this->input->post('content_source'));
+		//可询价
+		$update["price_show"] = trim($this->input->post('price_show'));
+		//店铺
+		$update["shop_id"] = trim($this->input->post('shop_id'));
+		//访问量
+		$update["pv_num"] = trim($this->input->post('pv_num'));
+		//销售量
+		$update["ps_num"] = trim($this->input->post('ps_num'));
+
+		$update['package_name'] = $this->input->post('package_name');
+		$update['subhead'] = $this->input->post('subhead');
+                $update['pack_method'] = $this->input->post('pack_method');
 
 		$update['product_name'] = $this->input->post('product_name');
 		$update['is_best'] = intval($this->input->post('is_best'))?1:0;
@@ -398,6 +503,13 @@ class Product extends CI_Controller
 		$update['is_stop'] = intval($this->input->post('is_stop'))?1:0;
 
 		$update['sort_order'] = intval($this->input->post('sort_order'));
+        // 促销价格
+		$update['is_promote'] = intval($this->input->post('is_promote'))?1:0;
+        if( $update['is_promote'] ){
+            $update['promote_price'] = $this->input->post('promote_price');
+            $update['promote_start_date'] = $this->input->post('promote_start_date');
+            $update['promote_end_date'] = $this->input->post('promote_end_date');
+        }
 
 		
 		$update['style_id'] = intval($this->input->post('style_id'));
@@ -418,8 +530,14 @@ class Product extends CI_Controller
 		$update['product_desc'] = trim($this->input->post('product_desc'));
 		$update['product_desc_detail'] = trim($this->input->post('product_desc_detail'));
 
+		// 新增逻辑，主要针对课程和产品的修改
+		$update['detail1'] = trim($this->input->post('detail1') ? $this->input->post('detail1') : '');
+		$update['detail2'] = trim($this->input->post('detail2') ? $this->input->post('detail2') : '');
+		$update['detail3'] = trim($this->input->post('detail3') ? $this->input->post('detail3') : '');
+		$update['detail4'] = trim($this->input->post('detail4') ? $this->input->post('detail4') : '');
+
 		$update['stop_admin'] = $update['is_stop']?$this->admin_id:0;
-		$update['stop_date'] = $update['is_stop']?$now:'';
+		$update['stop_date'] = $update['is_stop']?$now:0;
 		
 		$update['min_month'] = intval($this->input->post('min_month'));
 		$update['max_month'] = intval($this->input->post('max_month'));
@@ -442,45 +560,52 @@ class Product extends CI_Controller
 		$desc_array["desc_expected_shipping_date"] = $this->input->post('desc_expected_shipping_date');
                 $desc_array["desc_use_explain"] = $this->input->post('desc_use_explain');
 		$desc_array["desc_function_explain"] = $this->input->post('desc_function_explain');
+                
 		$update["product_desc_additional"] = json_encode($desc_array);
                 
                 $update['update_time'] = $now;
-		
-		if (!$product->is_audit && $this->product_model->filter(array('product_sn'=>$update['product_sn'],'product_id !='=>$product_id))) {
-			sys_msg('商品款号重复', 1);
-		}
+                if (!empty($update['brand_id']) && !empty($update['category_id']) && !empty($update['provider_id'])){
+                    $brand_obj = $this->brand_model->filter(array('brand_id'=>$update['brand_id']));
+                    $cate_obj = $this->category_model->filter(array('category_id'=>$update['category_id']));
 
-		if (!$product->is_audit && !$this->brand_model->filter(array('brand_id'=>$update['brand_id']))) {
-			sys_msg('所选品牌不存在');
-		}
-		if (!$product->is_audit && !$this->category_model->filter(array('category_id'=>$update['category_id']))) {
-			sys_msg('所选分类不存在');
-		}
-		if (!$product->is_audit && !$this->provider_model->filter(array('provider_id'=>$update['provider_id']))) {
-			sys_msg('所选分销商不存在');
-		}
-		if (!$this->style_model->filter(array('style_id'=>$update['style_id']))) {
-			sys_msg('所选样式不存在');
-		}
-		if (!$this->season_model->filter(array('season_id'=>$update['season_id']))) {
-			sys_msg('所选季节不存在');
-		}
-		if ($update['model_id'] && !$this->model_model->filter(array('model_id'=>$update['model_id']))) {
-			sys_msg('所选模特不存在');
-		}
+                    if (!$product->is_audit && !$brand_obj) {
+                            sys_msg('所选品牌不存在');
+                    }
+
+                    if (!$product->is_audit && !$cate_obj) {
+                            sys_msg('所选分类不存在');
+                    }
+
+                    if (!$product->is_audit && !$this->provider_model->filter(array('provider_id'=>$update['provider_id']))) {
+                            sys_msg('所选分销商不存在');
+                    }
+                }
+		// if (!$this->style_model->filter(array('style_id'=>$update['style_id']))) {
+		// 	sys_msg('所选样式不存在');
+		// }
+		// if (!$this->season_model->filter(array('season_id'=>$update['season_id']))) {
+		// 	sys_msg('所选季节不存在');
+		// }
+		// if ($update['model_id'] && !$this->model_model->filter(array('model_id'=>$update['model_id']))) {
+		// 	sys_msg('所选模特不存在');
+		// }
 		if (!$this->flag_model->filter(array('flag_id'=>$update['flag_id']))) {
 			sys_msg('所选国旗不存在');
 		}
+
+
+                
 		if (!$product->is_audit) {
 			$size_image = $this->size_model->filter_image(array('category_id'=>$update['category_id'],'brand_id'=>$update['brand_id'],'sex'=>$update['product_sex']));
 			$update['size_image_id'] = $size_image?$size_image->size_image_id:0;
 		}
+
 		if ($this->input->post('delete_size_image') && $product->size_image) {
 			@unlink(PRO_SIZE_IMAGE_PATH . PRO_SIZE_IMAGE_TAG . $product->size_image);
 			$update['size_image'] = '';
 		}
+
 		$this->product_model->update($update, $product_id);
-		
 		//上传图片
 		
 		$this->upload->initialize(array(
@@ -488,6 +613,7 @@ class Product extends CI_Controller
 				'allowed_types' => 'jpg|gif|png',
 				'encrypt_name' => TRUE
 			));
+
 		if($this->upload->do_upload('size_image')){
 			$file = $this->upload->data();
 			$this->product_model->update(array('size_image'=> PRO_SIZE_IMAGE_TAG . $file['file_name']), $product_id);
@@ -577,7 +703,7 @@ class Product extends CI_Controller
 					sys_msg('商品审核后不能反审核',1);
 				}else{
 					$cs = $this->product_model->filter_sub(array('product_id'=>$id));
-					if(!$cs) sys_msg('该商品没有录入颜色尺码',1);
+					if(!$cs) sys_msg('该商品没有录入颜色规格',1);
 					$this->product_model->update(array('is_audit'=>1,'audit_admin'=>$this->admin_id,'audit_date'=>date('Y-m-d H:i:s')),$id);
 				}
 				print json_encode(array('err'=>0, 'msg'=>'','content'=>$row->is_audit?$no_exp:$yes_exp));
@@ -627,7 +753,8 @@ class Product extends CI_Controller
 				if ($v) {
 					$gallery_list = $this->product_model->all_gallery(array('product_id'=>$id));
 					$gallery_list = get_pair($gallery_list,'image_type','image_id');
-					if(!isset($gallery_list['default']) || !isset($gallery_list['part'])) sys_msg('图片未上传', 1);
+					//if(!isset($gallery_list['default']) || !isset($gallery_list['part'])) sys_msg('图片未上传', 1);
+					if(!isset($gallery_list['default'])) sys_msg('图片未上传', 1);
 				}
 				
 				$this->product_model->update_where_sub(array('is_on_sale'=>$v),array('product_id' => $id, 'is_on_sale' => !$v));
@@ -678,7 +805,7 @@ class Product extends CI_Controller
 				if ($is_on_sale) {
 					$gallery_list = $this->product_model->all_gallery(array('product_id'=>$row->product_id,'color_id'=>$row->color_id));
 					$gallery_list = get_pair($gallery_list,'image_type','image_id');
-					if(!isset($gallery_list['default']) || !isset($gallery_list['part'])) sys_msg('图片未上传', 1);
+					if(!isset($gallery_list['default'])) sys_msg('图片未上传', 1);
 				}
 				$this->product_model->update_sub(array('is_on_sale'=>$is_on_sale),$id);
 				$this->product_model->insert_onsale_record(array('sub_id'=>$id,'sr_onsale'=>$is_on_sale,'create_admin'=>$this->admin_id,'create_date'=>date('Y-m-d H:i:s'),'onsale_memo'=>'商品列表手工操作'));
@@ -720,7 +847,7 @@ class Product extends CI_Controller
 				foreach ($res as $rs){
 				    $batch = $this->purchase_model->filter_purchase_batch(array("batch_id"=>$rs->batch_id));
 				    if(!empty($batch)){
-				       if($batch->batch_type == 0 && $batch->is_consign == 0 && $batch->is_reckoned == 0){
+				       if($val !== -1 && $batch->batch_type == 0 && $batch->is_consign == 0 && $batch->is_reckoned == 0){
 					   print json_encode(array('err'=>1,'msg'=>'商品不属于虚库批次，对应实库销售批次号为['.$batch->batch_code.']，不可导入虚库库存。'));
 					   $vali_b_flag = FALSE;
 					   break;
@@ -816,6 +943,7 @@ class Product extends CI_Controller
 	public function export_purcahse_order(){
 	    auth('export_purcahse_order');
 	    $this->load->model('purchase_batch_model');
+            $this->load->model('provider_model');
 	    $filter = $this->uri->uri_to_assoc(3);
 	    $filter['product_sn'] = trim($this->input->post('product_sn'));
 	    $filter['product_name'] = trim($this->input->post('product_name'));
@@ -841,9 +969,10 @@ class Product extends CI_Controller
 	    //Purchase_batch_model
 	    $query_filter["batch_code"] = $filter['batch_code'];
 	    $batch = $this->purchase_batch_model->filter($query_filter);
+            $provider = $this->provider_model->filter(array('provider_id' => $batch->provider_id));
 	    $title["batch_no"] =$batch ->batch_code;
-	    $title['provider_code'] ="";
-	    $title['provider_cooperation'] ="";
+	    $title['provider_code'] =$provider->provider_code;
+	    $title['provider_cooperation'] =$provider->provider_cooperation;
 	    foreach($purcahse_order_list as $key=>$value){
 		//title
 		if($key == 1){
@@ -1021,6 +1150,9 @@ class Product extends CI_Controller
 	    $data['muti_data'] = $muti_data;
 	    $data['index'] = $i;
 	    $this->load->view('product/purchase_batch_check',$data);
+	}
+	public function strip_product_tags(){
+		$this->product_model->strip_product();
 	}
     
 }

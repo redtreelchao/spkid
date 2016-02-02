@@ -2,9 +2,7 @@
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
 <script type="text/javascript" src="public/js/cluetip.js"></script>
-<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
-<script type="text/javascript" src="public/js/jquery.form.js"></script>
+<!--<script type="text/javascript" src="public/js/jquery.form.js"></script> -->
 <link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 <script type="text/javascript">
 	//<![CDATA[
@@ -14,14 +12,14 @@
 	function check_form(){
                 var excelFile = $('input[name=excel]').val();
                 if (excelFile === null || excelFile === '') {
-                    alert('请选择要上传的尺寸表文件！')
+                    alert('请选择要上传的规格表文件！')
                     return false;
                 }
 	}
 	//]]>
 </script>
 <div class="main">
-	<div class="main_title"><span class="l">尺寸详情图管理 >> 编辑 </span><a href="size/image_index" class="return r">返回列表</a></div>
+	<div class="main_title"><span class="l">规格详情图管理 >> 编辑 </span><a href="size/image_index" class="return r">返回列表</a></div>
 	<div class="blank5"></div>
 	<?php print form_open_multipart('http://upload.baobeigou.com/baby/sizetable/uploadByBrand.htm', array('id'=>'mainForm', 'name'=>'mainForm','onsubmit'=>'return check_form()'), array('sizeImageId'=>$row->size_image_id));?>
 		<table class="form" cellpadding=0 cellspacing=0>
@@ -55,7 +53,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="item_title">尺寸表:</td>
+				<td class="item_title">规格表:</td>
 				<td class="item_input">
 					<?php print form_upload('excel','',$perm_edit?'':'disabled');?>
 				</td>
@@ -64,7 +62,7 @@
 				<tr>
 					<td class="item_title"></td>
 					<td class="item_input">
-                                                <input type="submit" class="button" name="mysubmit" value="提交"  />
+                                                <input type="submit" class="am-btn am-btn-primary" name="mysubmit" value="提交"  />
 					</td>
 				</tr>
 			<?php endif ?>

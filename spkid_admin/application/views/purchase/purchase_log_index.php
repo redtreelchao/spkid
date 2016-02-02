@@ -26,7 +26,7 @@
 				时间段：
 				<input type="text" name="start_time" id="start_time" class="Wdate" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'end_time\')}'})" /> - 
 				<input type="text" name="end_time" id="end_time" class="Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'start_time\')}'})" />
-				<input type="submit" class="button" value="搜索" />
+				<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

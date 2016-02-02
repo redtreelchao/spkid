@@ -14,13 +14,13 @@
 		//]]>
 	</script>
 	<div class="main">
-		<div class="main_title"><span class="l">尺寸列表</span><span class="r"><a href="size/add" class="add">新增</a></span></div>
+		<div class="main_title"><span class="l">规格列表</span><span class="r"><a href="size/add" class="add">新增</a></span></div>
 		
 		<div class="blank5"></div>
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
-			尺寸名称：<input type="text" class="ts" name="size_name" value="" style="width:100px;" />
-			<input type="submit" class="button" value="搜索" />
+			规格名称：<input type="text" class="ts" name="size_name" value="" style="width:100px;" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -34,8 +34,8 @@
 					<th width="50px">
 						<a href="javascript:listTable.sort('s.size_id', 'ASC'); ">编号<?php echo ($filter['sort_by'] == 's.size_id') ? $filter['sort_flag'] : '' ?></a>
 					</th>
-					<th>尺寸名称</th>
-					<th>尺寸编码</th>
+					<th>规格名称</th>
+					<th>规格编码</th>
 					<th>
 						<a href="javascript:listTable.sort('s.sort_order', 'ASC'); ">排序号<?php echo ($filter['sort_by'] == 's.sort_order') ? $filter['sort_flag'] : '' ?></a>
 					</th>

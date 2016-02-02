@@ -75,7 +75,7 @@ class Purchase_consign_model extends CI_Model {
                 " LEFT JOIN " . $this->db->dbprefix('product_size') . " AS f ON b.size_id=f.size_id " .
                 " LEFT JOIN " . $this->db->dbprefix('purchase_batch') . " AS i ON i.provider_id = a.provider_id AND i.batch_type = 0" .
                 " INNER JOIN " . $this->db->dbprefix('product_cost') . " AS pc ON a.product_id = pc.product_id AND pc.batch_id = i.batch_id";
-        $where = " WHERE 1=1 ";
+        $where = " WHERE 1=1 AND c.`shipping_status`=0";
         $param = array();
 
         if (!empty($filter['provider_id'])) {

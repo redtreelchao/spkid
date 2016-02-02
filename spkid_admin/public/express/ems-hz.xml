@@ -2,9 +2,9 @@
 <express size="300" width="540">
     <orderSn x="110" y="16"/>
     <orderCell x="240" y="16"/>
-    <sender x="40" y="59">妈咪树</sender>
-    <sender2 x="40" y="259">妈咪树</sender2>
-    <siteName x="80" y="76">妈咪树</siteName>
+    <sender x="40" y="59">悦牙网</sender>
+    <sender2 x="40" y="259">悦牙网</sender2>
+    <siteName x="80" y="76">悦牙网</siteName>
     <companyAddress x="40" y="114" width="300" wrapLength="18" noIndent="true">浙江省 湖州市 吴兴区七幸路999号 金泰科技4栋</companyAddress>
     <companyPhone x="155" y="59">400-0966-021</companyPhone>
     <custormPostNo x="40" y="154"/>
@@ -12,7 +12,7 @@
     <rcvPerson x="310" y="59"/>
     <rcvMobile x="428" y="59" width="120"/>
     <rcvAddress x="260" y="114" append="bestTime" wrapLength="24" noIndent="true"/>
-    <category x="60" y="219">服装</category>
+    <category x="60" y="219">牙科器材</category>
     <goodsnum x="165" y="219"/>
     <right x="80" y="170">√</right>
 <!--    <payMethod x="352" y="238">√</payMethod> -->

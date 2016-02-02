@@ -1,4 +1,7 @@
 <?php
+function pass_hash($pass){
+    return hash('sha512', $pass.md5('yyw').'zesxW6qHePNZwcX6');
+}
 
 /*
  * 显示错误信息
@@ -198,13 +201,16 @@ if (!function_exists('get_pair'))
 	{
 		$result = $ext;
 		foreach ($arr as $val)
-		{
-			if (is_object($val)) {
-				$result[$val->$k] = $val->$v;
-			}elseif (is_array($val)) {
-				$result[$val[$k]] = $val[$v];
-			}
-		}
+                {
+                    $ary  =  explode(',', $v);$sep='-';
+                    if (is_object($val)) {
+                        $sk = $val->$k;
+                        foreach( $ary AS $vn ) isset($result[$sk])? $result[$sk].= $sep.$val->$vn: $result[$sk]= $val->$vn;
+                    }elseif (is_array($val)) {
+                        $sk = $val[$k];
+                        foreach( $ary AS $vn ) isset($result[$sk])? $result[$sk] .= $sep.$val[$vn]:$result[$sk] = $val[$vn];
+                    }
+                }
 		return $result;
 	}
 
@@ -463,6 +469,7 @@ if (!function_exists('proc_edit')) {
  */
  function m_encode($string)
  {
+	 return pass_hash( $string );
  	$td = mcrypt_module_open(MCRYPT_DES,'','ecb',''); //使用MCRYPT_DES算法,ecb模式
 	$iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
 	$ks = mcrypt_enc_get_key_size($td);
@@ -547,7 +554,17 @@ function is_time_str_check($time_str ){
     }
     return false;
 }
+function static_style_url($path='')
+{
+    $path = str_replace('version', JSCSS_DIST_VERSION, $path);
+    return static_url($path);
+}
 
+function static_url($path=''){
+    eval(STATIC_HOST_CONFIG);
+    $rand_index=rand(0,count($static_host_arr)-1);
+    return $static_host_arr[$rand_index]."/".$path;
+}
 function img_url($path='')
 {
 	return IMG_HOST.'/'.$path;
@@ -575,12 +592,12 @@ function get_ghost ()
  * 会将有数据的keys值以数组形式记录在search_keys中
  * return 填充后的$filter
  */
-function fill_filter( $filter, $keys ){
+function fill_filter( $filter, $keys, $zero=false ){
     if( empty($keys) || !is_array($keys) ) return $filter;
 	$CI = &get_instance();
     foreach( $keys AS $key ){
         $val = $CI->input->post($key);
-        if (!empty($val)) {
+        if (!empty($val) || ($zero && $val==='0')) {
             $filter['search_keys'][] = $key;
             $filter[$key] = $val;
         }   
@@ -670,6 +687,23 @@ if(!function_exists('curl')){
     }
 }
 
+function curl_post($url,$data=array(), $header=Array()){
+		$ch = curl_init ();
+		curl_setopt ( $ch, CURLOPT_URL, $url);
+		curl_setopt ( $ch, CURLOPT_POST, 1 );
+		empty($header) || curl_setopt ( $ch, CURLOPT_HTTPHEADER, $header );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, http_build_query($data) );
+
+		$result = curl_exec($ch );
+		$errorno=curl_errno($ch);
+		if( $errorno > 0 ) {
+			var_dump($errorno);
+		}
+
+		curl_close ( $ch );
+		return $result;
+}
 function front_img_url($path='')
 {
     return STATIC_HOST.'/'.$path;
@@ -794,7 +828,7 @@ function get_ctb_return_depot(){
      */
 if (!function_exists('local_date'))
 {
-function local_date($format, $time = NULL) {
+    function local_date($format, $time = NULL) {
         $timezone = '8';
         if ($time === NULL) {
             $time = time() - date('Z');
@@ -804,4 +838,186 @@ function local_date($format, $time = NULL) {
         $time += ($timezone * 3600);
         return date($format, $time);
     }
+}
+
+/**
+ * 生成随机现金券号,规则:根据年份以大写字母‘A-Z’+11随机数组成
+ */
+if (!function_exists('getVoucherDes')){
+    function getVoucherDes(){
+        srand((double)microtime()*1000000000000);
+        $voucher_sn = mt_rand();
+        if(strlen($voucher_sn) < 11)
+        {
+            $voucher_sn = str_pad($voucher_sn,11,'0',STR_PAD_LEFT);
+        }
+        elseif(strlen($voucher_sn) > 11)
+        {
+            $voucher_sn = substr($voucher_sn,0,11);
+        }
+        $year_diff = date('Y') - 2015;
+        $alphabets =  array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        for($i = 0; $i <= $year_diff; $i++){
+            $str = $alphabets[$i];
+        }
+        $voucher_sn = $str . $voucher_sn;
+        return $voucher_sn;
+    }
+}
+
+/**
+ * 	记录 memcache key
+ */
+if (!function_exists('memcache_key_record'))
+{
+    function memcache_key_record($key,$name,$class,$function,$file_path){    	
+    	$CI = & get_instance();
+    	$CI->load->model('memcache_key_model');
+    	$time = date('Y-m-d H:i:s');
+      	$admin_id = $CI->session->userdata('admin_id');
+        $data = array(
+        			'key' => $key,
+        			'name' => $name,
+        			'update_aid' => $admin_id,
+        			'update_atime' => $time,
+        			'class' => $class,
+        			'function' => $function,
+        			'file_path' => $file_path
+        			);
+
+        $list = $CI->memcache_key_model->record($data);
+
+	    if(empty($list)){
+	    	$content = array($admin_id);
+	    	$data['content'] = serialize($content);
+	    	$CI->memcache_key_model->insert($data);
+	    }else{
+	    	$content = unserialize($list['content']);
+
+	    	if(count($content) >= 5){
+	    		array_shift($content);
+	    		array_push($content, $admin_id);
+	    		$data['content'] = serialize($content);
+	    	}else{
+	    		array_push($content, $admin_id);
+	    		$data['content'] = serialize($content);
+	    	}
+
+	    	$CI->memcache_key_model->update($data);
+	    }
+    } 
+}
+
+/**
+ *  是/否
+ *  0 = 否
+ *  1 = 是
+ */
+if (!function_exists('get_yes_no')){
+    function get_yes_no(){
+        return array(
+        			1 => '是',
+        			2 => '否'
+        		);
+    }
+}
+// 可自定义 商品大类的商品字段的label
+// 将字段label替换名字，
+// 如果是日期类型，也支持:e.g. 名称#date
+//
+function get_field_map_js( $json){
+    if( empty($json) ) return '';
+    $ary = json_decode( $json );
+    $date_str = '';
+    foreach( $ary AS $field=>$name ){
+        if( strpos($name,'#')!==false ){
+            $tmp = explode('#',$name);
+            if( $tmp[1] == 'hide' ){ // for useless field
+                $date_str .= <<<EOD
+
+$('#{$field}_label').css('display','none').next().css('display','none');
+EOD;
+            }else
+            if( $tmp[1] == 'date' ){ // for datepicker
+                $date_str .= <<<EOD
+
+    $(':input[name={$field}]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
+EOD;
+            }
+            $ary->$field = $tmp[0];
+        }
+
+    }
+    $json = json_encode( $ary );
+    $str = $date_str;
+    if( !empty($json) ){
+        $str .= <<<EOD
+var field_map = {$json};
+for( field in field_map ){
+  $('#'+field+'_label').text(field_map[field]+":");
+}
+
+EOD;
+    }
+    return $str;
+}
+
+
+/**
+ * 人民币小写转大写
+ *
+ * @param string $number   待处理数值
+ * @param bool   $is_round 小数是否四舍五入,默认"四舍五入"
+ * @param string $int_unit 币种单位,默认"元"
+ * @return string
+ */
+function rmb_format($money = 0, $is_round = true, $int_unit = '元') {
+    $chs     = array (0, '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
+    $uni     = array ('', '拾', '佰', '仟' );
+    $dec_uni = array ('角', '分' );
+    $exp     = array ('','万','亿');
+    $res     = '';
+    // 以 元为单位分割
+    $parts   = explode ( '.', $money, 2 );
+    $int     = isset ( $parts [0] ) ? strval ( $parts [0] ) : 0;
+    $dec     = isset ( $parts [1] ) ? strval ( $parts [1] ) : '';
+    // 处理小数点
+    $dec_len = strlen ( $dec );
+    if (isset ( $parts [1] ) && $dec_len > 2) {
+        $dec = $is_round ? substr ( strrchr ( strval ( round ( floatval ( "0." . $dec ), 2 ) ), '.' ), 1 ) : substr ( $parts [1], 0, 2 );
+    }
+    // number= 0.00时，直接返回 0
+    if (empty ( $int ) && empty ( $dec )) {
+        return '零';
+    }
+    
+    // 整数部分 从右向左
+    for($i = strlen ( $int ) - 1, $t = 0; $i >= 0; $t++) {
+        $str = '';
+        // 每4字为一段进行转化
+        for($j = 0; $j < 4 && $i >= 0; $j ++, $i --) {
+            $u   = $int{$i} > 0 ? $uni [$j] : '';
+            $str = $chs [$int {$i}] . $u . $str;
+        }
+        $str = rtrim ( $str, '0' );
+        $str = preg_replace ( "/0+/", "零", $str );
+        $u2  = $str != '' ? $exp [$t] : '';
+        $res = $str . $u2 . $res;
+    }
+    $dec = rtrim ( $dec, '0' );
+    // 小数部分 从左向右
+    if (!empty ( $dec )) {
+        $res .= $int_unit;
+        $cnt =  strlen ( $dec );
+        for($i = 0; $i < $cnt; $i ++) {
+            $u = $dec {$i} > 0 ? $dec_uni [$i] : ''; // 非0的数字后面添加单位
+            $res .= $chs [$dec {$i}] . $u;
+        }
+        if ($cnt == 1) $res .= '整';
+        $res = rtrim ( $res, '0' ); // 去掉末尾的0
+        $res = preg_replace ( "/0+/", "零", $res ); // 替换多个连续的0
+    } else {
+        $res .= $int_unit . '整';
+    }
+    return $res;
 }

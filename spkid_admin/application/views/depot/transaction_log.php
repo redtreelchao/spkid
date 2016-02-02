@@ -1,6 +1,5 @@
 <?php if ($full_page): ?>
     <?php include(APPPATH . 'views/common/header.php'); ?>
-    <link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
     <script type="text/javascript" src="public/js/listtable.js"></script>
     <script type="text/javascript">
         //<![CDATA[
@@ -62,7 +61,7 @@
 				<input type="checkbox" name="trans_status" value="2" checked="checked">已出
 				<input type="checkbox" name="trans_status" value="3" checked="checked">待入
 				<input type="checkbox" name="trans_status" value="4" checked="checked">已入
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 		</form>
         </div>
         <div class="blank5"></div>
@@ -78,7 +77,7 @@
 			<tr class="row">
 				<th>商品名称</th>
 				<th>颜色</th>
-				<th>尺寸</th>
+				<th>规格</th>
 				<th>条形码</th>
 				<th>货号</th>
 				<th>仓库</th>

@@ -69,7 +69,7 @@
 					<dd>
 					<img class="l" src="<?php print $pay_logo; ?>"/>
 					<?php if ($order->unpay_price>0 && $order->is_online && !$order->order_status): ?>
-					<a href="/order/pay/<?php print $order->order_id ?>.html" class="btn_impay" target="_blank">立即支付</a>
+					<a href="/order/pay/<?php print $order->order_id ?>.html" class="btn_impay external" target="_blank">立即支付</a>
 					<?php endif ?> 
 					</dd>
 				</dl>

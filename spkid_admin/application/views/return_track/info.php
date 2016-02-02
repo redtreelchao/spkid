@@ -85,7 +85,7 @@
         <table class="dataTable" width="100%" cellpadding="0" cellspacing="0">
             <tr>
                 <td colspan="10" height="40" style="text-align: center;">
-                    <input type="button" class="button" value="确认退货" onclick="javascript:proc_recive(<?php print $apply_info['apply_id']; ?>);" />
+                    <input type="button" class="am-btn am-btn-primary" value="确认退货" onclick="javascript:proc_recive(<?php print $apply_info['apply_id']; ?>);" />
                 </td>
             </tr>
         </table>

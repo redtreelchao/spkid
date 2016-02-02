@@ -1,8 +1,6 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
     <script type="text/javascript" src="public/js/alert_msg.js"></script>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 	<div class="main">
 		<div class="main_title">
 		    <span class="l">扫描收货</span>
@@ -23,7 +21,7 @@
                     <td>&nbsp;&nbsp;<?=$purchase->purchase_finished_number?>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td align="right">箱子数量:</td>
                     <td><?=$box_count?>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>
-			<?php if(check_perm('pruchase_box_scan_list') ):?><input class="button" type="button" onclick="redirect('purchase_box/pruchase_box_scan_list/<?=$purchase->purchase_code?>');" value="扫描记录" /><? endif;?>
+			<?php if(check_perm('pruchase_box_scan_list') ):?><input class="am-btn am-btn-primary" type="button" onclick="redirect('purchase_box/pruchase_box_scan_list/<?=$purchase->purchase_code?>');" value="扫描记录" /><? endif;?>
 		    </td>
                 </tr>
             </table>
@@ -33,7 +31,7 @@
 <?php endif; ?>
 			<table class="dataTable" cellpadding=0 cellspacing=0>
 				<tr>
-					<td colspan="11" class="topTd"> </td>
+					<td colspan="12" class="topTd"> </td>
 				</tr>
 				<tr class="row">
 				    <th>名称</th>
@@ -43,6 +41,7 @@
 				    <th>条码</th>
 				    <th>颜色</th>
 				    <th>尺码</th>
+                                    <th>过期日期</th>
 				    <th>预采购数量</th>
 				    <th>已收货数量</th>
 				    <th>本箱已收货数量</th>
@@ -58,6 +57,7 @@
 				    <td><?php echo $detail->provider_barcode?></td>
 				    <td><?php echo $detail->color_name?></td>
 				    <td><?php echo $detail->size_name?></td>
+                                    <td><?php echo $detail->expire_date?></td>
 				    <td><?php echo $detail->pnum?></td>
 				    <td><?php echo $detail->product_finished_number?></td>
 				    <td><?php echo $detail->product_number?></td>
@@ -72,11 +72,11 @@
 				<?php endforeach;endif;?>
 				</tbody>
 				<tr>
-				    <td colspan="10"></td>
+				    <td colspan="11"></td>
 				    <td>本次扫描合计：<span id="xiaoji" style="font-size:20px;color:red">0</span></td>
 				</tr>
 				<tr>
-				    <td colspan="11" class="bottomTd"> </td>
+				    <td colspan="12" class="bottomTd"> </td>
 				</tr>
 			</table>
             <div>
@@ -96,11 +96,11 @@
 		    </tr>
                     <tr>
                         <td colspan="4" style="text-align:center">
-			    <input type="button" name="mysubmit" class="button" value="完成扫描"/>
+			    <input type="button" name="mysubmit" class="am-btn am-btn-primary" value="完成扫描"/>
 			    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			    <input type="button" class="button" onclick="javascript:location.href=location.href;" value="取消本次扫描" />	        
+			    <input type="button" class="am-btn am-btn-primary" onclick="javascript:location.href=location.href;" value="取消本次扫描" />	        
 			    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			    <input type="button" onclick="gen_new_box();" class="button" value="新箱号"/>
+			    <input type="button" onclick="gen_new_box();" class="am-btn am-btn-primary" value="新箱号"/>
                         </td>
                     </tr>
                 </table>
@@ -162,10 +162,10 @@
                                 }else if(data.provider_barcode != product_code){
                                     alt_msg('条码不匹配，输入条码：['+product_code+']；系统条码：['+data.provider_barcode+']',2)
                                 }
-                                else if (data.is_consign==1 && checkScanCount(data))
+                                /*else if (data.is_consign==1 && checkScanCount(data))
                                 {
                                     alt_msg("虚库销售采购单不允许超收！");
-                                }
+                                }*/
                                 else{
 				    var xj = $("#xiaoji").html();
 				    $("#xiaoji").html(parseInt(xj) +1);
@@ -187,6 +187,7 @@
                                     tr+="<td>"+data.provider_barcode+"</td>";
                                     tr+="<td>"+data.color_name+"</td>";
                                     tr+="<td>"+data.size_name+"</td>";
+                                    tr+="<td>"+data.expire_date+"</td>";
                                     tr+="<td>"+data.p_number+"</td>";
 				    tr+="<td>"+data.product_finished_number+"</td>";
                                     tr+="<td>"+data.box_number+"</td>";

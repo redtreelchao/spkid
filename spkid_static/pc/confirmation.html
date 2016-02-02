@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv=Content-Type content="text/html;charset=utf-8">
+<title>悦牙网支付</title>
+<link href="css/main.css" rel="stylesheet" type="text/css">
+<link href="css/common.css" rel="stylesheet" type="text/css">
+
+
+</head>
+
+<body>
+<!--nav start-->
+<div class="nav-wrap min-wrapper">
+    <div class="nav clearfix">
+          <a href="#" class="logo"><img src="images/logo2.png"></a>
+          
+          <div class="nav-right">
+               <div class="nav-lb">
+                   <div class="nav-users">
+                        <a class="nav-user-icon" href="#"><img src="images/touxiang.jpg"></a>
+                        <span class="pay-name">胡玲翠</span>
+                        <a href="#" class="nav-order">我的订单</a>
+                        <a href="#" class="nav-cart">购物车</a>
+                   </div>
+            </div>
+         </div>
+    </div>
+  
+<!--header end-->
+
+</div>
+
+<!--pay start-->
+<div class="cart-wrapper">
+     <div class="gwc-wrapper">
+           <div class="home-wrapper pay-scuss">
+                <div class="course-pic"><img src="images/course-order-img2.png"></div>
+                <div class="pay-lb clearfix">
+                     <div class="order-collect clearfix">
+                          
+                          <div class="tip-box">
+                               <h3 class="title">订单提交成功，请尽快支付！</h3>
+                               <p class="tip">请在<strong class="houer">24</strong>小时内完成支付，否则订单将被自动取消</p>
+                          </div>
+                          <div class="money">
+                                <div class="should">应付总额：<strong class="highlight">¥1398.00</strong></div>
+                                <div class="ordersn">
+                                   订单编号：<strong>15122958160817202</strong>
+                                    <span class="toggleshow">
+                                         <span class="showtext" onclick="openShutManager(this,'goods-detail',false,'收起','展开')">收起</span>
+                                    </span>
+                               </div>
+                          </div>
+                    </div>
+                    
+                    <div id="goods-detail" class="goods-detail" style="display: none;">
+                         <div class="pay-buy clearfix"><span class="fl-left">购买商品：</span><span class="fl-left">1.金马克藻酸盐印模材<br/>2.金马克</span></span></div>
+                         <p class="pay-ad">收货地址：<span>上海市</span><span>徐汇区</span><span>龙吴路2888弄28号1602</span><span>王猛</span><span>15618354477</span></p>
+                    </div>
+                    
+                   
+  <script>
+	function openShutManager(oSourceObj,oTargetObj,shutAble,oOpenTip,oShutTip){
+	var sourceObj = typeof oSourceObj == "string" ? document.getElementById(oSourceObj) : oSourceObj;
+	var targetObj = typeof oTargetObj == "string" ? document.getElementById(oTargetObj) : oTargetObj;
+	var openTip = oOpenTip || "";
+	var shutTip = oShutTip || "";
+	if(targetObj.style.display!="none"){
+	   if(shutAble) return;
+	   targetObj.style.display="none";
+	   if(openTip  &&  shutTip){
+		sourceObj.innerHTML = shutTip; 
+	   }
+	} else {
+	   targetObj.style.display="block";
+	   if(openTip  &&  shutTip){
+		sourceObj.innerHTML = openTip; 
+	   }
+	}
+	}
+</script>
+
+
+                    
+                    
+                    
+                    
+                
+                </div>
+                
+                <div class="fill-info confirmation">
+                       <p class="fill-info-tit confirmation-tit">填写凭证信息</p>
+                       <ul class="fill-info-lb confirmation-lb">
+                       <li>手机号码（接收上课凭证码）：<input name="" type="text"><span class="fill-empty"><i></i>无效电话号码</span></li>
+                       <li>电子邮箱（接收上课凭证码）：<input name="" type="text"></li>
+                       <li>真实姓名（接收上课凭证码）：<input name="" type="text"></li>
+                       </ul>
+                 </div>
+                
+                
+                
+                
+               <div class="platform">
+                   <div class="title">请选择支付方式</div>
+                   <ul class="clearfix">
+                   <li class="type"><span class="i-radio checked"></span><img src="images/zhifubao.png"></li>
+                   <li class="type"><span class="i-radio"></span><img src="images/weixinpay.jpg"></li>
+                   </ul>
+                   <input type="hidden" value="15122958160817202" name="order_sn">
+                   <input type="hidden" value="" name="pay_company">
+                  
+              </div>
+           
+             
+           
+           
+           
+           </div>
+           
+           <div class="home-wrapper clearfix">
+             <div class="send fill-cur">【成都】【预约报名】正畸课程实训落地实验课<p>讲师：赵廷旺<span>时间：2016/1/3</span></p><p>地点：成都</p><p class="con-money">总金额：￥8888</p></div>
+            <a href="#" class="submit-button fl-right">确认提交</a>
+      </div>
+     
+     
+     </div>
+
+
+</div>
+
+<!--pay end-->
+
+
+
+
+<!--copyright-start-->
+<div class="copyright clearfix">
+     <div class="copyright-show clearfix">
+          <div class="copyright-lb">
+               <ul class="f-regular-list clearfix">
+               <li class="copyright-bz">严格准入标准</li>
+               <li class="copyright-tuihuo">7天无理由退货</li>
+               <li class="copyright-mianfei">15天免费换货</li>
+               <li class="copyright-pinpai">品牌授权</li>
+               <li class="copyright-rongyu">权威荣誉</li>
+               </ul>
+          </div>
+     </div>
+     
+     <div class="f-product-info min-width clearfix">
+          <div class="f-product-left">
+                 <div class="copyright-tel"><img src="images/tel.png"></div>
+                 <div class="f-info-inner">
+                      <a target="_blank" href="#">关于悦牙网</a>
+                      <a target="_blank" href="#">服务条款</a>
+                      <a target="_blank" href="#">意见反馈</a>
+                      <a target="_blank" href="#">售后政策</a>
+                      <a target="_blank" href="#">合作咨询</a>
+                      <a target="_blank" href="#">加入我们</a>
+                </div>
+          </div>
+          <div class="f-focus-us">
+               <div class="copyright-txt">
+                    关注我们:
+                    <div class="f-focus-icon">
+                         <a class="c-weixin" target="_blank" href="#"></a>
+                         <a class="c-weibo" target="_blank" href="#"></a>
+                         <a class="c-QQ" target="_blank" href="#"></a>
+                   </div>
+              </div>
+              <div class="phone-wx"><p>手机悦牙网</p><img src="images/code.png"></div>
+              
+              
+        </div>
+    
+    
+    </div>
+     
+     
+
+</div>    
+     
+
+<!--copyright-end-->
+
+
+
+
+</body>
+
+</html>

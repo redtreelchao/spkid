@@ -153,12 +153,13 @@
 
 		function showLoactionWin(obj,depot_id)
 		{
-			var loOBJ = new Object();
+			/*var loOBJ = new Object();
 			var lonewWin = window.showModalDialog("/depotio/show_location_win/"+depot_id,loOBJ,"dialogHeight:450px;dialogWidth:200px;center:yes;help:no;status:no;resizable:no");
 			if(loOBJ.pass){
 				obj.value = loOBJ.packet_name;
-			}
+			}*/
 
+                    window.open("/depotio/show_location_win/"+depot_id+"/"+obj.id,'newwindow',"height=500,width=300,toolbar=no,titlebar=no,location=no,menubar=no,resizable=no,z-look=yes");
 		}
 
 		function insert_sel_product(sub_id,index)
@@ -320,72 +321,72 @@
 
 		function add_product_in()
 		{
-			$('#add_p').attr('disabled','disabled');
-			var depot_in_id = document.getElementById('depot_in_id').value;
-			var depot_page_size = document.getElementById('depot_pageSize').value;
-			var param_str = {
-			            is_ajax:1,
-			            depot_in_id : depot_in_id,
-			            depot_page_size : depot_page_size,
-			            rnd : new Date().getTime()
-			        };
-			var tmp_id = "";
-			var tmp_str = "";
-			var	all=document.getElementById("listDiv");
-    		var checks=all.getElementsByTagName("input");
-			var is_sel = 0;
+                    $('#add_p').attr('disabled','disabled');
+                    var depot_in_id = document.getElementById('depot_in_id').value;
+                    var depot_page_size = document.getElementById('depot_pageSize').value;
+                    var param_str = {
+                                is_ajax:1,
+                                depot_in_id : depot_in_id,
+                                depot_page_size : depot_page_size,
+                                rnd : new Date().getTime()
+                    };
+                    var tmp_id = "";
+                    var tmp_str = "";
+                    var	all=document.getElementById("listDiv");
+                    var checks=all.getElementsByTagName("input");
+                    var is_sel = 0;
 		    for(var i=0;i <checks.length;i++)
 		    {
-				if (checks[i].type == "text")
-		   		{
-                	if(checks[i].id.length > 9)
-                	{
-                		if(checks[i].id.substr(0,9) == "location_")
-                		{
-                				tmp_id = checks[i].id.substr(9);
-                				tmp_arr = tmp_id.split('_');
-                				tmp_sub_id = tmp_arr[0];
-                				if(tmp_sub_id > 0)
-                				{
-									tmp_location = checks[i].value;
-									tmp_num = document.getElementById("innum_"+tmp_id).value;
-									tmp_batchid = document.getElementById("batchid_"+tmp_sub_id).value;
-                                                                        if(tmp_num === '' || (tmp_num == parseInt(tmp_num) && tmp_num <= 0)) {
-                                                                            continue;
-                                                                        }
-									if(tmp_num == parseInt(tmp_num) && tmp_num > 0 && tmp_location != '' && tmp_batchid != '')
-									{
-										if (param_str['checkp__'+tmp_sub_id+'__'+tmp_location+'__'+tmp_batchid])
-										{
-											param_str['checkp__'+tmp_sub_id+'__'+tmp_location+'__'+tmp_batchid] = parseInt(param_str['checkp__'+tmp_sub_id+'__'+tmp_location+'__'+tmp_batchid])+parseInt(tmp_num);
-										} else
-										{
-											param_str['checkp__'+tmp_sub_id+'__'+tmp_location+'__'+tmp_batchid] = parseInt(tmp_num);
-										}
+                        if (checks[i].type == "text")
+                        {
+                            if(checks[i].id.length > 9)
+                            {
+                                if(checks[i].id.substr(0,9) == "location_")
+                                {
+                                    tmp_id = checks[i].id.substr(9);
+                                    tmp_arr = tmp_id.split('_');
+                                    tmp_sub_id = tmp_arr[0];
+                                    if(tmp_sub_id > 0)
+                                    {
+                                        tmp_location = checks[i].value;
+                                        tmp_num = document.getElementById("innum_"+tmp_id).value;
+                                        tmp_batchid = document.getElementById("batchid_"+tmp_sub_id).value;
+                                        if(tmp_num === '' || (tmp_num == parseInt(tmp_num) && tmp_num <= 0)) {
+                                            continue;
+                                        }
+                                        
+                                        if(tmp_num == parseInt(tmp_num) && tmp_num > 0 && tmp_location != '' && tmp_batchid != '')
+                                        {
+                                            if (param_str['checkp__'+tmp_sub_id+'__'+tmp_location+'__'+tmp_batchid])
+                                            {
+                                                    param_str['checkp__'+tmp_sub_id+'__'+tmp_location+'__'+tmp_batchid] = parseInt(param_str['checkp__'+tmp_sub_id+'__'+tmp_location+'__'+tmp_batchid])+parseInt(tmp_num);
+                                            } else
+                                            {
+                                                    param_str['checkp__'+tmp_sub_id+'__'+tmp_location+'__'+tmp_batchid] = parseInt(tmp_num);
+                                            }
 
-										is_sel = 1;
-									}
-									else
-									{
-										if(tmp_location != '' || tmp_num != '')
-										{
-											alert('无效的储位或者商品数量');
-											checks[i].style.borderColor ="red";
-											$('#add_p').removeAttr('disabled');
-											return false;
-										}
-
-									}
-                				}
-                				else
-                				{
-                					alert('无效的入库记录号depot_in_sub_id'+tmp_sub_id);
-                					$('#add_p').removeAttr('disabled');
-                					return false;
-                				}
-                		}
-                	}
-                }
+                                            is_sel = 1;
+                                        }
+                                        else
+                                        {
+                                            if(tmp_location != '' || tmp_num != '')
+                                            {
+                                                    alert('无效的储位或者商品数量');
+                                                    checks[i].style.borderColor ="red";
+                                                    $('#add_p').removeAttr('disabled');
+                                                    return false;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                            alert('无效的入库记录号depot_in_sub_id'+tmp_sub_id);
+                                            $('#add_p').removeAttr('disabled');
+                                            return false;
+                                    }
+                                }
+                            }
+                        }
 		    }
 		    if(is_sel == 0)
 		    {
@@ -394,7 +395,7 @@
 		    	return false;
 		    }
 
-			$.ajax({
+		    $.ajax({
 	            url: '/depotio/add_product_in',
 	            data: param_str,
 	            dataType: 'json',
@@ -403,46 +404,46 @@
 	                if(result.msg) {alert(result.msg)};
 	                if(result.error == 0)
 	                {
-	                	if(result.row_num > 0)
-	                	{
-							document.getElementById('goodsDiv').disabled = false;
-	                	}
-	                	else
-	                	{
-	                		document.getElementById('goodsDiv').disabled = true;
-	                	}
-	                	alert("操作已完成");
-	                	document.getElementById('goodsDiv').innerHTML = result.content;
-	                } else
+                            if(result.row_num > 0)
+                            {
+                                document.getElementById('goodsDiv').disabled = false;
+                            }
+                            else
+                            {
+                                document.getElementById('goodsDiv').disabled = true;
+                            }
+                            alert("操作已完成");
+                            document.getElementById('goodsDiv').innerHTML = result.content;
+	                } 
+                        else
 	                {
-	                	if(result.sub_id && result.sub_id > 0)
-	                	{
-						    for(var l=0;l <checks.length;l++)
-						    {
-								if (checks[l].type == "text")
-						   		{
-				                	if(checks[l].id.length > 9)
-				                	{
-				                		if(checks[l].id.substr(0,9) == "location_")
-				                		{
-				                			tmp_id = checks[l].id.substr(9);
-				                			tmp_arr = tmp_id.split('_');
-				                			tmp_sub_id = tmp_arr[0];
-				                			if(tmp_sub_id == result.sub_id && checks[l].value == result.subvalue)
-				                			{
-				                				checks[l].style.borderColor ="red";
-				                			}
-				                		}
-				                	}
-				                }
-				             }
-				         }
+                            if(result.sub_id && result.sub_id > 0)
+                            {
+                                for(var l=0;l <checks.length;l++)
+                                {
+                                    if (checks[l].type == "text")
+                                    {
+                                        if(checks[l].id.length > 9)
+                                        {
+                                            if(checks[l].id.substr(0,9) == "location_")
+                                            {
+                                                tmp_id = checks[l].id.substr(9);
+                                                tmp_arr = tmp_id.split('_');
+                                                tmp_sub_id = tmp_arr[0];
+                                                if(tmp_sub_id == result.sub_id && checks[l].value == result.subvalue)
+                                                {
+                                                    checks[l].style.borderColor ="red";
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 	                }
 	                $('#add_p').removeAttr('disabled');
-	            }
-	        });
+	            }});
 		    return false;
-		}
+	        }
 
 
 
@@ -630,8 +631,8 @@
 			状态：<?php print form_dropdown('provider_status',$provider_status);?>
 			<?php endif; ?>
 			<input type="checkbox" name="with_not" id="with_not" checked >过滤已有商品
-			<input type="submit" class="button" value="搜索" />
-			<input type="button" id="toggle_product" class="button" value="隐藏" onclick="toggle_product_div()" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
+			<input type="button" id="toggle_product" class="am-btn am-btn-primary" value="隐藏" onclick="toggle_product_div()" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -652,8 +653,8 @@
 					<th>供应商名称</th>
 					<th>售价</th>
 					<th>状态</th>
-					<th>颜色</th>
-					<th>尺码</th>
+					<th>颜色|尺码</th>
+					<th>包装方式</th>
 					<th>批次</th>
 					<th>最大入库数</th>
 					<th width="300px;">操作</th>
@@ -662,11 +663,11 @@
 				<tr class="row">
 					<td><?php print $row->product_sn; ?>&nbsp;|&nbsp;<?php print $row->product_name; ?>&nbsp;|&nbsp;<?php print $row->provider_productcode; ?></td>
 					<td><?php print $row->brand_name; ?></td>
-                                        <td><?php print $row->provider_name; ?></td>
+                    <td><?php print $row->provider_name; ?></td>
 					<td><?php print $row->shop_price; ?></td>
 					<td><?php print $row->status_name; ?></td>
-					<td><?php print $row->color_name.'['.$row->color_sn.']'; ?></td>
-					<td><?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
+					<td><?php print $row->color_name.'['.$row->color_sn.']'; ?>| <?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
+                    <td data-pk="<?php print $row->product_id;?>" title ="点击可修改" data-name="pack_method" class="editable" data-type="textarea" data-value="<?php print $row->pack_method; ?>"><?php print $row->pack_method; ?> </td>
 					<td>
 						<?php print $row->batch_code; ?><?php if($row->is_reckoned==1): ?><br>(已结算)<?php endif; ?>
                                             <input type="hidden" name="batchid_<?php print $row->sub_id; ?>" id="batchid_<?php print $row->sub_id; ?>" value="<?php print $row->batch_id; ?>" />
@@ -697,6 +698,20 @@
 
 <?php endif; ?>
 <?php if($full_page): ?>
+
+<script>
+// jquery editable 
+function _editable(){
+$('.editable').editable({ url: '/quick_edit/pack_method', emptytext:'点击可修改',
+        success: function(response, newValue) {
+            if(!response.success) return response.msg;
+            if( response.value != newValue ) return '操作失败';
+        }
+    });
+}
+//listTable.func = _editable; // 分页加载后调用的函数名
+_editable();
+</script>
 		</div>
 		</div></div>
 	</div>

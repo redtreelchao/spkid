@@ -314,7 +314,7 @@ class Order_track extends CI_Controller {
         $response_date['shipping_list'] = $shipping_list;
         
         $response_date['format_order'] = $this->format_print_order($order);
-        
+        $response_date['front_url'] = FRONT_URL;
         $result = $this->load->view('order_track/info', $response_date, TRUE);
         
         echo $result;

@@ -2,10 +2,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/utils.js"></script>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<script type="text/javascript">
 		//<![CDATA[
 
@@ -59,7 +55,7 @@
 			退货人：<input type="text" class="ts" name="consignee" id="consignee" value="" style="width:100px;" />
 			商品款号或名称：<input type="text" class="ts" name="provider_goods" value="" style="width:100px;" />
 			退单状态：<?php print form_dropdown('status',$status_list);?>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			<span style="cursor: hand; color:red;" onclick ="swap_more_search()">高级搜索</span>
 		    <div id="more_search" style="display:none;margin-top:8px;">
 		        <select name="return_status" id="select9">

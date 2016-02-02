@@ -1,8 +1,10 @@
 function check_all () {
-	if($(':checkbox[name=ck_check_all]').attr('checked'))
-		$(':checkbox[name=product_id]').attr('checked',true);
+	if($(':checkbox[name=ck_check_all]').prop('checked'))
+		//$(':checkbox[name=product_id]').attr('checked',true);
+		$(':checkbox[name=product_id]').prop('checked',true);
 	else
-		$(':checkbox[name=product_id]').attr('checked',false);
+		//$(':checkbox[name=product_id]').attr('checked',false);
+		$(':checkbox[name=product_id]').prop('checked',false);
 }
 function batch_audit () {
 	var product_id = $(':hidden[name=product_id]').val();

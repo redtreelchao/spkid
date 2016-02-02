@@ -15,10 +15,10 @@ class Frontnav extends CI_Controller
     public function index ()
     {
         auth(array('frontnav_edit','frontnav_view'));
-        $this->load->model('product_type_model');
+        // $this->load->model('product_type_model');
         $this->load->vars(array(
             'nav_list' => $this->frontnav_model->all(),
-            'all_category' => index_array($this->product_type_model->filter(array('parent_id'=>0)),'type_id'),
+            // 'all_category' => index_array($this->product_type_model->filter(array('parent_id'=>0)),'type_id'),
             'can_edit' => check_perm('frontnav_edit')
         ));        
         $this->load->view('frontnav/list');
@@ -26,8 +26,8 @@ class Frontnav extends CI_Controller
     
     public function add(){
         auth('frontnav_edit');
-        $this->load->model('product_type_model');
-	$this->load->vars('first_types', index_array($this->product_type_model->filter(array('parent_id'=>0)),'type_id'));
+        // $this->load->model('product_type_model');
+	// $this->load->vars('first_types', index_array($this->product_type_model->filter(array('parent_id'=>0)),'type_id'));
         $this->load->view('frontnav/add');
     }
     
@@ -36,21 +36,22 @@ class Frontnav extends CI_Controller
         $this->load->library('form_validation');
         $this->load->library('upload');
         $this->form_validation->set_rules('nav_name', '导航名称', 'trim|required');
+        $this->form_validation->set_rules('nav_url', '导航链接', 'trim|required');
         if (!$this->form_validation->run()) {
                 sys_msg(validation_errors(), 1);
         }
         $data['nav_name'] = trim($this->input->post('nav_name'));
-        $data['category_ids'] = $this->input->post('category_id');
+        // $data['category_ids'] = $this->input->post('category_id');
         $data['nav_url'] = trim($this->input->post('nav_url'));        
         $data['sort_order'] = intval($this->input->post('sort_order'));
-        $data['nav_ad_url'] = trim($this->input->post('nav_ad_url'));
-        if(is_array($data['category_ids'])) {
-            foreach($data['category_ids'] as &$cat_id) $cat_id = intval($cat_id);
-            $data['category_ids'] = implode(',',$data['category_ids']);
-        }else{
-            $data['category_ids'] ='';
-            if(!$data['nav_url']) sys_msg('请填写导航链接');
-        }
+        // $data['nav_ad_url'] = trim($this->input->post('nav_ad_url'));
+        // if(is_array($data['category_ids'])) {
+        //     foreach($data['category_ids'] as &$cat_id) $cat_id = intval($cat_id);
+        //     $data['category_ids'] = implode(',',$data['category_ids']);
+        // }else{
+        //     $data['category_ids'] ='';
+        // if(!$data['nav_url']) sys_msg('请填写导航链接');
+        // }
         
         $nav_id = $this->frontnav_model->insert($data);
         sys_msg('操作成功！',0 , array(array('text'=>'查看', 'href'=>'frontnav/edit/'.$nav_id)));
@@ -61,10 +62,10 @@ class Frontnav extends CI_Controller
         $nav_id = intval($nav_id);
         $nav =  $this->frontnav_model->filter(array('nav_id' => $nav_id));
         if(empty($nav)) sys_msg('记录不存在', 1);
-        $nav->category_ids = explode(',',$nav->category_ids);
-	$this->load->model('product_type_model');
+ //        $nav->category_ids = explode(',',$nav->category_ids);
+	// $this->load->model('product_type_model');
         $this->load->vars(array(
-            'first_types'=> index_array($this->product_type_model->filter(array('parent_id'=>0)),'type_id'),
+            // 'first_types'=> index_array($this->product_type_model->filter(array('parent_id'=>0)),'type_id'),
             'nav' => $nav
         ));
         $this->load->view('frontnav/edit');
@@ -79,21 +80,22 @@ class Frontnav extends CI_Controller
         if(empty($nav)) sys_msg('记录不存在', 1);
           
         $this->form_validation->set_rules('nav_name', '导航名称', 'trim|required');
+        $this->form_validation->set_rules('nav_url', '导航链接', 'trim|required');
         if (!$this->form_validation->run()) {
                 sys_msg(validation_errors(), 1);
         }
         $data['nav_name'] = trim($this->input->post('nav_name'));
-        $data['category_ids'] = $this->input->post('category_id');
+        // $data['category_ids'] = $this->input->post('category_id');
         $data['nav_url'] = trim($this->input->post('nav_url'));
-        $data['nav_ad_url'] = trim($this->input->post('nav_ad_url')); 
+        // $data['nav_ad_url'] = trim($this->input->post('nav_ad_url')); 
         $data['sort_order'] = intval($this->input->post('sort_order'));
-        if(is_array($data['category_ids'])) {
-            foreach($data['category_ids'] as &$cat_id) $cat_id = intval($cat_id);
-            $data['category_ids'] = implode(',',$data['category_ids']);
-        }else{
-            $data['category_ids'] ='';
-            if(!$data['nav_url']) sys_msg('请填写导航链接');
-        }
+        // if(is_array($data['category_ids'])) {
+        //     foreach($data['category_ids'] as &$cat_id) $cat_id = intval($cat_id);
+        //     $data['category_ids'] = implode(',',$data['category_ids']);
+        // }else{
+        //     $data['category_ids'] ='';
+            // if(!$data['nav_url']) sys_msg('请填写导航链接');
+        // }
         $this->frontnav_model->update($data,$nav_id);
         sys_msg('操作成功',0,array(array('href'=>'frontnav/index','text'=>'返回列表页')));
     }
@@ -101,14 +103,14 @@ class Frontnav extends CI_Controller
     public function delete($nav_id){
         auth('frontnav_edit');
         $nav_id = intval($nav_id);
-        $test = $this->input->post('test');
+        // $test = $this->input->post('test');
         $nav =  $this->frontnav_model->filter(array('nav_id' => $nav_id));
         if(empty($nav)){
             sys_msg('记录不存在', 1);
         }
-        if($test) sys_msg('');
+        // if($test) sys_msg('');
         $this->frontnav_model->delete($nav_id);
-        if($nav->nav_ad_img) @unlink(CREATE_IMAGE_PATH.$nav->nav_ad_img);
+        // if($nav->nav_ad_img) @unlink(CREATE_IMAGE_PATH.$nav->nav_ad_img);
         sys_msg('操作成功',0,array(array('href'=>'frontnav/index','text'=>'返回列表页')));
     }
 

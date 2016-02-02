@@ -2,8 +2,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
 	<script type="text/javascript">
             function check_suggestion_form(){
                 var eles=document.forms['suggest_form'].elements;

@@ -1,12 +1,8 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-	<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-	<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.min.js"></script>
+	<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.js"></script>
 
 	<script type="text/javascript">
 	    /* 时间插件 */
@@ -85,13 +81,13 @@
 		}
 	</script>
 	<div class="main">
-		<div class="main_title"><span class="l">妈咪团管理 >> 妈咪团列表</span> <span class="r"><a href="mami_tuan/add" class="add">新增</a></span></div>
+		<div class="main_title"><span class="l">团购管理 >> 团购列表</span> <span class="r"><a href="mami_tuan/add" class="add">新增</a></span></div>
         <div class="blank5"></div>
 	<div class="search_row">
 	<form name="search" action="javascript:search(); ">
 	    商品款号:<input type="text" name="product_sn" id="product_sn" />
 	    开始日期：<input type="text" name="start_time" id="start_time" />
-		<input type="submit" class="button" value="搜索" />
+		<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 	</form>
 </div>
 		<div class="blank5"></div>

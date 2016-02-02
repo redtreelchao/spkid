@@ -19,14 +19,16 @@ class Order_advice_model extends CI_Model
 		$row = $query->row();
 		$query->free_result();
 		$filter['record_count'] = (int) $row->ct;
-		if ($filter['record_count'] <= 0)
-		{
-			return array('list' => array(), 'filter' => $filter);
-		}
         //detail 
 		$filter['sort_by'] = 'oa.advice_id';
 		$filter['sort_order'] = 'desc';
 		$filter = page_and_size($filter);
+                
+		if ($filter['record_count'] <= 0)
+		{
+			return array('list' => array(), 'filter' => $filter);
+		}
+
         $sql = "SELECT oa.*, t.type_name, t.type_color, a.admin_name,if(oa.is_return = 1,oi.order_sn,if(oa.is_return = 2,ri.return_sn,'')) order_sn
                 FROM ".$this->db->dbprefix('order_advice')." AS oa
                 LEFT JOIN ".$this->db->dbprefix('order_advice_type')." AS t ON oa.type_id = t.type_id

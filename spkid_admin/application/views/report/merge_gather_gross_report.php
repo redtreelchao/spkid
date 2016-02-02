@@ -1,10 +1,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="../../../public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="../../../public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../../public/js/listtable.js"></script>
 	<script type="text/javascript" src="../../../public/js/utils.js"></script>
-    <script type="text/javascript" src="../../../public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="../../../public/js/jui/datepicker.min.js"></script>
 
 	<script type="text/javascript">
 	    $(function(){
@@ -53,7 +49,7 @@
 	                <?php endforeach; ?>
 				</select>&nbsp;
 				<span style="color: #FF0000;font: 12px verdana;">*</span>期间：<input type="text" name="start_time" id="start_time" value="<?php echo $start_time;?>" /><input type="text" name="end_time" id="end_time" value="<?php echo $end_time;?>" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 		</form>
 </div>
 		<div class="blank5"></div>
@@ -71,7 +67,7 @@
 					<th rowspan="2">款号</th>
 					<th rowspan="2">货号</th>
 					<th rowspan="2">颜色</th>
-					<th rowspan="2">尺寸</th>
+					<th rowspan="2">规格</th>
 					<th colspan="10">合计</th>
 				</tr>
 				<tr>

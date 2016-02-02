@@ -1,8 +1,6 @@
 <?php include(APPPATH.'views/common/header.php');?>
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
 <script type="text/javascript">
 	//<![CDATA[
 	$(function(){
@@ -14,7 +12,8 @@
 			validator.required('location_code2', '请填写储位编码2');
 			validator.required('location_code3', '请填写储位编码3');
 			validator.required('location_code4', '请填写储位编码4');
-			document.forms['mainForm'].elements['location_name'].value = document.forms['mainForm'].elements['location_code1'].value + '-' +document.forms['mainForm'].elements['location_code2'].value + '-' + document.forms['mainForm'].elements['location_code3'].value + '-' + document.forms['mainForm'].elements['location_code4'].value;
+                        validator.required('location_code5', '请填写储位编码5');
+			document.forms['mainForm'].elements['location_name'].value = document.forms['mainForm'].elements['location_code1'].value + '-' +document.forms['mainForm'].elements['location_code2'].value + '-' + document.forms['mainForm'].elements['location_code3'].value + '-' + document.forms['mainForm'].elements['location_code4'].value + '-' + document.forms['mainForm'].elements['location_code5'].value;
 			return validator.passed();
 	}
 	//]]>
@@ -39,8 +38,9 @@
 				<?php print form_input(array('name'=> 'location_code1','class'=> 'textbox require','size'=>'2','value' => $row->location_code1));?>-
 				<?php print form_input(array('name'=> 'location_code2','class'=> 'textbox require','size'=>'2','value' => $row->location_code2));?>-
 				<?php print form_input(array('name'=> 'location_code3','class'=> 'textbox require','size'=>'2','value' => $row->location_code3));?>-
-				<?php print form_input(array('name'=> 'location_code4','class'=> 'textbox require','size'=>'2','value' => $row->location_code4));?>
-				<?php else: print $row->location_code1.'-'.$row->location_code2.'-'.$row->location_code3.'-'.$row->location_code4; ?>
+				<?php print form_input(array('name'=> 'location_code4','class'=> 'textbox require','size'=>'2','value' => $row->location_code4));?>-
+				<?php print form_input(array('name'=> 'location_code5','class'=> 'textbox require','size'=>'2','value' => $row->location_code5));?>
+				<?php else: print $row->location_code1.'-'.$row->location_code2.'-'.$row->location_code3.'-'.$row->location_code4.'-'.$row->location_code5; ?>
 				<?php endif; ?>
 				</td>
 			</tr>
@@ -79,7 +79,7 @@
 				<td class="item_title"></td>
 				<td class="item_input">
 				<?php if ($can_edit): ?>
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'编辑'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'编辑'));?>
 				<?php endif; ?>
 				</td>
 			</tr>

@@ -1,14 +1,8 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="public/style/jui/timepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
     <script type="text/javascript" src="public/js/utils.js"></script>
     <script type="text/javascript" src="public/js/listtable.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
     <script type="text/javascript" src="public/js/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-    <script type="text/javascript" src="public/js/jui/timepicker.addon.js"></script>
     <script type="text/javascript">
         $(function(){
             var arrs = 'create_date_start,create_date_end,confirm_date_start,confirm_date_end'.split(',');
@@ -76,7 +70,7 @@
                     <option value="2">已复核</option>
                     <option value="3">已发货</option>
                 </select>
-                <input type="submit" class="button" value="搜索" />
+                <input type="submit" class="am-btn am-btn-primary" value="搜索" />
             </form>
         </div>
         <div class="blank5"></div>

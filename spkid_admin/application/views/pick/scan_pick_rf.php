@@ -38,8 +38,8 @@ th,td{font-size:12px}
 		</tr>
 		<tr>
 			<td colspan="2" align="center">
-				<input type="button" class="button" name="sim" value="提交">&nbsp;
-				<input type="button" class="button" name="info" value="详情">
+				<input type="button" class="am-btn am-btn-primary" name="sim" value="提交">&nbsp;
+				<input type="button" class="am-btn am-btn-primary" name="info" value="详情">
 			</td>
 		</tr>
 	</table>

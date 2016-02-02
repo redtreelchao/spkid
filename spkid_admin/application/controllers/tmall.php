@@ -380,7 +380,7 @@ class Tmall Extends CI_Controller {
             $arr_from = array();
             $arr_to = array();
             foreach ($matches[1] as $img) {
-                if (strstr($img, 'mammytree.com') !== FALSE) {
+                if (strstr($img, 'yueyawang.com') !== FALSE) {
                     continue;
                 }
                 try {

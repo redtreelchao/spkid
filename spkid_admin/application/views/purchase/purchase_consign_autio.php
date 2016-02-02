@@ -1,7 +1,5 @@
 <?php if ($full_page): ?>
     <?php include(APPPATH . 'views/common/header.php'); ?>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-    <link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
     <!-- 样式脚本开始 -->
     <style type="text/css">
         .search_array{background-color:white;padding:10px;border:1px solid #ccc;line-height:30px;clear:both;overflow:hidden;}
@@ -152,7 +150,7 @@
                 <input type="hidden" name="end_time" value="<?php if (!empty($end_time)) echo $end_time; ?>" />
                 <input type="hidden" name="provider_id" value="<?php if (!empty($provider_id)) echo $provider_id; ?>"/>
                 <input type="hidden" name="batch_id" value="<?php if (!empty($batch_id)) echo $batch_id; ?>"/>
-                <input value="生成采购单" type="submit" class="button"/>
+                <input value="生成采购单" type="submit" class="am-btn am-btn-primary"/>
             <?php endif; ?>
             <?php if ($full_page): ?>
             </div>

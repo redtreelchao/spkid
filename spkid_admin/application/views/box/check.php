@@ -7,8 +7,6 @@ if ($doc_type == 1) {
     $expected_number = $biz_content->depot_out_number;
 }
 ?>
-<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/alert_msg.js"></script>
 <div class="main">
@@ -27,7 +25,7 @@ if ($doc_type == 1) {
                 <td>&nbsp;&nbsp;<span id="scan_box"><?= $box_count ?></span></td>
                 <td align="right">已复核数量:</td>
                 <td>&nbsp;&nbsp;<span id="scan_num"><?= $all_check_number ?></span>
-                    <input class="button" type="button" onclick="redirect('box_check/check_details/<?= $doc_type . '/' . $doc_code ?>');" value ="复核记录" />
+                    <input class="am-btn am-btn-primary" type="button" onclick="redirect('box_check/check_details/<?= $doc_type . '/' . $doc_code ?>');" value ="复核记录" />
                 </td>
             </tr>
         </table>
@@ -79,9 +77,9 @@ if ($doc_type == 1) {
                     </tr>
                     <tr>
                         <td colspan="4" style="text-align:center" >
-                            <input class="button" type="button" name="mysubmit" value="完成复核" />
+                            <input class="am-btn am-btn-primary" type="button" name="mysubmit" value="完成复核" />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input class="button" type="button" onclick="javascript:location.href = location.href;" value="取消本次复核" />
+                            <input class="am-btn am-btn-primary" type="button" onclick="javascript:location.href = location.href;" value="取消本次复核" />
                         </td>
                     </tr>
                 </table>
@@ -272,7 +270,7 @@ if ($doc_type == 1) {
                             var p_s = tr.find("td:eq(6)").html();
                             var t_msg = "商品[<span style='color:red'>" + p_n + "</span>]";
                             t_msg += "颜色[<span style='color:red'>" + p_c + "</span>]";
-                            t_msg += "尺寸[<span style='color:red'>" + p_s + "</span>]";
+                            t_msg += "规格[<span style='color:red'>" + p_s + "</span>]";
                             t_msg += "条码[<span style='color:red'>" + p_b + "</span>]";
                             t_msg += "复核<span style='color:red'>1</span>件";
                             $("#p_name").html(t_msg);

@@ -313,11 +313,14 @@ function order_unconfirm () {
 }
 
 function order_shipping (shipping_true,invoice_no) {
-    if ($('#h_shipping').dialog('isOpen')) {
+   // if ($('#h_shipping').dialog('isOpen')) {
         var order_id = $(':hidden[name=order_id]').val();
         if (invoice_no == undefined) var invoice_no = $('[type=text][name=invoice_no]').val();
         if (shipping_true == undefined) var shipping_true = $('[type=radio][name=shipping_true]:checked').val();
-        if(invoice_no=='') return false;
+        if(invoice_no=='') {
+            alert('请填写运单号');            
+            return false;
+        }
         $.ajax({
             url:'order_api/shipping',
             data:{order_id:order_id,shipping_true:shipping_true,invoice_no:invoice_no,rnd:new Date().getTime()},
@@ -337,9 +340,10 @@ function order_shipping (shipping_true,invoice_no) {
                 }			
             }
         });
-    } else {
-        $('#h_shipping').dialog('open');
-    }
+    //} 
+    //else {
+        //$('#h_shipping').dialog('open');
+    //}
 }
 
 function add_payment () {
@@ -394,7 +398,20 @@ function order_pay () {
 		}
 	});
 }
-
+function order_unpay () {
+	var order_id = $(':hidden[name=order_id]').val();
+	$.ajax({
+		url:'order_api/unpay',
+		data:{order_id:order_id,rnd:new Date().getTime()},
+		dataType:'json',
+		type:'POST',
+		success:function(result){
+			if(result.msg) alert(result.msg);
+			if(result.err) return false;
+			location.href=location.href;
+		}
+	});
+}
 function order_deny () {
 	var order_id = $(':hidden[name=order_id]').val();
 	location.href=$('base').attr('href')+'order/deny/'+order_id;

@@ -70,7 +70,7 @@
 			<form name="search" action="javascript:search(); ">
 			储位名称或编码：<input type="text" class="ts" name="location_name" value="" style="width:100px;" />
 			<?php print form_dropdown('depot_id',$depot_list);?>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -90,7 +90,7 @@
 				</tr>
 				<?php foreach($list as $row): ?>
 			    <tr class="row">
-			    	<td>&nbsp;<?php print $row->location_code1."-".$row->location_code2."-".$row->location_code3."-".$row->location_code4; ?></td>
+			    	<td>&nbsp;<?php print $row->location_code1."-".$row->location_code2."-".$row->location_code3."-".$row->location_code4."-".$row->location_code5; ?></td>
 					<td>&nbsp;<?php print $row->location_name; ?></td>
 					<td>&nbsp;<?php print $row->depot_name; ?></td>
 					<td>&nbsp;<?php print $row->is_use == 1 ? '可用' : '停用'; ?></td>

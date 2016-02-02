@@ -147,6 +147,11 @@ class User_model extends CI_Model
         $this->_db->update('user_info', $data, "user_id = $user_id");
         return $this->_db->affected_rows();
     }
+    public function update_by_mobile($data, $mobile)
+    {
+        $this->_db->update('user_info', $data, "mobile = '$mobile'");
+        return $this->_db->affected_rows();
+    }
 
     public function update_address($data, $address_id)
     {
@@ -544,7 +549,7 @@ class User_model extends CI_Model
 			return array('list' => array(), 'filter' => $filter);
 		}
 
-        $sql = "SELECT g.product_id,g.product_name, MIN(o.shipping_date) AS order_shipping_date,gg.img_48_48 AS img_30_40,gg.img_170_170 AS img_130_173, gg.img_url, pb.brand_name, if(g.is_promote, g.promote_price, g.shop_price) as sale_price  " .
+        $sql = "SELECT g.product_id,g.product_name, MIN(o.shipping_date) AS order_shipping_date,gg.img_48_48 AS img_30_40,gg.img_170_170 AS img_130_173, gg.img_url, pb.brand_name, if(g.is_promote, g.promote_price, g.shop_price) as sale_price, og.product_num " .
         		" FROM ".$this->_db->dbprefix('order_product')." AS og " .
         		" LEFT JOIN ".$this->_db->dbprefix('order_info')." AS o ON og.order_id=o.order_id" .
         		" LEFT JOIN ".$this->_db->dbprefix('product_info')." AS g ON g.product_id=og.product_id".
@@ -559,20 +564,20 @@ class User_model extends CI_Model
 		foreach($rows as $row)
 		{
             $row->url = '/product-'.$row->product_id.'.html';
-			$row->teeny_url = img_url($row->img_url.".85x85.jpg");
+			$row->tiny_url = img_url($row->img_url.".85x85.jpg");
 			$row->small_url = img_url($row->img_url.".140x140.jpg");
             //$row->teeny_url = img_url($row->img_30_40);
 			//$row->small_url = img_url($row->img_130_173);
             $product_list[$row->product_id] = $row;
             $product_ids[] = $row->product_id;
         }
-        //附加点评数据
+        //附加点评数据 AND l.comment_type=2 
         $sql = "SELECT l.*,s.size_name, if(pi.is_promote, pi.promote_price, pi.shop_price) as sale_price, usl.pay_points, pb.brand_name FROM ".$this->_db->dbprefix('product_liuyan')." AS l
                 LEFT JOIN ".$this->_db->dbprefix('product_size')." AS s ON l.size_id = s.size_id
                 LEFT JOIN ty_product_info pi ON pi.product_id = l.tag_id
                 LEFT JOIN ty_product_brand pb ON pi.brand_id = pb.brand_id
                 LEFT JOIN ty_user_account_log usl ON usl.change_code = 'point_comment' AND usl.link_id = l.comment_id
-                WHERE l.tag_type=1 AND l.comment_type=2 AND l.is_del=0 AND l.user_id='".$user_id."' AND l.tag_id ".db_create_in($product_ids);
+                WHERE l.tag_type=1 AND l.is_del=0 AND l.user_id='".$user_id."' AND l.tag_id ".db_create_in($product_ids);
         $query = $this->_db->query($sql);
 		$rows = $query->result();
 		$product_list2 = array();
@@ -581,7 +586,7 @@ class User_model extends CI_Model
 			$row->product_id = $product_list[$row->tag_id]->product_id;
 			$row->product_name = $product_list[$row->tag_id]->product_name;
 			$row->order_shipping_date = $product_list[$row->tag_id]->order_shipping_date;
-			$row->teeny_url = $product_list[$row->tag_id]->teeny_url;
+			$row->tiny_url = $product_list[$row->tag_id]->tiny_url;
 			$row->small_url = $product_list[$row->tag_id]->small_url;
 			$row->url = $product_list[$row->tag_id]->url;
 			if (isset($product_list[$row->tag_id]))
@@ -1051,4 +1056,16 @@ SQL;
             $this->_db->insert('user_baby_info', $data);
             return $this->_db->insert_id();		
 		}
-}
+
+		//获取 用户 所收藏的 商品信息
+		public function get_collect_info ($filter){
+			$query = $this->_db->get_where('front_collect_product',$filter);
+			return $query->result_array();
+		}
+        //获取最后一个user_id的值        
+        public function get_last_user_id(){
+            $sql = "SELECT user_id FROM ty_user_info ORDER BY user_id DESC LIMIT 1";
+            $result = $this->db->query($sql)->row();
+            return !empty($result) ? $result->user_id : 0;
+        }
+}                

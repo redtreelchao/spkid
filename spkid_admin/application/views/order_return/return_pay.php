@@ -130,7 +130,7 @@
 						<option value="<?php print $key; ?>" ><?php print $value; ?></option>
 						<?php endforeach; ?>
 						</select>
-				                    <input type="button" value="自动扣除折扣" class="button" style="vertical-align:middle" onclick="auto_deduct('<?php print $return_id; ?>');" />
+				                    <input type="button"  value="自动扣除折扣"  class="am-btn am-btn-secondary" style="vertical-align:middle" onclick="auto_deduct('<?php print $return_id; ?>');" />
 				                </td>
 					</tr>
 					<tr style="display:block;" id="deduct_type">
@@ -160,8 +160,8 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-						<input type="submit" name="submit" value="<?php print isset($payment_id) && !empty($payment_id)?'修改支付明细':'添加支付明细'; ?>" class="button" />
-				        <input type="button" name="back" value="返回" class="button" onclick="javascript:location.href='/order_return/edit/<?php print $return_id; ?>'" />
+						<input type="submit" name="submit" value="<?php print isset($payment_id) && !empty($payment_id)?'修改支付明细':'添加支付明细'; ?>" class="am-btn am-btn-primary" />
+				        <input type="button" name="back" value="返回" class="am-btn am-btn-primary" onclick="javascript:location.href='/order_return/edit/<?php print $return_id; ?>'" />
 						</td>
 					</tr>
 

@@ -13,7 +13,7 @@ scrollbar-Shadow-color:#BCBEBB;scrollbar-arrow-color:#BDBBBE;scrollbar-track-col
 <div class="left">
 	<?php foreach ($admin_menu as $group): ?>
 		<dl>
-	      <dt class="navt_u"><?php print $group->menu_name; ?></dt>
+          <dt class="navt_u" title="<?php echo $group->menu_name.'['.$group->action_id.']';?>"><?php print $group->menu_name; ?></dt>
 	      <?php foreach ($group->sub_items as $item): ?>
 	      <dd><a href="<?php print $item->url; ?>" target="<?php if(in_array($item->action_code, array('menu_purchasebox_scanning','menu_exchange_location'))):?>_blank<?php else:?>mainFrame<?php endif;?>"><?php print $item->menu_name; ?></a></dd>
 	      <?php endforeach ?>

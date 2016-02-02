@@ -19,7 +19,7 @@ class Mami_tuan extends CI_Controller
         $this->status_list=array(0=>'未审核',1=>'已审核',2=>'已停止',3=>'已结束');
     }
 
-	/* 妈咪团列表 */
+	/* 团购列表 */
     public function index ()
     {
         auth('mami_tuan_view');
@@ -44,7 +44,7 @@ class Mami_tuan extends CI_Controller
         $this->load->view('mami_tuan/list', $data);
     }
 
-	/* 载入添加妈咪团 */
+	/* 载入添加团购 */
     public function add()
     {
         auth('mami_tuan_add');
@@ -64,21 +64,21 @@ class Mami_tuan extends CI_Controller
 			if($this->mami_tuan_model->check_product_rush($product_info->product_id)) {
 				sys_msg('商品已添加限抢活动中',1,array(array('href'=>'mami_tuan/add','text'=>'重新载入')));
 			}
-			//检测商品是否已添加到妈咪团
+			//检测商品是否已添加到团购
 			if($this->mami_tuan_model->check_product_tuan($product_info->product_id)) {
-				sys_msg('商品已添加妈咪团活动中',1,array(array('href'=>'mami_tuan/add','text'=>'重新载入')));
+				sys_msg('商品已添加团购活动中',1,array(array('href'=>'mami_tuan/add','text'=>'重新载入')));
 			}
 			//排除正在限抢或团购活动中的商品
 			$pro_id_arr[] = $product_info->product_id;
 			if($this->rush_model->sel_pro_df($pro_id_arr)) {
-				sys_msg('商品正在限抢或妈咪团活动中',1,array(array('href'=>'mami_tuan/add','text'=>'重新载入')));
+				sys_msg('商品正在限抢或团购活动中',1,array(array('href'=>'mami_tuan/add','text'=>'重新载入')));
 			}
 		}
 		$this->load->vars('product',$product_info);
         $this->load->view('mami_tuan/add');
     }
 	
-	/* 添加妈咪团 */
+	/* 添加团购 */
     public function post_add()
     {
         auth('mami_tuan_add');
@@ -171,7 +171,7 @@ class Mami_tuan extends CI_Controller
         sys_msg('操作成功',2,array(array('href'=>'mami_tuan/index','text'=>'返回列表页')));
     }
     
-	/*载入妈咪团编辑*/
+	/*载入团购编辑*/
 	function edit($tuan_id){
 		auth('mami_tuan_view');
 		$this->load->model('product_model');
@@ -197,7 +197,7 @@ class Mami_tuan extends CI_Controller
 		$this->load->view('mami_tuan/edit');
     }
 
-	/* 编辑妈咪团 */
+	/* 编辑团购 */
     function post_edit($tuan_id){
 		auth('mami_tuan_edit');
         $tuan_id = intval($tuan_id);
@@ -291,7 +291,7 @@ class Mami_tuan extends CI_Controller
         sys_msg('操作成功',2,array(array('href'=>'mami_tuan/index','text'=>'返回列表页')));
     }
 	
-	/* 妈咪团 审核、反审核 */
+	/* 团购 审核、反审核 */
     public function confirm() {
         auth('mami_tuan_edit');
         $tuan_id = intval($this->input->post('tuan_id'));
@@ -330,7 +330,7 @@ class Mami_tuan extends CI_Controller
         echo json_encode(array('error' => 0,'msg' => '操作成功！'));
     }
 
-	/* 妈咪团 上架、停止 */
+	/* 团购 上架、停止 */
 	function sale() {
 		auth('mami_tuan_edit');
         $tuan_id = intval($this->input->post('tuan_id'));

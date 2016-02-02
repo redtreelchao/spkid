@@ -22,7 +22,7 @@
             热门关键字名称：
               <input type="text" name="hotword_name" id="hotword_name" />
 
-		      <input type="submit" class="button" value="搜索" />
+		      <input type="submit" class="am-btn am-btn-primary" value="搜索" />
 		</form>
 </div>
 		<div class="blank5"></div>

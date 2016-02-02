@@ -24,6 +24,7 @@ class Provider extends CI_Controller
 		if (!empty($provider_code)) $filter['provider_code'] = $provider_code;
 		$provider_name = trim($this->input->post('provider_name'));
 		if (!empty($provider_name)) $filter['provider_name'] = $provider_name;
+        $filter['parent_id'] = 0;
 
 		$filter = get_pager_param($filter);
 		$data = $this->provider_model->provider_list($filter);
@@ -47,11 +48,19 @@ class Provider extends CI_Controller
 		$this->load->view('provider/index', $data);
 	}
 
-	public function add()
+	public function add($parent_id='')
 	{
 		auth('provider_edit');
-                $this->load->model('cooperation_model');
-                $this->load->vars('all_cooperation', $this->cooperation_model->all_cooperation());
+        $this->load->model('cooperation_model');
+
+        //获取上级供应商
+        if(!empty($parent_id)){
+        	$parent = $this->provider_model->filter(array('provider_id'=>$parent_id));
+        	$this->load->vars('parent', $parent);
+        }
+
+        $this->load->vars('all_cooperation', $this->cooperation_model->all_cooperation());
+        $this->load->vars('top_providers', $this->provider_model->all_provider(Array('parent_id'=>0)));
 		$this->load->view('provider/add');
 	}
 
@@ -61,16 +70,20 @@ class Provider extends CI_Controller
                 $this->load->library('upload');
                 $this->config->load('provider');
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('provider_name', '供应商名称', 'trim|required');
-                $this->form_validation->set_rules('provider_code', '供应商名称', 'trim|required');
-                $this->form_validation->set_rules('provider_cooperation', '供应商合作方式', 'trim|required');
+		$this->form_validation->set_rules('provider_name', '名称', 'trim|required');
+                //$this->form_validation->set_rules('provider_code', '代码', 'trim|required');
+                $this->form_validation->set_rules('provider_cooperation', '合作方式', 'trim|required');
 		if (!$this->form_validation->run()) {
 			sys_msg(validation_errors(), 1);
 		}
 		$update = array();
-                $update['provider_code'] = $this->input->post('provider_code');
+        $update['provider_code'] = trim($this->input->post('provider_code'));
+        // 自动生成供应商编号
+		if( empty($update['provider_code']) ){
+		    $update['provider_code'] = $this->provider_model->gen_provider_sn();
+		}
 		$update['provider_name'] = $this->input->post('provider_name');
-                $update['provider_cooperation'] = $this->input->post('provider_cooperation');
+        $update['provider_cooperation'] = $this->input->post('provider_cooperation');
 		$update['official_name'] = trim($this->input->post('official_name'));
 		$update['provider_bank'] = trim($this->input->post('provider_bank'));
 		$update['provider_account'] = trim($this->input->post('provider_account'));
@@ -78,21 +91,21 @@ class Provider extends CI_Controller
 		$update['is_use'] = intval($this->input->post('is_use'));
 		$update['create_admin'] = $this->admin_id;
 		$update['create_date'] = date('Y-m-d H:i:s');
-                $update['display_name'] = trim($this->input->post('display_name'));
-                $update['return_address'] = trim($this->input->post('return_address'));
-                $update['return_postcode'] = trim($this->input->post('return_postcode'));
-                $update['return_consignee'] = trim($this->input->post('return_consignee'));
-                $update['return_mobile'] = trim($this->input->post('return_mobile'));
-                $sms_price = trim($this->input->post('sms_price'));
-                $update['sms_price'] = $sms_price <= 0 ? DEFAULT_SMS_PRICE : $sms_price;
-                //$update['shipping_fee_config'] = json_encode($this->config->item('provider_shipping_config'));
-                $check_provider_code = $this->provider_model->filter(array('provider_code'=>$update['provider_code']));
+        $update['display_name'] = trim($this->input->post('display_name'));
+        $update['return_address'] = trim($this->input->post('return_address'));
+        $update['return_postcode'] = trim($this->input->post('return_postcode'));
+        $update['return_consignee'] = trim($this->input->post('return_consignee'));
+        $update['return_mobile'] = trim($this->input->post('return_mobile'));
+        $sms_price = trim($this->input->post('sms_price'));
+        $update['sms_price'] = $sms_price <= 0 ? DEFAULT_SMS_PRICE : $sms_price;
+        //$update['shipping_fee_config'] = json_encode($this->config->item('provider_shipping_config'));
+        $check_provider_code = $this->provider_model->filter(array('provider_code'=>$update['provider_code']));
 		if ($check_provider_code) {
-			sys_msg('供应商代码重复', 1);
+			sys_msg('代码重复', 1);
 		}
 		$provider = $this->provider_model->filter(array('provider_name'=>$update['provider_name']));
 		if ($provider) {
-			sys_msg('供应商名称重复', 1);
+			sys_msg('名称重复', 1);
 		}
                 
                 // 上传图片
@@ -101,7 +114,8 @@ class Provider extends CI_Controller
 			'allowed_types' => 'gif|jpg|png',
 			'encrypt_name' => TRUE
 		));
-
+		$parent_id = trim($this->input->post('parent_id'));
+		$update['parent_id'] = $parent_id;
 		$provider_id = $this->provider_model->insert($update);
                 
 		if($this->upload->do_upload('logo')){
@@ -109,13 +123,25 @@ class Provider extends CI_Controller
 			$this->provider_model->update(array('logo'=>'provider/'.$file['file_name']), $provider_id);
 		}
 		
-		sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/edit/'.$provider_id), array('text'=>'返回列表','href'=>'provider/index')));
+		if(!empty($parent_id)){
+        	sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/scm_edit/'.$provider_id."/".$parent_id), array('text'=>'返回列表','href'=>'provider/scm_index/'.$parent_id)));
+        }else{
+        	sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/scm_edit/'.$provider_id), array('text'=>'返回列表','href'=>'provider/index')));        	
+        }
+
+		// sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/edit/'.$provider_id), array('text'=>'返回列表','href'=>'provider/index')));
 	}
 
-	public function edit($provider_id)
+	public function edit($provider_id,$parent_id='')
 	{
 		auth(array('provider_edit','provider_view'));
 		$provider = $this->provider_model->filter(array('provider_id'=>$provider_id));
+
+		if(!empty($parent_id)){
+        	$parent = $this->provider_model->filter(array('provider_id'=>$parent_id));
+        	$this->load->vars('parent', $parent);
+        }
+
 		if (!$provider) {
 			sys_msg('记录不存在', 1);
 		}
@@ -131,7 +157,7 @@ class Provider extends CI_Controller
 		auth('provider_edit');
                 $this->load->library('upload');
 		$this->load->library('form_validation');
-                $this->form_validation->set_rules('provider_name', '供应商名称', 'trim|required');
+                $this->form_validation->set_rules('provider_name', '名称', 'trim|required');
                 if (!$this->form_validation->run()) {
 			sys_msg(validation_errors(), 1);
 		}
@@ -156,8 +182,10 @@ class Provider extends CI_Controller
                 
 		$check_provider = $this->provider_model->filter(array('provider_name'=>$update['provider_name'], 'provider_id !='=>$provider_id));
 		if ($check_provider) {
-			sys_msg('供应商名称重复', 1);
+			sys_msg('名称重复', 1);
 		}
+
+		$parent_id = trim($this->input->post('parent_id'));
                 
 		$this->provider_model->update($update, $provider_id);
                 
@@ -172,8 +200,12 @@ class Provider extends CI_Controller
 			if($provider->logo) @unlink(CREATE_IMAGE_PATH.$provider->logo);
 			$this->provider_model->update(array('logo'=>'provider/'.$file['file_name']), $provider_id);
 		}
-		
-		sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/edit/'.$provider_id), array('text'=>'返回列表','href'=>'provider/index')));
+
+		if(!empty($parent_id)){
+        	sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/edit/'.$provider_id."/".$parent_id), array('text'=>'返回列表','href'=>'provider/scm_index/'.$parent_id)));
+        }else{
+        	sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/edit/'.$provider_id), array('text'=>'返回列表','href'=>'provider/index')));        	
+        }
 	}
 
 	public function delete($provider_id)
@@ -263,16 +295,38 @@ class Provider extends CI_Controller
         sys_msg('操作成功', 0, array(array('text' => '继续编辑', 'href' => 'provider/shipping/' . $provider_id), array('text' => '返回列表', 'href' => 'provider/index')));
     }
     
-    public function scm_edit($provider_id) {
+    public function scm_edit($provider_id,$parent_id='') {
         auth(array('provider_edit','provider_view'));
-        
+
         $provider = $this->provider_model->filter(array('provider_id'=>$provider_id));
+        if(!empty($parent_id)){
+        	$parent = $this->provider_model->filter(array('provider_id'=>$parent_id));
+        	$this->load->vars('parent', $parent);
+        }
         if (!$provider) {
             sys_msg('记录不存在', 1);
         }
-        
+
         $this->load->vars('row', $provider);
         $this->load->vars('perm_edit', check_perm('provider_edit'));
+
+        $this->load->model('region_model');
+
+        //获取所辖地区
+        $region = explode(',',$provider->send_country);
+        $region = array_merge($region,explode(',',$provider->send_province));
+        $region = array_merge($region,explode(',',$provider->send_city));
+        $region = array_merge($region,explode(',',$provider->send_district));
+        $reg = array();
+        foreach ($region as $value) {
+        	$reg = array_merge($reg,$this->region_model->all_data(array('region_id'=>$value)));
+        }
+        $this->load->vars('all_region', $reg);
+
+        //展示所有省份
+        $province = $this->region_model->all_region(array('region_type' => 1));
+        $this->load->vars('province', $province);
+
         $this->load->view('provider/scm_edit');
     }
     
@@ -280,6 +334,8 @@ class Provider extends CI_Controller
         auth('provider_edit');
         
         $provider_id = intval($this->input->post('provider_id'));
+        $parent_id = intval($this->input->post('parent_id'));
+
         $provider = $this->provider_model->filter(array('provider_id'=>$provider_id));
         if (!$provider) {
             sys_msg('记录不存在!', 1);
@@ -311,9 +367,77 @@ class Provider extends CI_Controller
         $update['return_mobile'] = trim($this->input->post('return_mobile'));
         $sms_price = trim($this->input->post('sms_price'));
         $update['sms_price'] = $sms_price <= 0 ? DEFAULT_SMS_PRICE : $sms_price;
-            
+
+        $area = $this->input->post('area');
+
+        $this->load->model('region_model');
+
+        $areas = array();
+        $areas['send_country']=array();
+        $areas['send_province']=array();
+        $areas['send_city']=array();
+        $areas['send_district']=array();
+        $ary = array( 'send_country', 'send_province', 'send_city', 'send_district' ); //先后顺序要保持
+        if(!empty($area)){
+        	$regions = $this->region_model->get_specified_region($area);
+        	$regions = get_pair( $regions, 'region_id', 'region_type');
+
+	        foreach ($area as $value) {
+	        	$areas[$ary[$regions[$value]]][] = $value;
+	        }
+	        // 将选择的区域，组成字符串
+	       $areas =  array_map(array($this,'local_implode'),$areas);
+	       // 将数据还给update
+	       $update = array_merge($update,$areas);
+        }
+
         $this->provider_model->update($update, $provider_id);
-        sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/scm_edit/'.$provider_id), array('text'=>'返回列表','href'=>'provider/index')));
+        if(!empty($parent_id)){
+        	sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/scm_edit/'.$provider_id."/".$parent_id), array('text'=>'返回列表','href'=>'provider/scm_index/'.$parent_id)));
+        }else{
+        	sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/scm_edit/'.$provider_id), array('text'=>'返回列表','href'=>'provider/index')));        	
+        }
+
+    }
+    private  function local_implode($ary){
+	 	if( empty($ary)) return null;
+	    	return implode(',',$ary);
+	 }
+
+    public function scm_index($provider_id = 0) {
+        auth(array('provider_edit','provider_view'));
+        
+        $provider = $this->provider_model->filter(array('provider_id'=>$provider_id));
+        if (!$provider) {
+            sys_msg('记录不存在', 1);
+        }
+		$filter = $this->uri->uri_to_assoc(3);
+		$provider_code = trim($this->input->post('provider_code'));
+		if (!empty($provider_code)) $filter['provider_code'] = $provider_code;
+		$provider_name = trim($this->input->post('provider_name'));
+		if (!empty($provider_name)) $filter['provider_name'] = $provider_name;
+        $filter['parent_id'] = $provider_id;
+
+		$filter = get_pager_param($filter);
+		$data = $this->provider_model->provider_list($filter);
+		//
+		$this->load->model('provider_brand_model');
+		foreach ($data["list"] as $item){
+		     $item->provider_brand_list = $this->provider_brand_model->provider_brand_list($item->provider_id);
+		}
+		$this->load->vars('perm_delete', check_perm('provider_edit'));
+		$this->load->vars('perm_provider_brand_setup', check_perm('provider_brand_setup'));
+		if ($this->input->is_ajax_request())
+		{
+			$data['full_page'] = FALSE;
+			$data['content'] = $this->load->view('provider/scm_index', $data, TRUE);
+			$data['error'] = 0;
+			unset($data['list']);
+			echo json_encode($data);
+			return;
+		}
+		$data['full_page'] = TRUE;
+        $this->load->view('provider/scm_index', $data);
     }
 
 }

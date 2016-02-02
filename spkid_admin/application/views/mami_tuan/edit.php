@@ -1,10 +1,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<script type="text/javascript" src="public/js/validator.js"></script>
     <script type="text/javascript">
 		$(function(){
@@ -24,7 +20,7 @@
 		}
 	</script>
 	<div class="main">
-		<div class="main_title"><span class="l">妈咪团管理 &gt;&gt; 编辑妈咪团</span><span class="r">[ <a href="/mami_tuan">返回列表 </a>]</span></div>
+		<div class="main_title"><span class="l">团购管理 &gt;&gt; 编辑团购</span><span class="r">[ <a href="/mami_tuan">返回列表 </a>]</span></div>
 		<div class="produce">
 		<div class="pc base">
 		<div class="blank5"></div>
@@ -163,7 +159,7 @@
 						<?php if($is_edit){?>
 						<td class="item_title"></td>
 						<td class="item_input" colspan=3>
-						<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+						<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 						</td>
 						<?php }else{?>
 						<td>&nbsp;&nbsp;</td>

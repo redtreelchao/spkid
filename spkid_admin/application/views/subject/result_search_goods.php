@@ -3,7 +3,7 @@
         <td colspan="5" style="text-align:right;">
             <input type="checkbox" name="selectAllGoods" onclick="javascript:selectAllGoods();" />
             全选
-            <input type="button" value="添加所选商品" onclick="javascript:doAddSelectedGoods();" />  
+            <input type="button" class="am-btn am-btn-secondary" value="添加所选商品" onclick="javascript:doAddSelectedGoods();" />  
         </td>
     </tr>
     

@@ -18,8 +18,8 @@ class Action extends CI_Controller {
         $filter = $this->uri->uri_to_assoc(3);
 
         // 关键字search_keys是搜索用的字段
-        $keys  = array('action_code','action_name','parent_id');
-        $filter = fill_filter( $filter, $keys );
+        $keys  = array('action_code','action_name','parent_id','menu_name');
+        $filter = fill_filter( $filter, $keys, true );
         if( !empty($filter['search_keys']) ) $filter['sort_order'] = 'ASC';
 
         $filter = get_pager_param($filter);

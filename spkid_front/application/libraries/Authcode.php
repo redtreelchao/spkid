@@ -96,10 +96,11 @@ class Authcode {
 		}
 
 		$this->CI->session->set_userdata('auth_code', strtolower($code));
+        
 		//ob_clean();
-		header("Content-type: image/jpeg");
-		imagejpeg($this->image);
-		imagedestroy($this->image);
+        header("Content-type: image/jpeg");
+        imagejpeg($this->image);
+        imagedestroy($this->image);
 	}
 
 	/**

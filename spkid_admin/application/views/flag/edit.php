@@ -2,8 +2,6 @@
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
 <script type="text/javascript" src="public/js/cluetip.js"></script>
-<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
 <link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 <script type="text/javascript">
 	//<![CDATA[
@@ -12,13 +10,13 @@
 	});
 	function check_form(){
 		var validator = new Validator('mainForm');
-			validator.required('flag_name', '请填写国旗名称');
+			validator.required('flag_name', '请填写产地名称');
 			return validator.passed();
 	}
 	//]]>
 </script>
 <div class="main">
-	<div class="main_title"><span class="l">国旗管理 >> 编辑 </span><a href="flag/index" class="return r">返回列表</a></div>
+	<div class="main_title"><span class="l">产地管理 >> 编辑 </span><a href="flag/index" class="return r">返回列表</a></div>
 	<div class="blank5"></div>
 	<?php print form_open_multipart('flag/proc_edit',array('name'=>'mainForm','onsubmit'=>'return check_form()'), array('flag_id'=>$row->flag_id));?>
 		<table class="form" cellpadding=0 cellspacing=0>
@@ -26,7 +24,7 @@
 				<td colspan=2 class="topTd"></td>
 			</tr>
 			<tr>
-				<td class="item_title">国旗名称:</td>
+				<td class="item_title">产地名称:</td>
 				<td class="item_input"><?php print form_input('flag_name',$row->flag_name,'class="textbox require" '.($perm_edit?'':'disabled'));?></td>
 			</tr>
 			<tr>
@@ -54,7 +52,7 @@
 				<tr>
 					<td class="item_title"></td>
 					<td class="item_input">
-						<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+						<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 					</td>
 				</tr>
 			<?php endif ?>

@@ -1,6 +1,5 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="../../../public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../../public/js/listtable.js"></script>
 	<script type="text/javascript" src="../../../public/js/utils.js"></script>
 
@@ -27,7 +26,7 @@
 			      <option value="2">启用</option>
 			      <option value="1">未启用</option>
 		      </select>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 		</form>
 </div>
 		<div class="blank5"></div>

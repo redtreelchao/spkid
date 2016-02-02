@@ -6,8 +6,9 @@ class front_focus_image_model extends CI_Model
 {
     public function all($filter)
     {
-        $sql="select * from ty_front_focus_image where focus_type=$filter[focus_type] and (end_time >now() or end_time is null)
-                order by focus_order desc limit 40";
+        // $sql="select * from ty_front_focus_image where focus_type=$filter[focus_type] and (end_time >now() or end_time is null)
+        //         order by focus_order desc limit 40";
+        $sql="select * from ty_front_focus_image where focus_type=$filter[focus_type] order by focus_order desc limit 40";
         $query=$this->db_r->query($sql);
         return $query->result();
     }

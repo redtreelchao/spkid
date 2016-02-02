@@ -211,7 +211,7 @@ class Order_model extends CI_Model
     public function lock_order($order_id, $invoice_no = '')
     {
         $condition =(!empty($order_id)) ? (strtoupper(substr(strval($order_id),0,2))=='DD') ? "AND order_sn = '".$order_id."'" : "AND order_id = '".$order_id."'" : '';
-        if ($condition == '') $condition = 'AND invoice_no = "'.$invoice_no.'"'; 
+        if ($condition == '') $condition = 'AND shipping_status = 0 AND invoice_no = "'.$invoice_no.'"'; 
         $sql = "SELECT * FROM ".$this->db->dbprefix('order_info')." WHERE 1=1 ".$condition."  FOR UPDATE";
         $query = $this->db->query($sql);
         return $query->row();
@@ -394,11 +394,12 @@ class Order_model extends CI_Model
 
     public function order_product($order_id)
     {
-        $sql = "SELECT op.*, p.provider_id, p.product_name, p.product_sn,p.provider_productcode, p.unit_name,cat.category_id,
+        $sql = "SELECT op.*, p.provider_id, p.product_name, p.product_sn,p.provider_productcode, p.unit_name,cat.category_id, pp.provider_code, 
                 cat.category_name, b.brand_id, b.brand_name, c.color_name, c.color_sn, s.size_name, s.size_sn,sub.sub_id,sub.gl_num,sub.consign_num as gl_consign_num,
                 ti.batch_id,pb.batch_code,ti.consign_price,ti.cost_price,ti.consign_rate,ti.product_cess, ti.product_number,d.depot_name,li.location_name, oi.order_sn, sub.provider_barcode, pg.img_215_215    
                 FROM ".$this->db->dbprefix('order_product')." AS op
-                LEFT JOIN ".$this->db->dbprefix('product_info')." AS p ON op.product_id = p.product_id
+                LEFT JOIN ".$this->db->dbprefix('product_info')." AS p ON op.product_id = p.product_id 
+                LEFT JOIN ".$this->db->dbprefix('product_provider')." AS pp ON p.provider_id = pp.provider_id  
                 LEFT JOIN ".$this->db->dbprefix('product_category')." AS cat ON cat.category_id = p.category_id
                 LEFT JOIN ".$this->db->dbprefix('product_brand')." AS b ON b.brand_id = p.brand_id
                 LEFT JOIN ".$this->db->dbprefix('product_color')." AS c ON c.color_id = op.color_id
@@ -540,7 +541,7 @@ class Order_model extends CI_Model
             $sql .= " AND pay_id = ? ";
             $param[] = intval($filter['pay_id']);
         }
-        $sql .= ") ORDER BY s.sort_order DESC";
+        $sql .= ") ORDER BY s.sort_order ASC";
         $query = $this->db->query($sql, $param);
         return $query->result();
     }
@@ -684,7 +685,7 @@ class Order_model extends CI_Model
 		从程序严谨性角度来讲有一点遗憾，在此做注释。 20130318 frank		
 		*/
 		$sql = "SELECT t.depot_id,t.location_id,SUM(t.product_number) AS product_number,
-                t.batch_id,t.consign_price,t.cost_price,t.consign_rate,t.product_cess,
+                t.batch_id,t.consign_price,t.cost_price,t.consign_rate,t.product_cess,t.expire_date,
                 pi.shop_price
                 FROM ".$this->db->dbprefix('transaction_info')." AS t
                 LEFT JOIN ".$this->db->dbprefix('depot_info')." AS d ON t.depot_id=d.depot_id
@@ -692,7 +693,7 @@ class Order_model extends CI_Model
                 LEFT JOIN ".$this->db->dbprefix('product_info')." as pi on pi.product_id=t.product_id
                 WHERE d.is_use = 1 AND d.is_return = 0 AND l.is_use = 1 AND t.trans_status IN (1,2,4) 
                 AND t.product_id=? AND t.color_id = ? AND t.size_id = ?
-                GROUP BY t.batch_id,l.location_id HAVING product_number>0 ORDER BY MIN(t.batch_id) ASC,d.depot_priority ASC;";
+                GROUP BY t.batch_id,l.location_id HAVING product_number>0 ORDER BY MIN(expire_date) ASC, MIN(t.batch_id) ASC,d.depot_priority ASC;";
         $query = $this->db->query($sql, array($sub->product_id,$sub->color_id,$sub->size_id));
         $trans = $query->result();
         if(!$trans) return array('err'=>1,'msg'=>'没有库存');
@@ -709,7 +710,7 @@ class Order_model extends CI_Model
             'create_admin'=>$this->admin_id,
             'create_date'=>"'{$this->time}'",
             'trans_direction'=>0,
-            'finance_check_admin' => $sub->finance_admin, 
+            'finance_check_admin' => isset($sub->finance_admin) ? $sub->finance_admin : 0 , 
             'finance_check_date' => empty($sub->finance_date) ? null : "'$sub->finance_date'"
             );
         foreach($trans as $t){
@@ -722,6 +723,7 @@ class Order_model extends CI_Model
             $row['consign_rate'] = $t->consign_rate;
             $row['cost_price'] = $t->cost_price;
             $row['product_cess'] = $t->product_cess;
+			$row['expire_date'] = "'$t->expire_date'";
             $result[] = $row;
             $num += $row['product_number']; //因为$row['product_number']为负值，所以此处用+
             if($num==0) break;
@@ -741,7 +743,7 @@ class Order_model extends CI_Model
     public function insert_trans_batch($updates)
     {
         $keys = array('trans_type','trans_status','trans_sn','product_id','color_id','size_id','sub_id','create_admin','create_date','trans_direction','depot_id','location_id','product_number',
-                'batch_id','shop_price','consign_price','consign_rate','cost_price','product_cess','update_admin','update_date', 'finance_check_date', 'finance_check_admin');
+                'batch_id','shop_price','consign_price','consign_rate','cost_price','product_cess','update_admin','update_date', 'finance_check_date', 'finance_check_admin','expire_date');
         $sql = "INSERT INTO ".$this->db->dbprefix('transaction_info');
                 //." (".implode(',',$keys).") VALUES ";
         $result = array();
@@ -917,7 +919,7 @@ class Order_model extends CI_Model
                     WHERE order_status = 0 
                     AND create_date > FROM_UNIXTIME(UNIX_TIMESTAMP() - ".TIME_OUT.") 
                     AND create_date < FROM_UNIXTIME(UNIX_TIMESTAMP() - ".MIN_CHECK_TIME.") 
-                    AND pay_id > 1 AND LENGTH(user_notice) < 1 AND lock_admin = 0 
+                    AND pay_id > 1 AND lock_admin = 0 
                     AND product_num > 0 AND odd = 0 AND order_price + shipping_fee <= paid_price LIMIT ".MAX_LIMIT_ORDER;
         $query = $this->db->query($sql);
         return $query->result();
@@ -1180,4 +1182,65 @@ class Order_model extends CI_Model
         return $row ? $row->provider_cooperation : 0;
     }
 
+    //批量更新信息
+    public function all_invoice_order ($update){
+        $this->db->update_batch('order_info', $update, 'order_sn');
+        return true;
+    }
+
+    //获取导入订单的id
+    public function all_order_id ($update) {
+        $this->db->select('order_id,order_status,shipping_status,pay_status,');
+        $this->db->where_in('order_sn', $update);
+        return $this->db->get('order_info')->result_array();
+    }
+
+    //获取在指定时间内 付款完成的订单
+    public function get_time_order ( $now_time,$pass_time) {
+        $row = array();
+        //已付款订单 商品数量
+        $payment_sql = "SELECT op.`product_id`,SUM(op.`product_num`) AS num 
+                        FROM ty_order_info AS oi
+                        LEFT JOIN ty_order_product AS op ON oi.`order_id`=op.`order_id`
+                        WHERE oi.`pay_status`=1 AND oi.`finance_date` BETWEEN '".$pass_time."' AND '".$now_time."' AND op.`order_id` IS NOT NULL GROUP BY op.`product_id`";
+        $payment_query = $this->db->query($payment_sql);
+        $row['payment_row'] = $payment_query->result_array();
+
+        //已退款订单 商品数量
+        $refund_sql = " SELECT rp.`product_id`,SUM(rp.`product_num`) AS num 
+                        FROM ty_order_return_info AS ri
+                        LEFT JOIN ty_order_return_product AS rp ON ri.`return_id`=rp.`return_id`
+                        WHERE ri.`pay_status`=1 AND ri.`finance_date` BETWEEN '".$pass_time."' AND '".$now_time."' AND rp.`return_id` IS NOT NULL GROUP BY rp.`product_id`";
+        $refund_query = $this->db->query($refund_sql);
+        $row['refund_row'] = $refund_query->result_array();
+
+        return $row;
+    }
+    //获取超时未支付的订单
+    public function get_unpay_timeout_order($filter){
+        $sql = "SELECT o.* FROM ty_order_info o "
+                . "INNER JOIN ty_payment_info p ON o.pay_id = p.pay_id "
+                . "WHERE o.create_date <= '" . $filter['date_end']. "' "
+                . "AND o.pay_status = 0 AND is_ok = 0 AND order_status = 0 "
+                . "AND lock_admin = 0 AND order_price + shipping_fee - paid_price > 0 LIMIT ".ORDER_INVALID_LIMIT;
+        return $this->db->query($sql)->result_array();
+    }
+    
+    //获取订单商品总重量
+    public function get_order_product_weight($order_id){
+        $sql = "SELECT SUM(p.`product_weight`) AS weight "
+               . "FROM ty_order_product op "
+               . "LEFT JOIN ty_product_info p ON op.product_id = p.`product_id` "
+               . "WHERE op.order_id = '".$order_id."'";
+        return $this->db->query($sql)->row_array();
+    }
+    //取出订单报名人信息
+    public function order_client($order_id)
+    {
+        $sql = "SELECT * 
+                FROM ".$this->db->dbprefix('order_client_info')." 
+                WHERE order_id = ?";
+        $query = $this->db->query($sql, array(intval($order_id)));
+        return $query->result();
+    }
 }

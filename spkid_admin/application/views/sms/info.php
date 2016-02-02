@@ -91,7 +91,7 @@ var computerMobileTemplateLength = function(){
 		    <textarea name='mobiles' style='float:left' id='mobiles' cols=40 rows=10></textarea>
 			</td></tr>
 		</table>
-		<input type='submit' name='submit' value='添加' class='button'>
+		<input type='submit' name='submit' value='添加' class='am-btn am-btn-primary'>
 		<input type='hidden' name='act' value='add'>
 		</form>
 		<br />
@@ -101,7 +101,7 @@ var computerMobileTemplateLength = function(){
 		        <span>剩余字数：</span><span id='mobile_template_length'></span>
 		    </td></tr>
 		    <tr><td>&nbsp;</td>
-		    <td><input value='发送短信' name='send_sms' id='send_sms' type='button' onclick='sendMobileCode()'>
+		    <td><input value='发送短信' name='send_sms' id='send_sms' type='am-btn am-btn-primary' onclick='sendMobileCode()'>
 		    </td></tr>
 		</table>
 	</div>

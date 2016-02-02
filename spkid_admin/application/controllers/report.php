@@ -115,7 +115,7 @@ class Report extends CI_Controller
         //$filter = get_pager_param($filter);
         $rclist = $this->report_model->finance_invoicing_su_report($filter);
         $count_arr = $this->report_model->finance_invoicing_su_report_count($rclist);
-
+//print_r($rclist);
 		$data['brand_id']=$brand_id;
 		$data['category_id']=$category_id;
 		$data['start_time']=$start_time;
@@ -250,7 +250,10 @@ class Report extends CI_Controller
 
         $product_sn = $this->input->post("product_sn");
         if(!empty($product_sn)) $filter['product_sn'] = $product_sn;
-
+        $start_time = $this->input->post("start_time");
+        if(!empty($start_time)) $filter['start_time'] = $start_time;
+        $end_time = $this->input->post("end_time");
+        if(!empty($end_time)) $filter['end_time'] = $end_time;
         //$filter = get_pager_param($filter);
 	if ( !empty($filter) )
         $data = $this->report_model->depot_real_inventory_report($filter);
@@ -307,5 +310,17 @@ class Report extends CI_Controller
         $this->load->vars('coop_list',$this->report_model->coop_list());
         $this->load->vars('provider_list',$this->report_model->provider_list());
         $this->load->view('report/merge_gather_gross_report', $data);
+    }
+
+
+    public function yyw_pv_report() {
+        auth('yyw_pv_report');
+        $this->load->helper('perms_helper');
+        $this->load->vars('perms' , get_yyw_pv_report());
+        $data['hourly_pv'] = $this->report_model->get_hourly_pv();
+        $data['daily_pv'] = $this->report_model->get_daily_pv();
+        $data['weekly_pv'] = $this->report_model->get_weekly_pv();
+        $data['monthly_pv'] = $this->report_model->get_monthly_pv();
+        $this->load->view('report/pv_report', $data);
     }
 }

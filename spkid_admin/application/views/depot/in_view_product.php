@@ -20,8 +20,8 @@
 					<th>供应商名称</th>
 					<th>售价</th>
 					<th>条码</th>
-					<th>颜色</th>
-					<th>尺码</th>
+					<th>颜色|尺码</th>
+					<th>包装方式</th>
 					<th>批次</th>
 					<th>最大入库数</th>
 					<th>入库详细</th>
@@ -33,8 +33,8 @@
 					<td><?php print $row->provider_name; ?></td>
 					<td><?php print $row->shop_price; ?></td>
 					<td><?php print $row->provider_barcode; ?></td>
-					<td><?php print $row->color_name.'['.$row->color_sn.']'; ?></td>
-					<td><?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
+					<td><?php print $row->color_name.'['.$row->color_sn.']'; ?>| <?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
+                    <td data-pk="<?php print $row->product_id;?>" title ="点击可修改" data-name="pack_method" class="editable" data-type="textarea" data-value="<?php print $row->pack_method; ?>"><?php print $row->pack_method; ?> </td>
 					<td><?php print $row->batch_code; ?></td>
 					<td><?php print $row->max_num; ?></td>
 					<td>
@@ -55,4 +55,17 @@
 		</div>
 	</div></div></div>
 	<input type="hidden" name="depot_in_id" id="depot_in_id" value="<?php print $depot_in_info->depot_in_id; ?>" />
+<script>
+// jquery editable 
+function _editable(){
+$('.editable').editable({ url: '/quick_edit/pack_method', emptytext:'点击可修改',
+        success: function(response, newValue) {
+            if(!response.success) return response.msg;
+            if( response.value != newValue ) return '操作失败';
+        }
+    });
+}
+//listTable.func = _editable; // 分页加载后调用的函数名
+_editable();
+</script>
 <?php include_once(APPPATH.'views/common/footer.php'); ?>

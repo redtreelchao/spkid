@@ -1,9 +1,5 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
     <script type="text/javascript" src="public/js/listtable.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-    <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
     <script type="text/javascript">
 	$(function(){
 	    $('.inputEdit').bind('dblclick',function () {
@@ -129,7 +125,7 @@
 			      <th>品牌</th>
 			      <th>款号</th>
 			      <th>颜色</th>
-			      <th>尺寸</th>
+			      <th>规格</th>
 			      <th>收货数量</th>
 			      <th>上架数量</th>
 			      <th width="120px;">操作</th>
@@ -144,8 +140,8 @@
 				    上架人【<?=$row->shelve_name?>】
 				</td>
 				<td rowspan="<?=count($row->box_sub_list)+1?>">
-				    <?php if(check_perm('cancel_purchase_box_scan')):?><input type="button" class="button" onclick="cancel_purchase_box_scan(<?=$row->box_id?>)" value="取消此箱收货" style="margin: 2px;"/><? endif;?>
-				    <?php if(check_perm('purchse_edit_p_num')):?><input type="button" class="button" onclick="proc_box_prodcut_statistics(<?=$row->box_id?>)" value="审核对应入库单" style="margin: 2px;"/><? endif;?>
+				    <?php if(check_perm('cancel_purchase_box_scan')):?><input type="button" class="am-btn am-btn-primary" onclick="cancel_purchase_box_scan(<?=$row->box_id?>)" value="取消此箱收货" style="margin: 2px;"/><? endif;?>
+				    <?php if(check_perm('purchse_edit_p_num')):?><input type="button" class="am-btn am-btn-primary" onclick="proc_box_prodcut_statistics(<?=$row->box_id?>)" value="审核对应入库单" style="margin: 2px;"/><? endif;?>
 				</td>
 			    </tr>
 			    <?php foreach($row->box_sub_list as $sub): ?>

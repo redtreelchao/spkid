@@ -1,11 +1,7 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="../../../public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="../../../public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../../public/js/listtable.js"></script>
 	<script type="text/javascript" src="../../../public/js/utils.js"></script>
-    <script type="text/javascript" src="../../../public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="../../../public/js/jui/datepicker.min.js"></script>
 
 	<script type="text/javascript">
 	    $(function(){
@@ -31,7 +27,7 @@
         <div class="main_title"><span class="l">会员管理 >> 会员帐户变动明细列表</span><a href="user/index" class="return r">返回列表</a></div>
         <div class="blank5"></div>
         		<div class="button_row">
-          <input type="button" <?php echo $dis == 2 ? 'disabled="disabled"' : '';?>  class="button" value="调节账户" onclick="javascript:location.href='/user_account_log/add/<?php echo $user_arr->user_id;?>'" />
+          <input type="button" <?php echo $dis == 2 ? 'disabled="disabled"' : '';?>  class="am-btn am-btn-primary" value="调节账户" onclick="javascript:location.href='/user_account_log/add/<?php echo $user_arr->user_id;?>'" />
     <strong>当前会员：</strong><?php echo $user_arr->user_name;?> <strong>账户金额：</strong>￥<?php echo $user_arr->user_money;?> 元 <strong>累计消费金额：</strong>￥<?php echo $user_arr->paid_money;?>元 <strong>消费积分：</strong><?php echo $user_arr->pay_points;?>  </div>
 		<div class="blank5"></div>
     <div class="blank5"></div>
@@ -45,7 +41,7 @@
                 <?php endforeach;?>
               </select>
 			  变动时间：<input type="text" name="start_time" id="start_time" /><input type="text" name="end_time" id="end_time" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 		</form>
 </div>
 		<div class="blank5"></div>

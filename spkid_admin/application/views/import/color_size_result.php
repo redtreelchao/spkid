@@ -16,7 +16,7 @@
 				<tr class="row">
 					<th width="100px">商品款号</th>
 					<th>颜色名称</th>
-					<th>尺寸名称</th>
+					<th>规格名称</th>
 					<th>商品条形码</th>
 					<th width="250px">状态</th>
 				</tr>

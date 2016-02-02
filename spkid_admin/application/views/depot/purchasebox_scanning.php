@@ -11,7 +11,7 @@
                                         
 				</td>
 				<td class="item_input">
-					<input type="button" value="取消本次扫描" name="myreset" id="myreset"/>
+					<input type="button" class="am-btn am-btn-secondary" value="取消本次扫描" name="myreset" id="myreset"/>
 					<?php if(!empty($product_number) && !empty($shelve_num)) print $product_number."/".$shelve_num;?>
 				</td>
 			</tr>			
@@ -43,7 +43,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<input type="button" value="提交本次扫描" name="mysubmit" id="mysubmit" onclick="$('#mainForm').submit();"/>
+					<input type="button" class="am-btn am-btn-secondary" value="提交本次扫描" name="mysubmit" id="mysubmit" onclick="$('#mainForm').submit();"/>
 				</td>				
 			</tr>
 			<tr>
@@ -168,7 +168,7 @@
 		});
 			
 	});
-	var pattern = /(^[a-zA-Z0-9]{1,3})-(\d{1,3})-(\d{1,3})-(\d{1,3})$/; 
+	var pattern = /(^[a-zA-Z0-9]{1,3})-(\d{1,3})-(\d{1,3})-(\d{1,3})-(\d{1,3})$/; 
 	function check_is_location(str){
 	    if(str.indexOf("-") == -1){
 		return false;

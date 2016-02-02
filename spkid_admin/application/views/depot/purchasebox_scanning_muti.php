@@ -124,6 +124,7 @@
 					}else{
 						//是商品条码
 						if(!check_is_location(data_code)){
+                                                    
 							if(goods_code =="") {
 								var content = data_code+":"+String(parseInt(1),10);
 								$('#goods_code').attr('value',content);
@@ -195,7 +196,7 @@
 		str.attr('value',strFinal);
 		html.html(strFinalBR);
 	}
-	var pattern = /(^[a-zA-Z0-9]{1,3})-(\d{1,3})-(\d{1,3})-(\d{1,3})$/; 
+	var pattern = /(^[a-zA-Z0-9]{1,3})-(\d{1,3})-(\d{1,3})-(\d{1,3})-(\d{1,3})$/; 
 	function check_is_location(str){
 	    if(str.indexOf("-") == -1){
 		return false;

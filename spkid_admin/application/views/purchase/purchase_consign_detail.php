@@ -1,9 +1,5 @@
 <?php include(APPPATH . 'views/common/header.php'); ?>
 <script type="text/javascript" src="public/js/listtable.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 <div class="main">
     <div class="main_title">
         <span class="l">代销采购订单关联详情记录</span>

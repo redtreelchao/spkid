@@ -1,10 +1,6 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="public/js/listtable.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
 	<script type="text/javascript">
 		//<![CDATA[
 		listTable.filter.page_count = '<?php echo $filter['page_count']; ?>';
@@ -38,7 +34,7 @@
             收件结束时间：<input type="text" class="ts" name="end_time" style="width:80px;">
             收件人：<input type="text" class="ts" name="user_name" style="width:80px;">
 
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

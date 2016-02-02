@@ -17,9 +17,9 @@
 				<tr class="row">
 				  <th width="50">ID</th>
 				  <th>导航名称</th>
-				  <th>包含分类</th>
-				  <th>链接地址</th>
-				  <th>广告链接</th>
+				  <!-- <th>包含分类</th> -->
+				  <th>导航链接</th>
+				  <!-- <th>广告链接</th> -->
 				  <th>排序</th>
 				  <th>操作</th>
 				</tr>
@@ -27,16 +27,16 @@
 			    <tr class="row">
 			      <td><?php print $nav->nav_id; ?></td>
 			      <td><?php print $nav->nav_name; ?></td>
-			      <td>
+			      <!-- <td>
 			      <?php 
 			      	if($nav->category_ids){
 			      		$category_ids = explode(',',$nav->category_ids);
 			      		foreach ($category_ids as $cat_id) print (isset($all_category[$cat_id])?$all_category[$cat_id]->type_name:'').'&nbsp;&nbsp;';
 			      	}
 			      ?>
-			      </td>
+			      </td> -->
 			      <td><?php print str_replace('[front]',FRONT_HOST,$nav->nav_url); ?></td>
-			      <td><?php print str_replace('[front]',FRONT_HOST,$nav->nav_ad_url); ?></td>
+			      <!-- <td><?php print str_replace('[front]',FRONT_HOST,$nav->nav_ad_url); ?></td> -->
 			      <td><?php print edit_link('frontnav/edit_field','sort_order',$nav->nav_id,$nav->sort_order); ?></td>
 				  <td>
 				  	<?php if ($can_edit): ?>

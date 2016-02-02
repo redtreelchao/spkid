@@ -9,7 +9,8 @@ class Order_api extends CI_Controller
 	{
 		parent::__construct();
 		$this->admin_id = $this->session->userdata('admin_id');
-		if (!$this->admin_id) redirect('index/login');
+                $sys_user = $this->input->post('sys_user');
+		if (empty($sys_user) && !$this->admin_id) redirect('index/login');
 		$this->time = date('Y-m-d H:i:s');
 		$this->load->model('order_model');
 		$this->load->helper('order');
@@ -78,6 +79,7 @@ class Order_api extends CI_Controller
                 
                 // 2013-12-11: 检查商品是否属于同一个供应商
                 $order_product_ary = $this->order_model->order_product($order_id);
+/*
                 if (!empty($order_product_ary) && count($order_product_ary) > 0) {
                     foreach ($order_product_ary as $item) {
                         if ($product->provider_id != $item->provider_id) {
@@ -85,6 +87,7 @@ class Order_api extends CI_Controller
                         }
                     }
                 }
+*/
                 
 		//检查库存
 		$sub = $this->product_model->lock_sub(array('product_id'=>$product_id,'color_id'=>$color_id,'size_id'=>$size_id));
@@ -348,21 +351,22 @@ class Order_api extends CI_Controller
 
 	public function remove_voucher()
 	{
-		auth('order_edit');
+            $auto_invalid = $this->input->post('auto_invalid');
+            if (empty($auto_invalid)) auth('order_edit');
 		$this->load->model('voucher_model');
 		$order_id = intval($this->input->post('order_id'));
 		$this->db->trans_begin();
 		$order = $this->order_model->lock_order($order_id);
 		if(!$order) sys_msg('订单不存在',1);
 		$perms = get_order_perm($order);
-		if(!$perms['edit_order']) sys_msg('不能操作',1);
+		if(empty($auto_invalid) && !$perms['edit_order']) sys_msg('不能操作',1);
 		$payment = $this->order_model->filter_payment(array('order_id'=>$order_id,'pay_id'=>PAY_ID_VOUCHER));
 		if(!$payment) sys_msg('未使用过现金券');
 		$voucher = $this->voucher_model->lock_voucher($payment->payment_account);
 		// 删除支付记录
 		$this->order_model->delete_payment($payment->payment_id);
 		// 恢复现金券的可用数量
-		$this->voucher_model->update(array('used_number'=>$voucher->used_number-1),$voucher->voucher_id);
+		$this->voucher_model->update(array('used_number'=>$voucher->used_number-1, 'voucher_status' => 0),$voucher->voucher_id);
 		// 更新订单
 		$order->paid_price = fix_price($order->paid_price - $payment->payment_money);
 		$this->order_model->update(array('paid_price'=>$order->paid_price),$order_id);
@@ -378,7 +382,8 @@ class Order_api extends CI_Controller
 
 	public function invalid()
 	{
-		auth('order_edit');
+            $auto_invalid = $this->input->post('auto_invalid');
+            if (empty($auto_invalid)) auth('order_edit');
 		$this->load->model('product_model');
 		$this->load->model('voucher_model');
 		$this->load->model('user_model');
@@ -388,13 +393,20 @@ class Order_api extends CI_Controller
 		$order = $this->order_model->lock_order($order_id);
 		if(!$order) sys_msg('订单不存在',1);
 		$perms = get_order_perm($order);
-		if(!$perms['invalid']) sys_msg('不能操作',1);
+		if(empty($auto_invalid) && !$perms['invalid']) sys_msg('不能操作',1);
 		$user = $this->user_model->lock_user($order->user_id);
 		// 返还余额支付
 		$order_payment = $this->order_model->order_payment($order_id);
 		$balance_amount = 0;
 		foreach ($order_payment as $payment) {
-			if ($payment->is_discount) sys_msg('请先取消现金券等折扣支付',1);
+			if ($payment->is_discount) {
+                            if (!empty($auto_invalid)){
+                                $this->remove_voucher();
+				continue;
+                            } else {
+                                sys_msg('请先取消现金券等折扣支付',1);
+                            }
+                        }
 			$balance_amount += $payment->payment_money;
 		}
 		if($balance_amount){
@@ -656,7 +668,35 @@ class Order_api extends CI_Controller
 		$this->db->trans_commit();
 		print json_encode(array('err'=>0,'msg'=>''));
 	}
-
+	public function unpay()
+	{
+		auth('order_pay');
+		$order_id = intval($this->input->post('order_id'));
+		$this->db->trans_begin();
+		$order = $this->order_model->lock_order($order_id);
+		if(!$order) sys_msg('订单不存在',1);
+		$perms = get_order_perm($order);
+		if($perms['pay']) sys_msg('不能操作',1);
+		$update = array(
+			'pay_status' => 0,
+			'finance_admin' => 0		
+		);
+		$action_note = '订单反财审';
+		// 如果订单已发货，则自动完结
+		if($order->shipping_status){
+                    sys_msg('已发货不能反财审',1);
+		}
+		// 更新事务表
+		$this->order_model->update_trans(
+			array('finance_check_admin'=>0),
+			array('trans_type'=>TRANS_TYPE_SALE_ORDER,'trans_sn'=>$order->order_sn,'trans_status'=>TRANS_STAT_AWAIT_OUT)
+		);
+		$this->order_model->update($update,$order_id);
+		foreach($update as $key=>$val) $order->$key=$val;
+		$this->order_model->insert_action($order,$action_note);
+		$this->db->trans_commit();
+		print json_encode(array('err'=>0,'msg'=>''));
+	}
 	public function shipping()
 	{
 		auth('order_shipping');
@@ -696,7 +736,7 @@ class Order_api extends CI_Controller
 			foreach ($order_product as $p) {
 				if($p->consign_num==0) continue;
 				if(!isset($subs[$p->sub_id])) $subs[$p->sub_id] = 0;
-				$subs[$p->sub_id] == $p->consign_num;
+				$subs[$p->sub_id] += $p->consign_num;
 			}
 			if($subs){
 				$sub_list = $this->product_model->lock_sub(array('sub_id'=>array_keys($subs)));

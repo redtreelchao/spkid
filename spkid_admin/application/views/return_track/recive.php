@@ -1,11 +1,7 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
         
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<script type="text/javascript">
             
             function load_return_data(){
@@ -35,7 +31,7 @@
                 <div class="pc base">
                     <div class="search_row" style="text-align: center;">
                         退货申请运单号/系统订单号：<input type="text" class="tl" name="invoice_no" value="<?php print empty($invoice_no) ? '' : $invoice_no; ?>" />
-                        <input type="button" class="button" value="载入" onclick="load_return_data()" />
+                        <input type="button" class="am-btn am-btn-primary" value="载入" onclick="load_return_data()" />
                     </div>
                     <div class="blank5"></div>
 

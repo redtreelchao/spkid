@@ -22,8 +22,6 @@ class user_recharge_model extends CI_Model
 		return $this->db->insert_id();
 	}
 
-
-
         public function recharge_list ($filter)
 	{
 		$from = " FROM ty_user_recharge AS r
@@ -71,7 +69,7 @@ class user_recharge_model extends CI_Model
 		{
 			return array('list' => array(), 'filter' => $filter);
 		}
-		$sql = "SELECT r.*,u.user_name,p.pay_name,u.mobile,u.email "
+		$sql = "SELECT r.*,u.user_name,p.pay_name,u.mobile,u.email,u.discount_percent "
 				. $from . $where . " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order']
 				. " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'];
 		$query = $this->db->query($sql, $param);

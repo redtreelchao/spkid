@@ -1,0 +1,138 @@
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+*:focus {
+  outline: none;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.form-signin .form-signin-heading, .form-signin .checkbox {
+  margin-bottom: 10px;
+}
+
+.form-signin .checkbox {
+  font-weight: normal;
+}
+
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+  z-index: 2;
+  border-color: #0078b9;
+}
+
+.form-signin input[type="tel"] {
+  margin-bottom: -1px;
+  margin-bottom: 40px;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+}
+
+.pop-box >.modal-dialog {
+  width: 500px;
+}
+
+.pop-box .modal-header {
+  background-color: #fafafa;
+  font-size: 14px;
+}
+
+.pop-box .modal-header h4 {
+  text-align: center;
+  color: #666;
+  font-size: 20px;
+}
+
+a {
+  color: #0078b9;
+  text-decoration: none;
+}
+
+.grey-text {
+  color: #909090;
+}
+/************************************************************************************
+	分割线
+*************************************************************************************/
+
+
+.other1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center
+    justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  text-align: center;
+}
+#login-box .horizontal span {
+    background-color: #fff;
+}
+
+/*
+.other > a{
+  width: 55px;
+  height: 55px;
+  display: inline-block;
+  background-image: url(../images/web-login.svg);
+  background-repeat: no-repeat;
+}
+*/
+/************************************************************************************
+其它登录方式
+ *************************************************************************************/
+
+svg{
+  width: 40px;
+  height: 40px;
+}
+
+.fi-wechat {
+  fill: #8dc81b;
+}
+
+.fi-qq {
+  fill: #68a5e1;
+}
+
+.fi-alipay {
+  fill: #fc8848;
+}
+
+.fi-sina {
+  fill: #f56467;
+}
+
+#register-box input, #forgot-box input {
+  border: 1px solid #909090;
+  border-radius: 4px;
+}

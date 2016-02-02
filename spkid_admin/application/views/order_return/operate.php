@@ -74,7 +74,7 @@ if( typeof(ctb) == 'undefined' ) ctb='';
 				                  <td align="center"><strong>商品名称</strong></td>
 				                  <td align="center"><strong>商品款号</strong></td>
 				                  <td align="center"><strong>供应商货号</strong></td>
-				                  <td align="center"><strong>颜色尺寸</strong></td>
+				                  <td align="center"><strong>颜色规格</strong></td>
 				                  <td align="center"><strong>数量</strong></td>
 				                  <td align="center"><strong>实入数量</strong></td>
 				                  <td align="center"><strong>来源</strong></td>
@@ -155,8 +155,8 @@ if( typeof(ctb) == 'undefined' ) ctb='';
 				  <tr>
 				    <td colspan="2">
 				      <div align="center">
-				        <input type="submit" name="submit" value="提交" class="button" />
-				        <input type="button" name="back" value="返回" class="button" onclick="history.back()" />
+				        <input type="submit" name="submit" value="提交" class="am-btn am-btn-primary" />
+				        <input type="button" name="back" value="返回" class="am-btn am-btn-primary" onclick="history.back()" />
 				        <input type="hidden" name="return_id" value="<?php print $return_id; ?>" />
 				        <input type="hidden" name="operation" value="<?php print $operation; ?>" />
 				        <input type="hidden" name="act" value="operate_post" />

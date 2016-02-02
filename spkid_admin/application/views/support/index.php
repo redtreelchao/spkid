@@ -1,19 +1,7 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 <link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
-<link type="text/css" href="/public/style/jui/core.css" rel="stylesheet" />
-<link type="text/css" href="/public/style/jui/theme.css" rel="stylesheet" />
-<link type="text/css" href="/public/style/jui/tabs.css" rel="stylesheet" />
-<link type="text/css" href="/public/style/jui/dialog.css" rel="stylesheet" />
 <script type="text/javascript" src="/public/js/listtable.js"></script>
-<script type="text/javascript" src="/public/js/jui/core.min.js"></script>
-<script type="text/javascript" src="/public/js/jui/widget.min.js"></script>
-<script type="text/javascript" src="/public/js/jui/tabs.min.js"></script>
 
-<script type="text/javascript" src="/public/js/jui/position.min.js"></script>
-<script type="text/javascript" src="/public/js/jui/mouse.min.js"></script>
-<script type="text/javascript" src="/public/js/jui/draggable.min.js"></script>
-<script type="text/javascript" src="/public/js/jui/resizable.min.js"></script>
-<script type="text/javascript" src="/public/js/jui/dialog.min.js"></script>
 <script type="text/javascript" src="/public/js/support.js"></script>
 <script type="text/javascript" src="public/js/cluetip.js"></script>
 

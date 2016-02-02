@@ -1,8 +1,6 @@
 <?php include(APPPATH.'views/common/header.php');?>
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
 <script type="text/javascript">
 	//<![CDATA[
 	$(function(){
@@ -14,6 +12,7 @@
 			validator.required('location_code2', '请填写储位编码2');
 			validator.required('location_code3', '请填写储位编码3');
 			validator.required('location_code4', '请填写储位编码4');
+                        validator.required('location_code5', '请填写储位编码5');
 
 			return validator.passed();
 	}
@@ -32,7 +31,10 @@
 				<td class="item_input"><?php print form_input(array('name'=> 'location_code1','class'=> 'textbox require','size'=>'2'));?>-
 				<?php print form_input(array('name'=> 'location_code2','class'=> 'textbox require','size'=>'2'));?>-
 				<?php print form_input(array('name'=> 'location_code3','class'=> 'textbox require','size'=>'2'));?>-
-				<?php print form_input(array('name'=> 'location_code4','class'=> 'textbox require','size'=>'2'));?></td>
+				<?php print form_input(array('name'=> 'location_code4','class'=> 'textbox require','size'=>'2'));?>-
+				<?php print form_input(array('name'=> 'location_code5','class'=> 'textbox require','size'=>'2'));?>
+                                
+                                </td>
 			</tr>
 			<!--<tr>
 				<td class="item_title">储位名称:</td>
@@ -52,7 +54,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'编辑'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'编辑'));?>
 				</td>
 			</tr>
 			<tr>

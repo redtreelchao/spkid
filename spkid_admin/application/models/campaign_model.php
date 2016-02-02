@@ -16,7 +16,7 @@ class Campaign_model extends CI_Model
 	public function campaign_list ($filter)
 	{
 		$from = " FROM ".$this->db->dbprefix('front_campaign') ." AS a  LEFT JOIN ".
-                        $this->db->dbprefix('product_info')." AS b ON a.promote_value = b.product_id and a.campaign_type in (1,3,5)  ";
+        $this->db->dbprefix('product_info')." AS b ON a.product_id = b.product_id   ";
 		$where = " WHERE 1 ";
 		$param = array();
 
@@ -25,12 +25,12 @@ class Campaign_model extends CI_Model
 			$where .= " AND a.campaign_name LIKE ? ";
 			$param[] = '%' . $filter['campaign_name'] . '%';
 		}
-                if (!empty($filter['start_time']))
+        if (!empty($filter['start_time']))
 		{
 			$where .= " AND a.start_date > ? ";
 			$param[] = $filter['start_date'];
 		}
-                if (!empty($filter['end_time']))
+        if (!empty($filter['end_time']))
 		{
 			$where .= " AND a.end_date < ? ";
 			$param[] = $filter['end_time'];
@@ -91,11 +91,6 @@ class Campaign_model extends CI_Model
             $query = $this->db->query($sql , $param);
             return $query->result();
         }
-       function check_product_valid( $field, $value ){
-	       $sql = "select count(*) AS recog_num, group_concat( ".$field ."  ) AS ". $field . " from ty_product_info as i where ". $field ." in ('".implode("','", $value)."') limit 1";
-	       $query = $this->db->query($sql);
-	       return $query->result_array();
-       }
 
 
 }

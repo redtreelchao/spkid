@@ -95,7 +95,9 @@
                                                     </div>
                                                     <div style="display:none;" id="cart_edit_<?php print $product->rec_id; ?>">
                                                         <div class="qtyCtrl">
-                                                            <input type="text" maxlength="3" class="textType" id="OrderCnt_<?php print $product->rec_id; ?>" value="<?php print $product->product_num; ?>" onclick="javascript:OrderCnt_onClick(this);" onblur="javascript:OrderCnt_onBlur(this);" ><a href="javascript:UpQty('<?php print $product->rec_id; ?>');" class="up">up</a><a href="javascript:DownQty('<?php print $product->rec_id; ?>');" class="down">down</a>
+                                                            <input type="text" maxlength="3" class="textType" id="OrderCnt_<?php print $product->rec_id; ?>" value="<?php print $product->product_num; ?>" onclick="javascript:OrderCnt_onClick(this);" onblur="javascript:OrderCnt_onBlur(this);" >
+                                                            <a href="javascript:UpQty('<?php print $product->rec_id; ?>');" class="up">up</a>
+                                                            <a href="javascript:DownQty('<?php print $product->rec_id; ?>');" class="down">down</a>
                                                         </div>    
                                                         <div style="margin:0 auto;width: 80px;">
                                                             <a href="javascript:goQtyEdit('<?php print $product->rec_id; ?>', '');" class="orderBtns btn_apply">确定</a>

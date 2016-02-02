@@ -1,12 +1,26 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="../../../public/js/listtable.js"></script>
 	<script type="text/javascript" src="../../../public/js/utils.js"></script>
-    <script type="text/javascript" src="../../../public/js/jui/core.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+	$('input[type=text][name=start_time]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:'', yearRange:'-100:+10'});
+		$('input[type=text][name=end_time]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:'', yearRange:'-100:+10'});
 
-	<script type="text/javascript">
-		function checkForm(){
+	});
+
+	function checkForm(){
+		var eles = document.forms['theForm'];
+		if (eles['start_time'].value=='' || eles['end_time'].value==''){
+			alert('错误：请输入报表期间!');
+			return false;
 		}
-	</script>
+		if(eles['end_time'].value < eles['start_time'].value ){
+			alert('错误：期间的结束时间早于或等于开始时间!');
+			return false;
+		}
+	}
+</script>
+
 	<div class="main">
     <div class="main_title"><span class="l">报表管理 >> 实际库存报表</span> </div>
     <div class="blank5"></div>
@@ -38,9 +52,9 @@
 
      			商品款号 <input type="text" name="product_sn" value="<?php echo $product_sn;?>" size="15" />(多个款号请用,分隔)
     			<!-- 关键字 -->
+                        <span style="color: #FF0000;font: 12px verdana;">*</span>期间：<input type="text" name="start_time" id="start_time" value="<?php echo $start_time;?>" /><input type="text" name="end_time" id="end_time" value="<?php echo $end_time;?>" />
 
-
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 		</form>
 </div>
 		<div class="blank5"></div>

@@ -97,6 +97,7 @@ class CI_DB_mysqli_result extends CI_DB_result {
 			$F->default		= $field->Default;
 			$F->max_length	= $length;
 			$F->primary_key = ( $field->Key == 'PRI' ? 1 : 0 );
+			$F->comment     = $field->Comment;
 
 			$retval[] = $F;
 		}

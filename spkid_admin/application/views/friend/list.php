@@ -24,7 +24,7 @@
               <input type="text" name="link_name" id="link_name" />
               地址：
 			    <input type="text" name="link_url" id="link_url" />
-		      <input type="submit" class="button" value="搜索" />
+		      <input type="submit" class="am-btn am-btn-primary" value="搜索" />
 		</form>
 </div>
 		<div class="blank5"></div>

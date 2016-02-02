@@ -66,6 +66,8 @@ class Liuyan_model extends CI_Model
 		if(!empty($filter['comment_type'])) $where.=" AND l.comment_type='{$filter['comment_type']}' ";
 		if(!empty($filter['tag_type'])) $where.=" AND l.tag_type='{$filter['tag_type']}' ";
 		if(!empty($filter['tag_id'])) $where.=" AND l.tag_id='{$filter['tag_id']}' ";
+		if(!empty($filter['user_id'])) $where.=" AND l.user_id='{$filter['user_id']}' ";
+
 		$sort = " ORDER BY comment_id DESC ";
 		
 		$sql = "SELECT count(*) as ct {$from} {$where} {$sort}";
@@ -74,10 +76,16 @@ class Liuyan_model extends CI_Model
 		if(!$row) return array('filter'=>$filter,'list'=>array());
 		$filter['record_count'] = $row->ct;
 		$filter['page_count']=ceil($filter['record_count']/$filter['page_size']);
-		$filter['page'] = max(min($filter['page'],$filter['page_count']-1),0);
-		$start=$filter['page']*$filter['page_size']; //开始条数
-       	$sql = "{$select} {$from} {$where} {$sort} LIMIT {$start},{$filter['page_size']}";
-       	$query = $this->_db->query($sql);
+		if (isset($filter['page'])) {
+			$filter['page'] = max(min($filter['page'],$filter['page_count']-1),0);
+			$start=$filter['page']*$filter['page_size']; //开始条数
+		}
+		
+		
+       	//$sql = "{$select} {$from} {$where} {$sort} LIMIT {$start},{$filter['page_size']}";
+       	$sql = "{$select} {$from} {$where} {$sort}";
+       	$query = $this->_db->query($sql);    
+       	
        	$list = $query->result();
        	return array('filter'=>$filter,'list'=>$list);
 	}

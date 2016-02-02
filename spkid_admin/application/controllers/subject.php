@@ -154,8 +154,11 @@ class Subject extends CI_Controller {
         $this->load->helper('file');
         $generate_file = $this->do_get_subject_file($subject->page_file);
         $this->load->helper("common");
-        $header = curl(FRONT_HOST.'/api/get_header'); 
-        $footer = curl(FRONT_HOST."/api/get_footer");
+        // TODO 手机版本、PC版本的头部是不一样的。
+        // 将文件名字传递过去，将来好做进一步处理
+        $header = curl(FRONT_HOST.'/api/get_header/'.$subject->page_file); 
+        $footer = curl(FRONT_HOST."/api/get_footer/".$subject->page_file);
+        $footer .= $footer;
         $file_data = $this->load->view(
                 'subject/template_global', 
                 array("subject" => $subject, "template_content_list" => $template_content_list, "header" => $header, "footer" => $footer), 

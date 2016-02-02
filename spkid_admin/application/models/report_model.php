@@ -314,8 +314,8 @@ class report_model extends CI_Model
 			return array();
 		}
 
-		$timewhere = " AND ((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))>= TO_DAYS('" . $starttime . "') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))<= TO_DAYS('" . $endtime . "')) OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND TO_DAYS(FROM_UNIXTIME(tr.finance_check_date))>= TO_DAYS('" . $starttime . "') AND TO_DAYS(FROM_UNIXTIME(tr.finance_check_date))<= TO_DAYS('" . $endtime . "')))";
-		$timekey = "FROM_UNIXTIME(IF(tr.trans_type IN ('3','4'),tr.finance_check_date,tr.update_date)) as checktime ";
+		$timewhere = " AND ((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(tr.update_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tr.update_date)<= TO_DAYS('" . $endtime . "')) OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND TO_DAYS(tr.finance_check_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tr.finance_check_date)<= TO_DAYS('" . $endtime . "')))";
+		$timekey = "IF(tr.trans_type IN ('3','4'),tr.finance_check_date,tr.update_date) as checktime ";
 
 		$whereadd = "";
 
@@ -340,13 +340,12 @@ class report_model extends CI_Model
 				" WHERE 1 " . $timewhere . $whereadd . " ORDER BY g.category_id ASC,tr.product_id ASC ,tr.color_id ASC,tr.size_id ASC,checktime ASC";
 		$query = $this->db->query($mainsql);
 		$result = $query->result_array();
-
 		//得到期初期末库存
-		$sql = "SELECT tr.product_id,tr.color_id,tr.size_id,IF(g.consign_price > 0,g.consign_price,g.cost_price) as cost_price,g.goods_cess,SUM(IF((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))< TO_DAYS('" . $starttime . "')) " .
-					"OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND tr.finance_check_date > 0 AND TO_DAYS(FROM_UNIXTIME(tr.finance_check_date))< TO_DAYS('" . $starttime . "')),tr.product_number,0)) AS before_product_number," .
-					"SUM(IF((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))<= TO_DAYS('" . $endtime . "')) " .
-					"OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND tr.finance_check_date > 0 AND TO_DAYS(FROM_UNIXTIME(tr.finance_check_date))<= TO_DAYS('" . $endtime . "')),tr.product_number,0)) AS after_product_number " .
-					"FROM ty_transaction_info as tr " .
+		$sql = "SELECT tr.product_id,tr.color_id,tr.size_id,IF(g.consign_price > 0,g.consign_price,g.cost_price) as cost_price,g.goods_cess,SUM(IF((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(tr.update_date)< TO_DAYS('" . $starttime . "')) " .
+					"OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND tr.finance_check_date > 0 AND TO_DAYS(tr.finance_check_date)< TO_DAYS('" . $starttime . "')),tr.product_number,0)) AS before_product_number," .
+					"SUM(IF((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(tr.update_date)<= TO_DAYS('" . $endtime . "')) " .
+					"OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND tr.finance_check_date > 0 AND TO_DAYS(tr.finance_check_date)<= TO_DAYS('" . $endtime . "')),tr.product_number,0)) AS after_product_number " .
+                    "FROM ty_transaction_info as tr " .
 					"LEFT JOIN ty_product_info as g ON g.product_id=tr.product_id " .
 					" LEFT JOIN ty_product_category AS c ON g.category_id = c.category_id" .
 					" LEFT JOIN ty_product_category AS pc ON c.parent_id = pc.category_id" .
@@ -364,7 +363,6 @@ class report_model extends CI_Model
 		$sql .= " GROUP BY product_id,color_id,size_id";
 		$query = $this->db->query($sql);
 		$tmparrrs = $query->result_array();
-
 		$beforeNum = array();
 		$afterNum = array();
 		$total_before_num = 0;
@@ -494,10 +492,7 @@ class report_model extends CI_Model
 
 			$num[$goodslist[$i]['trans_direction']] += $goodslist[$i]['product_number'];
 			$amount[$goodslist[$i]['trans_direction']] += $goodslist[$i]['productcount'];
-		}
-		$amount[0] = number_format($amount[0], 2, '.', '');
-		$amount[1] = number_format($amount[1], 2, '.', '');
-
+		} $amount[0] = number_format($amount[0], 2, '.', ''); $amount[1] = number_format($amount[1], 2, '.', ''); 
 		$countarr['numarr'] = $num;
 		$countarr['amountarr'] = $amount;
 		return array('list'=>$goodslist,'count'=>$countarr);
@@ -517,7 +512,7 @@ class report_model extends CI_Model
 			return array();
 		}
 
-		$timewhere = " AND ((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))>= TO_DAYS('" . $starttime . "') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))<= TO_DAYS('" . $endtime . "')) OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND TO_DAYS(FROM_UNIXTIME(tr.finance_check_date))>= TO_DAYS('" . $starttime . "') AND TO_DAYS(FROM_UNIXTIME(tr.finance_check_date))<= TO_DAYS('" . $endtime . "')))";
+		$timewhere = " AND ((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(tr.update_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tr.update_date)<= TO_DAYS('" . $endtime . "')) OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND TO_DAYS(tr.finance_check_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tr.finance_check_date)<= TO_DAYS('" . $endtime . "')))";
 		$whereadd = $whereadd2 = "";
 
 		if($category_id != '0') $whereadd .= " AND (g.category_id = '" . $category_id . "' OR pc.category_id = '" . $category_id . "') ";
@@ -537,9 +532,9 @@ class report_model extends CI_Model
 				" WHERE 1 " . $timewhere . $whereadd . $whereadd2 . " ORDER BY g.category_id ASC,tr.product_id ASC ,tr.color_id ASC,tr.size_id ASC";
 		$query = $this->db->query($sql);
 		$result = $query->result_array();
-
-		$sql = "SELECT product_id,color_id,size_id,SUM(IF((trans_type NOT IN ('3','4') AND trans_status IN ('2','4') AND TO_DAYS(FROM_UNIXTIME(update_date))< TO_DAYS('" . $starttime . "')) OR (trans_type IN ('3','4') AND trans_status IN ('1','2','3','4') AND finance_check_date > 0 AND TO_DAYS(FROM_UNIXTIME(finance_check_date))< TO_DAYS('" . $starttime . "')),product_number,0)) AS before_product_number," .
-					"SUM(IF((trans_type NOT IN ('3','4') AND trans_status IN ('2','4') AND TO_DAYS(FROM_UNIXTIME(update_date))<= TO_DAYS('" . $endtime . "')) OR (trans_type IN ('3','4') AND trans_status IN ('1','2','3','4') AND finance_check_date > 0 AND TO_DAYS(FROM_UNIXTIME(finance_check_date))<= TO_DAYS('" . $endtime . "')),product_number,0)) AS after_product_number FROM ty_transaction_info WHERE 1 ";
+print_r($result);
+		$sql = "SELECT product_id,color_id,size_id,SUM(IF((trans_type NOT IN ('3','4') AND trans_status IN ('2','4') AND TO_DAYS(update_date)< TO_DAYS('" . $starttime . "')) OR (trans_type IN ('3','4') AND trans_status IN ('1','2','3','4') AND finance_check_date > 0 AND TO_DAYS(finance_check_date)< TO_DAYS('" . $starttime . "')),product_number,0)) AS before_product_number," .
+					"SUM(IF((trans_type NOT IN ('3','4') AND trans_status IN ('2','4') AND TO_DAYS(update_date)<= TO_DAYS('" . $endtime . "')) OR (trans_type IN ('3','4') AND trans_status IN ('1','2','3','4') AND finance_check_date > 0 AND TO_DAYS(finance_check_date)<= TO_DAYS('" . $endtime . "')),product_number,0)) AS after_product_number FROM ty_transaction_info WHERE 1 ";
 		if($depot_id != '0') $sql .= " AND depot_id = '".$depot_id."'";
 
 		$sql .= " GROUP BY product_id,color_id,size_id";
@@ -804,8 +799,8 @@ class report_model extends CI_Model
 			return array();
 		}
 
-		$timewhere = " AND TO_DAYS(FROM_UNIXTIME(tr.update_date))>= TO_DAYS('" . $starttime . "') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))<= TO_DAYS('" . $endtime . "') ";
-		$timekey = "FROM_UNIXTIME(tr.update_date) as checktime ";
+		$timewhere = " AND TO_DAYS(tr.update_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tr.update_date)<= TO_DAYS('" . $endtime . "') ";
+		$timekey = "tr.update_date as checktime ";
 		$whereadd = "";
 
 		if($category_id != '0') $whereadd .= " AND (g.category_id = '" . $category_id . "' OR pc.category_id = '" . $category_id . "') ";
@@ -833,8 +828,8 @@ class report_model extends CI_Model
 
 		//得到期初期末库存
 
-		$sql = "SELECT product_id,color_id,size_id,SUM(IF(TO_DAYS(FROM_UNIXTIME(update_date))< TO_DAYS('" . $starttime . "'),product_number,0)) AS before_product_number," .
-					"SUM(IF(TO_DAYS(FROM_UNIXTIME(update_date))<= TO_DAYS('" . $endtime . "'),product_number,0)) AS after_product_number FROM ty_transaction_info WHERE trans_status IN ('2','4') ";
+		$sql = "SELECT product_id,color_id,size_id,SUM(IF(TO_DAYS(update_date)< TO_DAYS('" . $starttime . "'),product_number,0)) AS before_product_number," .
+					"SUM(IF(TO_DAYS(update_date)<= TO_DAYS('" . $endtime . "'),product_number,0)) AS after_product_number FROM ty_transaction_info WHERE trans_status IN ('2','4') ";
 		if($depot_id != '0') $sql .= " AND depot_id = '".$depot_id."'";
 
 
@@ -994,7 +989,7 @@ class report_model extends CI_Model
 			return array();
 		}
 
-		$timewhere = " AND TO_DAYS(FROM_UNIXTIME(tr.update_date))>= TO_DAYS('" . $starttime . "') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))<= TO_DAYS('" . $endtime . "') ";
+		$timewhere = " AND TO_DAYS(tr.update_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tr.update_date)<= TO_DAYS('" . $endtime . "') ";
 		$whereadd = $whereadd2 = "";
 
 		if($category_id != '0') $whereadd .= " AND (g.category_id = '" . $category_id . "' OR pc.category_id = '" . $category_id . "') ";
@@ -1015,8 +1010,8 @@ class report_model extends CI_Model
 		$query = $this->db->query($sql);
 		$result = $query->result_array();
 
-		$sql = "SELECT product_id,color_id,size_id,SUM(IF(TO_DAYS(FROM_UNIXTIME(update_date))< TO_DAYS('" . $starttime . "'),product_number,0)) AS before_product_number," .
-					"SUM(IF(TO_DAYS(FROM_UNIXTIME(update_date))<= TO_DAYS('" . $endtime . "'),product_number,0)) AS after_product_number FROM ty_transaction_info WHERE trans_status IN ('2','4') ";
+		$sql = "SELECT product_id,color_id,size_id,SUM(IF(TO_DAYS(update_date)< TO_DAYS('" . $starttime . "'),product_number,0)) AS before_product_number," .
+					"SUM(IF(TO_DAYS(update_date)<= TO_DAYS('" . $endtime . "'),product_number,0)) AS after_product_number FROM ty_transaction_info WHERE trans_status IN ('2','4') ";
 		if($depot_id != '0') $sql .= " AND depot_id = '".$depot_id."'";
 
 		$sql .= " GROUP BY product_id,color_id,size_id";
@@ -1839,8 +1834,8 @@ class report_model extends CI_Model
 
 
 
-		$timewhere = " AND ((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))>= TO_DAYS('" . $starttime . "') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))<= TO_DAYS('" . $endtime . "')) OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND TO_DAYS(FROM_UNIXTIME(tr.finance_check_date))>= TO_DAYS('" . $starttime . "') AND TO_DAYS(FROM_UNIXTIME(tr.finance_check_date))<= TO_DAYS('" . $endtime . "')))";
-		$timekey = "FROM_UNIXTIME(IF(tr.trans_type IN ('3','4'),tr.finance_check_date,tr.update_date)) as checktime ";
+		$timewhere = " AND ((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(tr.update_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tr.update_date)<= TO_DAYS('" . $endtime . "')) OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND TO_DAYS(tr.finance_check_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tr.finance_check_date)<= TO_DAYS('" . $endtime . "')))";
+		$timekey = "IF(tr.trans_type IN ('3','4'),tr.finance_check_date,tr.update_date) as checktime ";
 
 		$whereadd = "";
 
@@ -1876,10 +1871,10 @@ class report_model extends CI_Model
 		$result = $query->result_array();
 
 		//得到期初期末库存
-		$sql = "SELECT tr.product_id,tr.color_id,tr.size_id,IF(g.consign_price > 0,g.consign_price,g.cost_price) as cost_price,g.goods_cess,SUM(IF((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))< TO_DAYS('" . $starttime . "')) " .
-					"OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND tr.finance_check_date > 0 AND TO_DAYS(FROM_UNIXTIME(tr.finance_check_date))< TO_DAYS('" . $starttime . "')),tr.product_number,0)) AS before_product_number," .
-					"SUM(IF((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(FROM_UNIXTIME(tr.update_date))<= TO_DAYS('" . $endtime . "')) " .
-					"OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND tr.finance_check_date > 0 AND TO_DAYS(FROM_UNIXTIME(tr.finance_check_date))<= TO_DAYS('" . $endtime . "')),tr.product_number,0)) AS after_product_number " .
+		$sql = "SELECT tr.product_id,tr.color_id,tr.size_id,IF(g.consign_price > 0,g.consign_price,g.cost_price) as cost_price,g.goods_cess,SUM(IF((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(tr.update_date)< TO_DAYS('" . $starttime . "')) " .
+					"OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND tr.finance_check_date > 0 AND TO_DAYS(tr.finance_check_date)< TO_DAYS('" . $starttime . "')),tr.product_number,0)) AS before_product_number," .
+					"SUM(IF((tr.trans_type NOT IN ('3','4') AND tr.trans_status IN ('2','4') AND TO_DAYS(tr.update_date)<= TO_DAYS('" . $endtime . "')) " .
+					"OR (tr.trans_type IN ('3','4') AND tr.trans_status IN ('1','2','3','4') AND tr.finance_check_date > 0 AND TO_DAYS(tr.finance_check_date)<= TO_DAYS('" . $endtime . "')),tr.product_number,0)) AS after_product_number " .
 					"FROM ty_transaction_info as tr " .
 					"LEFT JOIN ty_product_info as g ON g.product_id=tr.product_id " .
 					" LEFT JOIN ty_product_category AS c ON g.category_id = c.category_id" .
@@ -2035,6 +2030,160 @@ class report_model extends CI_Model
 		$countarr['numarr'] = $num;
 		$countarr['amountarr'] = $amount;
 		return array('list'=>$goodslist,'count'=>$countarr);
+	}
+	public function get_hourly_pv() {
+		$today = date('Y-m-d');		
+		$first_day = date('Y-m-d', strtotime('-2 day'));
+
+		$sql = "select sum(pv) hourly_pv, type, concat(year, '-', month, '-',  day, '-', hours) as pv_hour from ty_product_access where TO_DAYS('" . $today . "') >= TO_DAYS(add_time) and TO_DAYS(add_time) > TO_DAYS('" . $first_day . "')  GROUP BY pv_hour, type";
+		
+		$data = array();
+		$data = $this->db->query($sql)->result_array();	
+		foreach ($data as $key => $value) {			
+			$date_arr = explode('-',$value['pv_hour']);
+			$new_key = date('Y-m-d-H', mktime($date_arr[3], 0, 0, $date_arr[1], $date_arr[2], $date_arr[0]));
+			$result[$new_key][$value['type']] = ($value['hourly_pv']);
+		}	
+		ksort($result);
+		$data = null;
+		$data['min_hour'] = preg_replace('/\d{4}-\d{2}-/', '', min(array_keys($result)));
+		$data['max_hour'] = preg_replace('/\d{4}-\d{2}-/', '', max(array_keys($result)));
+
+		$data['hour_list'] = '';
+		$data['product_pv_list'] = '';
+		$data['article_pv_list'] = '';
+		$data['course_pv_list'] = '';
+		foreach ($result as $key => $value) {
+			$data['hour_list'] .= '"' . $key . '",';
+			$data['product_pv_list'] .= (isset($value['product']) ? $value['product'] : 0) . ',';
+
+			$data['article_pv_list'] .= (isset($value['article']) ? $value['article'] : 0) . ',';
+
+			$data['course_pv_list'] .= (isset($value['course']) ? $value['course'] : 0) . ',';
+		}
+		$data['hour_list'] = preg_replace('/\d{4}-\d{2}-/', '', rtrim($data['hour_list'], ','));
+		$data['product_pv_list'] = rtrim($data['product_pv_list'], ',');
+		$data['article_pv_list'] = rtrim($data['article_pv_list'], ',');
+		$data['course_pv_list'] = rtrim($data['course_pv_list'], ',');
+		$data['max_scale'] = max(max(explode(',', $data['product_pv_list'])), max(explode(',', $data['article_pv_list'])), 
+			max(explode(',', $data['course_pv_list'])));
+
+		//var_export($data);exit();
+		return $data;		
+	}
+
+	public function get_daily_pv() {
+		$today = date('Y-m-d');		
+		$first_day = date('Y-m-d', strtotime('-30 day'));
+
+		$sql = "select sum(pv) daily_pv, type, date(add_time) as pv_date from ty_product_access where TO_DAYS('" . $today . "') >= TO_DAYS(add_time) and TO_DAYS(add_time) > TO_DAYS('" . $first_day . "')  GROUP BY pv_date, type";
+		
+		
+		$data = array();
+		$data = $this->db->query($sql)->result_array();	
+		foreach ($data as $key => $value) {			
+			$result[substr($value['pv_date'], 5)][$value['type']] = ($value['daily_pv']);
+		}	
+		$data = null;
+		$data['min_day'] = min(array_keys($result));
+		$data['max_day'] = max(array_keys($result));
+
+		$data['day_list'] = '';
+		$data['product_pv_list'] = '';
+		$data['article_pv_list'] = '';
+		$data['course_pv_list'] = '';
+		foreach ($result as $key => $value) {
+			$data['day_list'] .= '"' . $key . '",';
+			$data['product_pv_list'] .= (isset($value['product']) ? $value['product'] : 0) . ',';
+
+			$data['article_pv_list'] .= (isset($value['article']) ? $value['article'] : 0) . ',';
+
+			$data['course_pv_list'] .= (isset($value['course']) ? $value['course'] : 0) . ',';
+		}
+		$data['day_list'] = rtrim($data['day_list'], ',');
+		$data['product_pv_list'] = rtrim($data['product_pv_list'], ',');
+		$data['article_pv_list'] = rtrim($data['article_pv_list'], ',');
+		$data['course_pv_list'] = rtrim($data['course_pv_list'], ',');
+		$data['max_scale'] = max(max(explode(',', $data['product_pv_list'])), max(explode(',', $data['article_pv_list'])), 
+			max(explode(',', $data['course_pv_list'])));
+
+		//var_export($data);exit();
+		return $data;		
+	}
+
+	public function get_weekly_pv() {
+		$today = date('Y-m-d');		
+		$first_day = date('Y-m-d', strtotime('-30 week Monday')); //求前30周，每周以周日作为第一天
+		$sql = "select sum(pv) weekly_pv,type, CONCAT(year, '-', week(add_time)) as week_year from ty_product_access where TO_DAYS('" . $today . "') >= TO_DAYS(add_time) and TO_DAYS(add_time) > TO_DAYS('" . $first_day . "')  GROUP BY week_year, type";
+		
+		$data = array();
+		$data = $this->db->query($sql)->result_array();	
+		foreach ($data as $key => $value) {
+			$tmp = explode('-', $value['week_year']);
+			$tmp = date('Y-m-d', strtotime($tmp[0].'W'.$tmp[1]));
+			$result[$tmp][$value['type']] = ($value['weekly_pv']);
+		}	
+		$data = null;
+		$data['min_week'] = min(array_keys($result));
+		$data['max_week'] = max(array_keys($result));
+
+		$data['week_list'] = '';
+		$data['product_pv_list'] = '';
+		$data['article_pv_list'] = '';
+		$data['course_pv_list'] = '';
+		foreach ($result as $key => $value) {
+			$data['week_list'] .= '"' . $key . '",';
+			$data['product_pv_list'] .= (isset($value['product']) ? $value['product'] : 0) . ',';
+
+			$data['article_pv_list'] .= (isset($value['article']) ? $value['article'] : 0) . ',';
+
+			$data['course_pv_list'] .= (isset($value['course']) ? $value['course'] : 0) . ',';
+		}
+		$data['week_list'] = rtrim($data['week_list'], ',');
+		$data['product_pv_list'] = rtrim($data['product_pv_list'], ',');
+		$data['article_pv_list'] = rtrim($data['article_pv_list'], ',');
+		$data['course_pv_list'] = rtrim($data['course_pv_list'], ',');
+		$data['max_scale'] = max(max(explode(',', $data['product_pv_list'])), max(explode(',', $data['article_pv_list'])), 
+			max(explode(',', $data['course_pv_list'])));	
+		///var_export($data);exit();
+		return $data;	
+	}
+
+	public function get_monthly_pv() {
+		$today = date('Y-m-d');		
+		$first_day = date('Y-m-d', strtotime('-12 month')); 
+		$sql = "select sum(pv) monthly_pv, type, extract(year_month from add_time) as month_year from ty_product_access where TO_DAYS('" . $today . "') >= TO_DAYS(add_time) and TO_DAYS(add_time) > TO_DAYS('" . $first_day . "') GROUP BY month_year, type";
+		
+		$data = array();
+		$data = $this->db->query($sql)->result_array();	
+		foreach ($data as $key => $value) {			
+			$result[$value['month_year']][$value['type']] = ($value['monthly_pv']);
+		}	
+		$data = null;
+		$data['min_month'] = min(array_keys($result));
+		$data['max_month'] = max(array_keys($result));
+
+		$data['month_list'] = '';
+		$data['product_pv_list'] = '';
+		$data['article_pv_list'] = '';
+		$data['course_pv_list'] = '';
+		foreach ($result as $key => $value) {
+			$data['month_list'] .= '"' . $key . '",';
+			$data['product_pv_list'] .= (isset($value['product']) ? $value['product'] : 0) . ',';
+
+			$data['article_pv_list'] .= (isset($value['article']) ? $value['article'] : 0) . ',';
+
+			$data['course_pv_list'] .= (isset($value['course']) ? $value['course'] : 0) . ',';
+		}
+		$data['month_list'] = rtrim($data['month_list'], ',');
+		$data['product_pv_list'] = rtrim($data['product_pv_list'], ',');
+		$data['article_pv_list'] = rtrim($data['article_pv_list'], ',');
+		$data['course_pv_list'] = rtrim($data['course_pv_list'], ',');
+		$data['max_scale'] = max(max(explode(',', $data['product_pv_list'])), max(explode(',', $data['article_pv_list'])), 
+			max(explode(',', $data['course_pv_list'])));	
+		//var_export($data);exit();
+		
+		return $data;	
 	}
 
 }

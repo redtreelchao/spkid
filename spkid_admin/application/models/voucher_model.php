@@ -381,113 +381,140 @@ class Voucher_model extends CI_Model
 
 	public function do_release($release, $config)
 	{
-		if($config['sys']) return 0;
-		
-		$CI = & get_instance();
-		$release_id = $release->release_id;
-		if ($config['sys']) {
-			$start_date = $CI->time;
-			$end_date = date('Y-m-d H:i:s', strtotime($start_date) + $release->expire_days*86400);
-		} else {
-			$start_date = $release->start_date;
-			$end_date = $release->end_date;
-		}
-		$user_arr = array();
-		$release->release_rules = unserialize($release->release_rules);
-		switch ($release->release_rules['rule']) {
-			case 'number':
-				$voucher_count = $release->release_rules['rule_number'];
-				break;
-			
-			case 'list':
-			 	$user_arr = explode(',',$release->release_rules['rule_list']);
-			 	$user_arr = $this->filter_real_user_ids($user_arr);
-			 	$voucher_count = count($user_arr);
-			 	break; 
+            if($config['sys']) return 0;
 
-			 case 'sn':
-			 	$sn_arr = explode(',',$release->release_rules['rule_sn']);
-			 	$voucher_count = count($sn_arr);
-			 	break;
+            $CI = & get_instance();
+            $release_id = $release->release_id;
+            if ($config['sys']) {
+                    $start_date = $CI->time;
+                    $end_date = date('Y-m-d H:i:s', strtotime($start_date) + $release->expire_days*86400);
+            } else {
+                    $start_date = $release->start_date;
+                    $end_date = $release->end_date;
+            }
+            $user_arr = array();
+            $release->release_rules = unserialize($release->release_rules);
+            switch ($release->release_rules['rule']) {
+                    case 'number':
+                            $voucher_count = $release->release_rules['rule_number'];
+                            break;
 
-			 case 'rule':
-			 	$user_arr = array_keys(index_array($this->get_user_by_rule($release->release_rules), 'user_id'));
-			 	$voucher_count = count($user_arr);
-			 	break;
-			
-			default:
-				sys_msg('请指定正确的发放规则!',1);
-				break;
-		}
-		if ($voucher_count<1) sys_msg('现金券的发放数量为0，请检查发放设置!',1);
-		if ($voucher_count>599999) sys_msg('一次最多生成599,999张现金券。',1);
+                    case 'list':
+                            $user_arr = explode(',',$release->release_rules['rule_list']);
+                            $user_arr = $this->filter_real_user_ids($user_arr);
+                            $voucher_count = count($user_arr);
+                            break; 
 
-		switch ($release->release_rules['rule']) {
-			case 'sn':
-				$rs = $this->all_voucher(array('voucher_sn'=>$sn_arr));
-				if($rs) {
-					$sns = implode(',',array_keys(index_array($rs,'voucher_sn')));
-					sys_msg("现金券券号 $sns 有重复，请修改!", 1);
-				}
-				$sql = "INSERT INTO ".$this->db->dbprefix('voucher_record')."
-	                    (campaign_id,release_id,voucher_sn) VALUES";
-                foreach($sn_arr as $voucher_sn) {
-                    $sql .= "({$release->campaign_id},{$release->release_id},'{$voucher_sn}'),";
-                }
-                $sql = substr($sql,0,-1);
-                if(!$this->db->query($sql)) {
-                	$this->db->trans_rollback();
-                    sys_msg("发放失败，数据库错误！",1);
-	            }
-				break;
-			
-			default:
-				$num_per = 10000;
-                $times = ceil($voucher_count/$num_per); 
-                @set_time_limit(0);                
-                for($i=0;$i<$times;$i++) {
-                  
-                    $start = $num_per*$i;
-                    $i_count = $num_per*($i+1)>$voucher_count? $voucher_count-$num_per*$i : $num_per;
+                     case 'sn':
+                            $sn_arr = explode(',',$release->release_rules['rule_sn']);
+                            $voucher_count = count($sn_arr);
+                            break;
+
+                     case 'rule':
+                            $user_arr = array_keys(index_array($this->get_user_by_rule($release->release_rules), 'user_id'));
+                            $voucher_count = count($user_arr);
+                            break;
+
+                    default:
+                            sys_msg('请指定正确的发放规则!',1);
+                            break;
+            }
+            if ($voucher_count<1) sys_msg('现金券的发放数量为0，请检查发放设置!',1);
+            if ($voucher_count>599999) sys_msg('一次最多生成599,999张现金券。',1);
+
+            switch ($release->release_rules['rule']) {
+                case 'sn':
+                    $rs = $this->all_voucher(array('voucher_sn'=>$sn_arr));
+                    if($rs) {
+                            $sns = implode(',',array_keys(index_array($rs,'voucher_sn')));
+                            sys_msg("现金券券号 $sns 有重复，请修改!", 1);
+                    }
                     $sql = "INSERT INTO ".$this->db->dbprefix('voucher_record')."
-                            (campaign_id,release_id,user_id,voucher_sn) VALUES";
-                    for($j=$start;$j<$start+$i_count;$j++) {
-                        if(isset($user_arr[$j])) {
-                            $user_id = $user_arr[$j];
-                        }else {
-                            $user_id = 0;
-                        }
-                        $sql .= "({$release->campaign_id},{$release->release_id},$user_id,null),";
+                    (campaign_id,release_id,voucher_sn) VALUES";
+                    foreach($sn_arr as $voucher_sn) {
+                        $sql .= "({$release->campaign_id},{$release->release_id},'{$voucher_sn}'),";
                     }
                     $sql = substr($sql,0,-1);
                     if(!$this->db->query($sql)) {
-                    	$this->db->trans_rollback();
-	                    sys_msg("发放失败，数据库错误！",1);
-	                }                   
-                }
-                if(!$this->db->query("call create_voucher_sn($release_id)")) {
-                    $this->db->trans_rollback();
-	                sys_msg("发放失败，数据库错误！",1);
-                }
-				break;
-		}
+                        $this->db->trans_rollback();
+                        sys_msg("发放失败，数据库错误！",1);
+                    }
+                    break;			
+                default:
+                    $num_per = 10000;
+                    $times = ceil($voucher_count/$num_per); 
+                    @set_time_limit(0);                
+                    for($i=0;$i<$times;$i++) {                  
+                        $start = $num_per*$i;
+                        $i_count = $num_per*($i+1)>$voucher_count? $voucher_count-$num_per*$i : $num_per;
+                        $sql = "INSERT INTO ".$this->db->dbprefix('voucher_record')."
+                                (campaign_id,release_id,user_id,voucher_sn) VALUES";
+                        $voucher_rs = array();
+                        $voucher_arr = array();
+                        $t_sql = "SELECT * FROM ya_voucher_log WHERE voucher_status = 0 ORDER BY voucher_id ASC LIMIT ".$i_count;
+                        $result = $this->db->query($t_sql)->result_array();
+                        foreach ($result as $row){ 
+                            $voucher_rs[] = $row;
+                            $voucher_arr[] = $row['voucher_des'];
+                        }
+                        if(count($voucher_rs) < $i_count) sys_msg("发放失败，现金券临时表中数据不够用，请10分钟后重试！:".count($voucher_rs),1);
+                        $start_arr = reset($voucher_rs);
+                        $start_id = $start_arr['voucher_id'];
+                        $end_arr = end($voucher_rs);
+                        $end_id = $end_arr['voucher_id'];       
+                        $vkey = 0;
+                        for($j=$start;$j<$start+$i_count;$j++) {
+                            if(isset($user_arr[$j])) {
+                                $user_id = $user_arr[$j];
+                            }else {
+                                $user_id = 0;
+                            }
+                            if($voucher_arr[$vkey]) {
+                                $voucher_des = $voucher_arr[$vkey];
+                                $vkey = $vkey + 1;
+                            }else {
+                                $voucher_des = getVoucherDes();
+                            }
+                            $sql .= "({$release->campaign_id},{$release->release_id},$user_id,'".$voucher_des."'),";
+                        }
+                        $sql = substr($sql,0,-1);
+                        if(!$this->db->query($sql)) {
+                            $this->db->trans_rollback();
+                            sys_msg("发放失败，数据库错误！",1);
+                        } else {
+                            $affectedRows = $this->db->affected_rows();
+                            if ($affectedRows < $i_count) {
+                                $this->db->query("ROLLBACK");
+                                sys_msg("发放失败，现金券临时表中数据不够用，请10分钟后重试!！".$affectedRows .':'. $i_count,1);
+                            }
+                        }
 
-		$sql = "UPDATE ".$this->db->dbprefix('voucher_record')." SET
-                start_date = '$start_date',
-                end_date = '$end_date',
-                repeat_number = $release->repeat_number,
-                voucher_amount = $release->voucher_amount,
-                min_order = $release->min_order,
-                create_date = '{$CI->time}',
-                create_admin = {$CI->admin_id}
-                where release_id = $release_id;";
-                        
-       if(!$this->db->query($sql)) {
-        	$this->db->trans_rollback();
-            sys_msg("发放失败，数据库错误！",1);
-        }
+                        $vsql = "UPDATE ya_voucher_log SET edit_time = NOW(), voucher_status = 1 WHERE voucher_id >= $start_id AND voucher_id <= $end_id";
+                        if(!$this->db->query($vsql)) {
+                            $this->db->query("ROLLBACK");
+                            sys_msg("发放失败，数据库错误3！",1);
+                        }
+                    }
+      
+                    break;
+            }
+
+            $sql = "UPDATE ".$this->db->dbprefix('voucher_record')." SET
+            start_date = '$start_date',
+            end_date = '$end_date',
+            repeat_number = $release->repeat_number,
+            voucher_amount = $release->voucher_amount,
+            min_order = $release->min_order,
+            create_date = '{$CI->time}',
+            create_admin = {$CI->admin_id}
+            where release_id = $release_id;";
+
+            if(!$this->db->query($sql)) {
+                 $this->db->trans_rollback();
+                 sys_msg("发放失败，数据库错误！",1);
+             }
      	
-     	return $voucher_count;
+            return $voucher_count;
 	}
 	
 

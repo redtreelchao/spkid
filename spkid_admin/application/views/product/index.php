@@ -4,9 +4,7 @@
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/product_index.js"></script>
 	<script type="text/javascript" src="public/js/cluetip.js"></script>
-	<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
-        <script type="text/javascript" src="public/js/lhgdialog/lhgdialog.min.js"></script>
+        <script type="text/javascript" src="public/js/lhgdialog/lhgdialog.js"></script>
 	<link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 	<style>
 	    .sn_black{color:black}
@@ -43,6 +41,7 @@
 		listTable.url = 'product/index';
 		listTable.func = img_tip;
 		function search(){ 
+			listTable.filter['product_id'] = $.trim($('input[type=text][name=product_id]').val());
 			listTable.filter['product_sn'] = $.trim($('input[type=text][name=product_sn]').val());
 			listTable.filter['product_name'] = $.trim($('input[type=text][name=product_name]').val());
 			listTable.filter['provider_productcode'] = $.trim($('input[type=text][name=provider_productcode]').val());
@@ -55,6 +54,10 @@
 			listTable.filter['provider_id'] = $.trim($('select[name=provider_id]').val());
 			listTable.filter['is_pic'] = $.trim($('select[name=is_pic]').val());
 			listTable.filter['batch_code'] = $.trim($('input[type=text][name=batch_code]').val());
+			listTable.filter['medical1_id'] = $.trim($('select[name=medical1_id]').val());
+			listTable.filter['medical2_id'] = $.trim($('select[name=medical2_id]').val());
+			listTable.filter['is_on_sale'] = $.trim($('select[name=is_on_sale]').val());
+			listTable.filter['genre_id'] = $.trim($('select[name=genre_id]').val());
 			listTable.loadList();
 		}
 		function load_product_cost_panel(product)
@@ -149,18 +152,26 @@
 		//]]>
 	</script>
 	<div class="main">
-		<div class="main_title"><span class="l">商品管理 >> 商品列表</span> <span class="r"> <a class="add" href="product/add">新增</a></span></div>
+        <div class="main_title"><span class="l">商品管理 >> 商品列表</span> <span class="r"> 
+				<?php foreach($all_genres as $genre) print '<a class="add" href="product/add/'.$genre->id.'">新增'.$genre->name.'</a>'?>
+</span></div>
 
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
+			ID：<input type="text" class="ts" name="product_id" value="" style="width:60px;" />
 			名称：<input type="text" class="ts" name="product_name" value="" style="width:60px;" />
 			款号：<input type="text" class="ts" name="product_sn" value="" style="width:60px;" />
 			货号：<input type="text" class="ts" name="provider_productcode" value="" style="width:60px;" />
-			<select name="category_id">
-				<option value="">分类</option>
-				<?php foreach($all_category as $category) print "<option value='{$category->category_id}'>{$category->level_space}{$category->category_name}</option>"?>
+			<select name="genre_id">
+				<option value="">商品类型</option>
+				<?php foreach($all_genres as $genre) print "<option value='{$genre->id}'>{$genre->name}</option>"?>
 			</select>
-			<?php print form_dropdown('brand_id',get_pair($all_brand,'brand_id','brand_name', array(''=>'品牌'))); ?>
+			<select name="category_id" data-am-selected="{searchBox: 1,maxHeight: 300}">
+				<option value="">分类</option>
+				<?php foreach($all_category as $category) print "<option value='{$category->category_id}'>{$category->level_space}{$category->cate_code}{$category->category_name}</option>"?>
+			</select>
+			<?php print form_dropdown('brand_id',get_pair($all_brand,'brand_id','brand_name', array(''=>'品牌')),'',' data-am-selected="{searchBox: 1,maxHeight: 300}"'); ?>
+<!--
 			<?php print form_dropdown('style_id',get_pair($all_style,'style_id','style_name', array(''=>'样式'))); ?>
 			<select name="product_sex">
 				<option value="">性别</option>
@@ -169,14 +180,14 @@
 				<option value="3">男女</option>
 			</select>
 			<?php print form_dropdown('season_id',get_pair($all_season,'season_id','season_name', array(''=>'季节'))); ?>
-
+-->
 			<select name="product_status">
 				<option value="">状态</option>
-				<option value="is_best">清仓</option>
+				<option value="is_best">展品</option>
 				<option value="is_new">新品</option>
 				<option value="is_hot">热销</option>
 				<option value="is_promote">促销</option>
-				<option value="is_offcode">断码</option>
+				<!-- <option value="is_offcode">断码</option> -->
 				<option value="is_gifts">赠品</option>
 				<option value="is_stop">停止订货</option>
 				<option value="is_audit_yes">已审核</option>
@@ -184,11 +195,19 @@
 				<option value="is_pic_yes">已拍摄</option>
 				<option value="is_pic_no">未拍摄</option>
 			</select>
-			<?php print form_dropdown('provider_id',get_pair($all_provider,'provider_id','provider_code', array(''=>'供应商'))); ?>
+			<?php print form_dropdown('provider_id',get_pair($all_provider,'provider_id','provider_code,provider_name', array(''=>'供应商')),'',' data-am-selected="{searchBox: 1,maxHeight: 300}"'); ?>
 			批次号：<input type="text" class="ts" name="batch_code" />
-			<input type="submit" class="button" value="搜索" />
-			<input type="button" class="button" value="批量审核" onclick="batch_audit()" />
-			<input type="button" class="button" value="导出采购单模版" onclick="export_purcahse_order()" />
+
+			<?php print form_dropdown('medical1_id',get_pair($all_medical1,'field_id','field_value1', array(''=>'医疗类型'))); ?>
+			<?php print form_dropdown('medical2_id',get_pair($all_medical2,'field_id','field_value1', array(''=>'医疗设备'))); ?>
+			<select name="is_on_sale">
+				<option value="">上/下 架</option>
+				<option value="is_on_sale_yes">上架</option>
+				<option value="is_on_sale_no">下架</option>
+			</select>
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
+			<input type="button" class="am-btn am-btn-primary" value="批量审核" onclick="batch_audit()" />
+			<input type="button" class="am-btn am-btn-primary" value="导出采购单模版" onclick="export_purcahse_order()" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -226,6 +245,10 @@
 					<th width="70">状态</th>
 
 					<th width="50">库存</th>
+					<th width="50">
+						销售量<br/>
+						访问量<br/>
+					</th>
 					<th width="40">
 						<a href="javascript:listTable.sort('p.sort_order', 'ASC'); ">排序<?php echo ($filter['sort_by'] == 'p.sort_order') ? $filter['sort_flag'] : '' ?></a>
 					</th>
@@ -261,7 +284,7 @@
 						<br/>
 						<a href="<?php print front_url("product-{$row->product_id}.html?is_preview=1"); ?>" target="_blank"><?php print $row->product_name;?></a><br/>				
 						<?php print $row->provider_productcode?><br/>
-						<?php print $all_age[$row->min_month].'<span style="color:red;"> - </span>'.$all_age[$row->max_month]; ?><br/>
+						<?php //print $all_age[$row->min_month].'<span style="color:red;"> - </span>'.$all_age[$row->max_month]; ?><br/>
                         <?php print $row->update_time; ?>
                         <?php if(!empty($row->tmall_num_iid)):?>
                              <a style="color:blue;" href="http://detail.tmall.com/item.htm?&id=<?php print $row->tmall_num_iid;?>" target="_blank">Tmall</a>
@@ -279,10 +302,10 @@
 						<span style="color:#FF0000;"><?php print $row->shop_price?></span>
 					</td>
 					<td>						
-						<?php print toggle_link('product/toggle','is_best',$row->product_id, $row->is_best,'<font color=red>清仓</font>','<font color=gray>清仓</font>');?>
+						<?php print toggle_link('product/toggle','is_best',$row->product_id, $row->is_best,'<font color=red>展品</font>','<font color=gray>展品</font>');?>
 						<?php print toggle_link('product/toggle','is_new',$row->product_id, $row->is_new,'<font color=red>新品</font>','<font color=gray>新品</font>');?><br/>
 						<?php print toggle_link('product/toggle','is_hot',$row->product_id, $row->is_hot,'<font color=red>热销</font>','<font color=gray>热销</font>');?>
-						<?php print toggle_link('product/toggle','is_offcode',$row->product_id, $row->is_offcode,'<font color=red>促销</font>','<font color=gray>促销</font>');?><br/>
+						<?php print toggle_link('product/toggle','is_promote',$row->product_id, $row->is_promote,'<font color=red>促销</font>','<font color=gray>促销</font>');?><br/>
 						<?php print toggle_link('product/toggle','is_gifts',$row->product_id, $row->is_gifts,'<font color=red>赠品</font>','<font color=gray>赠品</font>');?>
 					
 						
@@ -292,6 +315,11 @@
 						实：<?php print $row->sub_gl;?><br/>
 						虚：<?php print $row->sub_consign==-2?'无限':$row->sub_consign;?>
 					</td>
+
+					<td>
+						<?php print $row->ps_real_num.'/'.$row->ps_num;?><br/>
+						<?php print $row->pv_real_num.'/'.$row->pv_num;?>
+					</td>
 					
 					<td>
 						<?php print edit_link('product/edit_field', 'sort_order', $row->product_id, $row->sort_order);?>
@@ -300,7 +328,7 @@
 						<a class="edit" href="product/edit/<?php print $row->product_id; ?>" title="编辑"></a>
 						<?php if ($perm_delete): ?><br/>
 							<a class="del" href="javascript:void(0)" rel="product/delete/<?php print $row->product_id; ?>" title="删除" onclick="do_delete(this)"></a><br/>
-							审核<?php print toggle_link('product/toggle','is_audit',$row->product_id, $row->is_audit);?>
+							审核<?php print toggle_link('product/toggle','is_audit',$row->product_id, $row->is_audit);?><br>
 						<?php endif ?>
                                         <span style="cursor:pointer;color:red;" onclick="op_product_onoff(this, <?=$row->product_id?>, 'is_on_sale', 1);">上架</span>
 <span class="yesForGif"></span>

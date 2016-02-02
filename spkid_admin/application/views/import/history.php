@@ -1,11 +1,7 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/listtable.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
 <script type="text/javascript">
 	//<![CDATA[
 	$(function(){
@@ -63,7 +59,7 @@
 	    导入人：<?php print form_dropdown('create_admin', get_pair($all_import_admin,'create_admin','admin_name'));?>
 	    开始时间：<input type="text" name="start_date" class="ts" value="" style="width:100px;">
 	    结束时间：<input type="text" name="end_date" class="ts" value="" style="width:100px;">
-	    <input type="submit" class="button" value="搜索" />
+	    <input type="submit" class="am-btn am-btn-primary" value="搜索" />
 	    </form>
 	</div>
 	<div class="blank5"></div>
@@ -89,7 +85,7 @@
 				<td><?php if($row->status == '02'){echo '执行中';} elseif($row->status == '03'){echo '执行失败';}else{echo "执行成功";} ?></td>
 				<td>
 				    <?php if($row->status == '06'):?>
-				    【<a href="javascript:export_color_size(<?php print $row->id; ?>)">下载颜色尺寸模版</a>】
+				    【<a href="javascript:export_color_size(<?php print $row->id; ?>)">下载颜色规格模版</a>】
 				    【<a href="javascript:export_product_sub(<?php print $row->id; ?>)">下载次要信息模版</a>】
 				    <?php endif;?></td>
 				<td width="50px" align="center">

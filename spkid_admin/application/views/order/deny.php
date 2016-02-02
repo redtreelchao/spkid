@@ -182,7 +182,7 @@
 				<td class="item_title" style="text-align:center;font-weight:bold;">商品款号</td>
 				<td class="item_title" style="text-align:center;font-weight:bold;">供应商货号</td>
 				<td class="item_title" style="text-align:center;font-weight:bold;">批次号</td>
-				<td class="item_title" style="text-align:center;font-weight:bold;">颜色尺寸</td>
+				<td class="item_title" style="text-align:center;font-weight:bold;">颜色规格</td>
 				<td class="item_title" style="text-align:center;font-weight:bold;">条码</td>
 				<td class="item_title" style="text-align:center;font-weight:bold;">待入库数量</td>
 				<td class="item_title" style="text-align:center;font-weight:bold;">扫描数量</td>
@@ -269,7 +269,7 @@
 			
 			<tr>
 				<td colspan="10">
-					<?php print form_submit('mysubmit','提交','class="button"') ?>
+					<?php print form_submit('mysubmit','提交','class="am-btn am-btn-primary"') ?>
 				</td>
 			</tr>
 			<tr>

@@ -34,7 +34,7 @@
 						<td align="center" style="font-weight:bold">货号</td>
 						<td align="center" style="font-weight:bold">商品名称</td>
 						<td align="center" style="font-weight:bold">颜色编码</td>
-						<td align="center" style="font-weight:bold">尺寸编码</td>
+						<td align="center" style="font-weight:bold">规格编码</td>
 						<td align="center" style="font-weight:bold">数量</td>
 					</tr>
 					<?php foreach($goods_list as $key=>$row): ?>

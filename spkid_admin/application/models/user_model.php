@@ -32,6 +32,10 @@ class user_model extends CI_Model
                     $where .= " AND i.mobile like  ? ";
                     $param[] = '%'.$filter['mobile'].'%';
                 }
+        if(!empty($filter['user_name'])){
+            $where .= " AND i.user_name = ? ";
+            $param[] = $filter['user_name'];
+        }
                 
                 if(!empty($filter['email'])){
                     $where .= " AND i.email like  ? ";
@@ -81,7 +85,7 @@ class user_model extends CI_Model
 			return array('list' => array(), 'filter' => $filter);
 		}
                 
-		$sql = "SELECT i.*,r.rank_name "
+		$sql = "SELECT i.*,r.rank_name"
 				. $from . $where . " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order']
 				. " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'];
 		$query = $this->db->query($sql, $param);
@@ -98,7 +102,7 @@ class user_model extends CI_Model
 
 	public function update ($data, $user_id)
 	{
-		$this->db->update('user_info', $data, array('user_id' => $user_id));
+		return $this->db->update('user_info', $data, array('user_id' => $user_id));
 	}
 
 	public function delete ($user_id)

@@ -1,10 +1,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="../../../public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="../../../public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../../public/js/listtable.js"></script>
 	<script type="text/javascript" src="../../../public/js/utils.js"></script>
-    <script type="text/javascript" src="../../../public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="../../../public/js/jui/datepicker.min.js"></script>
 
 	<script type="text/javascript">
 	    $(function(){
@@ -47,7 +43,7 @@
 	                <?php endforeach; ?>
 				</select>&nbsp;
 				<select name="size_id" id="size_id" >
-					<option value="0">--商品尺寸--</option>
+					<option value="0">--商品规格--</option>
 					<?php foreach($size_list as $item): ?>
 	                <option value='<?php echo $item->size_id;?>' <?php if ($item->size_id == $size_id): ?>selected<?php endif; ?>><?php echo $item->size_name;?></option>";
 	                <?php endforeach; ?>
@@ -70,7 +66,7 @@
     			<!-- 关键字 -->
     			商品名称 <input type="text" name="keyword" value="<?php echo $keyword;?>" size="15" />
 
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 		</form>
 </div>
 		<div class="blank5"></div>

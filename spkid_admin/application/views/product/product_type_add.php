@@ -5,7 +5,7 @@
 	//<![CDATA[
     $(function(){
     });
-    
+
 	function check_form(){
 		var validator = new Validator('mainForm');
 //			validator.required('type_code', '请填写编码');
@@ -25,6 +25,21 @@
 			<tr>
 				<td colspan=2 class="topTd"></td>
 			</tr>
+			<tr>
+                <td class="item_title">
+                    商品所属大类
+                </td>
+                <td class="item_input">
+                    <?php
+                    	if(isset($row->genre_id)){
+                    		print form_dropdown('genre_id', get_pair($all_genre,'id','name'),array($row->genre_id),'data-am-selected');
+                    	}else{
+                    		print form_dropdown('genre_id', get_pair($all_genre,'id','name'),array(),'data-am-selected');
+                    	}
+                    	
+                    ?>
+                </td>
+            </tr>
 			<tr>
 				<td class="item_title">上级分类:</td>
 				<td class="item_input">
@@ -52,11 +67,9 @@
 			    </td>
 			</tr>
                         <tr>
-                            <td class="item_title">
-                                对应后台分类
-                            </td>
+                            <td class="item_title"> 对应后台分类 </td>
                             <td class="item_input">
-                                <?php print form_product_category('category_id', $all_category, empty($row)?0:$row->category_id, '', array('0'=>'不对应后台分类'));?>
+<?php print form_product_category('category_id', $all_category, empty($row)?0:$row->category_id, '', array('0'=>'不对应后台分类'));?>
                             </td>
                         </tr>
 			<?php if($type_id != 0 ): ?>
@@ -95,7 +108,7 @@
             <tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<tr>
@@ -106,6 +119,23 @@
 </div>
 <script>
     $(function(){
+       $('select[name=genre_id]').change(function(){
+           var first_type=$('#first_type');
+           first_type[0].length=1;
+           if($(this).val()!=0){
+               $.post('/product_type/get_first_type/'+$(this).val(),
+                   function(data){
+                       for(var i=0;i<data.length;i++){
+                           //过滤3级分类
+                           if(data[i].parent_id2>0){
+                               continue;
+                           }
+                           first_type.append("<option value='"+data[i].type_id+"'>"+data[i].type_name+"</option>");
+                       }
+                   },
+                   'json');
+           }
+       });
         $('#first_type').change(function(){
             var second_type=$('#second_type');
             second_type[0].length=1;

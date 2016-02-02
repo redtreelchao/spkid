@@ -410,6 +410,7 @@
             <th>供应商名称</th>
             <th>颜色</th>
             <th>尺码</th>
+            <th>过期日期</th>
             <th width="60px;">预采购数量</th>
           </tr>
           <?php foreach($goods_list as $row): ?>
@@ -423,6 +424,7 @@
             <td><?php print $row->provider_name; ?></td>
             <td><?php print $row->color_name.'['.$row->color_sn.']'; ?></td>
             <td><?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
+            <td><?php print $row->expire_date; ?></td>
             <td><input type="text" size="4" id="purchase_num_<?php print $row->purchase_sub_id; ?>" value="<?php print $row->product_number; ?>" /></td>
           </tr>
           <?php endforeach; ?>
@@ -444,7 +446,7 @@
       供应商：<?php print $purchase_info->purchase_provider?form_dropdown('provider_id',$provider_list,$purchase_info->purchase_provider,' disabled="disabled"'): form_dropdown('provider_id',$provider_list);?> 
       合作方式：<?php print form_dropdown('purchase_type',$type_list,$purchase_info->purchase_type,' disabled="disabled"');?> 
       状态：<?php print form_dropdown('provider_status',$provider_status);?><input type="checkbox" name="with_not" id="with_not" checked >
-      过滤已有商品<input type="submit" class="button" value="搜索" /><input type="button" id="toggle_product" class="button" value="隐藏" onclick="toggle_product_div()" /></form>
+      过滤已有商品<input type="submit" class="am-btn am-btn-primary" value="搜索" /><input type="button" id="toggle_product" class="am-btn am-btn-primary" value="隐藏" onclick="toggle_product_div()" /></form>
 </div>
 <div id="listDiv" style="display:none;">
         <?php endif; ?>

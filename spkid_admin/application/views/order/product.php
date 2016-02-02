@@ -45,16 +45,16 @@
                 <!-- 颜色组 -->
                 <?php print form_dropdown('color_group', array('颜色组')+get_pair($all_color_group,'group_id','group_name')); ?>
                 <!-- 尺寸 -->
-                <?php print form_dropdown('size_id', array('尺寸')+get_pair($all_size,'size_id','size_name')); ?>
+                <?php print form_dropdown('size_id', array('规格')+get_pair($all_size,'size_id','size_name')); ?>
                 礼包名称：<?php print form_input('package_name'); ?>
-        		<input type="submit" value="搜索" />
+        		<input type="submit" class="am-btn am-btn-secondary" value="搜索" />
         	</form>
 	</div>
 	<div id="listDiv" style="margin-top:5px;">
 	</div>
         <div style="text-align:center;">
-                <?php print form_button('mysubmit',$act=='add'?'下一步':'提交','class="button" onclick="submit_add_product();"') ?>
-                <?php print form_button('mycancel','取消','class="button" onclick="location.href=base_url+\'order/info/'.$order->order_id.'\';"'); ?>
+                <?php print form_button('mysubmit',$act=='add'?'下一步':'提交','class="am-btn am-btn-primary" onclick="submit_add_product();"') ?>
+                <?php print form_button('mycancel','取消','class="am-btn am-btn-primary" onclick="location.href=base_url+\'order/info/'.$order->order_id.'\';"'); ?>
         </div>
 </div>
 <?php include(APPPATH.'views/common/footer.php');?>

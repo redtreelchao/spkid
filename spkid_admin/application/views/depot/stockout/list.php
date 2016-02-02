@@ -2,12 +2,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
     <script type="text/javascript" src="public/js/utils.js"></script>
     <script type="text/javascript" src="public/js/listtable.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-    <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-    <script type="text/javascript" src="public/js/jui/timepicker.addon.js"></script>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/timepicker.addon.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
     <script type="text/javascript">
         //<![CDATA[
         listTable.filter.page_count = '<?php echo $filter['page_count']; ?>';
@@ -32,7 +26,7 @@
             <form name="search" action="javascript:search(); ">
                 流水号：<input type="text" class="ts" name="stockout_sn" style="width:140px;height:23px;" />
                 订单/退货单编号：<input type="text" class="ts" name="trans_sn" style="width:140px;height:23px;" />
-                <input type="submit" class="button" value="搜索" />
+                <input type="submit" class="am-btn am-btn-primary" value="搜索" />
             </form>
         </div>
         <div class="blank5"></div>

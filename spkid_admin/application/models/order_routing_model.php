@@ -24,8 +24,8 @@ class Order_routing_model extends CI_Model{
 			$sql .= " AND routing_id != ".$routing_id;
 		}
 		$sql .= " LIMIT 1";
-	    $query = $this->db->query($sql);
-	    return $query->row()->routing_id;
+	    $row = $this->db->query($sql)->row();
+	    return (!empty($row)) ? $row->routing_id : 0;
     }
     
     public function check_in_use($routing_id)
@@ -34,8 +34,8 @@ class Order_routing_model extends CI_Model{
 				FROM ".$this->db->dbprefix('order_info')." a
 				LEFT JOIN ".$this->db->dbprefix('order_routing')." b ON a.source_id=b.source_id AND a.shipping_id=b.shipping_id AND a.pay_id=b.pay_id
 				WHERE b.routing_id=".$routing_id.= " LIMIT 1";;
-	    $query = $this->db->query($sql);
-	    return $query->row()->order_id;
+	    $row = $this->db->query($sql)->row();
+	    return (!empty($row)) ? $row->order_id : 0;
     }
     
     public function order_routing_list ($filter)

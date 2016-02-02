@@ -212,7 +212,7 @@ class Rush_model extends CI_Model {
     public function product_list($filter , $slave = TRUE ,$is_preview = FALSE) {
 		$this->adoEx = $slave ? $this->db_r : $this->db;
 		$this->load->helper("product");
-		$filter['page_size'] = is_int( LIST_PAGE_SIZE ) ? LIST_PAGE_SIZE : 30;
+		$filter['page_size'] = is_int( M_LIST_PAGE_SIZE ) ? M_LIST_PAGE_SIZE : 30;
 		$filter['record_count'] = 0;
 		$filter['page_count'] = 0;
 		
@@ -243,9 +243,9 @@ class Rush_model extends CI_Model {
 */
 	  $select = "SELECT sub.product_id,sub.gl_num as sub_gl_num,sub.consign_num,sub.wait_num,
 				 if(SUM(GREATEST(sub.gl_num-sub.wait_num,0))+SUM(GREATEST(sub.consign_num,0)+IF(sub.consign_num=-2,1000,0))>0,1,0) AS gl_num,
-					p.product_name,p.product_sn,p.shop_price,p.market_price,
+					p.product_name,p.product_sn,p.shop_price,p.market_price,p.ps_num,p.pv_num,p.is_hot,p.is_new,p.is_offcode,p.is_best as is_zhanpin,
 					p.is_promote,p.promote_price,p.promote_start_date,p.promote_end_date,
-					p.is_new,p.is_hot,p.is_offcode,p.is_best,p.is_gifts,p.product_desc_additional,
+					p.is_new,p.is_hot,p.is_offcode,p.is_best,p.is_gifts,p.product_desc_additional,p.price_show,
 					b.brand_name,g.img_url,pp.display_name,pp.provider_id ";
 				   
 		$from = "FROM ty_product_sub AS sub
@@ -269,8 +269,19 @@ class Rush_model extends CI_Model {
 	    $where.=" AND p.product_sex IN ('3','{$filter['sex_id']}')";
 	if (!empty($filter['kw'])) {
 	    $kw = $this->adoEx->escape_like_str($filter['kw']);
-	    $where.=" AND (p.product_name LIKE '%{$kw}%' OR p.product_sn LIKE '%{$kw}%' OR p.keywords LIKE '%{$kw}%' OR b.brand_name LIKE '%{$kw}%' OR cat.category_name LIKE '%{$kw}%') ";
+	    
+	    $kw_arrs = preg_split('[\s+]', $kw);
+	    array_walk($kw_arrs, create_function('&$val', '$val = trim($val);')); 
+	    foreach ($kw_arrs as $k_k => $k_v) {
+	    	$where .= " AND (p.product_name LIKE '%{$k_v}%' OR p.product_sn LIKE '%{$k_v}%' OR p.keywords LIKE '%{$k_v}%' OR b.brand_name LIKE '%{$k_v}%' OR pt.type_name LIKE '%{$k_v}%') ";
+	    }
+	    
+	    // $where.=" AND (p.product_name LIKE '%{$kw}%' OR p.product_sn LIKE '%{$kw}%' OR p.keywords LIKE '%{$kw}%' OR b.brand_name LIKE '%{$kw}%' OR pt.type_name LIKE '%{$kw}%') ";
 	}
+    if (isset($filter['ids'])){
+        $ids = $filter['ids'];
+        $where = " WHERE sub.product_id IN ($ids)";
+    }
 	if (!empty($filter['age']) && is_array($filter['age']) && count($filter['age']) == 2) {
 	    $where.=" AND (p.min_month<='{$filter['age'][1]}' AND p.max_month>='{$filter['age'][0]}') ";
 	}
@@ -280,6 +291,9 @@ class Rush_model extends CI_Model {
 	$group = "GROUP BY sub.product_id";
 	// 排序 0默认 1价格底到高 2价格高到底 3上新时间
 	switch ($filter['sort']) {
+		case 0:
+		$sort = "ORDER BY p.pv_num DESC, gl_num DESC, p.sort_order ASC, p.product_id DESC";
+		break;
 	    case 1:
 		$sort = "ORDER BY gl_num DESC, if(p.is_promote, p.promote_price, p.shop_price) DESC, p.sort_order DESC, p.product_id DESC";
 		break;
@@ -289,13 +303,41 @@ class Rush_model extends CI_Model {
 	    case 3:
 		$sort = "ORDER BY gl_num DESC, p.promote_start_date DESC, p.sort_order DESC, p.product_id DESC";
 		break;
+
+		// added new contents for sort
+		case 4: //'price_asc'
+			$sort="ORDER BY p.shop_price ASC, p.sort_order DESC, p.product_id DESC";
+		break;
+
+		case 5: //'price_desc'
+			$sort="ORDER BY p.shop_price DESC, p.sort_order DESC, p.product_id DESC";
+		break;
+
+		case 6: //'xiaoliang_asc'
+			$sort="ORDER BY p.ps_num ASC, p.sort_order DESC, p.product_id DESC";
+		break;
+
+		case 7: //'xiaoliang_desc'
+			$sort="ORDER BY p.ps_num DESC, p.sort_order DESC, p.product_id DESC";
+		break;
+
+		case 8: //'renqi_asc'
+			$sort="ORDER BY p.pv_num ASC, p.sort_order DESC, p.product_id DESC";
+		break;
+
+		case 9: //'renqi_desc'
+			$sort="ORDER BY p.pv_num DESC, p.sort_order DESC, p.product_id DESC";
+		break;
+
+
+		// ends added
 	    default://默认按优先级
-		$sort = "ORDER BY gl_num DESC, p.sort_order ASC, p.product_id DESC";//has_order DESC,
+		$sort = "ORDER BY p.pv_num DESC, gl_num DESC, p.sort_order ASC, p.product_id DESC";//has_order DESC,
 		break;
 	}
 	$sql = "SELECT COUNT(1) AS ct FROM (SELECT 1 {$from} {$where} {$group}) a";
-        
 	$query = $this->adoEx->query($sql);
+
 	$row = $query->row();
 	if (!$row)
 	    return array('filter' => $filter, 'list' => array());
@@ -303,9 +345,11 @@ class Rush_model extends CI_Model {
 	$filter['page_count'] = ceil($filter['record_count'] / $filter['page_size']);
 	$filter['page'] = $filter['page'] == 0 ? 1:$filter['page'];
 	$start = $filter['page'] < 1 ? 0:($filter['page'] - 1 ) * $filter['page_size']; //开始条数
-	
-	$sql = "{$select} {$from} {$where} {$group} {$sort} LIMIT {$start}, {$filter['page_size']}";
+	$sql = "{$select} {$from} {$where} {$group} {$sort} LIMIT {$start}, {$filter['page_size']}";	
 	$query = $this->adoEx->query($sql);
+
+	$sql_ret = $sql;
+
 	$list = array();
 	$goods_ids = array();
 	foreach ($list = $query->result() as $p){
@@ -324,7 +368,6 @@ class Rush_model extends CI_Model {
                 $comment_arr[$row->tag_id] = $row->cnt;
 	    }		
 	}
-	
 	return array('filter' => $filter, 'list' => $list, 'comment' => $comment_arr);
     }
     

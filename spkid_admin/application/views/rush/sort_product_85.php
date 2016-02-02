@@ -59,7 +59,7 @@ ul,li{list-style:none;}
 	    </ul>
 	</div>
 	<a class="button2" href="/rush/sort_view/<?php echo $rush->rush_id; ?>">切换</a>
-	<input id="btn" type="submit" class="button" onclick="sort_rush_product();" value="保存">
+	<input id="btn" type="submit" class="am-btn am-btn-primary" onclick="sort_rush_product();" value="保存">
 </div>
 <script type="text/javascript" src="/public/js/creatSequence.js"></script>
 <script type="text/javascript">

@@ -3,8 +3,6 @@
 	<script type="text/javascript" src="public/js/utils.js"></script>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/cluetip.js"></script>
-	<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
 	<link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 		<script type="text/javascript">
 		//<![CDATA[
@@ -20,12 +18,12 @@
 		//]]>
 	</script>
 	<div class="main">
-		<div class="main_title"><span class="l">国旗列表</span><span class="r"><a href="flag/add" class="add">新增</a></span></div>
+		<div class="main_title"><span class="l">产地列表</span><span class="r"><a href="flag/add" class="add">新增</a></span></div>
 		<div class="blank5"></div>
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
-			国旗名称：<input type="text" class="ts" name="flag_name" value="" style="width:100px;" />
-			<input type="submit" class="button" value="搜索" />
+			产地名称：<input type="text" class="ts" name="flag_name" value="" style="width:100px;" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -37,8 +35,8 @@
 				</tr>
 				<tr class="row">
 					<th width="50px">编号</th>
-					<th>国旗名称</th>
-					<th>国旗图片</th>
+					<th>产地名称</th>
+					<th>产地图片</th>
 					<th>排序号</th>
 					<th>启用</th>
 					<th width="120px;">操作</th>

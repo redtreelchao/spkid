@@ -228,7 +228,7 @@
 		str.attr('value',strFinal);
 		html.html(strFinalBR);
 	}
-	var pattern = /(^[a-zA-Z0-9]{0,3})-([0-9]{1,3})-([0-9]{1,3})-([0-9]{1,3})$/; 
+	var pattern = /(^[a-zA-Z0-9]{0,3})-([0-9]{1,3})-([0-9]{1,3})-([0-9]{1,3})-(\d{1,3})$/; 
 	function check_is_location(str){
 	    if(str.indexOf("-") == -1){
 		return false;

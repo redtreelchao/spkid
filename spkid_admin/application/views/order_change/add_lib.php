@@ -32,7 +32,7 @@
     <td align="center">
     <?php print $item['color_name']; ?>--<?php print $item['size_name']; ?>
 	</td>
-    <td align="center"><input type="button" value="删除" class="button" onclick="delchangeitem('<?php print $product['rec_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>_<?php print $item['color_id']; ?>_<?php print $item['size_id']; ?>');" /></td>
+    <td align="center"><input type="button"  value="删除"  class="am-btn am-btn-secondary" onclick="delchangeitem('<?php print $product['rec_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>_<?php print $item['color_id']; ?>_<?php print $item['size_id']; ?>');" /></td>
   </tr>
   <?php endforeach;?>
   <?php endforeach;?>
@@ -75,7 +75,7 @@
 			<td align="center">
 			<input type="text" name="sum_<?php print $product['rec_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>" id="sum_<?php print $product['rec_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>" value="0" size="3" />
 			</td>
-		    <td align="center"><input type="button" value="添加" class="button" onclick="addchangeitem('<?php print $product['rec_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>');" /></td>
+		    <td align="center"><input type="button"  value="添加"  class="am-btn am-btn-secondary" onclick="addchangeitem('<?php print $product['rec_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>');" /></td>
 		  </tr>
   		<?php endforeach;?>
   		<?php endif;?>
@@ -153,7 +153,7 @@
 		</td>
 	</tr>
 	<tr>
-	<td colspan="4" align="center"><input type="submit" name="post_add" value="提交申请" class="button"  /></td>
+	<td colspan="4" align="center"><input type="submit" name="post_add" value="提交申请" class="am-btn am-btn-primary"  /></td>
 	</tr>
 </table>
 

@@ -1,0 +1,101 @@
+/*body { font: 12px/1.5  Arial,Verdana,"Microsoft YaHei"; color: #909090; }*/
+
+*:focus {outline: none} 
+
+ol, ul { list-style:none;}
+img{ border:0 none;  max-width: 100%;}
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video { margin: 0; padding: 0; outline: 0; font-size: 100%; font: inherit; vertical-align: baseline;}
+a{ text-decoration:none;}
+
+
+body,html{height: 100%;}
+#wrap-login {height: 100%; overflow: hidden; position: relative;width: 100%; background-color:#ededef;}
+#wrap-login[id] {display: table; position: static;}
+.login-box {position: absolute; top: 50%;} /* for explorer only*/
+.login-box[class] {display: table-cell; vertical-align: middle; position: static;}
+.login-main {position: relative; top: -50%;width: 400px;margin: 0 auto;} /* for explorer only */
+.form-wrapper{ width:100%; -moz-box-sizing:border-box; box-sizing:border-box; overflow: hidden;}
+.login-main>.logo { text-align:center; padding-bottom:50px;}
+.Logincom{ width:300px; margin:10px auto 0;}
+.loginUser{  height:40px; line-height:40px; margin-top:10px; position:relative; border-radius:5px; -webkit-border-radius:5px; -moz-border-radius:5px; -o-border-radius:5px; -ms-border-radius:5px; margin-bottom:24px; background-color:#fff;}
+.loginUser .userLogo{  background:url(../images/user-ico.png) 10px bottom no-repeat; background-size:20px auto; }
+.loginplic{ display: inline-block; float: left; height:30px; width:30px;}
+.loginUser:last-Child{ margin-bottom:0;}
+.loginUser .loginInput{ float: left; height:40px; width:260px; line-height:40px; border:none; background: none; font-family: 微软雅黑;font-size: 14px; color:#909090; top:0; left:40px; position:absolute;}
+.passWord{ background:url(../images/passwrod-ico.png) 10px bottom no-repeat; background-size:20px auto;}
+.user-ico{  background-size:20px auto; height:20px; width:40px; display:inline-block; padding-top:15px;}
+.Loginipnut{ -moz-border-bottom-colors: none; -moz-border-left-colors: none; -moz-border-right-colors: none; -moz-border-top-colors: none; color: #909090; float: left;
+font-family: 微软雅黑; font-size: 14px; height: 30px; left: 0; padding-left:30px;  position: absolute; top: 0; width:302px;}
+input:focus{ outline:none } 
+.password-ico{ background:url(../images/passwrod-ico.png) 10px center no-repeat; background-size:20px auto;}
+.control-wrapper:nth-child(2){ margin-bottom:0;}
+.checkgroup{ margin-bottom: 1.6em; }
+.regular-checkbox { display: none;}
+.regular-checkbox + label { background-color: #f2f2f3; border: 1px solid #000; width:14px; height:14px; border-radius:3px; display: inline-block; position: relative; vertical-align:middle;}
+.regular-checkbox + label:active, .regular-checkbox:checked + label:active { box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);}
+.regular-checkbox:checked + label { background-color: #f2f2f3; border: 1px solid #000; color: #99a1a7;}
+.regular-checkbox:checked + label:after { content: '\2714'; font-size: 18px; position: absolute; top: -3px; left: 0px; color: #000;}
+.Logincom span{ padding-left:5px;}
+.forget-mm{ float:right; text-align:right; color:#0078b9; font-size:14px;}
+.forget-mm a{ color:#0078b9;}
+.btn-default { width: 100%; background: #17a1e5; color: #fff; font-size: 18px; text-align: center; vertical-align: middle; border: 1px solid transparent; border-radius: 4px; -moz-box-sizing: border-box; box-sizing: border-box; height:40px;}
+.disabled{ background-color:#909090 !important;cursor:default !important;}
+.btn {display: inline-block; margin-bottom: 0; font-weight: 400; border: none; outline: 0; -ms-touch-action: manipulation; touch-action: manipulation; cursor: pointer;}
+.fr{ float:right; font-size:14px; margin-top:5px;}
+.fr a{ padding-left:10px; color:#0078b9;}
+.horizontal{ border-bottom:solid 1px #c7c8cc; text-align:center; height:35px;}
+.horizontal span{ display:inline-block; margin-top:21px; padding:0 10px; background-color:#ededef; color:#333;}
+.other, .other1 { width:100%; text-align:center; margin-top:20px;}
+.other a{ background:url(../images/ico2.png) no-repeat; height:30px; width:40px;  display:inline-block;}
+.other .qq{ background-position:0 0;}
+.other .weixin{ background-position:-40px 0;}
+.other .alipay{ background-position:-79px 0;}
+.other .sina{ background-position:-119px 0;}
+
+/*register-now start*/
+.register-now{ margin:0 auto; width:450px;}
+
+.register-now li{ display:inline-block; margin:6px 0 20px 0;width: 100%;}
+
+.register-now li label{ color:#333; font-size:12px; text-align:right; width:50px; display:inline-block; margin-right:10px;}
+
+.register-now .register-Input{ border-radius:5px; -webkit-border-radius:5px; -moz-border-radius:5px; -o-border-radius:5px; -ms-border-radius:5px; height:40px; line-height:40px; background-color:#fff; width:300px; border:none; padding-left:10px;}
+
+.register-now .register-yzm{ width:30%}
+.register-now .yanzhengma{
+    vertical-align: middle;height: 40px;line-height: 40px;display: inline-block;
+    background:url(../images/icon-refresh.svg) no-repeat;background-position: right center;
+    background-size: 40px 40px;
+    padding: 0 45px 0 0;
+}
+
+
+.register-now .fi-refresh>img {
+    height: 25px;
+    vertical-align: middle;
+}
+
+.yanzhengma em{ color:#17a1e5; font-style:normal;}
+.register-now .yanzhengma img{margin-right:5px;}
+
+.register-now li:last-Child,.forgot-now li:last-Child { margin-bottom:0;}
+
+.yuedu{ text-align:center; padding-top:10px; color:#333;}
+.yuedu span{ padding-left:10px;}
+.yuedu a{ font-style:normal; color:#17a1e5;}
+.zhuchen{ width:300px; margin-left:60px; padding-top:20px;}
+
+/*forgot start margin:0 auto; text-align:center; */
+.find-step01, .find-step02, .find-step03 { background: url(../images/password-bj.png) no-repeat; height:45px; margin:40px 0 30px; width:402px;}
+.register-now .fsyzm{background-color:#17a1e5; padding: 0 6px;color:#fff; border:none; margin-left:10px;height:40px; line-height:40px;vertical-align:middle;display:none}
+
+.find-step02{ background-position:0 -57px;}
+.find-step03{ background-position:0 -121px;}
+.success {
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+}
+#step3{display:none}
+form[name="loginForm"] .error{ width: 300px;margin: 0 auto;font-size:12px;color:#f75555;min-height:14px; }
+form[name="registerForm"] .error, form[name="forgotForm"] .error{ margin-left: 60px;font-size:12px;color:#f75555;min-height:14px; }

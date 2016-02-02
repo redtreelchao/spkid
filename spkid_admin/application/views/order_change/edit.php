@@ -154,22 +154,22 @@
 			      <div align="center">
 			      	<input type="hidden" name="order_id" value="<?php print $change['order_id']; ?>" />
 					<input type="hidden" name="change_id" value="<?php print $change['change_id']; ?>" />
-				      	<input name="save" type="submit" value="保存"  <?php print $operable_list['save']?'':'style="color:grey;" disabled'; ?> onclick="return check_save();" />
-					    <input name="lock" type="submit" value="锁定"  <?php print $operable_list['lock']?'':'style="color:grey;" disabled'; ?> />
-					    <input name="unlock" type="submit" value="解锁"  <?php print $operable_list['unlock']?'':'style="color:grey;" disabled'; ?> />
-					    <input name="service_confirm" type="submit" value="客审"  <?php print $operable_list['service_confirm']?'':'style="color:grey;" disabled'; ?> />
-				        <input name="unservice_confirm" type="submit" value="反客审"  <?php print $operable_list['unservice_confirm']?'':'style="color:grey;" disabled'; ?> />
-				        <input name="shipped" type="submit" value="入库"   <?php print $operable_list['shipped']?'':'style="color:grey;" disabled'; ?>/>
-				        <input name="shipping" type="submit" value="发货"  <?php print $operable_list['shipping']?'':'style="color:grey;" disabled'; ?> <?php if(empty($change['invoice_no'])): ?>onclick="return check_shipping();"<?php endif;?> />
-				        <input name="invalid" type="submit" value="作废"  <?php print $operable_list['invalid']?'':'style="color:grey;" disabled'; ?> />
-				        <input name="is_ok" type="submit" value="完结"  <?php print $operable_list['is_ok']?'':'style="color:grey;" disabled'; ?> />
+				      	<input name="save" type="submit" class="am-btn am-btn-secondary" value="保存"  <?php print $operable_list['save']?'':'style="color:grey;" disabled'; ?> onclick="return check_save();" />
+					    <input name="lock" type="submit" class="am-btn am-btn-secondary" value="锁定"  <?php print $operable_list['lock']?'':'style="color:grey;" disabled'; ?> />
+					    <input name="unlock" type="submit" class="am-btn am-btn-secondary" value="解锁"  <?php print $operable_list['unlock']?'':'style="color:grey;" disabled'; ?> />
+					    <input name="service_confirm" type="submit" class="am-btn am-btn-secondary" value="客审"  <?php print $operable_list['service_confirm']?'':'style="color:grey;" disabled'; ?> />
+				        <input name="unservice_confirm" type="submit" class="am-btn am-btn-secondary" value="反客审"  <?php print $operable_list['unservice_confirm']?'':'style="color:grey;" disabled'; ?> />
+				        <input name="shipped" type="submit" class="am-btn am-btn-secondary" value="入库"   <?php print $operable_list['shipped']?'':'style="color:grey;" disabled'; ?>/>
+				        <input name="shipping" type="submit" class="am-btn am-btn-secondary" value="发货"  <?php print $operable_list['shipping']?'':'style="color:grey;" disabled'; ?> <?php if(empty($change['invoice_no'])): ?>onclick="return check_shipping();"<?php endif;?> />
+				        <input name="invalid" type="submit" class="am-btn am-btn-secondary" value="作废"  <?php print $operable_list['invalid']?'':'style="color:grey;" disabled'; ?> />
+				        <input name="is_ok" type="submit" class="am-btn am-btn-secondary" value="完结"  <?php print $operable_list['is_ok']?'':'style="color:grey;" disabled'; ?> />
 				        <?php if($change['odd']):?>
-                                        <input name="odd_cancel" type="submit" value="取消问题单标记"  <?php print $operable_list['odd_cancel']?'':'style="color:grey;" disabled'; ?> />
+                                        <input name="odd_cancel" type="submit" class="am-btn am-btn-secondary" value="取消问题单标记"  <?php print $operable_list['odd_cancel']?'':'style="color:grey;" disabled'; ?> />
                                         <?php else:?>
-                                        <input name="odd" type="submit" value="标记为问题单"  <?php print $operable_list['odd']?'':'style="color:grey;" disabled'; ?> />
+                                        <input name="odd" type="submit" class="am-btn am-btn-secondary" value="标记为问题单"  <?php print $operable_list['odd']?'':'style="color:grey;" disabled'; ?> />
                                         <?php endif;?>
-				    <!--|<input type="button" onclick="location.href='/order_change/shipping/<?php print $change['change_id']; ?>'" class="button" value="发货记录/手工发货" />
-				    <input type="button" onclick="window.open('/order_change/edit/print/1/<?php print $change['change_id']; ?>')" class="button" value="打印退货单"  />-->
+				    <!--|<input type="button" onclick="location.href='/order_change/shipping/<?php print $change['change_id']; ?>'" class="am-btn am-btn-primary" value="发货记录/手工发货" />
+				    <input type="button" onclick="window.open('/order_change/edit/print/1/<?php print $change['change_id']; ?>')" class="am-btn am-btn-primary" value="打印退货单"  />-->
 			    </div>
 			    </td>
 			  </tr>
@@ -200,11 +200,11 @@
 			     <?php endif; ?>
 			     </select>&nbsp;
 			     <?php if($operable_list['depotshipsave']): ?>
-			     <input name="depotshipsave" type="submit" value="保存配送方式" <?php print $operable_list['depotshipsave']?'':'style="color:grey;" disabled'; ?> onclick="return check_depotshipsave();" />
+			     <input name="depotshipsave" type="submit" class="am-btn am-btn-secondary" value="保存配送方式" <?php print $operable_list['depotshipsave']?'':'style="color:grey;" disabled'; ?> onclick="return check_depotshipsave();" />
 			     <?php endif; ?>
 			    </td>
 			    <td><div align="right"><strong>发货单号：</strong></div></td>
-			    <td><?php if ($operable_list['shipping']): ?><input type="text" id="invoice_no" name="invoice_no" value="<?php print $change['invoice_no']; ?>" /><input type="submit" value="保存" onclick="return check_invoice();"><?php else: ?><?php print $change['invoice_no']; ?><?php endif; ?></td>
+			    <td><?php if ($operable_list['shipping']): ?><input type="text" id="invoice_no" name="invoice_no" value="<?php print $change['invoice_no']; ?>" /><input type="submit" class="am-btn am-btn-secondary" value="保存" onclick="return check_invoice();"><?php else: ?><?php print $change['invoice_no']; ?><?php endif; ?></td>
 			  </tr>
 			  <tr>
 			    <td><div align="right"><strong>购货人：</strong></div></td>
@@ -298,7 +298,7 @@
 		    <td align="center">
 		    <?php print $item['color_name']; ?>--<?php print $item['size_name']; ?>
 			</td>
-		    <td align="center"><input type="button" value="删除" class="button" onclick="delchangeitem('<?php print $product['op_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>_<?php print $item['color_id']; ?>_<?php print $item['size_id']; ?>');" /></td>
+		    <td align="center"><input type="button"  value="删除"  class="am-btn am-btn-secondary" onclick="delchangeitem('<?php print $product['op_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>_<?php print $item['color_id']; ?>_<?php print $item['size_id']; ?>');" /></td>
 		  </tr>
 		  	<?php endif; ?>
 		  	<?php endforeach; ?>
@@ -344,7 +344,7 @@
 					<td align="center">
 					<input type="text" name="sum_<?php print $product['op_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>" id="sum_<?php print $product['op_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>" value="0" size="3" />
 					</td>
-				    <td align="center"><input type="button" value="添加" class="button" onclick="addchangeitem('<?php print $product['op_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>');" /></td>
+				    <td align="center"><input type="button"  value="添加"  class="am-btn am-btn-secondary" onclick="addchangeitem('<?php print $product['op_id']; ?>_<?php print $product['product_id']; ?>_<?php print $product['color_id']; ?>_<?php print $product['size_id']; ?>_<?php print $product['track_id']; ?>');" /></td>
 				  </tr>
 		  		<?php endif; ?>
 				<?php endforeach; ?>

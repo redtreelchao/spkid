@@ -37,9 +37,9 @@ class Purchasebox_scanning_model extends CI_Model
 		if (empty($product_info)) {
 			//添加入库单子表商品信息
 			$sql = "INSERT INTO ".$this->db->dbprefix('depot_in_sub')." (depot_in_id,product_id,product_name,color_id,size_id,depot_id,location_id,shop_price," .
-					"product_number,product_amount,create_admin,create_date,batch_id) " .
+					"product_number,product_amount,create_admin,create_date,batch_id, product_finished_number, expire_date) " .
 					"SELECT '".$depot_in_id."',pbs.product_id,ps.product_name,pbs.color_id,pbs.size_id,'".$depot_id."','".$location_id."',ps.shop_price,".
-					"'".$product_number."',ps.shop_price*".$product_number.",'".$admin_id."','".date('Y-m-d H:i:s')."',pm.batch_id " .
+					"'".$product_number."',ps.shop_price*".$product_number.",'".$admin_id."','".date('Y-m-d H:i:s')."',pm.batch_id, '".$product_number."', ps.expire_date " .
 					"FROM ".$this->db->dbprefix('purchase_box_sub')." pbs ".
                                         "LEFT JOIN ".$this->db->dbprefix('purchase_box_main')." pbm ON pbs.box_id = pbm.box_id ".
                                         "LEFT JOIN ".$this->db->dbprefix('purchase_main')." pm ON pbm.`purchase_code` = pm.`purchase_code` ".
@@ -61,8 +61,9 @@ class Purchasebox_scanning_model extends CI_Model
 				return false;
 			}
 			$total_num = intval($product_info->product_number) + intval($product_number);
+                        $total_finish_num = intval($product_info->product_finished_number) + intval($product_number);
 			$sql = "UPDATE ".$this->db->dbprefix('depot_in_sub')." " .
-					"SET product_number = '".$total_num."',product_amount = shop_price * ".$total_num.",location_id = '".$location_id."' " .
+					"SET product_number = '".$total_num."',product_amount = shop_price * ".$total_num.",location_id = '".$location_id."', product_finished_number = '".$total_finish_num."' " .
 					"WHERE depot_in_id = '".$depot_in_id."' AND depot_in_sub_id = '".$sub_id."'";
 			$query = $this->db->query($sql);
 		}
@@ -75,9 +76,9 @@ class Purchasebox_scanning_model extends CI_Model
 			return false;
 		}
 		$sql = "INSERT INTO ".$this->db->dbprefix('transaction_info')."(trans_type,trans_status,trans_sn,product_id,color_id,size_id,product_number," .
-				"depot_id,location_id,create_admin,create_date,update_admin,update_date,cancel_admin,cancel_date,trans_direction,sub_id,batch_id,shop_price,consign_price,cost_price,consign_rate,product_cess) ".
+				"depot_id,location_id,create_admin,create_date,update_admin,update_date,cancel_admin,cancel_date,trans_direction,sub_id,batch_id,shop_price,consign_price,cost_price,consign_rate,product_cess,expire_date) ".
 				" SELECT ".TRANS_TYPE_DIRECT_IN.",".TRANS_STAT_AWAIT_IN.",b.depot_in_code,a.product_id,a.color_id,size_id,'".$product_num."',".
-				"a.depot_id,a.location_id,'".$admin_id."','".date('Y-m-d H:i:s')."',0,'0000-00-00',0,'0000-00-00',1,a.depot_in_sub_id,a.batch_id,a.shop_price,pc.consign_price,pc.cost_price,pc.consign_rate,pc.product_cess" .
+				"a.depot_id,a.location_id,'".$admin_id."','".date('Y-m-d H:i:s')."',0,'0000-00-00',0,'0000-00-00',1,a.depot_in_sub_id,a.batch_id,a.shop_price,pc.consign_price,pc.cost_price,pc.consign_rate,pc.product_cess,a.expire_date" .
 				" FROM ".$this->db->dbprefix('depot_in_sub')." a" .
 				" LEFT JOIN ".$this->db->dbprefix('product_cost')." pc ON a.product_id = pc.product_id AND a.batch_id = pc.batch_id" .
 				" LEFT JOIN ".$this->db->dbprefix('depot_in_main')." b ON b.depot_in_id = a.depot_in_id WHERE a.depot_in_sub_id = '".$sub_id."' ";

@@ -19,16 +19,24 @@
 				<td colspan=2 class="topTd"></td>
 			</tr>
 			<tr>
+                <td class="item_title">
+                    商品所属大类
+                </td>
+                <td class="item_input">
+                    <?php print form_dropdown('genre_id', get_pair($all_genre,'id','name'),array(),'data-am-selected="{searchBox: 1,maxHeight: 300}"');?>
+                </td>
+            </tr>
+			<tr>
+				<td class="item_title">分类代号:</td>
+				<td class="item_input">
+					<?php print form_input(array('name'=> 'cate_code','class'=> 'textbox require'));?>
+					&nbsp;&nbsp;&nbsp;注: 分类代码填写规范 TY<span style="color:red;">xxx</span>,其中 "xxx" 是数字。例: TY001
+				</td>
+			</tr>
+			<tr>
 				<td class="item_title">父分类:</td>
 				<td class="item_input">
-					<select name="parent_id">
-						<option value="0">顶级分类</option>
-						<?php 
-						foreach($all_category as $category){
-							echo "<option value='",$category->category_id,"'>",$category->level_space,$category->category_name,"</option>"; 	
-						}
-						?>
-					</select>
+                    <?php print form_dropdown('parent_id', array('0'=>'顶级分类')+get_pair($all_category,'category_id','level_space,cate_code,category_name'),array(),'data-am-selected="{searchBox: 1,maxHeight: 300}"');?>
 				</td>
 			</tr>
 			<tr>
@@ -51,7 +59,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<tr>

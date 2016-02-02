@@ -2,10 +2,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/utils.js"></script>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<script type="text/javascript">
 		//<![CDATA[
 
@@ -83,7 +79,7 @@
                                 <option value="3">已取消</option>
                                 <option value="4">原单拒收</option>
                            </select>
-                <input type="submit" class="button" value="搜索" />
+                <input type="submit" class="am-btn am-btn-primary" value="搜索" />
                 </form>
         </div>
         <div class="blank5"></div>

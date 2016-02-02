@@ -692,6 +692,7 @@ class Inventory_Model extends CI_Model {
             $data_out['product_name'] = $product_sku->product_name;
             $data_out['shop_price'] = $product_sku->shop_price;
             $data_out['product_number'] = -1 * $product_sku->product_number;
+            $data_out['product_finished_number'] = -1 * $product_sku->product_number;
             $data_out['product_amount'] = -1 * $product_sku->product_number * $product_sku->shop_price;
             $data_out['create_admin'] = $admin_id;
             $data_out['create_date'] = $date;
@@ -1000,7 +1001,7 @@ class Inventory_Model extends CI_Model {
      */
     private function doGetInventoryLocationIdList($inventory) {
         $all_location_id_list = array();
-        
+        $tmp_obj = new stdClass();
         if ($inventory->inventory_type == 0) { // 指定货架范围盘点
             // 查询指定仓库，指定货架范围的储位列表
             $location_select_sql = "SELECT location_id "
@@ -1018,7 +1019,8 @@ class Inventory_Model extends CI_Model {
                 return;
             }
         } else if ($inventory->inventory_type == 1) { // 指定批次盘点
-            $all_location_id_list[]->location_id = $inventory->location_id;
+            $tmp_obj->location_id = $inventory->location_id;
+            $all_location_id_list[] = $tmp_obj;
         }
         
         // 查询待入/订单已拣货待出/或者出库待出的储位，作为排除储位

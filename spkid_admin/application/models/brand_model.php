@@ -75,12 +75,33 @@ class Brand_model extends CI_Model
 		$this->db->delete('product_brand', array('brand_id' => $brand_id));
 	}
 
-	public function all_brand($filter = array())
+	public function all_brand($filter = array(),$id = '')
 	{
 		$this->db->order_by('sort_order','desc');
+
+		if($id != ''){
+        	$this->db->where('brand_id',$id); 
+    	}
 		$query = $this->db->get_where('product_brand',$filter);
 		return $query->result();
 	}
+
+	// public function one_brand($id='')
+	// {
+	// 	$this->db->order_by('sort_order','desc');
+	// 	$query = $this->db->get_where('product_brand',$filter);
+	// 	return $query->result();
+
+	// 	$sql = "select p.* from ty_product_brand as p where 1 ";
+
+ //        if($id != ''){
+ //        	$sql .=" and id=".$id; 
+ //    	}
+    	
+ //        $sql .=" and name != '' order by id desc";
+ //        $query = $this->db->query($sql);
+ //        return $query->result();		
+	// }
         
         /**
          * 供应商的品牌列表

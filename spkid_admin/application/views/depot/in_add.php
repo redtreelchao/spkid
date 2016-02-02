@@ -1,10 +1,6 @@
 <?php include(APPPATH.'views/common/header.php');?>
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 <script type="text/javascript">
 	//<![CDATA[
 	$(function(){
@@ -56,12 +52,13 @@
 			{
 				type = 4;
 			}
-			var loOBJ = new Object();
-			var lonewWin = window.showModalDialog("/depotio/show_sel_win/type/"+type,loOBJ,"dialogHeight:600px;dialogWidth:800px;center:yes;help:no;status:no;resizable:no");
-			if(loOBJ.pass){
+			//var loOBJ = new Object();
+			//var lonewWin = window.showModalDialog("/depotio/show_sel_win/type/"+type,loOBJ,"dialogHeight:600px;dialogWidth:800px;center:yes;help:no;status:no;resizable:no");
+			window.open("/depotio/show_sel_win/type/"+type,'newwindow',"height=800,width=800,toolbar=no,titlebar=no,location=no,menubar=no,resizable=no,z-look=yes");
+			/*if(loOBJ.pass){
 				$('input[type=text][name=order_sn]').val(loOBJ.order_sn);
 				document.getElementById('order_id').value = loOBJ.order_id;
-			}
+              }*/
 		}
 
 	}
@@ -103,7 +100,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'添加'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'添加'));?>
 				</td>
 			</tr>
 			<tr>

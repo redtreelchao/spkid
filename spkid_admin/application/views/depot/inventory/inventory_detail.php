@@ -71,8 +71,8 @@
                 <span class="r">
                     <input type="hidden" name="inventory_id" value="<?=$row->inventory_id;?>" />
                     <!--<input type="file" name="inventory_file" />-->
-                    <!--<input type="submit" class="button" value="导入盘点清单" />-->
-                    <input type="button" class="button" onclick="javascript:generate_diff(<?=$row->inventory_id;?>);" value="生成差异商品" />
+                    <!--<input type="submit" class="am-btn am-btn-primary" value="导入盘点清单" />-->
+                    <input type="button" class="am-btn am-btn-primary" onclick="javascript:generate_diff(<?=$row->inventory_id;?>);" value="生成差异商品" />
                     <input type="button" class="button10" onclick="javascript:generate_invoice(<?=$row->inventory_id;?>);" value="生成差异出入库单据" />
                 </span>
                 <?php endif; ?>
@@ -110,7 +110,7 @@
                         <span>储位编码：<?=$key; ?></span>
                         <?php if($row->status == 1): ?>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span><input class="button" value="复盘此储位" onclick="javascript:reset(<?=$list[0]->location_id;?>);" /></span>
+                        <span><input class="am-btn am-btn-primary" value="复盘此储位" onclick="javascript:reset(<?=$list[0]->location_id;?>);" /></span>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -120,8 +120,8 @@
                     <th width="150px">商品条码</th>
                     <th width="60px">颜色</th>
                     <th width="70px">颜色编码</th>
-                    <th width="60px">尺寸</th>
-                    <th width="70px">尺寸编码</th>
+                    <th width="60px">规格</th>
+                    <th width="70px">规格编码</th>
                     <th width="60px">库存数量</th>
                     <th width="60px">已盘数量</th>
                     <th width="90px">盘点人</th>

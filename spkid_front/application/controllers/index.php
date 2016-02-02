@@ -12,201 +12,194 @@ class Index extends CI_Controller
 		$this->time = date('Y-m-d H:i:s');
         $this->load->vars('page_title','');//这里设置空title即可
 	}
+	/**
+	 * 公开访问引导页面。
+	 */
+	public function start_page(){
+		$startPage=@file_get_contents(static_style_url('index/mobile_first_page.html'));
+	   if( strlen($startPage) > 200 ){
+		   $time=substr($startPage,0,10);
+		   //echo 
+		   if (date('Y-m-d')<=$time){
+			   echo substr($startPage,10);
+			   exit();
+		   }else{
+				redirect('/index');
+			}
+	   }else{
+		   redirect('/index');
+	   }
+	}
+
 
     /**
      * @param:导航id
      */
-    public function index($nav_id=0)
+    public function index($tab='')
     {
+       // 引导页
+       if (!isset($_COOKIE['fp-started'])){
+	       $startPage=@file_get_contents(static_style_url('index/mobile_first_page.html'));
+	       if( strlen($startPage) > 200 ){
+		       $time=substr($startPage,0,10);
+		       //echo 
+		       if (date('Y-m-d')<=$time){
+			       echo substr($startPage,10);
+			       exit();
+		       }
+	       }
+       }
+       $avail_tabs = array( 'article','course', 'index','user' );
        $this->output->cache(CACHE_HTML_INDEX);
-         
-        $this->load->library('memcache');
+       if( empty($tab) || !in_array($tab,$avail_tabs)) $tab = 'index';
+       
+       if( $tab == 'course' ) get_page_view('course','-2');
+       else if( $tab == 'article' ) get_page_view('article','-3');
+       else get_page_view('product','-1');
+
+        $data = array();
         $this->load->library('lib_ad');
-        $this->load->model('product_model');
         $this->config->load('global', true);
         $data = array();
         $data['hot_brand_arr'] = array();        
-        $data['cate_toptwentyfive_goods_arr'] = array();        
-        $data['provider_goods'] = array();        
-        
-        //导航
-        $nav_list = get_nav();
-        
-        //导航下方广告位
-        $nav_footer_ad = $this->_get_ad('index_nav_footer_ad',INDEX_NAV_FOOTER_TAG);
-        if(!empty($nav_footer_ad))$data['nav_footer_ad']=$nav_footer_ad[0];        
-        
+        $goods_list = $this->memcache->get('index_goods_list');
+
+        if (is_array($goods_list))
+            $data['index_good'] = $goods_list[0];
+        else
+            $data['index_good'] = false; 
         // 轮播图
         $front_focus_image = $this->lib_ad->get_focus_image(INDEX_FOCUS_IMAGE_TAG);
-        foreach ($front_focus_image as $k => $row) {
+        /*foreach ($front_focus_image as $k => $row) {
             $front_focus_image[$k]['img_src'] = img_url($row['img_src']);
-        }
-        
-        //今日促销
-        $onsale_last_goods = $this->memcache->get('onsale_last_goods');
-        if ($onsale_last_goods != FALSE) {
-            $onsale_last_goods_arr = unserialize($onsale_last_goods);
-            $today_promotions = array();
-            foreach ($onsale_last_goods_arr as $k => $val) {
-                $today_promotions[$k] = array('index' => 0, 
-                    'gd_nm' => $val['product_name'], 
-                    'gd_no' => $val['product_id'], 
-                    'div_price_strong' => $val['shop_price']."元", 
-                    'img_src' => img_url($val['img_url'].".140x140.jpg"), 
-                    'href' => "/product-".$val['product_id'].".html");                
-            }
-            $data['today_promotions'] = json_encode($today_promotions);
-        }
-        
-        //麦麦团 最近热卖
-        $all_topfive_goods = $this->memcache->get('all_topfive_goods');
-        if ($all_topfive_goods != FALSE) {
-            $all_topfive_goods_arr = unserialize($all_topfive_goods);
-            $hot_sales = array();
-            foreach ($all_topfive_goods_arr as $k => $val) {
-                $hot_sales[$k] = array('index' => 0, 
-                    'gd_nm' => $val['product_name'], 
-                    'gd_no' => $val['product_id'], 
-                    'div_price_strong' => $val['shop_price']."元", 
-                    'img_src' => !empty($val['img_url']) ? img_url($val['img_url'].".140x140.jpg") : '', 
-                    'href' => "/product-".$val['product_id'].".html");                
-            }
-            $data['hot_sales'] = json_encode($hot_sales);
-        }       
-        
-        //商品分类
-        
-        //商品分类右下角广告位
-        $category_top_ad = $this->_get_ad('index_category_top_ad',INDEX_CATEGORY_TOP_TAG);
-        if(!empty($category_top_ad))$data['category_top_ad']=$category_top_ad[0];
-        
-        $category_footer_ad = $this->_get_ad('index_category_footer_ad',INDEX_CATEGORY_FOOTER_TAG);
-        if(!empty($category_footer_ad))$data['category_footer_ad']=$category_footer_ad[0];
+        }*/
         
         
-        //热卖品牌
-        $hot_brand = $this->memcache->get('all_topeight_brand');
-        if ($hot_brand != FALSE) {
-            $data['hot_brand_arr'] = array_slice(unserialize($hot_brand), 0, 4);
-        }
-        //通知
-        $notice=$this->cache->get('index-notice');
-        if(empty($notice))
-        {
-            $this->load->model('article_model');
-            $notice = $this->article_model->all_article(array('cat_id'=>INDEX_ARTICEL_CAT_ID,'is_use'=>1,'limit'=>3));
-            $this->cache->save('index_notice',$notice,CACHE_TIME_ARTICLE);
-        }
-		
-		$hot_goods = array();//畅销精品商品
-		$recommend_goods = array();//热卖推荐商品
-        foreach ($nav_list as $cate) {        
-			//畅销精品
-			$cate_toptwentyfive_goods = $this->memcache->get('cate_toptwentyfive_goods_'.$cate['category_id']);
-			if ($cate_toptwentyfive_goods != FALSE) {
-				$cate_toptwentyfive_goods_arr = unserialize($cate_toptwentyfive_goods);
-				//print_r($cate_toptwentyfive_goods_arr);
-                                $i = 0;
-				$hot_goods_tmp = array();
-				$recommend_goods_tmp = array();
-				foreach ($cate_toptwentyfive_goods_arr as $row) { 
-                                    $percent = 0;
-                        
-			            if ($row['market_price'] > $row['shop_price']) $percent = intval(($row['market_price'] - $row['shop_price'])/$row['market_price']*100);
-                                    //echo  "(".$row['market_price']." - ".$row['shop_price'].")/".$row['market_price']." =  ". $percent."<br>";
+        //品牌广告位(多个广告)
+        $ad = $this->_get_ad('m_index_brand_row','m_index_brand_row');
+        if(!empty($ad))
+            $data['ad']=$ad;
+        $ad = $this->_get_ad('miaosha','miaosha');
+        if(!empty($ad))
+            $data['ad1']=$ad;
 
-				    if ($i < 20) {
-					$rows = array('index' => $i, 
-						  'gd_nm' => $row['product_name'], 
-						  'gd_no' => $row['product_id'], 
-						  'price' => $row['shop_price']."元", 
-						  'img_src' => img_url($row['img_url'].".175x175.jpg"), 
-						  'group_code' => 0, 
-						  'href' => '/product-'.$row['product_id'].'.html', 
-						  'percent' => $percent."% OFF");
+        $this->load->model('wordpress_model');
+        $articles = array();
+        $articles['cat_0'] = $this->wordpress_model->fetch_articles(0, 1);
+       // $articles['cat_241'] = $this->wordpress_model->fetch_articles(241, 1);//产品，暂时去掉
+        $articles['cat_3'] = $this->wordpress_model->fetch_articles(3, 1);//技术
+        $articles['cat_1'] = $this->wordpress_model->fetch_articles(1, 1);// 行业
+        $data['articles'] = $articles;
+        //首页产品列表
+    //print_r($ad);
 
-
-				        $hot_goods_tmp[] = $rows;
-			            } else {
-					$rowts = array('index' => $i-20, 
-						      'gd_nm' => $row['product_name'], 
-						      'gd_no' => $row['product_id'],
-                                                      'percent' => $percent."% OFF",
-						      'currency_prise' => $row['shop_price']."元",
-                                                      'goodsSid' => $cate['category_id'], 
-						      'image' => img_url($row['img_url'].".175x175.jpg"), 
-                                                      'img_contents_no' => '',
-                                                      'gid' => '');
-
-					$recommend_goods_tmp[] = $rowts;
-				    }
-                                    $i++;
-				}
-				$hot_goods[] = $hot_goods_tmp;
-				$recommend_goods[] = $recommend_goods_tmp;
-			}
-		}
-		if (!empty($hot_goods)) $data['hot_goods'] = json_encode($hot_goods);
-		if (!empty($recommend_goods)) $data['recommend_goods'] = json_encode($recommend_goods);
-		
-        //热卖推荐类别
-        $nav_alias = $this->config->item('nav_alias_list');
-        foreach ($nav_list as $val){
-            $nav_ids[] = $val['category_id'];
-        }
-        if (!empty($nav_ids)) @array_multisort($nav_ids, $nav_alias);
-        //一级分类店铺
-        $cate_topseven_provider = $this->memcache->get('cate_topseven_provider');//店铺
-	$cate_topseven_provider_arr = Array();
-        $cate_topfive_provider_goods = $this->memcache->get('cate_topfive_provider_goods');//店铺销量前五的商品
-        $cate_topfive_provider_goods_arr = array();
-        $provider_goods = array();
-        $i = 1;
-        if ($cate_topseven_provider != FALSE) {
-            $cate_topseven_provider_arr = unserialize($cate_topseven_provider);
-            if ($cate_topfive_provider_goods != FALSE) $cate_topfive_provider_goods_arr = unserialize($cate_topfive_provider_goods);
-            $provider_list = array();
-            foreach ($cate_topseven_provider_arr as $cat_id => $provider) {
-                $provider_html = $this->_get_ad('index_nav_cat_'.$cat_id, 'index_nav_cat_'.$cat_id);
-                if (!empty($provider_html)) $cate_topseven_provider_arr[$cat_id]['provider_html'] = $provider_html[0];
-                if (!isset($cate_topfive_provider_goods_arr[$cat_id])) {
-                    continue;
-                }
-                foreach ($cate_topfive_provider_goods_arr[$cat_id] as $pid => $goods) {
-                    $goods_result = array();
-                    foreach ($goods as $row) {
-                        $goods_result[] = array('gd_nm' => $row['product_name'], 
-                                                'gd_no' => $row['product_id'], 
-                                                'price' => $row['shop_price'], 
-                                                'img_src' => img_url($row['img_url'].".175x175.jpg"), 
-                                                'href' => 'product-'.$row['product_id'].'.html',
-                                                'seller_coupon' => 'N');
-                    }
-                    $provider_goods[$i][] = $goods_result;                   
-                }
-                $i++;
-            }
-
-            $data['provider_goods'] = $provider_goods;
-        }
-        $data['cate_topseven_provider_arr'] = $cate_topseven_provider_arr;
+        /*$ad1 = $this->_get_ad('m_index_brand_row1','m_index_brand_row1');
+        if(!empty($ad1))
+            $data['ad1']=$ad1[0];*/
+        // 课程广告位
+        $course_ad = $this->_get_ad(INDEX_COURSE_TOP_TAG,INDEX_COURSE_TOP_TAG, 1);
+        $data['course_ad'] = empty($course_ad) ? array() : $course_ad;
+        //$course_list = $this->memcache->get('course_list');
+        $course_list = $this->_get_product_all(PRODUCT_COURSE_TYPE);
+        $data['courses'] = empty($course_list) ? array() : $course_list;
         
-        //超值促销广告位
-        $promotions_ad = $this->_get_ad('index_footer_promotions_ad',INDEX_FOOTER_PROMOTIONS_TAG);
-        if(!empty($promotions_ad))$data['promotions_ad']=$promotions_ad[0];
+        //商品收藏 数组
+        $data['collect_data'] = get_collect_data();
+
+        // 获取动态seo关键字
+        $this->load->library('lib_seo');
+        $seo = $this->lib_seo->get_seo_by_pagetag('index');
+        $data = array_merge($data, $seo);      
 
         $this->load->vars(array(
-            'notice'=>$notice, 
-            'nav_alias' => json_encode($nav_alias), 
+            'active_tab'=> $tab,
             'index_focus_image' => $front_focus_image, 
-            'goods_type' => array()
         ));
  
-        $this->load->view('index/m18',$data);
+        $this->load->view('mobile/index/index',$data);
         
     }
 
-    
+    function personal_center(){
+        $data = array(
+            'name' => 'ddd',
+            'title' => 'xxxx'
+        );
+        
+        $this->load->view('index/personal_center',$data);
+    }
+    public function get_article(){
+        $page = $this->input->get('page');
+        $cat = $this->input->get('cat');
+        $index = 'article_cat_'.$cat.'_'.$page;
+        $articles = $this->cache->get($index);
+        if ($articles == false){
+            $this->load->model('wordpress_model');
+            $articles = $this->wordpress_model->fetch_articles($cat, $page);
+        //$this->memcache->delete('articles'); // delete key first
+            $this->cache->save($index, $articles, 7200);
+        }
+        if( empty($articles) ) {
+            $result['success'] = 0;
+        }else {
+            $result['data'] = $this->load->view('mobile/index/article',array('articles'=>$articles), true);
+        }
+        echo json_encode($result);
+    }
+
+    function ajax_goods_list($page_name){
+        $page = $this->input->get('page');
+        // init 
+        $result = array('success'=>1,'data'=>array(),'msg'=>'','img_domain'=>get_img_host());
+
+        $m_page_max = M_INDEX_PAGE_MAX;
+
+        if(defined("M_".strtoupper($page_name)."_PAGE_MAX")) $m_page_max = constant("M_".strtoupper($page_name)."_PAGE_MAX");
+        
+        // exception
+        if ($page > $m_page_max){
+            $result['success'] = 0;
+            $result['message'] = 'all empty';
+            die(json_encode($result));
+        }
+
+
+        // result's data
+        if ($page_name == 'course'){
+
+            $list = $this->_get_product_all(PRODUCT_COURSE_TYPE, $page);
+            if( empty($list) ) {
+                $result['success'] = 0;
+            }else {
+                $result['data'] = $this->load->view('mobile/index/course',array('courses'=>$list), true);
+            }
+
+        }else{
+            $this->load->library('memcache');
+            $goods_list = $this->memcache->get('index_goods_list');
+            if ($goods_list && array_key_exists($page-1, $goods_list)){
+                $result['data'] = $goods_list[$page];
+            }else{
+                $result['success'] = 0;
+            }
+        }
+
+        die(json_encode($result));
+    }
+
+    //按大类获取所有的商品
+    function _get_product_all($genre_id, $page=1){
+        $product = $this->cache->get('product_all_'.$genre_id.'_'.$page);
+        if ($product == false){
+            $this->load->model('product_model');
+            $product = $this->product_model->get_product_onsale($genre_id, $page);
+            if(!empty($product))
+            {
+                $this->cache->save('product_all_'.$genre_id.'_'.$page, $product,CACHE_TIME_INDEX_PRODUCT);
+            }
+        }
+        return $product;
+    }
     /**
      * 获取预售rush
      */
@@ -367,9 +360,10 @@ class Index extends CI_Controller
     /**
      * 根据key或position_id获取广告
      */
-    function _get_ad($cache_key,$position_tag)
+    function _get_ad($cache_key,$position_tag, $size=0)
     {
         $this->load->library('lib_ad');
-        return $this->lib_ad->get_ad_by_position_tag($cache_key,$position_tag);
-    }
+        return $this->lib_ad->get_ad_by_position_tag($cache_key,$position_tag, $size);
+    }  
+      
 }

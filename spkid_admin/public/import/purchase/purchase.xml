@@ -33,16 +33,8 @@
   </Style>
  </Styles>
  <Worksheet ss:Name="Sheet1">
-  <Table ss:ExpandedColumnCount="8" ss:ExpandedRowCount="5" x:FullColumns="1"
+  <Table ss:ExpandedColumnCount="8" ss:ExpandedRowCount="4" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="13.5">
-   <Column ss:AutoFitWidth="0" ss:Width="120"/>
-   <Column ss:AutoFitWidth="0" ss:Width="162"/>
-   <Column ss:AutoFitWidth="0" ss:Width="159.75"/>
-   <Column ss:AutoFitWidth="0" ss:Width="148.5"/>
-   <Column ss:AutoFitWidth="0" ss:Width="109.5"/>
-   <Column ss:AutoFitWidth="0" ss:Width="100.5"/>
-   <Column ss:AutoFitWidth="0" ss:Width="79.5"/>
-   <Column ss:AutoFitWidth="0" ss:Width="91.5"/>
    <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">批次号</Data></Cell>
     <Cell><Data ss:Type="String">供应商编码</Data></Cell>
@@ -52,12 +44,12 @@
     <Cell><Data ss:Type="String">备注</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell><Data ss:Type="String">BT20150624000</Data></Cell>
-    <Cell><Data ss:Type="String">MM-F00001</Data></Cell>
-    <Cell><Data ss:Type="String">1</Data></Cell>
-    <Cell><Data ss:Type="String">2015-06-25</Data></Cell>
-    <Cell><Data ss:Type="String">2015-07-02</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">BT20150820000</Data></Cell>
+    <Cell><Data ss:Type="String">S140900001</Data></Cell>
+    <Cell><Data ss:Type="String">2</Data></Cell>
+    <Cell><Data ss:Type="String">2015-08-21</Data></Cell>
+    <Cell><Data ss:Type="String">2015-08-28</Data></Cell>
+    <Cell><Data ss:Type="String">批量导入采购单</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">商品款号</Data></Cell>
@@ -70,24 +62,14 @@
     <Cell><Data ss:Type="String">数量</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell><Data ss:Type="String">MMG000005</Data></Cell>
-    <Cell><Data ss:Type="String">MM-F00001</Data></Cell>
-    <Cell><Data ss:Type="String">PH03</Data></Cell>
-    <Cell><Data ss:Type="String">纯白</Data></Cell>
-    <Cell><Data ss:Type="String">0101</Data></Cell>
+    <Cell><Data ss:Type="String">157497797</Data></Cell>
+    <Cell><Data ss:Type="String">S140900001</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">无</Data></Cell>
+    <Cell><Data ss:Type="String">C01</Data></Cell>
     <Cell><Data ss:Type="String">F</Data></Cell>
     <Cell><Data ss:Type="String">SF1</Data></Cell>
-    <Cell><Data ss:Type="Number">1000</Data></Cell>
-   </Row>
-   <Row ss:AutoFitHeight="0">
-    <Cell><Data ss:Type="String">MMG000004</Data></Cell>
-    <Cell><Data ss:Type="String">MM-F00001</Data></Cell>
-    <Cell><Data ss:Type="String">PH02</Data></Cell>
-    <Cell><Data ss:Type="String">纯白</Data></Cell>
-    <Cell><Data ss:Type="String">0101</Data></Cell>
-    <Cell><Data ss:Type="String">F</Data></Cell>
-    <Cell><Data ss:Type="String">SF1</Data></Cell>
-    <Cell><Data ss:Type="Number">2000</Data></Cell>
+    <Cell><Data ss:Type="Number">100</Data></Cell>
    </Row>
   </Table>
   <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
@@ -101,8 +83,8 @@
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>5</ActiveRow>
-     <ActiveCol>7</ActiveCol>
+     <ActiveRow>1</ActiveRow>
+     <ActiveCol>5</ActiveCol>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>

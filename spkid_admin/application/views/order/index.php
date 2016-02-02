@@ -3,13 +3,7 @@
 	<script type="text/javascript" src="public/js/utils.js"></script>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/cluetip.js"></script>
-	<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
 	<script type="text/javascript" src="public/js/region.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 	<script type="text/javascript">
 		//<![CDATA[
@@ -99,25 +93,25 @@
 			<?php print form_dropdown('pay_status2',array('0'=>'财审状态','-1'=>'未财审','1'=>'已财审')); ?>
 			<?php print form_dropdown('shipping_status2',array('0'=>'配送状态','-1'=>'未发货','1'=>'已发货')); ?>
 			<?php print form_dropdown('is_ok',array('0'=>'完结状态','-1'=>'未完结','1'=>'已完结')); ?>
+				品牌:<?php print form_dropdown('brand_id',array(''=>'品牌')+get_pair($brand_list,'brand_id','brand_name'),''," data-am-selected='{searchBox:1}'"); ?>
+				商品款号：<input type="text" class="ts" name="product_sn" value="" style="width:100px;" />
+			
+			<a href="javascript:void(0);" onclick="switch_advanced_search();" style="color:red;">高级</a>
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
+			<div id="advanced_search_div" style="display:none;">
                         <label><input type="checkbox" name="odd" value="1" />问题单</label>
                         <label><input type="checkbox" name="pick" value="1" />拣货中</label>
 			<label><input type="checkbox" name="consign" value="1" />虚库销售</label>
-			<input type="submit" class="button" value="搜索" />
-			发票查询：<?php print form_input('inv_export_date','','style="width:100px;"readonly="readonly"') ?>
 			<a href="javascript:;" onclick="export_inv();return false;">导出当日发票记录</a>
-			
-			<a href="javascript:void(0);" onclick="switch_advanced_search();" style="color:red;">高级</a>
-			<div id="advanced_search_div" style="display:none;">
+			发票查询：<?php print form_input('inv_export_date','','style="width:100px;"readonly="readonly"') ?>
 				锁定人：<input type="text" class="ts" name="lock_admin" value="" style="width:100px;" />
-				商品款号：<input type="text" class="ts" name="product_sn" value="" style="width:100px;" />
-				<?php print form_dropdown('brand_id',array(''=>'品牌')+get_pair($brand_list,'brand_id','brand_name')); ?>
 				<select name="category_id">
 					<option value="">分类</option>
 					<?php foreach ($category_list as $cat): ?>
 						<option value="<?php print $cat->category_id; ?>"><?php print "{$cat->level_space} {$cat->category_name}" ?></option>
 					<?php endforeach ?>
 				</select>
-				<?php print form_dropdown('provider_id',array(''=>'供应商')+get_pair($provider_list,'provider_id','provider_name')); ?>
+				<?php print form_dropdown('provider_id',array(''=>'供应商')+get_pair($provider_list,'provider_id','provider_name',''," data-am-selected='{searchBox:1}'")); ?>
 				礼包ID：<input type="text" class="ts" name="package_id" value="" style="width:40px;" />
 				<?php print form_dropdown('country',array(''=>'国家')+get_pair($country_list,'region_id','region_name'),'','id="selCountries" onChange="region.changed(this, \'selProvinces\')"'); ?>
 				<?php print form_dropdown('province',array(''=>'省'),'','id="selProvinces" onChange="region.changed(this, \'selCities\')"'); ?>

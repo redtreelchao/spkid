@@ -1,10 +1,6 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<script type="text/javascript">
 		$(function(){			
 			$('input[type=text][name=end_date]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:'', yearRange:'-100:+0'});
@@ -36,7 +32,7 @@
 			<form name="search" action="javascript:search(); ">
 			<?php print form_dropdown('provider_id',get_pair($all_provider,'provider_id','provider_name', array(''=>'供应商'))); ?>
                             订单号:<input type="text" class="textbox" name="order_sn"/>
-                            <input type="submit" class="button" value="搜索" />
+                            <input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

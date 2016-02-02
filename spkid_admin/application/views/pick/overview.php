@@ -104,8 +104,8 @@
 		<div class="main_title"><span class="l">待拣汇总</span><span class="r"><a href="pick" class="add">拣货单列表</a></span></div>
 		<div class="blank5"></div>
 		<div class="search_row">
-			<input type="button" name="bt_refresh" class="button" onclick="location.href=location.href;" value="刷新"/>
-			<input type="button" name="bt_assign_sub" class="button" onclick="assign_sub();" value="分配虚库"/>
+			<input type="button" name="bt_refresh" class="am-btn am-btn-primary" onclick="location.href=location.href;" value="刷新"/>
+			<input type="button" name="bt_assign_sub" class="am-btn am-btn-primary" onclick="assign_sub();" value="分配虚库"/>
 		</div>
 		<div class="blank5"></div>
 		<div id="listDiv">
@@ -159,7 +159,7 @@
                                 <tr>
                                         <td class="item_title"></td>
                                         <td class="item_input">
-                                                <?php print form_submit('mysubmit','提交','class="button"') ?>
+                                                <?php print form_submit('mysubmit','提交','class="am-btn am-btn-primary"') ?>
                                         </td>
                                 </tr>
 				<tr>

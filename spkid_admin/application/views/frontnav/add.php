@@ -4,13 +4,13 @@
 <script type="text/javascript">
 	function check_form(){
 		var validator = new Validator('mainForm');
-		validator.required('nav_name', '请正确填写分类名称');
-		if($(':checkbox[name="category_id[]"]:checked').length<1){
-			validator.required('nav_url', '请正确填写链接地址');
-		}
-		if($(':checkbox[name="category_id[]"]:checked').length>1){
-			validator.addErrorMsg('商品分类最多只能选择一个');
-		}
+		validator.required('nav_name', '请正确填写导航名称');
+		// if($(':checkbox[name="category_id[]"]:checked').length<1){
+			validator.required('nav_url', '请正确填写导航链接');
+		// }
+		// if($(':checkbox[name="category_id[]"]:checked').length>1){
+		// 	validator.addErrorMsg('商品分类最多只能选择一个');
+		// }
 		return validator.passed();
 	}
 	
@@ -28,7 +28,7 @@
 				<td class="item_title">导航名称:</td>
 				<td class="item_input"><input name="nav_name" class="textbox require" type="text" id="nav_name" /></td>
 			</tr>
-			<tr>
+			<!-- <tr>
 			  <td class="item_title">商品分类</td>
 			  <td class="item_input">
 			  <?php foreach ($first_types as $cat): ?>
@@ -38,21 +38,21 @@
 			  	</label>
 			  <?php endforeach ?>
               </td>
-		  </tr>
+		  </tr> -->
 			<tr>
 			  <td class="item_title">导航链接:</td>
 			  <td class="item_input">
-			  <input name="nav_url" class="textbox" id="nav_url" />
-			  未选择商品分类时，链接地址为必填项。 前台网址请用 [front] 代替。
+			  <input name="nav_url" class="textbox require" id="nav_url" />
+			  <!-- 未选择商品分类时，链接地址为必填项。 前台网址请用 [front] 代替。 -->
 			  </td>
 			</tr>			
-			<tr>
+			<!-- <tr>
 				<td class="item_title">广告地址:</td>
 				<td class="item_input">
 				<input name="nav_ad_url" class="textbox" id="nav_ad_url" />
 				前台网址请用 [front] 代替。
 				</td>
-			</tr>
+			</tr> -->
 			<tr>
 				<td class="item_title">排序号:</td>
 				<td class="item_input"><input name="sort_order" class="textbox" id="sort_order" value="" /></td>
@@ -60,7 +60,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<tr>

@@ -281,3 +281,7 @@ function create_product_with_product($product_id, $provider_id, $use_new_provide
         $result["product_gallery_count"] = $CI->product_model->add_product_galleries($product_galleries);
         return $result;
 }
+
+function filter_product_desc($desc){
+    
+}

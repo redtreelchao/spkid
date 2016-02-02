@@ -19,7 +19,7 @@
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
 			风格名称：<input type="text" class="ts" name="style_name" value="" style="width:100px;" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

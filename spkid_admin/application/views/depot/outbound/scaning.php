@@ -1,6 +1,4 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
     <script type="text/javascript" src="public/js/utils.js"></script>
 	<div class="main">
 	    <div class="main_title"><span class="l">扫描出库</span></div>
@@ -17,7 +15,7 @@
 				<td align="right">箱子数量:</td>
 				<td>
 				    &nbsp;&nbsp;<span id="scan_box"><?=$box_count?></span>
-				    <input class="button" type="button" onclick="redirect('outbound/box_detail/<?=$depot_content->depot_out_code?>');" value ="扫描记录" />
+				    <input class="am-btn am-btn-primary" type="button" onclick="redirect('outbound/box_detail/<?=$depot_content->depot_out_code?>');" value ="扫描记录" />
 				</td>
 			    </tr>
 			</table>
@@ -94,11 +92,11 @@
 					<tr>
 					    <td colspan="4" style="text-align:center" >
 						<?php if(!$depot_content->audit_admin >0): ?>
-						<input class="button" type="button" name="mysubmit" value="完成扫描" />
+						<input class="am-btn am-btn-primary" type="button" name="mysubmit" value="完成扫描" />
 						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input class="button" type="button" onclick="javascript:location.href=location.href;" value="取消本次扫描" />
+						<input class="am-btn am-btn-primary" type="button" onclick="javascript:location.href=location.href;" value="取消本次扫描" />
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input class="button" type="button" onclick="javascript:gen_box_code();" value="新箱号" />
+						<input class="am-btn am-btn-primary" type="button" onclick="javascript:gen_box_code();" value="新箱号" />
 						<?php endif;?>
 					    </td>
 					</tr>

@@ -220,56 +220,56 @@
 
 		function update_sel_depot()
 		{
-			var depot_out_id = document.getElementById('depot_out_id').value;
-			var depot_page_size = document.getElementById('depot_pageSize').value;
-			var param_str = {
-			            is_ajax:1,
-			            depot_out_id : depot_out_id,
-			            depot_page : depot_page,
-			            depot_page_size : depot_page_size,
-			            rnd : new Date().getTime()
-			        };
-			var tmp_id = "";
-			var tmp_str = "";
-			var	all=document.getElementById("goodsDiv");
-    		var checks=all.getElementsByTagName("input");
-			var is_sel = 0;
+                    var depot_out_id = document.getElementById('depot_out_id').value;
+                    var depot_page_size = document.getElementById('depot_pageSize').value;
+                    var param_str = {
+                                is_ajax:1,
+                                depot_out_id : depot_out_id,
+                                depot_page : depot_page,
+                                depot_page_size : depot_page_size,
+                                rnd : new Date().getTime()
+                            };
+                    var tmp_id = "";
+                    var tmp_str = "";
+                    var	all=document.getElementById("goodsDiv");
+                    var checks=all.getElementsByTagName("input");
+                    var is_sel = 0;
 		    for(var i=0;i <checks.length;i++)
 		    {
-				if (checks[i].type == "text")
-		   		{
-                	if(checks[i].id.length > 10)
-                	{
-                		if(checks[i].id.substr(0,10) == "depot_num_")
-                		{
-                			//if(document.getElementById(checks[i].id).checked)
-                			//{
-                				tmp_id = checks[i].id.substr(10);
-                				if(tmp_id > 0)
-                				{
-									tmp_str = checks[i].value;
-									if(!isNaN(tmp_str) && tmp_str > 0)
-									{
-										param_str['checkp_'+tmp_id] = parseInt(tmp_str);
-										is_sel = 1;
-									}
-									else
-									{
-										alert('无效的商品数量');
-										checks[i].style.borderColor ="red";
-										return false;
-									}
-                				}
-                				else
-                				{
-                					alert('无效的出库记录号depot_out_sub_id:'+tmp_id);
-                					return false;
-                				}
+                        if (checks[i].type == "text")
+                        {
+                            if(checks[i].id.length > 10)
+                            {
+                                if(checks[i].id.substr(0,10) == "depot_num_")
+                                {
+                                        //if(document.getElementById(checks[i].id).checked)
+                                        //{
+                                    tmp_id = checks[i].id.substr(10);
+                                    if(tmp_id > 0)
+                                    {
+                                        tmp_str = checks[i].value;
+                                        if(!isNaN(tmp_str) && tmp_str > 0)
+                                        {
+                                            param_str['checkp_'+tmp_id] = parseInt(tmp_str);
+                                            is_sel = 1;
+                                        }
+                                        else
+                                        {
+                                            alert('无效的商品数量');
+                                            checks[i].style.borderColor ="red";
+                                            return false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        alert('无效的出库记录号depot_out_sub_id:'+tmp_id);
+                                        return false;
+                                    }
 
-                			//}
-                		}
-                	}
-                }
+                                        //}
+                                }
+                            }
+                        }
 		    }
 		    if(is_sel == 0)
 		    {
@@ -277,28 +277,28 @@
 		    	return false;
 		    }
 
-			$.ajax({
-	            url: '/depotio/update_depot_out_product',
-	            data: param_str,
-	            dataType: 'json',
-	            type: 'POST',
-	            success: function(result){
-	                if(result.msg) {alert(result.msg)};
-	                if(result.error == 0)
-	                {
-	                	if(result.row_num > 0)
-	                	{
-							document.getElementById('goodsDiv').disabled = false;
-	                	}
-	                	else
-	                	{
-	                		document.getElementById('goodsDiv').disabled = true;
-	                	}
-	                	alert("操作已完成");
-	                	document.getElementById('goodsDiv').innerHTML = result.content;
-	                }
-	            }
-	        });
+                    $.ajax({
+                        url: '/depotio/update_depot_out_product',
+                        data: param_str,
+                        dataType: 'json',
+                        type: 'POST',
+                        success: function(result){
+                            if(result.msg) {alert(result.msg)};
+                            if(result.error == 0)
+                            {
+                                    if(result.row_num > 0)
+                                    {
+                                                            document.getElementById('goodsDiv').disabled = false;
+                                    }
+                                    else
+                                    {
+                                            document.getElementById('goodsDiv').disabled = true;
+                                    }
+                                    alert("操作已完成");
+                                    document.getElementById('goodsDiv').innerHTML = result.content;
+                            }
+                        }
+                    });
 		    return false;
 		}
 
@@ -431,8 +431,8 @@
 			合作方式：<?php print form_dropdown('cooperation_id',$type_list);?>
 			状态：<?php print form_dropdown('provider_status',$provider_status);?>
 			<input type="checkbox" name="with_not" id="with_not" checked>过滤已有商品
-			<input type="submit" class="button" value="搜索" />
-			<input type="button" id="toggle_product" class="button" value="隐藏" onclick="toggle_product_div()" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
+			<input type="button" id="toggle_product" class="am-btn am-btn-primary" value="隐藏" onclick="toggle_product_div()" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -475,7 +475,11 @@
 					<td>
 					<?php foreach($row->item as $row2): ?>
 					<?php if($row2->can_out_num > 0): ?>
-					<p><span style="display:-moz-inline-box; display:inline-block; width:260px;"><?php print $row2->depot_name; ?>&nbsp;|&nbsp;<?php print $row2->location_name;?>&nbsp;可出库数:<?php print $row2->can_out_num; ?>&nbsp;</span><input type="text" size="4" id="product_num_<?php print $row2->transaction_id; ?>" value="<?php print $filter['depot_type']=='ck001'?$row2->can_out_num:0; ?>" /></p>
+					<p><span style="display:-moz-inline-box; display:inline-block; width:260px;">
+                                            <?php print $row2->depot_name; ?>&nbsp;|&nbsp;
+                                                <?php print $row2->location_name;?>&nbsp;可出库数:<?php print $row2->can_out_num; ?>&nbsp;</span>
+                                            <input type="text" size="4" id="product_num_<?php print $row2->transaction_id; ?>" value="<?php print $filter['depot_type']=='ck001'?$row2->can_out_num:0; ?>" />
+                                        </p>
 					<?php endif; ?>
 					<?php endforeach; ?>
 					</td>

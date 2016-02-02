@@ -87,7 +87,7 @@
 				<td class="item_input">
                     <?php if($perm_edit): ?>
                         <input name="id" type="hidden" value="<?php print $row->id ;?>"/>
-                        <?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+                        <?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
                     <?php endif; ?>
 				</td>
 			</tr>

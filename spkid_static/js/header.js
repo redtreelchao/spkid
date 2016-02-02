@@ -242,10 +242,10 @@ function update_cart_num () {
 }
 function addFavorite() {
     if (document.all) {
-        window.external.addFavorite('http://www.mammytree.com', '妈咪树');
+        window.external.addFavorite('http://www.mammytree.com', '悦牙网');
     } else if (window.sidebar) {
-        window.sidebar.addPanel('妈咪树', 'http://www.mammytree.com', '');
+        window.sidebar.addPanel('悦牙网', 'http://www.mammytree.com', '');
     } else {
-        alert('您的浏览器不支持加入收藏，请用 ctrl+d 收藏妈咪树');
+        alert('您的浏览器不支持加入收藏，请用 ctrl+d 收藏悦牙网');
     }
 } 

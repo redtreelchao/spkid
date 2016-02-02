@@ -19,8 +19,8 @@
                 <option value='b' <?php if($row->module_location == 'b'): ?> selected="true" <?php endif; ?>>底</option>
             </select>
             排序值：<input type="text" class="ts" name="sort_order" value="<?=$row->sort_order?>" style="width:70px;" />
-            <?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'保存'));?>
-            <?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'重置'));?>
+            <?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'保存'));?>
+            <?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'重置'));?>
             
             <br/>内容：<?php print $this->ckeditor->editor('module_text', $row->module_text); ?>
         <?php print form_close();?>

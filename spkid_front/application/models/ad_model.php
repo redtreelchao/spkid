@@ -41,7 +41,7 @@ class Ad_model extends CI_Model
     }
     
     function get_focus_image($type) {
-        $sql = "SELECT focus_name AS title, focus_url AS href, focus_img AS img_src FROM ty_front_focus_image WHERE focus_type = ".$type." AND NOW() BETWEEN start_time AND end_time AND focus_order > 0";
+        $sql = "SELECT focus_name AS title, focus_url AS href, focus_img AS img_src FROM ty_front_focus_image WHERE focus_type = ".$type." AND NOW() BETWEEN start_time AND end_time AND focus_order > 0 ORDER BY focus_order ASC";
         $query = $this->db_r->query($sql);
         return $query->result_array();
     }

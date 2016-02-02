@@ -1,17 +1,32 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="../../../public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="../../../public/style/jui/theme.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../../public/js/listtable.js"></script>
-	<script type="text/javascript" src="../../../public/js/utils.js"></script>
-    <script type="text/javascript" src="../../../public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="../../../public/js/jui/datepicker.min.js"></script>
+<script type="text/javascript" src="public/js/listtable.js"></script>
+<script type="text/javascript" src="public/js/utils.js"></script>
+<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.js"></script>
 
 	<script type="text/javascript">
 	    $(function(){
         $('input[type=text][name=start_time]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:'', yearRange:'-100:+10'});
 		$('input[type=text][name=end_time]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:'', yearRange:'-100:+10'});
 
+        $('.change_discount').click(function(e){
+            e.preventDefault();
+            var uid = $(this).attr('href').substring(1);
+            $.dialog({ id:'panel',height:150,width:300,maxBtn:false, lock:true, title:'修改会员折扣',iconTitle:false,cover:true,content: 'url:user/ajax_get_user_discount/'+uid,cache:false,ok:function(){
+                var value = this.content.document.getElementById('discount').value;
+                $.post('user/ajax_change_discount', {uid:uid, discount:value}, function(msg){
+                    if (1 == msg){
+                        $.dialog({content:'修改成功!'});
+                    } else if(0 == msg){
+                        $.dialog({content:'修改失败!'});
+                    } else{
+                        $.dialog.alert(msg);
+                    }
+
+                })
+            }
+            });
+        });
     	});
 
 		//<![CDATA[
@@ -90,7 +105,7 @@
 		      </select>
 
 			  支付时间：<input type="text" name="start_time" id="start_time" /><input type="text" name="end_time" id="end_time" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 		</form>
 </div>
 		<div class="blank5"></div>
@@ -139,6 +154,7 @@
                     <span id="audit_<?php print $row->recharge_id; ?>"><?php echo $row->is_audit == 1 ? '' : '<a onclick="audit('.$row->recharge_id.')" style="cursor:pointer" title="审核">审核</a>'?>	</span>
                     <?php endif;?>
                     <a href="user_recharge/show/<?php echo $row->recharge_id;?>" title="查看">查看</a>
+ <a class="change_discount" href="#<?php echo $row->user_id?>" >修改会员折扣</a>
                     </td>
 			    </tr>
 				<?php endforeach; ?>

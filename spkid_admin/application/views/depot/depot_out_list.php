@@ -232,7 +232,7 @@
 			出库类型：<?php print form_dropdown('depot_out_type',$type_list);?>
 			供应商：<?php print form_dropdown('provider_id',$provider_list);?>
 			出库仓库：<?php print form_dropdown('depot_depot_id',$depot_list);?>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

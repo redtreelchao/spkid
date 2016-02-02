@@ -17,7 +17,7 @@
 					<tbody>
 						<tr height="19">
 							<br/>
-							<td width="15%" valign="top" height="19" align="left"><img src="public/images/logo_print.jpg" style="width: 147px; height: 69px" alt=""></td>
+							<td width="15%" valign="top" height="19" align="left"><img src="public/images/logo2.0.png" style="width: 147px; height: 69px" alt=""></td>
 							<!--<td width="10%" valign="top" height="19" align="left"><span style="font-size:14px;line-height:18px; "><br/><b>http://www.baobeigou.com</b><br><br><b>电话：4008-320-235</b></span></td>-->
 							<td width="55%" valign="bottom" align="center" class="printer_title">订单装箱单</td>
 							<!--<td width="30%" valign="top" height="19" align="right"><img src="index/barcode/<?php //print str_replace(' ','-',$order->invoice_no);?>.html"></td>-->
@@ -94,11 +94,11 @@
 				</table>
 				<div align="right">合计：<?php print $order->product_num;?>件 ￥<?php print $order->order_price;?></div>
 				
-                                <p style="text-align: left; font-size: 14px" class="dingdan_nr full_width"><i>非常感谢您在 http://www.mammytree.com 购物，我们期待您的再次光临！</i></p>
+                                <p style="text-align: left; font-size: 14px" class="dingdan_nr full_width"><i>非常感谢您在 http://www.yueyawang.com 购物，我们期待您的再次光临！</i></p>
                                 <div align="left" style="margin-top:20px;"><b>退货信息：</b><br>
-                                地址：上海市峨山路77号金牛大厦北楼301室<br>
-                                收件：妈咪树退货组收<br>
-                                电话：400-0966-021
+                                地址：上海市虹口区天宝路466弄9号建邦大厦1102&1103室<br>
+                                收件：悦牙网售后服务中心<br>
+                                电话：021-65382798  4009905920
                                 </div>
 			</div>
 		<?php if($i<count($order_info)) print '<P style="page-break-after:always">&nbsp;</P>';  ?>

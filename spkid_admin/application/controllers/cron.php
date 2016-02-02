@@ -10,14 +10,52 @@
 class Cron extends CI_Controller
 {
 
-	function __construct (  )
+	function __construct ()
 	{
 		parent::__construct();
 		$this->admin_id=0;
 		$this->time=date('Y-m-d H:i:s');
 //		if(!$this->input->is_cli_request()) die('该脚本只能通过cron运行');
 		ini_set('max_execution_time', '0');
+        $this->load->library('memcache');
 	}
+    public function show_index_goods(){
+        $this->load->model('product_model');
+        $goods_list = $this->product_model->get_index_goods();
+        $goods_list = array_chunk($goods_list, MOBILE_INDEX_PRODUCT_NUM);
+        $this->memcache->delete('index_goods_list'); // delete key first
+        $this->memcache->save('index_goods_list', $goods_list, 7200);
+
+        //手动更新 memcache key 的函数方法
+        memcache_key_record('index_goods_list','首页产品列表',__CLASS__,__FUNCTION__,str_replace(FCPATH,'',__FILE__));
+    }
+    public function get_course(){
+        $this->load->model('wordpress_model');
+        $course_list = $this->wordpress_model->fetch_courses();
+        $this->memcache->save('course_list', $course_list, 7200);
+    }
+    public function mkdict(){
+        $static = realpath(CREATE_HTML_PATH);
+        $static = str_replace('\\', '/', $static);
+        $dict = $static.'/dict.txt';
+        $this->load->model('sphinx_word_model');
+        //echo $modify_time, ' ';
+        $last_time = $this->sphinx_word_model->lastime();
+        if (!file_exists($dict) || strtotime($last_time)>filemtime($dict)){
+            //生成词库
+            $words = $this->sphinx_word_model->getdict();
+            $lines = array();
+            foreach($words as $r){
+                $line = $r->name."\t".$r->level;
+                array_push($lines, $line);
+            }
+            $lines = implode("\n", $lines);
+            file_put_contents($dict, $lines);
+            echo 'make success';
+        } else{
+            echo 'no need make';
+        }
+    }
 	
 	public function send_rush_sms ($test=FALSE)
 	{
@@ -959,7 +997,6 @@ class Cron extends CI_Controller
 		$cotTuan = $this->mami_tuan_model->getTuanCount();
 		$cotTuanToday = $this->mami_tuan_model->getTodayTuanCount();
 		$cotBrand = $this->mami_tuan_model->getBrandNum();
-		$this->load->library('memcache');
 		$this->memcache->delete('tuan_all_goods_num');
 		$this->memcache->delete('tuan_today_goods_num');
 		$this->memcache->delete('tuan_today_brands_num');
@@ -1425,7 +1462,6 @@ class Cron extends CI_Controller
     public function webfront_data_cache(){
         $this->load->model('product_model');
         $this->load->model('order_model');
-        $this->load->library('memcache');
         
         $cate_list = $this->product_model->get_nav();
         
@@ -1510,5 +1546,138 @@ class Cron extends CI_Controller
     public function proc_provider_product_num() {
 	    $this->load->model('provider_model');
 		$this->provider_model->proc_provider_product_num();
-	}	
+	}
+
+	//将上个小时的访问量写入数据库
+	// NOTICE: 此函数，需要一个小时运行一次
+	// @type: product/article/course
+	// pv_@type_@date('dH')         : 小时内的产品/文章ids
+	// pv_@type_@date('dH')_$id     : 小时内的产品/文章访问量
+	// @author: v wang, @date:20150916.1615
+	public function write_hour_pv(){
+		$this->load->model('product_model');
+		$this->load->model('product_access_model');
+		$this->load->model('wordpress_model');
+
+        $year = date('Y');
+        $month = date('m');
+        $day = date('d');
+        $hour = date('H',strtotime('-1hour'));// 上一个小时
+        $add_time = date('Y-m-d H:i:s');
+        $types = array('product','course','article');
+        $pv_data = array();
+
+		for($j=0;$j<=2;$j++){
+	        $key = 'pv_'.$types[$j].'_'.$day.$hour."_ids";
+	        // 取得一个小时的IDS
+	        $ids = $this->memcache->get( $key );
+	        
+	        if( !empty($ids) ){
+	        	foreach ($ids as $i => $id) {
+	        		# 获取产品的小时访问量，写入DB
+	        		$key_product = 'pv_'.$types[$j].'_'.$day.$hour.'_'.$id;
+	        		$pv = $this->memcache->get( $key_product );
+	        		if( !empty($pv) ){
+	        			if( $id > 0 ){
+	        				if($types[$j] == 'article'){
+	        					//TODO 将小时访问量，累加到wordpress文章的访问量表
+			        			$this->wordpress_model->wordpress_num_update($id,$pv);
+
+			        			//TODO, 将文章小时访问量写入 产品访问量统计表。新建表, type: article, name: title
+			        			$title = $this->wordpress_model->wordpress_sn_name($id);
+			        			$product_sn_name = $title->post_title;
+
+	        				}else if($types[$j] == 'product' || $types[$j] == 'course'){
+
+		        				//TODO 将小时访问量，累加到产品的访问量表
+			        			$this->product_model->product_num_update($id,$pv);
+
+			        			//TODO, 将产品小时访问量写入 产品访问量统计表。新建表，type:product, name:sn+name
+			        			$sn_name = $this->product_model->product_sn_name($id);
+			        			$product_sn_name = $sn_name->product_sn.'_'.$sn_name->product_name;
+			        		}
+
+	        			}else{
+	        				$product_sn_name = $types[$j];
+	        			}
+
+	        			$pv_data[] = array(
+	        						'product_id' => $id,
+	        						'type' => $types[$j],
+	        						'name' => $product_sn_name,
+	        						'year' => $year,
+	        						'month' => $month,
+	        						'day' => $day,
+	        						'hours' => $hour,
+	        						'pv' => $pv,
+	        						'add_time' => $add_time
+	        			);
+	        			
+	        		}
+	        		$this->memcache->delete($key_product);// 删除商品的小时id key
+	        	}
+	        }
+	        $this->memcache->delete($key); // 删除商品的小时ids key
+		}
+
+        //批量插入访问记录
+        $this->product_access_model->insert($pv_data);
+	}
+
+
+	/**
+	 *	计算过去N个小时内的产品销量，更新到db
+	 *	$n_hour = 3 过去的3小时内的产品销量 
+	 *	建议定时每，$n_hour小时的49分执行一次
+	 */
+	public function write_hours_ps($n_hour = 3){
+
+		$this->load->model('order_model');
+		$this->load->model('product_model');
+		//计算时间范围
+		
+		$now_time = date('Y-m-d H:00:00'); //当前时间
+		$pass_time = date('Y-m-d H:00:00',strtotime('-'.$n_hour.' hours'));//过去的N小时 时间
+
+		//获得产品的销量
+		$row = $this->order_model->get_time_order($now_time,$pass_time);
+		$payment_row = get_pair($row['payment_row'], 'product_id', 'num' ); // array( key=> value )
+		$refund_row = get_pair($row['refund_row'], 'product_id', 'num' );
+
+		foreach( $refund_row AS $id=>$num ){
+			if( isset($payment_row[$id]) ) $payment_row[$id] -= $num;
+			$payment_row[$id] = -$num;
+		}
+
+		// 组成数据
+		$update_data = array();
+		foreach ($payment_row as $key => $value) {
+			array_push($update_data, array($key,$value));
+		}
+
+		//更新db产品的销量
+		$this->product_model->ps_num_update($update_data);
+
+	}
+        //订单作废
+        public function order_invalid(){
+		    $this->load->model('order_model');
+            $filter = array();
+            $filter['date_end'] = date("Y-m-d H:i:s", time() - ORDER_INVALID_TIME);           
+            $order_list = $this->order_model->get_unpay_timeout_order($filter);
+            if (empty($order_list))
+                exit('order_cnt:0');
+            $url = ERP_HOST . '/order_api/invalid';
+            $params['auto_invalid'] = 1;
+            $params['sys_user'] = 1;
+            $header = array('X-Requested-With: XMLHttpRequest');
+            foreach ($order_list as $order) {
+                $params['order_id']		= $order['order_id'];
+                $r = curl_post($url, $params, $header);
+                $r2 = json_decode($r, true);
+            }           
+        }
+        
+        
+
 }

@@ -11,13 +11,16 @@
   <Created>2011-06-20T06:38:30Z</Created>
   <LastSaved>2011-06-20T07:34:09Z</LastSaved>
   <Company>ig</Company>
-  <Version>12.00</Version>
+  <Version>15.00</Version>
  </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
  <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
-  <WindowHeight>11145</WindowHeight>
-  <WindowWidth>18195</WindowWidth>
-  <WindowTopX>120</WindowTopX>
-  <WindowTopY>75</WindowTopY>
+  <WindowHeight>3525</WindowHeight>
+  <WindowWidth>24240</WindowWidth>
+  <WindowTopX>0</WindowTopX>
+  <WindowTopY>0</WindowTopY>
   <ProtectStructure>False</ProtectStructure>
   <ProtectWindows>False</ProtectWindows>
  </ExcelWorkbook>
@@ -30,7 +33,7 @@
    <NumberFormat/>
    <Protection/>
   </Style>
-  <Style ss:ID="s64">
+  <Style ss:ID="s62">
    <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
    <NumberFormat ss:Format="@"/>
   </Style>
@@ -48,15 +51,15 @@
    <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">商品款号</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
     <Cell><Data ss:Type="String">颜色代码</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
-    <Cell><Data ss:Type="String">尺寸代码</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="String">规格代码</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
     <Cell><Data ss:Type="String">虚库数量</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">MB20130306</Data><NamedCell
       ss:Name="_FilterDatabase"/></Cell>
-    <Cell ss:StyleID="s64"><Data ss:Type="String">0205</Data><NamedCell
+    <Cell ss:StyleID="s62"><Data ss:Type="String">0205</Data><NamedCell
       ss:Name="_FilterDatabase"/></Cell>
-    <Cell ss:StyleID="s64"><Data ss:Type="String">0012</Data><NamedCell
+    <Cell ss:StyleID="s62"><Data ss:Type="String">0012</Data><NamedCell
       ss:Name="_FilterDatabase"/></Cell>
     <Cell><Data ss:Type="Number">-2</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
    </Row>
@@ -72,8 +75,8 @@
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>17</ActiveRow>
-     <ActiveCol>7</ActiveCol>
+     <ActiveRow>2</ActiveRow>
+     <ActiveCol>2</ActiveCol>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>

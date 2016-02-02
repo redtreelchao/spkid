@@ -236,7 +236,7 @@
 			入库类型：<?php print form_dropdown('depot_in_type',$type_list);?>
 			入库仓库：<?php print form_dropdown('depot_depot_id',$depot_list);?>
 			<?php print form_dropdown('brand_id',get_pair($brand_list,'brand_id','brand_name', array(''=>'品牌'))); ?>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

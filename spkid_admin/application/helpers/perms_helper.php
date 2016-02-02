@@ -144,5 +144,10 @@ function get_payment_perm(){
     return $perms;
 }
 
-
+function get_yyw_pv_report() {
+    $perms = array();
+    $perms['yyw_pv_report_view'] = check_perm('yyw_pv_report_view') ? '1' : '2';
+    
+    return $perms;
+}
 ?>

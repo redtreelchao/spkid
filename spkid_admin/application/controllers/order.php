@@ -105,6 +105,10 @@ class Order extends CI_Controller
 		$order = format_order($order);
 		$order_payment = $this->order_model->order_payment($order_id);
 		$order_product = $this->order_model->order_product_details($order_id);
+                if ($order->genre_id == PRODUCT_COURSE_TYPE){
+                    $order_client = $this->order_model->order_client($order_id);
+                    $this->load->vars('order_client',$order_client);
+                }
 		//附加储位信息
 		$trans_list = $this->order_model->order_trans($order->order_sn);
 		$op_list = $deny_list = array();
@@ -150,7 +154,7 @@ class Order extends CI_Controller
 		$this->load->vars('user', $this->user_model->filter(array('user_id'=>$order->user_id)));
 		$this->load->vars('voucher_list',$this->voucher_model->all_available_voucher(array('user_id'=>$order->user_id)));
 		$this->load->vars('order_payment',$order_payment);
-		$this->load->vars('voucher_payment', filter_payment($order_payment,'voucher'));
+		$this->load->vars('voucher_payment', filter_payment($order_payment,'coupon'));
 		$this->load->vars('order_product', $order_product);
 		$this->load->vars('order_advice', $this->order_model->order_advice($order_id));
 		$this->load->vars('all_advice_type', $this->order_advice_type_model->all(array('is_use'=>1)));
@@ -158,6 +162,8 @@ class Order extends CI_Controller
 		$this->load->vars('perms', $perms);
 		$this->load->vars('source_list',$source_list);
 		$this->load->vars('shipping_list',$shipping_list);
+                $this->load->vars('front_url',FRONT_URL);
+                $this->load->vars('course_type',PRODUCT_COURSE_TYPE);
 		$this->load->view('order/info');
 	}
 
@@ -477,7 +483,7 @@ class Order extends CI_Controller
 		$order = $this->order_model->filter(array('order_id'=>$order_id));
 		if(!$order) sys_msg('订单不存在', 1);
 		$perms = get_order_perm($order);
-		if(!$perms['edit_order']) sys_msg('不能操作');
+		if(!$perms['edit_other']) sys_msg('不能操作');
 		//取订单商品
 		$order_product = split_package_product($this->order_model->order_product($order_id));
 
@@ -498,7 +504,7 @@ class Order extends CI_Controller
 		$order = $this->order_model->lock_order($order_id);
 		if(!$order) sys_msg('订单不存在', 1);
 		$perms = get_order_perm($order);
-		if(!$perms['edit_order']) sys_msg('不能操作');
+		if(!$perms['edit_other']) sys_msg('不能操作');
 		$update['invoice_title'] = trim($this->input->post('invoice_title'));
 		$update['invoice_content'] = trim($this->input->post('invoice_content'));
 		$update['user_notice'] = trim($this->input->post('user_notice'));

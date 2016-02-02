@@ -1,13 +1,9 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
         <script type="text/javascript" src="public/js/swfobject.js"></script>
 	<script type="text/javascript" src="public/js/FABridge.js"></script>
         
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<script type="text/javascript">
             function load_order_data(){
 	        var order_sn = $.trim($('input[type=text][name=order_sn]').val());
@@ -31,7 +27,7 @@
                 <div class="pc base">
                     <div class="search_row" style="text-align: center;">
                         天猫运单号/系统订单编号：<input type="text" class="tl" name="order_sn" value="<?php print empty($order_sn) ? '' : $order_sn; ?>" />
-                        <input type="button" class="button" value="载入" onclick="load_order_data()" />
+                        <input type="button" class="am-btn am-btn-primary" value="载入" onclick="load_order_data()" />
                     </div>
                     <div class="blank5"></div>
 

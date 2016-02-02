@@ -1413,9 +1413,9 @@ class CI_DB_driver {
                     ",'".date('Y-m-d H:i:s')."'".
                     ",'".$type."'".
                     ",'".$_SERVER['REMOTE_ADDR']."'".
-                    ",'".$this->escape_string($sql)."'".
+                    ",'".$this->escape_str($sql)."'".
                     ')';
-                $this->query($mySql);
+                $ci->db->query($mySql);
             }
         }
         

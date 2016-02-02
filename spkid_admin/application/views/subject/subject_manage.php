@@ -41,8 +41,8 @@
             </select>
             排序值：<input type="text" class="ts" name="sort_order" value="0" style="width:70px;" />
             <input type="hidden" name="subject_id" value="<?php print($row->subject_id);?>" />
-            <input type="submit" class="button" value="添加" />
-            <input type="button" class="button" value="生成文件" onclick="" />
+            <input type="submit" class="am-btn am-btn-primary" value="添加" />
+            <input type="button" class="am-btn am-btn-primary" value="生成文件" onclick="" />
         </form>
     </div>
 

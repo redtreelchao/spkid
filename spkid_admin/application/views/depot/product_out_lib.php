@@ -29,7 +29,14 @@
 					<td><?php print $row->depot_name; ?></td>
 					<td><?php print $row->location_name; ?></td>
 					<td><?php print $row->product_finished_number; ?></td>
-					<td><span style="display:-moz-inline-box; display:inline-block; width:100px;">可出库数：<?php print $row->real_num+$row->product_number; ?>&nbsp;</span><input type="text" size="4" id="depot_num_<?php print $row->depot_out_sub_id; ?>" value="<?php print $row->product_number; ?>" /></td>
+					<td><span style="display:-moz-inline-box; display:inline-block; width:100px;">
+                                                <!--可出库数：
+                                                <?php //print $row->real_num+$row->product_number; ?>
+                                                -->
+                                        <?php print $row->product_number; ?>&nbsp;</span>
+                                            <!--
+                                            <input type="text" size="4" id="depot_num_<?php //print $row->depot_out_sub_id; ?>" value="<?php //print $row->product_number; ?>" /></td>
+                                            -->
 				</tr>
 				<?php endforeach; ?>
 				<tr>
@@ -38,7 +45,9 @@
 			</table>
 			<div class="purchase_btn">
 			<input type="button" class="r" name="del_p" id="del_p" value="删除勾选商品" onclick="del_sel_depot()" <?php echo !empty($goods_list)?'':'disabled' ?> />
+			<!--
 			<input type="button" class="r" name="edit_p" id="edit_p" value="提交数量更改" onclick="update_sel_depot()" <?php echo !empty($goods_list)?'':'disabled' ?> />
+			-->
 			</div>
 			<div class="page">
 				<?php include(APPPATH.'views/common/page_depot.php') ?>

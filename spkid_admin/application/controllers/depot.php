@@ -264,6 +264,7 @@ class Depot extends CI_Controller
 		$this->form_validation->set_rules('location_code2', '储位编码2', 'trim|required|alpha_numeric|max_length[2]');
 		$this->form_validation->set_rules('location_code3', '储位编码3', 'trim|required|alpha_numeric|max_length[2]');
 		$this->form_validation->set_rules('location_code4', '储位编码4', 'trim|required|alpha_numeric|max_length[2]');
+                $this->form_validation->set_rules('location_code5', '储位编码4', 'trim|required|alpha_numeric|max_length[2]');
 
 		if ( ! $this->form_validation->run() )
 		{
@@ -275,7 +276,8 @@ class Depot extends CI_Controller
 		$update['location_code2'] = trim($this->input->post('location_code2'));
 		$update['location_code3'] = trim($this->input->post('location_code3'));
 		$update['location_code4'] = trim($this->input->post('location_code4'));
-		$update['location_name'] = $update['location_code1'].'-'.$update['location_code2'].'-'.$update['location_code3'].'-'.$update['location_code4'];
+                $update['location_code5'] = trim($this->input->post('location_code5'));
+		$update['location_name'] = $update['location_code1'].'-'.$update['location_code2'].'-'.$update['location_code3'].'-'.$update['location_code4'].'-'.$update['location_code5'];
 		$update['depot_id'] = $this->input->post('depot_id');
 		$update['is_use'] = $this->input->post('is_use');
 		$update['create_date'] = date('Y-m-d H:i:s');
@@ -283,9 +285,10 @@ class Depot extends CI_Controller
 		//$location_code = $update['location_code1'] ."-". $update['location_code2']."-". $update['location_code3']."-". $update['location_code4'];
 		$location_info = $this->depot_model->filter_location(array('location_name'=>$update['location_name']));
 		$location_info2 = $this->depot_model->filter_location(array('location_code1'=>$update['location_code1'],
-																		'location_code2'=>$update['location_code2'],
-																		'location_code3'=>$update['location_code3'],
-																		'location_code4'=>$update['location_code4'],));
+									    'location_code2'=>$update['location_code2'],
+									    'location_code3'=>$update['location_code3'],
+									    'location_code4'=>$update['location_code4'],
+                                                                            'location_code5'=>$update['location_code5']));
 		if ( $location_info || $location_info2 )
 		{
 			sys_msg('储位名称或编码重复', 1);
@@ -304,6 +307,7 @@ class Depot extends CI_Controller
 		$this->form_validation->set_rules('location_code2', '储位编码2', 'trim|required|alpha_numeric|max_length[2]');
 		$this->form_validation->set_rules('location_code3', '储位编码3', 'trim|required|alpha_numeric|max_length[2]');
 		$this->form_validation->set_rules('location_code4', '储位编码4', 'trim|required|alpha_numeric|max_length[2]');
+                $this->form_validation->set_rules('location_code5', '储位编码4', 'trim|required|alpha_numeric|max_length[2]');
 
 		if ( ! $this->form_validation->run() )
 		{
@@ -320,7 +324,8 @@ class Depot extends CI_Controller
 		$update['location_code2'] = trim($this->input->post('location_code2'));
 		$update['location_code3'] = trim($this->input->post('location_code3'));
 		$update['location_code4'] = trim($this->input->post('location_code4'));
-		$update['location_name'] = $update['location_code1'].'-'.$update['location_code2'].'-'.$update['location_code3'].'-'.$update['location_code4'];
+                $update['location_code5'] = trim($this->input->post('location_code5'));
+		$update['location_name'] = $update['location_code1'].'-'.$update['location_code2'].'-'.$update['location_code3'].'-'.$update['location_code4'].'-'.$update['location_code5'];
 		$update['depot_id'] = $this->input->post('depot_id');
 		$update['is_use'] = $this->input->post('is_use');
 		$update['create_date'] = date('Y-m-d H:i:s');

@@ -17,7 +17,7 @@
 				<tr class="row">
 					<th width="100px">商品款号</th>
 					<th>颜色代码</th>
-					<th>尺寸代码</th>
+					<th>规格代码</th>
 					<th>虚库数量</th>
 					<th width="250px">状态</th>
 				</tr>

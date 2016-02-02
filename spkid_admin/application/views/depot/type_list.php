@@ -67,7 +67,7 @@
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
 			出入库类型名称或编号：<input type="text" class="ts" name="depot_type_name" value="" style="width:100px;" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

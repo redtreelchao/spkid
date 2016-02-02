@@ -2,8 +2,6 @@
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
 <script type="text/javascript" src="public/js/cluetip.js"></script>
-<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
 <link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 <script type="text/javascript">
 	//<![CDATA[
@@ -18,7 +16,7 @@
 	//]]>
 </script>
 <div class="main">
-	<div class="main_title"><span class="l">尺寸详情图管理 >> 编辑 </span><a href="size/image_index" class="return r">返回列表</a></div>
+	<div class="main_title"><span class="l">规格详情图管理 >> 编辑 </span><a href="size/image_index" class="return r">返回列表</a></div>
 	<div class="blank5"></div>
 	<?php print form_open_multipart('size/proc_image_edit',array('name'=>'mainForm','onsubmit'=>'return check_form()'), array('size_image_id'=>$row->size_image_id));?>
 		<table class="form" cellpadding=0 cellspacing=0>
@@ -62,7 +60,7 @@
 				<tr>
 					<td class="item_title"></td>
 					<td class="item_input">
-						<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+						<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 					</td>
 				</tr>
 			<?php endif ?>

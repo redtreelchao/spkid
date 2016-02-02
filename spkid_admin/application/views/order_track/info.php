@@ -1,4 +1,4 @@
-<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.min.js"></script>
+<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.js"></script>
 <link type="text/css" href="/public/js/lhgdialog/skins/default.css" rel="stylesheet" />
 
 <script type="text/javascript">
@@ -240,7 +240,7 @@
 			</tr>
                         <tr>
                             <td height="40" colspan="4" align="center">
-                                <input type="button" name="bt_print_invoice" value="控件加载中..." class="button" onclick="javascript:print_invoice();" disabled="disabled"/>
+                                <input type="button" name="bt_print_invoice" value="控件加载中..." class="am-btn am-btn-primary" onclick="javascript:print_invoice();" disabled="disabled"/>
                                 <div id="flashContent" style="display:none;">运单打印控件</div>
                                 <script type="text/javascript">
                                         swfobject.embedSWF("public/js/autoPrinter-1.1.16.swf", "flashContent","0", "0", "10.0.0","",{bridgeName:"expressBridge"});
@@ -251,9 +251,9 @@
                                         }
                                         FABridge.addInitializationCallback( "expressBridge", initCallback );
                                 </script>
-                                <input type="button" class="button" value="打印装箱单" onclick="javascript:print_order(<?php print $order->order_id; ?>);" />
+                                <input type="button" class="am-btn am-btn-primary" value="打印装箱单" onclick="javascript:print_order(<?php print $order->order_id; ?>);" />
                                 <?php if (!$order->is_ok) : ?>
-                                <input type="button" class="button" value="确认发货" onclick="javascript:proc_send(<?php print $order->order_id; ?>, '<?php print $order->order_sn; ?>');" />
+                                <input type="button" class="am-btn am-btn-primary" value="确认发货" onclick="javascript:proc_send(<?php print $order->order_id; ?>, '<?php print $order->order_sn; ?>');" />
                                 <?php endif; ?>
                             </td>
 			</tr>
@@ -320,7 +320,7 @@
 </tr>
 <tr>
 <td height="30">&nbsp;</td>
-<td><input type="button" value="确定" name="sb_shipping" class="button" onclick="order_shipping();"></td>
+<td><input type="button"  value="确定" name="sb_shipping"  class="am-btn am-btn-secondary" onclick="order_shipping();"></td>
 </tr>
 </table>
 </div>

@@ -105,12 +105,12 @@
 
 		function showLoactionWin(obj,depot_id)
 		{
-			var loOBJ = new Object();
-			var lonewWin = window.showModalDialog("/depotio/show_location_win/"+depot_id,loOBJ,"dialogHeight:450px;dialogWidth:200px;center:yes;help:no;status:no;resizable:no");
-			if(loOBJ.pass){
-				obj.value = loOBJ.packet_name;
-			}
-
+                    /*var loOBJ = new Object();
+                    var lonewWin = window.showModalDialog("/depotio/show_location_win/"+depot_id,loOBJ,"dialogHeight:450px;dialogWidth:200px;center:yes;help:no;status:no;resizable:no");
+                    if(loOBJ.pass){
+                            obj.value = loOBJ.packet_name;
+                    }*/
+                    window.open("/depotio/show_location_win/"+depot_id,'newwindow',"height=500,width=300,toolbar=no,titlebar=no,location=no,menubar=no,resizable=no,z-look=yes");
 		}
 
 		function insert_sel_product(sub_id,index,batch_id)
@@ -556,8 +556,8 @@
 			合作方式：<?php print form_dropdown('cooperation_id',$type_list);?>
 			状态：<?php print form_dropdown('provider_status',$provider_status);?>
 			<input type="checkbox" name="with_not" id="with_not" checked />过滤已有商品
-			<input type="submit" class="button" value="搜索" />
-			<input type="button" id="toggle_product" class="button" value="隐藏" onclick="toggle_product_div()" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
+			<input type="button" id="toggle_product" class="am-btn am-btn-primary" value="隐藏" onclick="toggle_product_div()" />
 			</form>
 		</div>
 		<div class="blank5"></div>

@@ -1,11 +1,7 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
     <script type="text/javascript" src="public/js/utils.js"></script>
     <script type="text/javascript" src="public/js/listtable.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-    <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
     <script type="text/javascript" src="public/js/toggle.js"></script>
     <script type="text/javascript">
         $(function(){
@@ -41,11 +37,11 @@
                 <input type="text" name="batch_name" id="batch_name"/>-->
                 批次号：
                 <input type="text" name="batch_code" id="batch_code" />
-                <select name="provider_id">
+                供应商<select name="provider_id" data-am-selected="{searchBox: 1,maxHeight: 300}">
                     <option value="">供应商</option>
-                    <?php foreach($provider_list as $provider) print "<option value='{$provider->provider_id}'>{$provider->provider_code}</option>"?>
+                    <?php foreach($provider_list as $provider) print "<option value='{$provider->provider_id}'>{$provider->provider_code}-{$provider->provider_name}</option>"?>
                 </select>
-                <?php print form_dropdown('brand_id',get_pair($brand_list,'brand_id','brand_name', array(''=>'品牌'))); ?>
+                品牌<?php print form_dropdown('brand_id',get_pair($brand_list,'brand_id','brand_name', array(''=>'品牌')),'','data-am-selected="{searchBox: 1,maxHeight: 300}"'); ?>
                 <!--批次状态：
                 <select name="batch_status">
                     <option value=>全部</option>
@@ -57,7 +53,7 @@
                 <input type="text" name="create_date_end" id="create_date_end" />
                 创建人：
                 <input type="text" name="create_admin" id="create_admin" />
-                <input type="submit" class="button" value="搜索" />
+                <input type="submit" class="am-btn am-btn-primary" value="搜索" />
             </form>
         </div>
         <div class="blank5"></div>

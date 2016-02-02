@@ -3,21 +3,8 @@
 <script type="text/javascript" src="public/js/listtable.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
 <script type="text/javascript" src="public/js/product.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-<link rel="stylesheet" href="public/style/jui/core.css" type="text/css" media="all" />
-<link rel="stylesheet" href="public/style/jui/dialog.css" type="text/css" media="all" />
-<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 <script type="text/javascript" src="public/js/cluetip.js"></script>
-<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
-<script type="text/javascript" src="public/js/jui/widget.min.js"></script>
-<script type="text/javascript" src="public/js/jui/mouse.min.js"></script>
-<script type="text/javascript" src="public/js/jui/position.min.js"></script>
-<script type="text/javascript" src="public/js/jui/draggable.min.js"></script>
-<script type="text/javascript" src="public/js/jui/dialog.min.js"></script>
-<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.min.js"></script>
+<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.js"></script>
 <link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 
 <script type="text/javascript">
@@ -30,7 +17,7 @@
 	function check_form(){
 		var validator = new Validator('mainForm');
 			validator.required('rush_index', '请填写名称');
-			validator.selected('nav_id', '请选择导航分类');
+			// validator.selected('nav_id', '请选择导航分类');
 			validator.required('start_date_p', '请填写开始时间');
 			validator.required('end_date_p', '请填写结束时间');
 			validator.required('sort_order', '请填写排序');
@@ -115,7 +102,7 @@
 		   data: "value="+sel_product_checkbox_price+"&rush_id="+rush_id,
 		   dataType: "json",
 		   success: function(msg){
-			 if(msg.msg != ''){alert(msg.msg);return false;}
+			 //if(msg.msg != ''){alert(msg.msg);return false;}
 			 if(msg.type == 1){
 			 	alert('请正确添加限时抢购商品');
 				return false;
@@ -157,7 +144,7 @@
                 var content = '<form name="importFrom" action="/rush/importProducts" method="POST" enctype="multipart/form-data">';
                 content += '请选择文件：<input type="file" name="data_file" />';
                 content += '<input type="hidden" name="rush_id" value="'+rush_id+'" />';
-                content += '<input type="submit" value="导入所选文件" />';
+                content += '<input type="submit" class="am-btn am-btn-secondary" value="导入所选文件" />';
                 content += '</form>';
                 content += '<br>请导入Excel格式的xml文件，且第一个工作表的第一列存放商品款号信息。';
                 var dialog = new $.dialog({ id:'thepanel',height:140,width:500,maxBtn:false, title:'设置',iconTitle:false,cover:true,html: content});
@@ -190,13 +177,12 @@
 				</td>
 			</tr>
 			<tr>
-			  <td class="item_title">品牌:</td>
+			  <td class="item_title">现金券ID:</td>
 			  <td class="item_input">
-			    <input name="rush_brand" <?php echo $perms['rush_edit']? '' : 'disabled="disabled"';?>  type="text" value="<?php echo $check->rush_brand;?>" class="textbox" />
-			    最大只能输入16个字符。
+			    <input name="campaign_id" <?php echo $perms['rush_edit']? '' : 'disabled="disabled"';?>  type="text" value="<?php echo $check->campaign_id;?>" class="textbox" />
 			  </td>
 			</tr>
-			<tr>
+		<!-- 		<tr>
 			  <td class="item_title">分类:</td>
 			  <td class="item_input">
 			    <input name="rush_category" <?php echo $perms['rush_edit']? '' : 'disabled="disabled"';?>  type="text" value="<?php echo $check->rush_category;?>" class="textbox" />
@@ -215,7 +201,7 @@
 			  <td class="item_input">
 			    <?php print form_dropdown('nav_id',array(''=>'请选择导航分类')+get_pair($all_nav,'nav_id','nav_name'),$check->nav_id); ?>
 			  </td>
-			</tr>
+			</tr> -->
 			<tr>
 				<td class="item_title">开始时间:</td>
 				<td class="item_input">
@@ -236,10 +222,10 @@
                     <input name="image_before_url" <?php echo $perms['rush_edit']? '' : 'disabled="disabled"';?> type="file" class="textbox" />
                     <?php if(!empty($check->image_before_url)):?>
                     <img src="<?php echo  base_url()?>public/data/images/<?php echo $check->image_before_url;?>" width="80px"/>
-                    <?php endif;?>请上传指定规格（318*368）图片
+                    <?php endif;?>请上传指定规格（750*362）图片
                 </td>
 			</tr>
-			<tr>
+			<!-- <tr>
 				<td class="item_title">限抢logo:</td>
 				<td class="item_input">
                     <input name="image_ing_url" <?php echo $perms['rush_edit']? '' : 'disabled="disabled"';?> type="file" class="textbox" />
@@ -247,7 +233,7 @@
                     <img src="<?php echo  base_url()?>public/data/images/<?php echo $check->image_ing_url;?>" width="80px"/>
                     <?php endif;?>请上传指定规格（984*320）图片
 				</td>
-			</tr>
+			</tr> -->
 			<tr>
 				<td class="item_title">排序:</td>
 				<td class="item_input">
@@ -287,7 +273,7 @@
 				<td class="item_title"></td>
 				<td class="item_input" colspan=3 height=30>
                 	<?php if($perms['rush_edit']):?>
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
                     <?php endif;?>
 				</td>
 			</tr>
@@ -339,8 +325,8 @@
                 <?php endforeach;?>
                 </select>
 				<select name="product_sex"><option value="">性别</option><option value="1">男款</option><option value="2">女款</option><option value="3">男女款</option></select>
-				<input type="submit" value="搜索" />
-                                <input type="button" value="导入EXCEL商品" onclick="showDialog(<?php print $check->rush_id; ?>);" />
+				<input type="submit" class="am-btn am-btn-secondary" value="搜索" />
+                                <input type="button" class="am-btn am-btn-primary" value="导入EXCEL商品" onclick="showDialog(<?php print $check->rush_id; ?>);" />
 				</form>
 			</div>
 			<div class="blank5"></div>
@@ -372,7 +358,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'uploadsubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'uploadsubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<tr>

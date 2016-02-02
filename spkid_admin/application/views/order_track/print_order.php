@@ -88,10 +88,10 @@
 				</table>
 				<div align="right">合计：<?php print $order->product_num;?>件 ￥<?php print $order->order_price;?></div>
 				
-                                <p style="text-align: left; font-size: 14px" class="dingdan_nr full_width"><i>非常感谢您在 http://www.mammytree.com 购物，我们期待您的再次光临！</i></p>
+                                <p style="text-align: left; font-size: 14px" class="dingdan_nr full_width"><i>非常感谢您在 http://www.yueyawang.com 购物，我们期待您的再次光临！</i></p>
                                 <div align="left" style="margin-top:20px;"><b>退货信息：</b><br>
                                 地址：上海市峨山路77号金牛大厦北楼301室<br>
-                                收件：妈咪树退货组收<br>
+                                收件：悦牙网退货组收<br>
                                 电话：400-0966-021
                                 </div>
 			</div>

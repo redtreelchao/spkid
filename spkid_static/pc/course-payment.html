@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv=Content-Type content="text/html;charset=utf-8">
+<title>悦牙网支付方式</title>
+<link href="css/main.css" rel="stylesheet" type="text/css">
+<link href="css/common.css" rel="stylesheet" type="text/css">
+
+
+</head>
+
+<body>
+<!--nav start-->
+<div class="nav-wrap min-wrapper">
+    <div class="nav clearfix">
+          <a href="#" class="logo"><img src="images/logo2.png"></a>
+          
+          <div class="nav-right">
+               <div class="nav-lb">
+                   <div class="nav-users">
+                        <a class="nav-user-icon" href="#"><img src="images/touxiang.jpg"></a>
+                        <span class="pay-name">胡玲翠</span>
+                        <a href="#" class="nav-order">我的订单</a>
+                        <a href="#" class="nav-cart">购物车</a>
+                   </div>
+            </div>
+         </div>
+    </div>
+  
+<!--header end-->
+
+</div>
+
+<!--pay start-->
+<div class="cart-wrapper">
+     <div class="gwc-wrapper">
+           <div class="home-wrapper pay-scuss">
+                <div class="course-pic"><img src="images/course-order-img2.png"></div>
+                <div class="pay-lb clearfix">
+                     <div class="order-collect clearfix">
+                          <div class="tip-box">
+                               <h3 class="title">订单提交成功，请尽快支付！</h3>
+                               <p class="tip">请在<strong class="houer">24</strong>小时内完成支付，否则订单将被自动取消</p>
+                          </div>
+                          <div class="money">
+                                <div class="should">应付总额：<strong class="highlight">¥1398.00</strong></div>
+                                <div class="ordersn">
+                                   订单编号：<strong>15122958160817202</strong>
+                                    <span class="toggleshow">
+                                         <span class="showtext" onclick="openShutManager(this,'goods-detail',false,'收起','展开')">收起</span>
+                                    </span>
+                               </div>
+                          </div>
+                    </div>
+                    
+                    <div id="goods-detail" class="goods-detail" style="display: none;">
+                         <div class="pay-buy clearfix"><span class="fl-left">购买商品：</span><span class="fl-left">1.金马克藻酸盐印模材<br/>2.金马克</span></span></div>
+                         <p class="pay-ad">收货地址：<span>上海市</span><span>徐汇区</span><span>龙吴路2888弄28号1602</span><span>王猛</span><span>15618354477</span></p>
+                    </div>
+                    
+                   
+  <script>
+	function openShutManager(oSourceObj,oTargetObj,shutAble,oOpenTip,oShutTip){
+	var sourceObj = typeof oSourceObj == "string" ? document.getElementById(oSourceObj) : oSourceObj;
+	var targetObj = typeof oTargetObj == "string" ? document.getElementById(oTargetObj) : oTargetObj;
+	var openTip = oOpenTip || "";
+	var shutTip = oShutTip || "";
+	if(targetObj.style.display!="none"){
+	   if(shutAble) return;
+	   targetObj.style.display="none";
+	   if(openTip  &&  shutTip){
+		sourceObj.innerHTML = shutTip; 
+	   }
+	} else {
+	   targetObj.style.display="block";
+	   if(openTip  &&  shutTip){
+		sourceObj.innerHTML = openTip; 
+	   }
+	}
+	}
+</script>
+
+
+                    
+                    
+                    
+                    
+                
+                </div>
+                
+                
+               <div class="weixinpay" style="display: block;">
+                    <div class="title"><img src="images/weixinpay.jpg" width="108"></div>
+                    <div id="qrcode" class="qrcode"><img src="http://store.baidu.com/order/getqrcode?code_url=weixin://wxpay/bizpayurl?pr=303desw"></div>
+                    <p class="tip">请使用微信扫描二维码以完成支付</p>
+                    <div class="back"><span>&lt;</span>选择其他支付方式</div>
+             </div>
+           
+           
+           
+           </div>
+     
+     
+     </div>
+
+
+</div>
+
+<!--pay end-->
+
+
+
+
+<!--copyright-start-->
+<div class="copyright clearfix">
+     <div class="copyright-show clearfix">
+          <div class="copyright-tel"></div>
+          <div class="copyright-about">
+               <div class="copyright-txt">关注我们：</div>
+               <a class="c-weixin" target="_blank" href="#"></a>
+               <a class="c-weibo" target="_blank" href="#"></a>
+               <a class="c-QQ" target="_blank" href="#"></a>
+               <img src="images/code.png">
+          </div>
+     
+     </div>
+</div>
+<!--copyright-end-->
+
+
+
+
+
+</body>
+
+</html>

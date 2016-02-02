@@ -154,11 +154,12 @@ class Provider_brand extends CI_Controller
             auth('provider_brand_setup');
             
             $provider_brand = $this->provider_brand_model->filter(array("id"=>$id));
-	    if(empty($provider_brand)){
-		echo json_encode(array("err"=>1, "msg"=>"供应商关联品牌不存在"));
-		return;
-	    }
-            
+            if(empty($provider_brand)){
+                sys_msg('供应商关联品牌不存在');
+            }
+            if (empty($provider_brand->commission_history)){
+                sys_msg('没有历史扣点');
+            } 
             $this->load->vars('histories', json_decode($provider_brand->commission_history));
             
             $this->load->model('admin_model');

@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv=Content-Type content="text/html;charset=utf-8">
+<title>悦牙网购物车</title>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+<link href="css/main.css" rel="stylesheet" type="text/css">
+<link href="css/common.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="js/common.js"></script> 
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+<!--nav start-->
+<div class="nav-wrap min-wrapper">
+    <div class="nav clearfix">
+          <a href="#" class="logo"><img src="images/logo2.png"></a>
+          <div id="navContentBox" class="nav-contentbox" style="right: 320px;"><img src="images/cart-img1.png" class="order-flow"></div>
+          <div class="nav-right">
+               
+              <div class="nav-lb">
+                   <div class="nav-users">
+                        <a class="nav-user-icon" href="#"><img src="images/touxiang.jpg"></a>
+                        <span class="nav-username">胡玲翠</span>
+                   </div>
+            </div>
+          </div>
+    </div>
+  
+<!--header end-->
+
+</div>
+
+<!--cart-wrapper start-->
+<div class="cart-wrapper">
+     <div class="gwc-wrapper">
+          <div class="home-wrapper">
+                    <div class="cart-title">全部商品(共<span>10</span>件)</div>
+                    <div class="cartlist">
+                         <ul class="cartlb clearfix">
+                             <li><span><em class="selectall i-checkbox i"></em>全选</span><span class="goods-name">商品信息</span></li>
+                             <li class="goods-price">单价</li>
+                             <li><span class="goods-num">数量</span><span class="goods-money">小计</span></li>
+                             <li class="operate">操作</li>
+                         </ul> 
+                         <ul class="cart-main clearfix">
+                             <!--购物车有内容的时候开始-->
+                             <li class="goods-first bulky">
+                                 <div class="item-table">
+                                       <span class="chooseone  i-checkbox i"></span>
+                                       <a class="goods-info" target="_blank" href="#">
+                                       <div class="goods-img item-table"><img src="images/pro1.jpg" width="100%"></div>
+                                       <div class="goods-desc item-table">
+                                            <p class="goods-name">金玛克藻酸盐印模材材</p>
+                                            <p class="goods-attr"><span class="goods-color">黑色</span>&nbsp;&nbsp;<span>标准版</span></p>
+                                        </div>
+                                      </a> 
+                                </div>
+                                
+                                <div class="goods-price item-table"><span>￥<em class="bprice">299.00</em></span></div>
+                                
+                                <div class="counter item-table">
+                                    <div class="counter-wrapper fl-right">
+                                         <span name="down" class="minus cart-num fl-left">-</span>
+                                         <input type="text" class="num fl-left" value="1" name="num">
+                                         <span name="up" class="plus cart-num fl-left">+</span> 
+                                    </div>
+	                               <div class="tips" style="display: block;"></div>
+	                          </div>
+                              
+                              <div class="goods-money item-table">￥<span><em class="total">598.00</em></span></div>
+                              <div class="operate item-table">
+                                   <a class="single-del" href="#forgot-box" data-toggle="modal" data-container="body">删除</a>
+                                   <a class="collect" href="#">移到我的关注</a>
+                              </div>
+                             </li>
+                             
+                             <li class="goods-first bulky">
+                                 <div class="item-table">
+                                       <span class="chooseone i-checkbox i checked"></span>
+                                       <a class="goods-info" target="_blank" href="#">
+                                       <div class="goods-img item-table"><img src="images/pro1.jpg" width="100%"></div>
+                                       <div class="goods-desc item-table">
+                                            <p class="goods-name">金玛克藻酸盐印模材材</p>
+                                            <p class="goods-attr"><span class="goods-color">黑色</span>&nbsp;&nbsp;<span>标准版</span></p>
+                                        </div>
+                                      </a> 
+                                </div>
+                                
+                                <div class="goods-price item-table"><span>￥<em class="bprice">299.00</em></span></div>
+                                
+                                <div class="counter item-table">
+                                    <div class="counter-wrapper fl-right">
+                                         <span name="down" class="minus cart-num fl-left">-</span>
+                                         <input type="text" class="num fl-left" value="1" name="num">
+                                         <span name="up" class="plus cart-num fl-left">+</span> 
+                                    </div>
+	                               <div class="tips" style="display: block;"></div>
+	                          </div>
+                              
+                              <div class="goods-money item-table">￥<span><em class="total">598.00</em></span></div>
+                              <div class="operate item-table">
+                                   <a class="single-del" href="#">删除</a>
+                                   <a class="collect" href="#">移到我的关注</a>
+                              </div>
+                             </li>
+                             <!--购物车有内容的时候结束-->
+                             
+                            <!--购物车没有内容的时候开始-->
+                            <!--<li class="empty-cart">您的购物车还是空的，赶紧去<span>购物</span>吧！</li>-->
+                            <!--购物车没有内容的时候结束-->
+                         </ul>  
+                         
+                         <div id="collect" class="cart-statement clearfix" style="display: block;">
+                                <div class="fl-left">
+                                    <span><em class="selectall i-checkbox i"></em>全选</span>
+                                    <a href="#" class="shanchun">删除选中商品</a>
+                                    <a href="#" style="display: none;">清除失效商品</a>
+                                </div>
+                                <div class="fl-right">
+                                    <span class="fl-left">已选<i class="buy-count">0</i>件商品</span>
+                                    <span class="fl-left"><em class="fl-left">总计金额（不含运费）：</em><i class="amounted">¥ 0.00</i></span>
+                                    <span type="submit" class="payment settle-accounts">去结算</span>
+                                </div>  
+                        </div>                 
+                    
+                    
+                    </div>
+               
+               </div>
+          
+          
+          
+     
+     
+     
+     </div>
+</div>         
+<!--cart-wrapper end-->
+
+
+<!--associated-goods start-->
+<div class="gwc-wrapper">
+    <div class="home-wrapper">
+         <div class="associated-goods">
+               
+               <ul class="associated-title clearfix">
+                    <li data-value="0" class="current">关联商品</li>
+                    <li data-value="1">猜你喜欢</li>
+                    <li data-value="2">最近收藏</li>
+               </ul>
+               
+               <ul class="associated-pic clearfix">
+               <li><a href="#"><img src="images/pro1.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材</p></a>
+               </li>
+               <li><a href="#"><img src="images/pro3.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材</p></a></li>
+               <li><a href="#"><img src="images/pro2.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材</p></a></li>
+               <li><a href="#"><img src="images/pro1.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材</p></a></li>
+               <li><a href="#"><img src="images/pro2.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材</p></a></li>
+               </ul>
+               
+               <ul class="associated-pic clearfix" style="display:none;">
+               <li><a href="#"><img src="images/pro1.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材1</p></a>
+               </li>
+               <li><a href="#"><img src="images/pro3.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材1</p></a></li>
+               <li><a href="#"><img src="images/pro2.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材1</p></a></li>
+               <li><a href="#"><img src="images/pro1.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材1</p></a></li>
+               <li><a href="#"><img src="images/pro2.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材1</p></a></li>
+               </ul>
+               
+               <ul class="associated-pic clearfix" style="display:none;">
+               <li><a href="#"><img src="images/pro1.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材2</p></a>
+               </li>
+               <li><a href="#"><img src="images/pro3.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材2</p></a></li>
+               <li><a href="#"><img src="images/pro2.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材2</p></a></li>
+               <li><a href="#"><img src="images/pro1.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材2</p></a></li>
+               <li><a href="#"><img src="images/pro2.jpg"><p class="associated-sprice">￥80</p><p class="associated-mc">金玛克藻酸盐印模材2</p></a></li>
+               </ul>
+               
+       </div>
+      
+   </div>
+</div>
+
+
+<!--associated-goods-end-->
+
+
+<!--copyright-start-->
+<div class="copyright clearfix">
+     <div class="copyright-show clearfix">
+          <div class="copyright-tel"></div>
+          <div class="copyright-about">
+               <div class="copyright-txt">关注我们：</div>
+               <a class="c-weixin" target="_blank" href="#"></a>
+               <a class="c-weibo" target="_blank" href="#"></a>
+               <a class="c-QQ" target="_blank" href="#"></a>
+               <img src="images/code.png">
+          </div>
+     
+     </div>
+</div>
+<!--copyright-end-->
+
+
+
+<div id="forgot-box" class="modal v-pov" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header v-close">
+              <button type="button" class="close triangle-topright" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">收货地址已满，请修改或删除收货地址</h4>
+          </div>
+          <div class="modal-body v-button">
+              <button class="btn btn-lg btn-blue" type="submit">确定</button>
+              <button class="btn cancel " type="submit">取消</button>
+          </div>
+        </div>
+      </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script>
+ $(".associated-title li").bind("click", function () {
+
+        $(".associated-title li").removeClass("current");
+        $(this).addClass("current");
+        var i = $(this).attr("data-value");
+        $(".associated-pic").hide();
+        $(".associated-pic:eq(" + i + ")").show();
+    });
+</script>
+
+</body>
+
+</html>

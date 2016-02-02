@@ -3,11 +3,7 @@
 <script type="text/javascript" src="public/js/validator.js"></script>
 <script type="text/javascript" src="public/js/voucher.js"></script>
 <script type="text/javascript" src="public/js/listtable.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
 <script type="text/javascript" src="public/js/cluetip.js"></script>
-<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 <script type="text/javascript">
 	//<![CDATA[
@@ -197,7 +193,7 @@
 			<tr>
 				<td class="item_title">&nbsp;</td>
 				<td class="item_input" colspan="3">
-					<?php print form_submit('mysubmit','提交','class="button"');?>
+					<?php print form_submit('mysubmit','提交','class="am-btn am-btn-primary"');?>
 				</td>
 			</tr>
 			<?php endif ?>

@@ -3,14 +3,8 @@
 <script type="text/javascript" src="public/js/listtable.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
 <script type="text/javascript" src="public/js/package.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 <script type="text/javascript" src="public/js/cluetip.js"></script>
-<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
-<script type="text/javascript" src="public/js/jquery.form.js"></script>
+<!--<script type="text/javascript" src="public/js/jquery.form.js"></script> -->
 <link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 <script type="text/javascript">
 	//<![CDATA[
@@ -201,7 +195,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input" colspan=3>
-					<?php print form_submit('mysubmit','提交',' '.($perms['edit']?'class="button"':'disabled'));?>
+					<?php print form_submit('mysubmit','提交',' '.($perms['edit']?'class="am-btn am-btn-primary"':'disabled'));?>
 				</td>
 			</tr>
 			<tr>
@@ -237,7 +231,7 @@
 				<?php print form_dropdown('style_id', get_pair($all_style,'style_id','style_name',array(''=>'风格')));?>
 				<?php print form_dropdown('season_id', get_pair($all_season,'season_id','season_name',array(''=>'季节')));?>
 				<select name="product_sex"><option value="">性别</option><option value="1">男款</option><option value="2">女款</option><option value="3">男女款</option></select>
-				<input type="submit" value="搜索" />
+				<input type="submit" class="am-btn am-btn-secondary" value="搜索" />
 				</form>
 			</div>
 			<div id="listDiv">

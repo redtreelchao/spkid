@@ -7,8 +7,6 @@ if ($doc_type == 1) {
     $expected_number = $biz_content->depot_out_number;
 }
 ?>
-<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <script type="text/javascript" src="public/js/utils.js"></script>
 <style type="text/css" rel="stylesheet">
     .up_edit{width:30px}
@@ -65,7 +63,7 @@ if ($doc_type == 1) {
                     </td>
                     <td rowspan="<?= count($rows->details) + 1 ?>">
                         <?php if ($rows->shelve_number > 0): if ($doc_type == 1 && check_perm('cancel_box_check_depot_out')): ?>
-                                <input type="button" class="button" onclick="cancel_box_check(<?php print $rows->box_id; ?>);" value="取消此箱复核" style="margin: 2px;"/>
+                                <input type="button" class="am-btn am-btn-primary" onclick="cancel_box_check(<?php print $rows->box_id; ?>);" value="取消此箱复核" style="margin: 2px;"/>
                                 <?
                             endif;
                         endif;

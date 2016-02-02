@@ -174,8 +174,8 @@ class Order_return extends CI_Controller
     	$print = $this->input->post('print');
         if ($print == 1) {
 
-        	$data['shop_name'] = 'mammytree';
-        	$data['shop_url'] = 'www.mammytree.com';
+        	$data['shop_name'] = 'yueyawang';
+        	$data['shop_url'] = FRONT_URL;
         	$data['shop_address'] = '';
         	$data['service_phone'] = '4000-966-021';
         	$data['print_time'] = date('Y-m-d H:i:s');
@@ -519,7 +519,6 @@ class Order_return extends CI_Controller
                         $return_product[$key]['return_location_name'] = $src_order_goods_depot[$product['op_id']]['location_name'];
                         continue;
                     }
-
                     if($product['ctb_number'] > 0) { //代转买
                         $return_product[$key]['return_depot_id'] = CTB_RETURN_DEPOT_ID;
                         $return_product[$key]['return_depot_name'] = CTB_RETURN_DEPOT_NAME;
@@ -557,6 +556,11 @@ class Order_return extends CI_Controller
                             $return_product[$key]['return_depot_name'] = DEPOT_NAME_MT_VIRTUAL_RETURN;
                             $return_product[$key]['return_location_id'] = LOCATION_ID_MT_VIRTUAL_RETURN;
                             $return_product[$key]['return_location_name'] = LOCATION_NAME_MT_VIRTUAL_RETURN;
+                        }  elseif ($coop->provider_cooperation == COOPERATION_TYPE_THIRD) { //MT服务(虚库)
+                            $return_product[$key]['return_depot_id'] = THIRD_DEPOT_ID;
+                            $return_product[$key]['return_depot_name'] = THIRD_DEPOT_NAME;
+                            $return_product[$key]['return_location_id'] = THIRD_DEPOT_LOCATION_ID;
+                            $return_product[$key]['return_location_name'] = LOCATION_NAME_THIRD_RETURN;
                         }
                     }
 		}
@@ -1264,7 +1268,7 @@ class Order_return extends CI_Controller
                     }
                     //取得申请退货单意见列表
                     $apply_suggest = $this->apply_return_model->apply_return_suggest($apply_id);
-                    $data['apply_id'] = $apply_id;
+                    //$data['apply_id'] = $apply_id;
                     $data['apply_product'] = $apply_product;
                     $data['apply_suggest'] = $apply_suggest;
                 }
@@ -1303,6 +1307,7 @@ class Order_return extends CI_Controller
 		$data['return_product'] = $order_product;
 		$data['return_reasons'] = $this->return_model->get_return_reasons();
 		$data['my_id'] = $this->admin_id;
+        $data['apply_id'] = $apply_id;
         // 下退货单时显示订单意见
         $this->load->model('order_model');
         $order_advice = $this->order_model->order_advice($order_info['order_id']);
@@ -1779,6 +1784,7 @@ class Order_return extends CI_Controller
                     $trans['consign_rate']=$availNum['consign_rate'];
                     $trans['product_cess']=$availNum['product_cess'];
                     $trans['shop_price']=$availNum['shop_price'];
+                    $trans['expire_date']=$availNum['expire_date'];
 
                     $this->return_model->insert_transaction($trans);
                 }
@@ -1917,6 +1923,7 @@ class Order_return extends CI_Controller
                         $result[$batchNum]['cost_price'] = $availNum['cost_price'];
                         $result[$batchNum]['consign_rate'] = $availNum['consign_rate'];
                         $result[$batchNum]['product_cess'] = $availNum['product_cess'];
+                        $result[$batchNum]['expire_date'] = $availNum['expire_date'];
                         break;
                     }else{
                         $result[$batchNum]['product_num'] = $availNum['product_num'];
@@ -1925,6 +1932,7 @@ class Order_return extends CI_Controller
                         $result[$batchNum]['cost_price'] = $availNum['cost_price'];
                         $result[$batchNum]['consign_rate'] = $availNum['consign_rate'];
                         $result[$batchNum]['product_cess'] = $availNum['product_cess'];
+                        $result[$batchNum]['expire_date'] = $availNum['expire_date'];
                         //$result[$batchNum] = $availNum;
                         $num -= $availNum['product_num'];
                     }
@@ -1941,22 +1949,22 @@ class Order_return extends CI_Controller
      */
     function insert_return_user_shipping_fee($fee,$shipping_name,$return_id,$return_sn,$order_id){
         //TODO 判断地区和运费是否符合标准
-        if($fee>20){
-            return '运费超标,江浙沪<=10元;其他地区<=20元!';
+        if($fee>SHIPPING_FEE_FAR){
+            return '运费超标,江浙沪<='.SHIPPING_FEE_NEAR.'元;其他地区<='.SHIPPING_FEE_FAR.'元!';
         }else{
             //大于10元还要进行判断,否则可以直接通过
-            if($fee>10){
+            if($fee>SHIPPING_FEE_NEAR){
                 //判断是否是江浙沪,如果大于10元,并且是江浙沪为不合法数据
                 $this->load->model('order_model');
                 $source_order = $this->order_model->filter(array('order_id'=>$order_id));
                 $province = $source_order->province;
                 $is_jzh = false;
                 //province = 16(江苏),25(上海),31(浙江)
-                if($province == 16 || $province == 25 || $province == 31){
+                if(in_array($province, $shipping_jzh)){
                     $is_jzh = true;
                 }
                 if($is_jzh)
-                    return '运费超标,江浙沪<=10元!';
+                    return '运费超标,江浙沪<='.SHIPPING_FEE_NEAR.'元!';
             }
         }
         $return_user_shipping_fee_data['return_id'] = $return_id;

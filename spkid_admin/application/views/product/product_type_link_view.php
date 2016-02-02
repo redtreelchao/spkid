@@ -6,7 +6,7 @@
 </div>
 <div>
 <!--商品前台分类-->
-	<div id="typelinkDiv" style="height:350px;overflow-y:scroll;">
+	<div id="typelinkDiv" style="height:500px;overflow-y:scroll;">
 		<input type="hidden" id="product_id" name="product_id" value="<?php echo $product_id ?>">
 		<?php foreach($types as $sub_type):?>
 		<table width="95%" align="center" cellpadding="0" cellspacing="0" class="classified" style="margin: 5px 0;">

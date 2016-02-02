@@ -159,12 +159,12 @@ class Return_Onshelf extends CI_Controller {
     /* ---- private methods ------------------------------------------------- */
     private function do_get_default_from_location_name($depot) {
         $depot_id = $depot->depot_id;
-        if ($depot_id == DEPOT_ID_FW_VIRTUAL_RETURN) { //MT服务(虚库)退货仓
-            return LOCATION_NAME_FW_VIRTUAL_RETURN;
-        } else if ($depot_id == DEPOT_ID_MT_REAL_RETURN) {  //MT代销(实库)退货仓
-            return LOCATION_NAME_MT_REAL_RETURN;
-        } else if ($depot_id == DEPOT_ID_MT_VIRTUAL_RETURN) { //MT代销(虚库)退货仓
-            return LOCATION_NAME_MT_VIRTUAL_RETURN;
+        if ($depot_id == DT_RETURN_DEPOT_ID) { //代销退货仓
+            return DT_RETURN_DEPOT_LOCATION_NAME;
+        } else if ($depot_id == MT_RETURN_DEPOT_ID) {  //买断退货仓
+            return MT_RETURN_DEPOT_LOCATION_NAME;
+        } else if ($depot_id == BT_RETURN_DEPOT_ID) { //第三方退货仓
+            return BT_RETURN_DEPOT_LOCATION_NAME;
         }
         return null;
     }

@@ -57,7 +57,51 @@ class Order_model extends CI_Model
             
             return $result;
         }
+    public function course_list($user_id){
+        $sql = 'SELECT o.*,op.shop_price,p.`product_name`,p.`brand_name`,p.`subhead`,p.`package_name`,p.`product_desc_additional`,p.`ps_num`,pg.img_url,pi.is_online FROM ty_order_info o LEFT JOIN ty_payment_info pi ON o.pay_id = pi.pay_id LEFT JOIN ty_order_product op ON o.`order_id`=op.`order_id` LEFT JOIN ty_product_info p ON p.product_id=op.`product_id` LEFT JOIN ty_product_gallery pg ON p.`product_id`=pg.`product_id` WHERE o.`user_id`='.$user_id.' AND o.genre_id = 2 ORDER BY order_id DESC LIMIT 30';
+        $rows = $this->db->query($sql)->result();
+        /*foreach ($rows as &$row){
+            $row->order_amount = $row->order_price + $row->shipping_fee - $row->paid_price;
+            $row->is_online = 1;
+        }*/
+        return $rows;
+    }
         
+    public function order_simple_list($user_id, $page, $status = null){
+        $page_size = M_LIST_PAGE_SIZE*5;
+        $page = ($page < 1) ? 1 : intval($page);
+        $start = ($page-1)*$page_size;
+        //AND o.order_status = '1'
+        $sql = "SELECT o.order_id,o.create_date,o.order_sn,o.paid_price,o.order_price,o.shipping_fee,o.shipping_id,o.shipping_status,o.pay_id,o.order_status,o.pay_status,o.is_ok,o.product_num,p.is_online FROM ".$this->db->dbprefix('order_info')." o LEFT JOIN ty_payment_info AS p ON o.pay_id = p.pay_id WHERE o.user_id = $user_id AND o.order_status != 3 AND o.genre_id = 1"; 
+        switch($status){
+        case 'pending' ://待付款
+            $sql .= " AND o.pay_status = 0 AND o.order_status IN (0,1) AND (o.order_price + o.shipping_fee)>o.paid_price AND p.is_online = 1";
+            break;
+        case 'wait_shipping' ://待发货
+            $sql .= ' AND o.pay_status = 1 AND o.shipping_status = 0';
+            break;
+        case 'wait_comment' ://待评价
+            //$sql .= 'not in (select 1 from ty_product_liuyan as pl where pl.tag_id = )';
+            //$where .= ' o.is_ok = 1 ';
+            break;
+        default :
+            break;
+
+
+        }
+        $sql .= " ORDER BY order_id DESC LIMIT $start, $page_size";
+        $rows = $this->db->query($sql)->result();
+        //$row->order_amount>0 && 
+        foreach ($rows as &$row){
+            $row->format_create_date=date("Y-m-d",strtotime($row->create_date));
+            $row->order_amount = $row->order_price + $row->shipping_fee - $row->paid_price;  //订单金额 + 运费 - 已经支付金额
+            $row->can_pay = $row->order_amount>0 && $row->is_online == 1 && 0 == $row->pay_status;   //未付款
+            $row->total_fee=$row->order_price+$row->shipping_fee;  //订单金额 + 运费
+            $row->total_fee=sprintf('%.2f',$row->total_fee);       //订单金额 + 运费
+            $row->order_amount=sprintf('%.2f',$row->order_amount);
+        }
+        return $rows;
+    }
 	public function order_list($filter,$user_id)
 	{
 		$where = " WHERE o.user_id = '" . $user_id . "' AND o.order_status != '3'";//显示虚发虚腿订单// AND o.shipping_true=1 ";
@@ -185,6 +229,7 @@ class Order_model extends CI_Model
                         {
                                 $cooper_arr[$row->order_id] = $row->provider_cooperation;
                                 $provider_arr[$row->order_id] = $row->provider_id;
+                               
                                 if ($row->provider_cooperation == 3) {
                                     $sql = "SELECT concat(p.return_address, '<br/>收件人:', p.return_consignee, '&nbsp;&nbsp;联系电话:', p.return_mobile) AS return_address FROM ty_product_provider p WHERE p.provider_id = 1";
                                     $result = $this->_db->query($sql)->row();
@@ -313,6 +358,16 @@ class Order_model extends CI_Model
         return $query->row();
     }
 
+    //获取订单 使用的 余额与现金券
+    public function get_payment_money($order_id) {
+    	$sql = " SELECT pf.`pay_code`, pf.`pay_id`,op.`payment_money` 
+    	FROM ty_order_payment AS op 
+    	LEFT JOIN ty_payment_info AS pf ON pf.`pay_id` = op.`pay_id` 
+    	WHERE pf.`pay_code` in( 'balance' ,'coupon') AND op.`order_id` = ".$order_id;
+    	$query = $this->_db->query($sql);
+        return $query->result();
+    }
+
     public function order_product($order_id)
     {
     	$sql = "SELECT op.*, p.product_name, p.product_sn,p.provider_productcode, p.unit_name, c.color_name, c.color_sn, s.size_name, s.size_sn, b.brand_id, b.brand_name
@@ -362,6 +417,11 @@ class Order_model extends CI_Model
 		$this->_db->update('order_info',$data,array('order_id'=>$order_id));
 	}
         
+        public function update_where ($data,$where)
+	{
+		$this->_db->update('order_info',$data,$where);
+	}
+        
         public function invalid($order_id, $order_sn) {
             $this->_db->update('ty_order_info',array("order_status" => 4, 'is_ok' => 1, 'is_ok_admin' => -1, 'is_ok_date' => date('Y-m-d H:i:s')),array('order_id' => $order_id));
             $this->_db->update('ty_transaction_info',array("trans_status" => 5),array('trans_sn' => $order_sn));
@@ -376,10 +436,12 @@ class Order_model extends CI_Model
          * 根据订单ID数组列表取订单记录
          * @param type $arr_order_id
          */
-        public function order_list_by_ids($arr_order_id)
+        public function order_list_by_ids($arr_order_id, $genre_id=0)
         {
             $sql = "select * from ty_order_info where order_id ".  db_create_in($arr_order_id);
-            $query = $this->db->query($sql);
+            if ($genre_id > 0) 
+                $sql .= " AND genre_id = ".$genre_id;
+            $query = $this->_db->query($sql);
             return $query->result();
         }
         
@@ -390,7 +452,7 @@ class Order_model extends CI_Model
          */
         public function product_list_by_order_ids($arr_order_id)
         {
-            $sql = "select op.*, p.product_name, c.color_name, s.size_name, g.img_url, pp.provider_id, pp.provider_name
+            $sql = "select op.*, p.product_name, p.brand_name, c.color_name, s.size_name, g.img_url, pp.provider_id, pp.provider_name
                     from ty_order_product as op
                     left join ty_product_info as p on op.product_id = p.product_id
                     left join ty_product_provider as pp on p.provider_id = pp.provider_id
@@ -455,7 +517,7 @@ class Order_model extends CI_Model
                 'order_ids' => $key,
                 'pay_price' => $pay_price,
                 'pay_id' =>$pay_id,
-                'bank_code' => $bank_code,
+                //'bank_code' => $bank_code, //支付调试中遇到此问题，上线前check
                 'user_id' => $user_id,
                 'add_time' => date('Y-m-d H:i:s'),                
             );
@@ -499,5 +561,11 @@ class Order_model extends CI_Model
             $result = $query->row();
             return $result ? $result->num : 0;
         }
+        
+        public function insert_order_client ($data)
+	{
+            $this->_db->insert('order_client_info',$data);
+            return $this->_db->insert_id();
+	}
 
 }

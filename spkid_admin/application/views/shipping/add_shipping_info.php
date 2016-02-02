@@ -52,12 +52,12 @@
 		  </tr>
 			<tr>
 				<td class="item_title">排序号:</td>
-				<td class="item_input"><input name="sort_order" class="textbox" value="0" id="sort_order" /></td>
+				<td class="item_input"><input name="sort_order" class="textbox" value="0" id="sort_order" />小的优先级高</td>
 			</tr>
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<tr>

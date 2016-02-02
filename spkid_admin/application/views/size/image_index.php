@@ -3,8 +3,6 @@
 	<script type="text/javascript" src="public/js/utils.js"></script>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/cluetip.js"></script>
-	<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
 	<link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 	<script type="text/javascript">
 		//<![CDATA[
@@ -29,7 +27,7 @@
 		//]]>
 	</script>
 	<div class="main">
-		<div class="main_title"><span class="l">尺寸详情列表</span><span class="r"><a href="size/image_add" class="add">新增</a></span></div>
+		<div class="main_title"><span class="l">规格详情列表</span><span class="r"><a href="size/image_add" class="add">新增</a></span></div>
 		<div class="blank5"></div>
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
@@ -50,7 +48,7 @@
 				;?>
 			</select>
 			<?php print form_dropdown('sex',array(0=>'所有性别','1'=>'男','2'=>'女'))?>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -68,7 +66,7 @@
 					<th>分类</th>
 					<th>性别</th>
 					<th>详情图</th>
-					<th>尺寸表</th>
+					<th>规格表</th>
 					<th width="120px;">操作</th>
 				</tr>
 				<?php foreach($list as $row): ?>
@@ -91,7 +89,7 @@
 						<?php if ($perm_delete): ?>
 							<a class="del" href="javascript:void(0)" rel="size/image_delete/<?php print $row->size_image_id; ?>" title="删除" onclick="do_delete(this)"></a>
 						<?php endif ?>
-						<a href="size/size_table_edit/<?php print $row->size_image_id; ?>" title="编辑尺寸表">尺寸表</a>
+						<a href="size/size_table_edit/<?php print $row->size_image_id; ?>" title="编辑规格表">规格表</a>
 					</td>
 				</tr>
 				<?php endforeach; ?>

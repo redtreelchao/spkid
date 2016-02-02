@@ -20,7 +20,7 @@ class Product_model extends CI_Model
 
 	public function product_info($product_id)
 	{
-		$sql = "SELECT p.*,f.flag_name,f.flag_url,b.brand_name,b.logo_160_73,b.brand_story, pp.display_name, pp.logo, pp.product_num, pp.provider_cooperation  
+		$sql = "SELECT p.*, p.is_best as is_zhanpin,f.flag_name,f.flag_url,b.brand_name,b.brand_info, b.brand_story, b.logo_160_73,b.brand_story, pp.display_name, pp.logo, pp.product_num, pp.provider_cooperation  
 				FROM ".$this->_db->dbprefix('product_info')." AS p
 				LEFT JOIN ".$this->_db->dbprefix('product_flag')." AS f ON p.flag_id = f.flag_id
 				LEFT JOIN ".$this->_db->dbprefix('product_brand')." AS b ON p.brand_id = b.brand_id 
@@ -105,11 +105,13 @@ class Product_model extends CI_Model
 
 	public function sub_info($sub_id)
 	{
-		$sql = "SELECT sub.sub_id,p.product_name,c.color_name,s.size_name
+		$sql = "SELECT sub.*,p.*,c.color_name,s.size_name, pt.type_name 
 				FROM ".$this->_db->dbprefix('product_sub')." AS sub
 				LEFT JOIN ".$this->_db->dbprefix('product_info')." AS p ON sub.product_id = p.product_id
 				LEFT JOIN ".$this->_db->dbprefix('product_color')." AS c ON sub.color_id = c.color_id
-				LEFT JOIN ".$this->_db->dbprefix('product_size')." AS s ON sub.size_id = s.size_id
+				LEFT JOIN ".$this->_db->dbprefix('product_size')." AS s ON sub.size_id = s.size_id 
+                                LEFT JOIN ty_product_type_link ptl ON ptl.product_id = p.product_id 
+				LEFT JOIN ty_product_type pt ON pt.type_id = ptl.type_id 
 				WHERE sub_id = ?";
 		$query = $this->_db->query($sql,array(intval($sub_id)));
 		return $query->row();
@@ -124,7 +126,7 @@ class Product_model extends CI_Model
 	{
 		$query = $this->_db->get_where('product_size_image',$filter,1);
 		return $query->row();
-	}
+    }
 
 	public function all_carelabel($filter=array())
 	{
@@ -153,6 +155,7 @@ class Product_model extends CI_Model
 		$query = $this->_db->get_where('product_category',$filter,1);
 		return $query->row();
 	}
+   
         
 	public function get_category($parent_id=0)
 	{
@@ -298,22 +301,94 @@ class Product_model extends CI_Model
 
 	public function link_product($product_id)
 	{
-		$sql="SELECT p.product_id,p.product_name,g.img_170_170, p.market_price,p.shop_price,
-				p.is_promote,p.promote_start_date,p.promote_end_date,p.promote_price
+		$sql="SELECT p.product_id,p.product_name,g.img_170_170, g.img_url, p.market_price,p.shop_price, p.subhead,
+				p.is_promote,p.promote_start_date,p.promote_end_date,p.promote_price, p.brand_name 
 			FROM ty_product_sub AS sub
 			LEFT JOIN ty_product_info AS p ON sub.product_id=p.product_id
-			LEFT JOIN ty_product_gallery AS g ON sub.product_id=g.product_id AND sub.color_id=g.color_id AND g.image_type='default'
-			WHERE sub.is_on_sale=1 AND (sub.consign_num=-2 OR sub.consign_num>0 OR sub.gl_num>sub.wait_num)
+			LEFT JOIN ty_product_gallery AS g ON sub.product_id=g.product_id AND  g.image_type='default'
+			WHERE sub.is_on_sale=1 
+			-- AND (sub.consign_num=-2 OR sub.consign_num>0 OR sub.gl_num>sub.wait_num)
 			AND sub.product_id IN (
 			SELECT l1.link_product_id FROM ty_product_link AS l1 WHERE l1.product_id=? 
 			UNION
 			SELECT l2.product_id FROM ty_product_link AS l2 WHERE l2.link_product_id=? AND l2.is_bothway=1 
 			)
 			GROUP BY p.product_id
-			ORDER BY p.sort_order LIMIT 5";
-		$query=$this->_db->query($sql, array($product_id,$product_id));
+			ORDER BY p.sort_order LIMIT 6";
+		$query=$this->_db->query($sql, array($product_id,$product_id));		
 		foreach($result=$query->result() as $p) format_product($p);
 		return $result;
+	}
+
+	public function get_link_product_by_rule($product_id, $left, $arr_exist_ids = array())
+	{
+		$exist_ids = count($arr_exist_ids) > 0 ? '(' . implode($arr_exist_ids, ',') . ')' : '';
+		$sql = "(";
+		$sql .="SELECT p.product_id,p.product_name,g.img_170_170, g.img_url, p.market_price,p.shop_price,p.subhead,
+				p.is_promote,p.promote_start_date,p.promote_end_date,p.promote_price,p.brand_name 
+			FROM ty_product_sub AS sub
+			LEFT JOIN ty_product_info AS p ON sub.product_id=p.product_id
+			LEFT JOIN ty_product_gallery AS g ON sub.product_id=g.product_id AND  g.image_type='default'
+			WHERE sub.is_on_sale=1 AND (sub.consign_num=-2 OR sub.consign_num>0 OR sub.gl_num>sub.wait_num)
+			AND ( p.product_name = (select product_name from ty_product_info where product_id = ?))
+			AND p.product_id != ? ";
+		$sql .= ($exist_ids ? " AND p.product_id not in " .  $exist_ids . ' ' : ' ');
+		$sql .=	" GROUP BY p.product_id
+			ORDER BY p.sort_order LIMIT " . $left;
+		$sql .= ")";
+		$sql .=" union ";
+		$sql .= "(";
+
+		$sql .= "SELECT p.product_id,p.product_name,g.img_170_170, g.img_url, p.market_price,p.shop_price,p.subhead,
+				p.is_promote,p.promote_start_date,p.promote_end_date,p.promote_price,p.brand_name 
+			FROM ty_product_sub AS sub
+			LEFT JOIN ty_product_info AS p ON sub.product_id=p.product_id
+			LEFT JOIN ty_product_gallery AS g ON sub.product_id=g.product_id AND  g.image_type='default'
+			WHERE sub.is_on_sale=1 AND (sub.consign_num=-2 OR sub.consign_num>0 OR sub.gl_num>sub.wait_num)
+			AND ( p.brand_id = (select brand_id from ty_product_info where product_id = ?))
+			AND p.product_id != ? ";
+		$sql .= ($exist_ids ? " AND p.product_id not in " .  $exist_ids . ' ' : ' ');
+		$sql .=" GROUP BY p.product_id
+			ORDER BY p.sort_order LIMIT " . $left;
+		$sql .= ")";
+		$query=$this->_db->query($sql, array($product_id,$product_id, $product_id, $product_id));	
+		foreach($result=$query->result() as $p) format_product($p);
+		return $result;
+	}
+
+	/**
+	* 按照产品id获取关联的产品
+	*/
+	public function get_cache_link_product($product_id) 
+	{		
+		if (empty($product_id)) {
+			return array();
+		}
+		
+		$cached_link_key = 'link-product-'. $product_id;				
+		$list = $this->cache->get($cached_link_key);
+
+		if (empty($list)) {
+			$list = $this->link_product($product_id);
+			$this->cache->save($cached_link_key, $list, CACHE_TIME_RECOMMEND_PRO);			
+		}
+		if(count($list) >=6) {
+			return $list;
+		}
+		$list2 = array();
+		$left = 6 - count($list);
+		$arr_exist_ids = array();
+		foreach($list as $k => $v) {
+			$arr_exist_ids[] = $v->product_id;	
+		}
+		if(empty($list) || $left > 0) {			
+			$list2 = $this->get_link_product_by_rule($product_id, $left, $arr_exist_ids);
+		}		
+		if(count($list2) > $left) {
+			$list2 = array_slice($list2, 0, $left );
+		}
+		$list = array_merge($list, $list2);
+		return $list;
 	}
 	/**
 	 * 按商品id获取默认的推荐商品 
@@ -353,7 +428,9 @@ class Product_model extends CI_Model
 			p.promote_start_date,
 			p.promote_end_date,
 			p.promote_price,
-			pb.brand_name
+			pb.brand_name,
+			p.brand_name,
+			p.subhead
 			FROM ty_product_sub AS sub
 			LEFT JOIN ty_product_info AS p
 			    ON sub.product_id = p.product_id
@@ -516,4 +593,203 @@ class Product_model extends CI_Model
         return $query->result();
     }
     
+    public function get_product_onsale($genre_id, $page){
+        $result = array();
+        $sql = "SELECT COUNT(1) AS cnt FROM (SELECT p.*, pg.img_url ". 
+               "FROM ".$this->_db->dbprefix('product_sub')." AS sub ". 
+               "INNER JOIN ".$this->_db->dbprefix('product_info')." AS p ON sub.product_id=p.product_id 
+               INNER JOIN ty_product_gallery pg ON pg.product_id = sub.product_id AND pg.color_id = sub.color_id AND image_type = 'default' 
+               WHERE p.is_audit=1 AND sub.is_on_sale=1 
+               AND (sub.consign_num=-2 OR sub.consign_num>0 OR sub.gl_num>sub.wait_num) 
+               AND p.genre_id = ".$genre_id." GROUP BY p.product_id) a";
+        $row = $this->db_r->query($sql)->row();
+        if (empty($row)) {
+            return $result;
+        }
+        $record_count = $row->cnt;
+        $page_size = M_LIST_PAGE_SIZE;
+        $page_cnt = ceil($record_count/$page_size);
+        $page = ($page < 1) ? 1 : intval($page);
+        $start = ($page-1)*$page_size;
+	$order_by = '';
+	// 课程按照开始时间 小的在前
+	if( $genre_id == PRODUCT_COURSE_TYPE){
+		$order_by =' ORDER BY FIELD(bbb,1,2) ASC, new_time ASC ';
+	}
+        $sql = "SELECT ABS(UNIX_TIMESTAMP(p.`package_name`) - UNIX_TIMESTAMP(CURRENT_DATE)) new_time,IF( UNIX_TIMESTAMP(p.`package_name`) - UNIX_TIMESTAMP(CURRENT_DATE)>0,1,2 ) AS bbb,p.*, pg.`img_url` ". 
+               "FROM ".$this->_db->dbprefix('product_sub')." AS sub ". 
+               "INNER JOIN ".$this->_db->dbprefix('product_info')." AS p ON sub.product_id=p.product_id 
+               INNER JOIN ty_product_gallery pg ON pg.product_id = sub.product_id AND pg.color_id = sub.color_id AND image_type = 'default' 
+               WHERE p.is_audit=1 AND sub.is_on_sale=1 
+               AND (sub.consign_num=-2 OR sub.consign_num>0 OR sub.gl_num>sub.wait_num) 
+               AND p.genre_id = ".$genre_id." GROUP BY p.product_id ".$order_by." LIMIT ".$start.", ".$page_size;
+        $query=$this->db_r->query($sql);
+        $result=$query->result_array();
+        /*foreach ($product as $row) {
+            $result[$row['product_id']] = $row;
+        }
+	*/
+        
+        /*$product_ids = array_keys($result);
+        if( empty($product_ids) ) return FALSE;
+        $sql = "SELECT product_id, img_url FROM ty_product_gallery WHERE product_id IN (".implode(",", $product_ids).") AND image_type = 'default' GROUP BY product_id";
+        $query=$this->db_r->query($sql);
+        $gallery=$query->result();
+        foreach ($gallery as $g) {
+            $result[$g->product_id]['img_url'] = $g->img_url;
+        }*/
+        return $result;
+    }
+
+    //获取大类
+    public function get_goods_genre($genre_id){
+        $sql = "SELECT * FROM `ty_product_genre` WHERE id = ".$genre_id;
+        $result = $this->db_r->query($sql)->row_array();
+        if (!empty($result['product_name_map'])){
+            $result['product_map'] = json_decode($result['product_name_map'], true);
+        }
+        if (!empty($result['client_info_map'])){
+            $result['client_map'] = json_decode($result['client_info_map'], true);
+        }
+        return $result;
+    }
+
+    //获取 指定 条件的 产品信息
+    public function get_product_list($brand_id){
+    	$sql = "SELECT pi.*,pg.img_url 
+				FROM ".$this->_db->dbprefix('product_info')." AS pi 
+				LEFT JOIN ".$this->_db->dbprefix('product_gallery')." AS pg ON pi.product_id=pg.product_id
+				WHERE pi.brand_id=?";
+		$query = $this->_db->query($sql,array($brand_id));
+        return $query->result();
+    }
+
+    //获取产品的注册号
+    public function get_product_additional($product_id) {
+    	$sql = "select p.`register_code_id`, r.* from ty_product_info p left join ya_register_code r on p.register_code_id = r.id where p.product_id = " . $product_id . " limit 1";
+    	$query = $this->_db->query($sql);
+    	$result = $query->result_array();
+    	$query->free_result();
+    	return $result;
+    }
+
+    //获取特卖商品列表
+    public function get_products_temai($genre_id, $page){
+        $result = array();
+        $sql = "SELECT COUNT(1) AS cnt FROM (SELECT p.*, pg.img_url ". 
+               "FROM ".$this->_db->dbprefix('product_sub')." AS sub ". 
+               "INNER JOIN ".$this->_db->dbprefix('product_info')." AS p ON sub.product_id=p.product_id 
+               INNER JOIN ty_product_gallery pg ON pg.product_id = sub.product_id AND pg.color_id = sub.color_id AND image_type = 'default' 
+               WHERE p.is_audit=1 AND sub.is_on_sale=1 AND p.is_promote = 1 AND promote_start_date <= now() AND promote_end_date >= now()
+               AND (sub.consign_num=-2 OR sub.consign_num>0 OR sub.gl_num>sub.wait_num) 
+               AND p.genre_id = ".$genre_id." GROUP BY p.product_id) a";
+        $row = $this->db_r->query($sql)->row();
+        if (empty($row)) {
+            return $result;
+        }
+        $record_count = $row->cnt;
+        $page_size = M_LIST_PAGE_SIZE;
+
+        $page_cnt = ceil($record_count/$page_size);
+        $page = ($page < 1) ? 1 : intval($page);
+        $start = ($page-1)*$page_size;
+        $sql = "SELECT p.*, pg.img_url ". 
+               "FROM ".$this->_db->dbprefix('product_sub')." AS sub ". 
+               "INNER JOIN ".$this->_db->dbprefix('product_info')." AS p ON sub.product_id=p.product_id 
+               INNER JOIN ty_product_gallery pg ON pg.product_id = sub.product_id AND pg.color_id = sub.color_id AND image_type = 'default' 
+               WHERE p.is_audit=1 AND sub.is_on_sale=1 AND p.is_promote = 1 AND promote_start_date <= now() AND promote_end_date >= now()
+               AND (sub.consign_num=-2 OR sub.consign_num>0 OR sub.gl_num>sub.wait_num) 
+               AND p.genre_id = ".$genre_id." GROUP BY p.product_id order by promote_start_date desc LIMIT ".$start.", ".$page_size;
+        $query=$this->db_r->query($sql);
+
+        $result=$query->result_array();
+        /*foreach ($product as $row) {
+            $result[$row['product_id']] = $row;
+        }
+        
+        /*$product_ids = array_keys($result);
+        if( empty($product_ids) ) return FALSE;
+        $sql = "SELECT product_id, img_url FROM ty_product_gallery WHERE product_id IN (".implode(",", $product_ids).") AND image_type = 'default' GROUP BY product_id";
+        $query=$this->db_r->query($sql);
+        $gallery=$query->result();
+        foreach ($gallery as $g) {
+            $result[$g->product_id]['img_url'] = $g->img_url;
+        }*/
+        return $result;
+    }
+
+    //取得产品的详情
+    //$genre_id = 1表示产品
+    //$genre_id = 2表示课程
+    public function get_product_detail($genre_id = 1) {
+    	$sql = 'SELECT product_id, product_desc_detail from ty_product_info where `genre_id` = ' . $genre_id . ' and product_id in (57,969,1322,2784,4239)';
+    	$query = $this->db_r->query($sql);    	
+    	$result = $query->result_array();
+    	return $result;
+    }
+    public function get_product_detail2($genre_id = 1) {
+    	$sql = 'SELECT product_id, detail1 from ty_product_info where `genre_id` = ' . $genre_id . ' and product_id in (57,969,1322,2784,2813,2815,2816,2817,2818,2819,2820,2821,2822,2823,2824,2825,2826,2827,2828,2829,2830,2831,2832,2833,2834,2835,2836,2837,2838,2839,2840,2841,2842,2843,2844,2845,2846,2847,2848,2849,2851,2852,2853,2854,2857,2858,2859,2860,2862,2863,2865,2867,2868,2869,2870,2871,2875,2876,2877,2879,2880,2881,2882,2883,2884,2886,2887,2888,2889,2890,2891,2892,2893,4098,4099,4106,4109,4111,4112,4114,4115,4116,4117,4119,4121,4122,4123,4126,4129,4131,4132,4133,4135,4137,4138,4139,4140,4141,4143,4144,4145,4146,4147,4148,4149,4158,4159,4161,4163,4164,4165,4166,4167,4168,4169,4170,4171,4172,4173,4174,4175,4176,4178,4179,4180,4181,4185,4187,4188,4189,4190,4191,4192,4193,4194,4195,4196,4197,4199,4200,4201,4202,4203,4204,4205,4206,4207,4208,4209,4210,4211,4213,4215,4216,4217,4218,4219,4220,4221,4222,4223,4224,4225,4227,4228,4229,4230,4231,4232,4233,4234,4236,4237,4238,4239,4242,4243,4244,4245,4247,4248,4249,4250,4251,4252,4253,4254,4255,4256,4257,4259,4260,4261,4262,4264,4265,4266,4268,4269,4270,4271,4275,4281,4282,42)';
+    	$query = $this->db_r->query($sql);    		
+    	$result = $query->result_array();
+    	var_export($result);
+    	return $result;
+    }
+    public function update_product_detail($product_id, $update) {
+    	// $sql = 'UPDATE ty_product_info set detail1 = "' .htmlspecialchars($prouct_detail_desc) . '" where product_id = ' . $product_id;
+    	// $this->db->query($sql);
+    	$this->db->update('product_info', $update, array('product_id'=>$product_id));
+    }
+
+    public function get_words_from_sphinx($keywords = array()) {
+    	if (empty($keywords)) {
+    		return false;
+    	}
+    	$sql = "select name from ty_sphinx_word where ";
+
+    	foreach ($keywords as $key => $value) {
+    		if ($key == 0) {
+    			$sql .= '';
+    		} else {
+    			$sql .= ' or ';
+    		}
+    		$sql .= " name like '%" . $value . "%' ";
+    	}
+		$query =  $this->db_r->query($sql);
+		$result = $query->result_array();
+		
+		return $result;
+    }
+
+
+    //获取该产品的现金券活动
+    public function get_product_voucher($product_id) {
+    	$sql = "SELECT vc.campaign_id,vr.`release_id`,vc.start_date ,vc.end_date,vr.voucher_amount,vr.`min_order`,vr.voucher_name
+				FROM ty_voucher_campaign AS vc
+				LEFT JOIN ty_voucher_release AS vr ON vc.`campaign_id` = vr.`campaign_id`
+				WHERE vc.campaign_type = 'auto' AND vc.campaign_status = 1 AND vc.start_date <= CURRENT_DATE AND CURRENT_DATE <= vc.end_date
+				AND vr.`release_status` = 1
+				AND CONCAT(',',product,',')  LIKE '%,".$product_id.",%'";
+    	$query = $this->db_r->query($sql);    	
+    	return $query->result();
+    }
+
+    /**
+     * 获取促销信息
+     * @param type $campaign_type
+     * @return type 
+     */
+    public function get_campaign($product_id) {
+		$campaign = $this->cache->get('campaign_' . $product_id);
+
+		if (empty($campaign )) {
+		    $sql = "SELECT campaign_id,campaign_name FROM ty_front_campaign WHERE "
+		    . " product_id = " . $product_id
+		    . " and is_use = 1 AND start_date <= NOW() AND end_date >= NOW() LIMIT 4";
+		    
+		    $campaign = $this->db_r->query($sql)->result_array();
+		    $this->cache->save('campaign_' . $product_id, $campaign, CACHE_TIME_CAMPAIGN);
+		}
+		return $campaign;
+	}
+
 }

@@ -31,10 +31,18 @@ class Product_model extends CI_Model
 				LEFT JOIN ".$this->db->dbprefix('product_sub')." AS sub ON sub.product_id = p.product_id
 				LEFT JOIN ".$this->db->dbprefix('product_cost')." AS cost ON cost.product_id = p.product_id
 				LEFT JOIN ".$this->db->dbprefix('product_provider')." AS prov ON prov.provider_id = p.provider_id
-				LEFT JOIN ".$this->db->dbprefix('purchase_batch')." AS batch ON batch.batch_id = cost.batch_id ";
+				LEFT JOIN ".$this->db->dbprefix('purchase_batch')." AS batch ON batch.batch_id = cost.batch_id 
+				LEFT JOIN ya_register_code AS reg ON reg.id = p.register_code_id ";
 		$where = " WHERE 1 ";
 		$group_by = " GROUP BY p.product_id ";
 		$param = array();
+
+		//商品ID
+		if (!empty($filter['product_id']))
+		{
+			$where .= " AND p.product_id = ? ";
+			$param[] = $filter['product_id'];
+		}
 
 		if (!empty($filter['product_sn']))
 		{
@@ -101,6 +109,35 @@ class Product_model extends CI_Model
 			$where .= " AND batch.batch_code = ? ";
 			$param[] = $filter['batch_code'];
 		}
+		
+		//医疗类型
+		if (!empty($filter['medical1_id']))
+		{
+			$where .= " AND reg.medical1 = ? ";
+			$param[] = $filter['medical1_id'];
+		}
+		//医疗设备
+		if (!empty($filter['medical2_id']))
+		{
+			$where .= " AND reg.medical2 = ? ";
+			$param[] = $filter['medical2_id'];
+		}
+		//上/下架
+		if (!empty($filter['is_on_sale']))
+		{
+			if ($filter['is_on_sale'] == 'is_on_sale_yes') {
+				$where .= " AND sub.is_on_sale = 1 ";
+			}elseif ($filter['is_on_sale'] == 'is_on_sale_no') {
+				$where .= " AND sub.is_on_sale = 0 ";
+			}
+		}
+		// 商品大类
+		if (!empty($filter['genre_id']))
+		{
+			$where .= " AND p.genre_id = ? ";
+			$param[] = $filter['genre_id'];
+		}
+
 		if (!empty($filter['product_status']) && in_array($filter['product_status'],array('is_best','is_new','is_hot','is_promote','is_offcode','is_gifts','is_stop','is_audit_yes','is_audit_no','is_pic_yes','is_pic_no')))
 		{
 			if ($filter['product_status'] == 'is_audit_yes') {
@@ -129,10 +166,11 @@ class Product_model extends CI_Model
 		{
 			return array('list' => array(), 'filter' => $filter);
 		}
-		$sql = "SELECT p.*,c.category_name,s.style_name,ss.season_name,b.brand_name,prov.provider_name "
+		$sql = "SELECT p.*,c.category_name,s.style_name,ss.season_name,b.brand_name,prov.provider_name,reg.medical1,reg.medical2 "
 				. $from . $where . $group_by . " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order']
 				. " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'];
-		$query = $this->db->query($sql, $param);
+		$query = $this->db->query($sql, $param); 
+
 		$list = $query->result();
 		$query->free_result();
 		return array('list' => $list, 'filter' => $filter);
@@ -291,7 +329,7 @@ class Product_model extends CI_Model
     public function product_sub_for_scan($filter)
 	{
 		$this->db_r
-			->select('ps.product_id,pi.product_name,pr.provider_name,pr.provider_code,pb.brand_name,ps.color_id,ps.size_id, 
+			->select('ps.product_id,pi.product_name,pr.provider_name,pr.provider_code,pb.brand_name,ps.color_id,ps.size_id,pps.expire_date, 
 			    color_name, size_name,product_sn,pps.product_number as p_number,pps.product_finished_number,pbs.product_number as box_number,
 			    ps.provider_barcode,pi.provider_productcode,pi.create_admin,pi.create_date,pi.audit_admin,pi.audit_date')
 			->from('product_sub AS ps')
@@ -351,6 +389,46 @@ class Product_model extends CI_Model
 		return $query->result();
 	}
 
+    public function get_index_goods(){
+        $max = MOBILE_INDEX_MAX_PRODUCT_NUM;
+        
+
+        // 优先获得打标的产品 max 个
+        $sql = 'SELECT p.*,is_best AS is_zhanpin,pg.`img_url` 
+		    FROM ty_product_info AS p 
+		    LEFT JOIN ty_product_sub AS ps USING(product_id) 
+		    LEFT JOIN ty_product_gallery AS pg ON ps.`product_id`=pg.`product_id` AND ps.`color_id`=pg.`color_id` WHERE pg.image_type="default"
+		    AND p.`is_audit`=1 AND  ps.is_on_sale = 1 AND (ps.consign_num>0 OR ps.consign_num=-2 OR ps.gl_num>ps.wait_num) AND 
+		    (p.is_best=1 OR p.is_hot=1 OR p.is_new=1 OR p.is_offcode=1 OR p.is_gifts=1) AND p.genre_id=1 group by p.product_id ORDER BY RAND()'. " limit $max";
+
+        $query = $this->db->query($sql);
+        $res = $query->result_array();
+
+        // 若不足max个
+        $total = count($res);
+        if ($total<$max){
+            $left = $max-$total;
+            $sql = "SELECT p.*,is_best AS is_zhanpin,pg.`img_url` 
+			FROM ty_product_info AS p LEFT JOIN ty_product_sub AS ps USING(product_id) 
+			LEFT JOIN ty_product_gallery AS pg ON ps.`product_id`=pg.`product_id` AND ps.`color_id`=pg.`color_id` 
+			WHERE  pg.image_type='default' and
+			p.`is_audit`=1 AND  ps.is_on_sale = 1 AND (ps.consign_num>0 OR ps.consign_num=-2 OR ps.gl_num>ps.wait_num) AND p.genre_id=1 
+			group by p.product_id ORDER BY RAND() limit $left";
+            $query = $this->db->query($sql);
+
+            $res_left  = $query->result_array();
+
+            if( !empty($res_left) ){
+                $res = array_merge( $res, $res_left );
+            }
+        }
+        foreach ($res as $key => &$p) {        	
+        	$p['is_promote'] = $p['is_promote'] && strtotime($p['promote_start_date'])<=time() && strtotime($p['promote_end_date'])>=time() ;
+			$p['shop_price'] = $p['is_promote'] ? $p['promote_price'] : $p['shop_price'];
+			//$p['last_shop_price'] = $p['shop_price'];
+        }
+		return $res;
+    }
 	public function link_search ($filter)
 	{
 
@@ -1318,7 +1396,76 @@ class Product_model extends CI_Model
         $list = $query->result_array();
         return $list;	
 	}
-	
+        
+        public function get_random(){
+            $sql = "SELECT rand_id, rand_sn FROM ya_product_sn_rand WHERE status = 0 ORDER BY rand_id ASC LIMIT 1";
+            $result = $this->db->query($sql)->row_array();
+            if (empty($result))
+                return false;
+            $sql = "UPDATE ya_product_sn_rand SET status = 1 WHERE `rand_id` = ".$result['rand_id'];
+            $this->db->query($sql);
+            return $result['rand_sn'];
+        }
+    // 商品款号生成规则
+    public function gen_p_sn($brand_code, $cate_code){
+        $sn = $this->get_random();
+        if (empty($sn)) return;
+        $a = "gen_p_sn_".PRODUCT_SN_RULE;
+        return $this->$a($sn,$brand_code, $cate_code);
+    }
+    // 商品款号按品牌缩写+随机数
+    private function gen_p_sn_cat_rand($sn,$brand_code, $cate_code){
+        return $cate_code.$sn;
+    }
+    // 商品款号按类别编码+随机数
+    private function gen_p_sn_brandyear($sn,$brand_code, $cate_code){
+        return $brand_code.date("y").$sn;
+    }
+
+	//更新产品访问量
+	public function product_num_update($id,$pv)
+	{
+        $sql = "UPDATE ty_product_info SET pv_num = pv_num+".$pv." WHERE product_id = ".$id;
+        return $this->db->query($sql);
+        return true;
+	}
+
+	//查询产品信息
+	public function product_sn_name($id)
+	{
+        $sql = "SELECT product_sn,product_name FROM ty_product_info WHERE product_id=".$id;
+        $sn_name = $this->db->query($sql)->row();
+        return $sn_name;
+	}
+
+	//批量更新产品销量信息
+    public function ps_num_update ($update){
+        $this->db->update_batch('product_info', $update, 'product_id');
+        return true;
+    }
+public function strip_product(){
+	$sql = "SELECT product_id,product_desc FROM ty_product_info WHERE genre_id=1 AND product_desc IS NOT NULL AND LENGTH(product_desc) > 20";
+        $query = $this->db->query($sql);
+	$list = $query->result_array();
+	foreach( $list AS $row ){
+		$product_id = $row['product_id'];
+		$desc = preg_replace('/style=".*"/','',strip_tags( $row['product_desc'], '<p>' ));
+		$data['product_desc'] = $desc;
+		$this->update( $data, $product_id );
+	}
+echo 'done';
+
+}
+public function get_check_gallery_rows($num=50){
+        $sql = "select product_id, img_url from ty_product_gallery where `img_exist` = 0 order by product_id desc limit ".$num;
+        $result = $this->db->query($sql)->result();
+        return $result;
+
+}
+public function update_check_gallery_rows($data){
+        $sql= 'update ty_product_gallery set img_exist = ? where product_id = ?';
+        return $this->db->query($sql,$data);
+}
 	
 }
 ###

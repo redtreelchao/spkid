@@ -1,11 +1,7 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="../../../public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="../../../public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../../public/js/listtable.js"></script>
 	<script type="text/javascript" src="../../../public/js/utils.js"></script>
-    <script type="text/javascript" src="../../../public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="../../../public/js/jui/datepicker.min.js"></script>
 	<div class="main">
 		<div class="main_title"><span class="l">系统设置 >> 广告管理</span> <span class="r"><a href="front_ad/index" class="return r">返回列表</a><a href="front_ad/ad_add/<?php echo $position_id;?>" class="add">新增</a></span></div>
         <div class="blank5"></div>

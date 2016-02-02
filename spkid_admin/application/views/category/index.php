@@ -11,7 +11,9 @@
 				</tr>
 				<tr class="row">
 					<th width="50px">编号</th>
+					<th width="150px">分类代号</th>
 					<th>分类名称</th>
+					<th>商品大类</th>
 					<th>排序号</th>
 					<th>启用</th>
 					<th width="120px;">操作</th>
@@ -19,7 +21,9 @@
 				<?php foreach($list as $row): ?>
 				<tr class="row">
 					<td><?php print $row->category_id; ?></td>
+					<td><?php echo $row->cate_code;?></td>
 					<td style="text-align:left;"><?php echo  $row->level_space, $row->category_name?></td>
+					<td><?php echo $row->name?></td>
 					<td>
 						<?php print edit_link('category/edit_field','sort_order',$row->category_id,$row->sort_order); ?>
 					</td>

@@ -40,7 +40,7 @@
     <tr class="row package_op_tr">
         <td colspan="7">
             <?php print form_hidden('package_id',$package->package_id); ?>
-            <input type="button" value="提交" onclick="add_package();" />
+            <input type="button" class="am-btn am-btn-secondary" value="提交" onclick="add_package();" />
         </td>
     </tr>
     <?php foreach ($package_area as $area): ?>

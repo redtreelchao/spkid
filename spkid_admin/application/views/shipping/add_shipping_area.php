@@ -91,7 +91,7 @@
 				<td height="35" class="item_input" id="addregion"></td>
 			</tr>
 			<tr>
-			  <td class="item_title">&nbsp;</td>
+			  <td class="item_title">可选任意维度添加。如只添加中国，表示整个中国。</td>
 			  <td class="item_input">
               <span style="vertical-align: top">国家： </span>
 		      <select name="country" id="country" style="width: 80px;" size="10">
@@ -113,14 +113,14 @@
               <option value="" selected="selected">请选择...</option>
 	          </select>
               <span style="vertical-align: top">
-              <input class="button" type="button" onclick="addRegion()" value="+">
+              <input class="am-btn am-btn-primary" type="button" onclick="addRegion()" value="+">
               </span>
               </td>
 		  </tr>
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+					<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 				</td>
 			</tr>
 			<tr>

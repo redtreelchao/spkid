@@ -55,8 +55,8 @@
 	</tr>
 	<tr>
 	    <td colspan="2" align="center">
-		<input type="button" class="button" name="sim" value="提交">&nbsp;
-                <input type="button" class="button" name="reset" value="重置">
+		<input type="button" class="am-btn am-btn-primary" name="sim" value="提交">&nbsp;
+                <input type="button" class="am-btn am-btn-primary" name="reset" value="重置">
 	    </td>
 	</tr>
 	<?php if(!empty($location_name)):?>
@@ -292,12 +292,13 @@
 	}
     }
     <?php if($doc_type==1):?>
-    var pattern = /(^XJ)-([a-zA-Z0-9]{0,})-([a-zA-Z0-9]{0,})$/; 
+    //var pattern = /(^XJ)-([a-zA-Z0-9]{0,})-([a-zA-Z0-9]{0,})$/; 
     <?php elseif($doc_type==2):?>
-    var pattern = /(^TCX)-([a-zA-Z0-9]{0,})-([a-zA-Z0-9]{0,})$/; 
+    //var pattern = /(^TCX)-([a-zA-Z0-9]{0,})-([a-zA-Z0-9]{0,})$/; 
     <?php elseif($doc_type==3):?>
-    var pattern = /(^LYX)-([a-zA-Z0-9]{0,})-([a-zA-Z0-9]{0,})$/; 
+    //var pattern = /(^LYX)-([a-zA-Z0-9]{0,})-([a-zA-Z0-9]{0,})$/; 
     <?php endif;?>
+    var pattern = /([a-zA-Z0-9]{0,})-([a-zA-Z0-9]{0,})-([a-zA-Z0-9]{0,})$/;
     function check_is_box_code(str){
         if(str.indexOf("-") == -1){
             return false;

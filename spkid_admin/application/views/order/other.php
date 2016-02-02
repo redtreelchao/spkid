@@ -48,11 +48,11 @@
 				<td class="item_input">
 					<?php if ($act=='add'): ?>
 						<input type="button" name="myprev" value="上一步" onclick="location.href=base_url+'order/payment/<?php print $order->order_id;?>?act=add'">
-						<?php print form_submit('mysubmit','下一步','class="button"') ?>					
+						<?php print form_submit('mysubmit','下一步','class="am-btn am-btn-primary"') ?>					
 					<?php else: ?>
-						<?php print form_submit('mysubmit','提交','class="button"') ?>
+						<?php print form_submit('mysubmit','提交','class="am-btn am-btn-primary"') ?>
 					<?php endif ?>
-					<input type="button" class="button" name="mycancel" value="取消" onclick="location.href=base_url+'order/info/<?php print $order->order_id;?>'">
+					<input type="button" class="am-btn am-btn-primary" name="mycancel" value="取消" onclick="location.href=base_url+'order/info/<?php print $order->order_id;?>'">
 				</td>
 			</tr>
 			<tr>

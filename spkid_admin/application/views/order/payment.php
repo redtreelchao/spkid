@@ -70,8 +70,8 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-					<?php print form_submit('mysubmit','下一步','class="button"') ?>
-					<?php print form_button('mycancel','取消','class="button" onclick="location.href=base_url+\'order/info/'.$order->order_id.'\';"'); ?>
+					<?php print form_submit('mysubmit','下一步','class="am-btn am-btn-primary"') ?>
+					<?php print form_button('mycancel','取消','class="am-btn am-btn-primary" onclick="location.href=base_url+\'order/info/'.$order->order_id.'\';"'); ?>
 				</td>
 			</tr>
 			<tr>

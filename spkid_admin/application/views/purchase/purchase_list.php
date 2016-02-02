@@ -284,6 +284,9 @@
 		<span class="r">
 			<a href="purchase/add" class="add">新增</a>
 		</span>
+                <span class="r">
+			<a href="purchase/product_import" class="add">导入产品有效期</a>
+		</span>
 		<?php endif; ?>
 		</div>
 
@@ -297,7 +300,7 @@
 			<br>
 			采购单状态：<?php print form_dropdown('purchase_status',$status_list);?>
 			采购类型：<?php print form_dropdown('purchase_type',$type_list);?>
-			供应商：<?php print form_dropdown('purchase_provider',$provider_list,"","onchange=get_purchase_batch()");?>
+			供应商：<?php print form_dropdown('purchase_provider',$provider_list,"","onchange=get_purchase_batch() data-am-selected='{searchBox: 1,maxHeight: 300}'");?>
 			批次号：<?php print form_dropdown('purchase_batch',array("请选择"));?>
 			销售类型：
 				<select name="is_consign">
@@ -305,8 +308,8 @@
 				<option value="0">实库销售</option>
 				<option value="1">虚库销售</option>
 				</select>
-			<?php print form_dropdown('brand_id',get_pair($brand_list,'brand_id','brand_name', array(''=>'品牌'))); ?>
-			<input type="submit" class="button" value="搜索" />
+			<?php print form_dropdown('brand_id',get_pair($brand_list,'brand_id','brand_name', array(''=>'品牌')),'','data-am-selected="{searchBox: 1,maxHeight: 300}"'); ?>
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -394,6 +397,7 @@
 						<?php if($row->purchase_finished_number >0 && check_perm('pruchase_box_scan_list')): ?>
 						<a class="icon_xiang" href="/purchase_box/pruchase_box_scan_list/<?php print $row->purchase_code; ?>" target="_blank" title="扫描记录" ></a>
 						 <?php endif; ?>
+                                                <a href="purchase/export/<?php print $row->purchase_id; ?>">导出</a>
 					</td>
 				</tr>
 				<?php endforeach; ?>

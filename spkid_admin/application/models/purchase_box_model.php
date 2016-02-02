@@ -192,7 +192,7 @@ class Purchase_box_model extends CI_Model
      */
     function get_box_product($box_id)
     {
-        $sql="select ps.product_number as pnum,pbs.product_id,pbs.color_id,pbs.size_id,ps.product_finished_number,
+        /*$sql="select ps.product_number as pnum,pbs.product_id,pbs.color_id,pbs.size_id,ps.product_finished_number,
                 pbs.product_number,realname,pi.product_sn,color_name,size_name,pi.product_name,b.brand_name,
                 pbs.provider_barcode,pi.provider_productcode,pbs.over_num,pbs.box_sub_id 
               from ty_purchase_box_sub as pbs
@@ -202,7 +202,20 @@ class Purchase_box_model extends CI_Model
               left join ty_product_size s on pbs.size_id=s.size_id
               left join ty_admin_info ai on pbs.scan_id=ai.admin_id
 	      left join ty_purchase_sub as ps on ps.product_id =  pbs.product_id and ps.color_id = pbs.color_id and ps.size_id=pbs.size_id
-              where box_id=$box_id group by pbs.product_id,pbs.color_id,pbs.size_id";
+              where box_id=$box_id group by pbs.product_id,pbs.color_id,pbs.size_id";*/
+        $sql="select ps.product_number as pnum,pbs.product_id,pbs.color_id,pbs.size_id,ps.product_finished_number,ps.expire_date, 
+                pbs.product_number,realname,pi.product_sn,color_name,size_name,pi.product_name,b.brand_name,
+                pbs.provider_barcode,pi.provider_productcode,pbs.over_num,pbs.box_sub_id 
+              from ty_purchase_box_sub as pbs
+              left join ty_product_info as pi on pbs.product_id=pi.product_id
+	      left join ty_product_brand as b on b.brand_id = pi.brand_id 
+              left join ty_product_color c on pbs.color_id=c.color_id
+              left join ty_product_size s on pbs.size_id=s.size_id
+              left join ty_admin_info ai on pbs.scan_id=ai.admin_id
+	      LEFT JOIN `ty_purchase_box_main` bm ON pbs.`box_id` = bm.`box_id` 
+              LEFT JOIN `ty_purchase_main` pm ON bm.`purchase_code` = pm.`purchase_code` 
+              LEFT JOIN `ty_purchase_sub` ps ON pm.purchase_id = ps.`purchase_id` AND pbs.product_id = ps.product_id AND pbs.color_id = ps.color_id AND pbs.size_id = ps.`size_id`
+              where pbs.box_id=$box_id group by pbs.product_id,pbs.color_id,pbs.size_id";    
         $query=$this->db_r->query($sql);
         return $query->result();
     }

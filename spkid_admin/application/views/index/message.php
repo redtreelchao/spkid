@@ -33,7 +33,7 @@
 			</tr>
 			<tr class="row">
 				<td  class="jump_row">
-					<?php echo $auto_redirect ? "如果您不做出选择，将在 <span id=\"spanSeconds\">3</span> 秒后跳转到第一个链接地址。" : '' ?>
+					<?php echo $auto_redirect ? "如果您不做出选择，将在 <span id=\"spanSeconds\">10</span> 秒后跳转到第一个链接地址。" : '' ?>
 					<ul style="margin:0; padding:0 10px" class="msg-link" id="link_list">
 						<?php foreach ($links as $link): ?>
 							<li style="display:block; clear:both;">
@@ -64,7 +64,7 @@
 	<?php if ($auto_redirect): ?>
 	<script language="JavaScript">
 		<!--
-		var seconds = 3;
+		var seconds = 10;
 		var defaultUrl = "<?php echo $default_url ?>";
 
 		onload = function()

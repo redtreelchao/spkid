@@ -111,7 +111,7 @@ function filter_result(status,page)
 						<td>
 							<a class="btn_g_52" href="/order/info/<?php print $order->order_sn ?>" target="_blank">查看</a>
 							<?php if ($order->can_pay): ?>
-							<a class="btn_r_56" href="/order/pay/<?php print $order->order_id ?>" target="_blank">付款</a>
+							<a class="btn_r_56 external" href="/order/pay/<?php print $order->order_id ?>" target="_blank">付款</a>
 							<?php endif ?>
 							<?php if ( (empty($order->lock_admin) && $order->lock_admin == 0) && $order->order_status == 0 ): ?>
 							<!--<a class="btn_no" href="/order/invalid/<?php print $order->order_sn ?>" >作废</a>-->

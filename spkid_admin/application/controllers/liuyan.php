@@ -15,9 +15,11 @@ class Liuyan extends CI_Controller
 			redirect('index/login');
 		}
         $this->time = date('Y-m-d H:i:s');
+        // 系统设置->参数配置 20160123 by leoli
+        global $liuyan_rel_types, $liuyan_types;
 		$this->load->model('liuyan_model');
-        $this->tag_type=array(1=>'商品',2=>'礼包');
-        $this->comment_type=array(1=>'咨询',2=>'评价');
+        $this->tag_type=$liuyan_rel_types;
+        $this->comment_type=$liuyan_types;
 	}
 
         public function index ()
@@ -195,6 +197,7 @@ class Liuyan extends CI_Controller
             $data['comment_type'] = $this->input->post('comment_type');
             $data['user_name'] = $this->input->post('user_name');
             $data['comment_content'] = $this->input->post('comment_content');
+            $data['grade'] = $this->input->post('grade');
             $data['user_id'] = 0;
             $data['height'] = $this->input->post('height');
             $data['weight'] = $this->input->post('weight');

@@ -16,7 +16,7 @@ class Provider_model extends CI_Model
 	public function provider_list ($filter)
 	{
 		$from = " FROM ".$this->db->dbprefix('product_provider')." AS p ";
-		$where = " WHERE 1 ";
+		$where = " WHERE 1 AND parent_id=".$filter['parent_id'];
 		$param = array();
 		if (!empty($filter['provider_code']))
 		{
@@ -75,6 +75,17 @@ class Provider_model extends CI_Model
 		$query = $this->db->get_where('product_provider',$filter);
 		return $query->result();
 	}
+
+	//合作方式为三方
+	public function all_provider_coop($filter=array(),$order_by = "")
+	{	
+		if(!empty($order_by))
+			$this->db->order_by($order_by);
+		$this->db->where('provider_cooperation',THIRD_DELIVERY_COOP_ID);
+		$query = $this->db->get_where('product_provider',$filter);
+		return $query->result();
+	}
+
     /**
      * 供应商合作方式表查询
      * @param type $filter
@@ -111,6 +122,29 @@ class Provider_model extends CI_Model
             $provider_shipping_fee_config[intval($config->regionId)] = array(floatval($config->fee), floatval($config->price));
         }
         return $provider_shipping_fee_config + $default_shipping_fee_config;
+    }
+
+    /**
+	 *获取管辖区域
+	 *
+    */
+    public function get_region($send,$id){
+    	$sql = "select ".$send." from ty_product_provider where provider_id=".$id;
+    	$query = $this->db->query($sql);
+    	$country = $query->result();
+    	return $country;
+    }
+	public function gen_provider_sn(){
+	    return 'S'.date('ym').$this->get_random();
+	}
+	private function get_random(){
+        $sql = "SELECT rand_id, rand_sn FROM ya_product_sn_rand WHERE status = 0 ORDER BY rand_id ASC LIMIT 1";
+        $result = $this->db->query($sql)->row_array();
+        if (empty($result))
+            return false;
+        $sql = "UPDATE ya_product_sn_rand SET status = 1 WHERE `rand_id` = ".$result['rand_id'];
+        $this->db->query($sql);
+        return $result['rand_sn'];
     }
 
 }

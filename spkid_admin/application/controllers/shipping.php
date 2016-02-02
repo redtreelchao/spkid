@@ -107,6 +107,8 @@ class Shipping extends CI_Controller
             $list[$item->shipping_area_id]['shipping_area_name'] = $item->shipping_area_name;
             $list[$item->shipping_area_id]['is_cod'] = $item->is_cod;
             $list[$item->shipping_area_id]['shipping_id'] = $item->shipping_id;
+            $list[$item->shipping_area_id]['shipping_fee1'] = $item->shipping_fee1;
+            $list[$item->shipping_area_id]['shipping_fee2'] = $item->shipping_fee2;
             if(!empty($item->region_id)){
                 $list[$item->shipping_area_id]['area'][] = $item->region_name;
             }
@@ -144,14 +146,28 @@ class Shipping extends CI_Controller
         $area = $this->input->post('area');
         $data['shipping_area_name'] = trim($this->input->post('shipping_area_name'));
         $data['is_cod'] = intval($this->input->post('is_cod'));
+        $data['shipping_fee1'] = floatval($this->input->post('shipping_fee1'));
+        $data['shipping_fee2'] = floatval($this->input->post('shipping_fee2'));
         $this->load->library('form_validation');
         $this->form_validation->set_rules('shipping_area_name', 'shipping_area_name', 'trim|required');
+        $this->form_validation->set_rules('shipping_fee1', 'shipping_fee1', 'trim|required');
+        $this->form_validation->set_rules('shipping_fee2', 'shipping_fee2', 'trim|required');
         if (!$this->form_validation->run()) {
             sys_msg(validation_errors(), 1);
         }
+        $exist_data = array();
+        if(!empty($area)){
+            $area_ids = implode(",", $area);
+            $exist_data = $this->shipping_model->shipping_area_filter($shipping_id, $shipping_area_id, $area_ids);
+        }
+        
         $this->shipping_model->update_shipping_area($data , $shipping_area_id);
         $this->shipping_model->delete_shipping_area_region(array('shipping_area_id' => $shipping_area_id));
         if(!empty($area)){
+            if (!empty($exist_data['region_ids'])) {
+                $exists_id_arr = explode(",", $exist_data['region_ids']);
+                $area = array_diff($area, $exists_id_arr);
+            }
             foreach($area as $key => $val){
                 $filter['shipping_area_id'] = $shipping_area_id;
                 $filter['region_id'] = $val;
@@ -159,6 +175,8 @@ class Shipping extends CI_Controller
                 $filter['create_date'] = $this->time;
                 $this->shipping_model->insert_shipping_area_region($filter);
             }
+            if (!empty($exist_data['region_names']))
+                sys_msg('以下地区在其他区域已存在，不能重复添加：<br>'.$exist_data['region_names'], 0,  array(array('href' => 'shipping/edit_shipping_area/'.$shipping_area_id.'/'.$shipping_id, 'text' => '返回上一页')));            
         }
         sys_msg('操作成功',2,array(array('href'=>'shipping/operate/'.$shipping_id,'text'=>'返回列表页')));
     }

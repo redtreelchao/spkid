@@ -100,6 +100,7 @@ class Import extends CI_Controller
 		$this->load->model('product_model');
 		$this->load->model('category_model');
 		$this->load->model('brand_model');
+		$this->load->model('register_model');
 		$this->load->model('style_model');
 		$this->load->model('season_model');
 		$this->load->model('flag_model');
@@ -122,19 +123,24 @@ class Import extends CI_Controller
 		$dom->registerXPathNamespace('c', 'urn:schemas-microsoft-com:office:spreadsheet');
 		$rows = $dom->xpath('//c:Workbook//c:Worksheet//c:Table//c:Row');
 		//'product_name','parent_category_name','category_name','cost_price','consign_price','consign_type_name','consign_rate','cooperation_name','provider_name','unit_name','goods_carelabel',
-		$keys = array('product_sn','provider_productcode','category_id','brand_name','market_price','shop_price','season_name','flag_name','provider_code','product_year','product_month','min_month','max_month');
+		$keys = array('product_sn','cate_code','brand_name','market_price','shop_price','flag_name','provider_code','register_no','shop_code');
 		$success_records = array();
 		$error_records = array();
 
-		//$category_rs = category_tree($this->category_model->all_category());
+		// $category_rs = category_tree($this->category_model->all_category());
 		$all_brand = index_array($this->brand_model->all_brand(),'brand_name');
 		//$all_style = index_array($this->style_model->all_style(),'style_name');
-		$all_season = index_array($this->season_model->all_season(), 'season_name');
+		// $all_season = index_array($this->season_model->all_season(), 'season_name');
 		$all_flag = index_array($this->flag_model->all_flag(), 'flag_name');
 		//$all_cooperation = index_array($this->cooperation_model->all_cooperation(),'cooperation_name');
 		$all_provider = index_array($this->provider_model->all_provider(), 'provider_code');
+
+		// $shop_code = index_array($this->provider_model->all_provider(), 'shop_code');
+
 		//$all_carelabel = index_array($this->carelabel_model->all_carelabel(),'carelabel_id');
-		$all_category = index_array($this->category_model->all_category(array('is_use'=>1)),'category_id');
+		$all_category = index_array($this->category_model->all_category(array('is_use'=>1)),'cate_code');
+
+		$all_register = index_array($this->register_model->all_register(),'register_no');
 //		$all_category = array();
 //		$all_category_1 = array();
 //		$all_category_2 = array();
@@ -151,17 +157,37 @@ class Import extends CI_Controller
 		$all_age = $this->config->item('product_age');
 		$product_id_list = "";
 		$imp_list_id = $this->product_imp_list_model->insert(array("product_id_list"=>$product_id_list,"status" =>"02","create_admin"=>$this->admin_id,"create_date"=>$this->time));
+			
 		try{
 		$this->db->trans_begin();
+					// var_dump($product);
+           
+		$rows = array_filter($rows);
+
 		foreach ($rows as $key => $row) {
-			if ($key == 0 || $key == 1) continue;
+			// if ($key == 0 || $key == 1) continue;
+			if ($key == 0 ) continue;
 			$product = array();
 			$result = array();
 			foreach ($row as $cell) {
-				$product[] = trim(strval($cell->Data));
-				$result[] = trim(strval($cell->Data));
+                preg_match("/<Cell ss:Index=\"(\d+)\"/i", $cell->asXML(), $match);
+                if (isset($match[1])) {
+                    $product[intval($match[1])-1] = strval($cell->Data);
+                    $result[intval($match[1])-1] = strval($cell->Data);
+                } else {
+                    $product[] = trim(strval($cell->Data));
+                    $result[] = trim(strval($cell->Data));
+
+                }
+				//$product[] = trim(strval($cell->Data));
+				//$result[] = trim(strval($cell->Data));
 			}
-			if (!isset($product[0]) || empty($product[0])) continue;
+            //if (!isset($product[0]) || empty($product[0])) continue;
+            // $product[0] = '';
+            // $result[0] = '';
+
+            ksort($product);
+            ksort($result);
 			$product = array_pad($product, count($keys), '');
 			$product = array_slice($product, 0, count($keys));
 			$product = array_combine($keys,$product);
@@ -169,47 +195,26 @@ class Import extends CI_Controller
 			$result = array_pad($result, count($keys), '');
 			$result = array_slice($result, 0, count($keys));
 			$result = array_combine($keys,$result);
-			
-//			if(!preg_match('/^[0-9a-zA-z]{10}$/',$product['product_sn'])){
-//				$this->_record_error($error_records, $result, '商品款号格式错误');
-//				continue;
-//			}
-			if(empty($product['product_sn'])){
-			    $tmp_sn = gen_product_sn();
-			    for($i=0;$i<100;$i++){
-				if(in_array($tmp_sn,$all_product_sns)){
-				    $tmp_sn = gen_product_sn();
-				    continue;
-				}
-				break;
-			    }
-			    $product['product_sn'] = $tmp_sn;
-			    if(in_array($tmp_sn,$all_product_sns)){
-				    $this->_record_error($error_records, $result, '商品款号重复');
-				    continue;
-			    }
-			}else{
-			    $old_product = $this->product_model->filter(array('product_sn'=>$product['product_sn']));
-			    if ($old_product) {
-				    $this->_record_error($error_records, $result, '商品款号重复');
-				    continue;
-			    }
-			}
-			$all_product_sns[] = $product['product_sn'];
-			if (empty($product['provider_productcode'])) {
-				$this->_record_error($error_records, $result, '供应商货号未填写');
-				continue;
-			}
-			
-			//分类
-			if (!isset($all_category[$product['category_id']])) {
+
+			// //分类
+			if (!isset($all_category[$product['cate_code']])) {
 				$this->_record_error($error_records, $result, '分类不存在');
 				continue;
 			}
-			if($all_category[$product['category_id']]->parent_id==0) {
+			
+			if($all_category[$product['cate_code']]->parent_id == 0) {
 				$this->_record_error($error_records, $result, '不是二级分类');
 				continue;
 			}
+			$product['category_id'] = $all_category[$product['cate_code']]->category_id;
+			unset($product['cate_code']);
+                        
+			// if (empty($product['provider_productcode'])) {
+			// 	$this->_record_error($error_records, $result, '供应商货号未填写');
+			// 	continue;
+			// }
+			
+
 //			if(empty($product['parent_category_name']) || !isset($all_category_1[$product['parent_category_name']])) {
 //				$this->_record_error($error_records, $result, '一级分类不存在');
 //				continue;
@@ -253,12 +258,12 @@ class Import extends CI_Controller
 //			unset($product['style_name']);
 
 			//季节
-			if (!isset($all_season[$product['season_name']])) {
-				$this->_record_error($error_records, $result, '季节不存在');
-				continue;
-			}
-			$product['season_id'] = $all_season[$product['season_name']]->season_id;
-			unset($product['season_name']);
+			// if (!isset($all_season[$product['season_name']])) {
+			// 	$this->_record_error($error_records, $result, '季节不存在');
+			// 	continue;
+			// }
+			// $product['season_id'] = $all_season[$product['season_name']]->season_id;
+			// unset($product['season_name']);
 
 			//国旗			
 			if (!isset($all_flag[$product['flag_name']])) {
@@ -285,13 +290,30 @@ class Import extends CI_Controller
 			$product['cooperation_id'] = $all_cooperation[$product['cooperation_name']]->cooperation_id;
 			unset($product['cooperation_name']);
 			*/
+
 			//供应商			
 			if (!isset($all_provider[$product['provider_code']])) {
 				$this->_record_error($error_records, $result, '供应商不存在');
 				continue;
 			}
 			$product['provider_id'] = $all_provider[$product['provider_code']]->provider_id;
-			unset($product['provider_code']);
+			unset($product['provider_code']);	
+
+			//注册证号	
+			if (!isset($all_register[$product['register_no']])) {
+				$this->_record_error($error_records, $result, '注册证号不存在');
+				continue;
+			}
+			$product['register_code_id'] = $all_register[$product['register_no']]->id;
+			unset($product['register_no']);
+
+			//店铺			
+			if (!isset($all_provider[$product['shop_code']])) {
+				$this->_record_error($error_records, $result, '店铺不存在');
+				continue;
+			}
+			$product['shop_id'] = $all_provider[$product['shop_code']]->provider_id;
+			unset($product['shop_code']);
 
 			//代销方式
 			/*if (!isset($all_consign_type[$product['consign_type_name']])) {
@@ -307,18 +329,48 @@ class Import extends CI_Controller
 //			}
 
 			//$product['goods_carelabel'] = str_replace('|',',',$product['goods_carelabel']);
-			$product['product_year'] = intval($product['product_year']);
-			$product['product_month'] = intval($product['product_month']);
+			// $product['product_year'] = intval($product['product_year']);
+			// $product['product_month'] = intval($product['product_month']);
 			
 			//日期
-			if(strlen($product['product_year']) != 4 || $product['product_year'] > date('Y')) {
-				$this->_record_error($error_records, $result, '年份有误');
-				continue;
+			// if(strlen($product['product_year']) != 4 || $product['product_year'] > date('Y')) {
+			// 	$this->_record_error($error_records, $result, '年份有误');
+			// 	continue;
+			// }
+			// if($product['product_month'] < 1 || $product['product_month'] > 12) {
+			// 	$this->_record_error($error_records, $result, '月份有误');
+			// 	continue;
+			// }
+
+			if(empty($product['product_sn'])){
+			    /*$tmp_sn = gen_product_sn();
+			    for($i=0;$i<100;$i++){
+				if(in_array($tmp_sn,$all_product_sns)){
+				    $tmp_sn = gen_product_sn();
+				    continue;
+				}
+				break;
+			    }*/
+                            
+                $tmp_sn = $this->product_model->gen_p_sn($all_brand[$product['brand_name']]->brand_initial, $all_category[$product['category_id']]->cate_code);
+                if (empty($tmp_sn)){
+                    $this->_record_error($error_records, $result, '没有可用商品款号，请联系技术部');
+                    break;
+                }
+			    $product['product_sn'] = $tmp_sn;
+			    if(in_array($tmp_sn,$all_product_sns)){
+				    $this->_record_error($error_records, $result, '商品款号重复');
+				    continue;
+			    }
+			}else{
+			    $old_product = $this->product_model->filter(array('product_sn'=>$product['product_sn']));
+			    if ($old_product) {
+				    $this->_record_error($error_records, $result, '商品款号重复');
+				    continue;
+			    }
 			}
-			if($product['product_month'] < 1 || $product['product_month'] > 12) {
-				$this->_record_error($error_records, $result, '月份有误');
-				continue;
-			}
+			$all_product_sns[] = $product['product_sn'];
+                        
 			//保养ID
 //			$carelabel_ids = explode(',',$product['goods_carelabel']);
 //			$flag = false;
@@ -362,12 +414,12 @@ class Import extends CI_Controller
 				}
 			}*/
 			//年龄段
-			$product['min_month'] = intval($product['min_month']);
-			$product['max_month'] = intval($product['max_month']);
-			if(!isset($all_age[$product['min_month']])||!isset($all_age[$product['max_month']])){
-				$this->_record_error($error_records, $result, '年龄段不正确');
-				continue;
-			}
+			// $product['min_month'] = intval($product['min_month']);
+			// $product['max_month'] = intval($product['max_month']);
+			// if(!isset($all_age[$product['min_month']])||!isset($all_age[$product['max_month']])){
+			// 	$this->_record_error($error_records, $result, '年龄段不正确');
+			// 	continue;
+			// }
 			try {
 				$product_id = $this->product_model->insert($product);
 				$result['product_id'] = $product_id;
@@ -546,12 +598,12 @@ class Import extends CI_Controller
                 }
                 file_put_contents(IMPORT_PATH_RESULT.'product_cost_success', serialize($success_pro));
 		file_put_contents(IMPORT_PATH_RESULT.'product_cost_error', serialize($fail_pro));
-		if(count($error_records)>0){
+		if(count($fail_pro)>0){
 		    $this->db->trans_rollback();
 		    $msg = "导入出错，数据回滚对数据库无任何影响，请根据结果修改后再次导入";
 		}else{
 		    $this->db->trans_commit();
-		    $msg = "全部导入成功,共".count($success_records)." 条记录";
+		    $msg = "全部导入成功,共".count($success_pro)." 条记录";
 		}
             }
             sys_msg($msg,0, array(array('text'=>'查看结果','href'=>'import/product_cost_result'), array('text'=>'返回','href'=>'import')),FALSE);
@@ -713,88 +765,87 @@ class Import extends CI_Controller
 
 	public function gallery()
 	{
-		set_time_limit(0);
-		auth('import_img');
-		$this->load->model('product_model');
-		$this->load->model('color_model');
-		$this->load->model('model_model');
-		$this->load->library('image_lib');
-		$this->config->load('product');
-		$all_color = index_array($this->color_model->all_color(), 'color_sn');
-		
-		$path = APPPATH.'../public/import/gallery/';
-		if (!file_exists($path)) sys_msg('未发现上传目录', 1 ,array() ,FALSE);
-		$dirs = new DirectoryIterator($path);
-		$error_records = array();
-		$success_records = array();
+            set_time_limit(0);
+            auth('import_img');
+            $this->load->model('product_model');
+            $this->load->model('color_model');
+            $this->load->model('model_model');
+            $this->load->library('image_lib');
+            $this->config->load('product');
+            $all_color = index_array($this->color_model->all_color(), 'color_sn');
 
-		$this->db->trans_begin();
-		$has_dir = false;
-		foreach ($dirs as $product_dir) {
-			if ($product_dir->isDot()) continue;
-			if (!$product_dir->isDir()) continue;
-	        $tag=mb_convert_encoding($product_dir->getFilename(),'utf-8','utf-8,gb2312,gbk');
-	        $tag=explode('_',$tag);
-	        if(count($tag)<2) continue;
-	        $has_dir = true;
-            $product_sn=$tag[0];
-            $color_sn=$tag[1];
-			$record = array();
-			$record['path'] = $product_dir->getPathname();
-			$product = $this->product_model->filter(array('product_sn'=>$product_sn));
-			if (!$product) {
-				$this->_record_error($error_records, $record, '商品不存在');
-				continue;
-			}
-            if (!isset($all_color[$color_sn])) {
+            $path = APPPATH.'../public/import/gallery/';
+            if (!file_exists($path)) sys_msg('未发现上传目录', 1 ,array() ,FALSE);
+            $dirs = new DirectoryIterator($path);
+            $error_records = array();
+            $success_records = array();
+
+            $this->db->trans_begin();
+            $has_dir = false;
+            foreach ($dirs as $product_dir) {
+                if ($product_dir->isDot()) continue;
+                if (!$product_dir->isDir()) continue;
+                $tag = mb_convert_encoding($product_dir->getFilename(),'utf-8','utf-8,gb2312,gbk');
+                $tag = explode('_',$tag);
+                if(count($tag)<2) continue;
+                $has_dir = true;
+                $product_sn=$tag[0];
+                $color_sn=$tag[1];
+                $record = array();
+                $record['path'] = $product_dir->getPathname();
+                $product = $this->product_model->filter(array('product_sn'=>$product_sn));
+                if (!$product) {
+                        $this->_record_error($error_records, $record, '商品不存在');
+                        continue;
+                }
+                if (!isset($all_color[$color_sn])) {
                     $this->_record_error($error_records, $record, '颜色不存在');
                     continue;
-            }
-            
-            $color = $all_color[$color_sn];
-            $all_gallery = $this->product_model->all_gallery(array('product_id'=>$product->product_id, 'color_id'=>$color->color_id));
-            $all_gallery = index_array($all_gallery, 'image_type');
-
-            $color_dir = new DirectoryIterator($record['path']);
-            foreach ($color_dir as $img) {
-                if ($img->isDot()) continue;
-                if (!$img->isFile()) continue;
-                $record['path'] = $color_dir->getPathname();
-                if(substr($img->getFilename(),0,5)=='model' && substr($img->getFilename(),-4) == '.txt') {
-                	$model_id = mb_substr($img->getFilename(), 5, -4);
-                	$model = $this->model_model->filter(array('model_id'=>$model_id));
-                	if(empty($model)) {
-                		$this->_record_error($error_records, $record, '模特编号不存在');
-                		continue;
-                	}
-                	$this->product_model->update(array('model_id'=>$model_id), $product->product_id);
-                	$this->_record_success($success_records, $record);
-                	continue;
                 }
-                if (!in_array(strtolower(substr($img->getFilename(),-4)), array('.jpg','.png','.gif'))) continue;
 
-                $gallery = $this->_upload_gallery($img, $product->product_id, $color->color_id);
+                $color = $all_color[$color_sn];
+                $all_gallery = $this->product_model->all_gallery(array('product_id'=>$product->product_id, 'color_id'=>$color->color_id));
+                $all_gallery = index_array($all_gallery, 'image_type');
 
-                if ($gallery['image_type'] == 'default' && isset($all_gallery['default'])) {
+                $color_dir = new DirectoryIterator($record['path']);
+                foreach ($color_dir as $img) {
+                    if ($img->isDot()) continue;
+                    if (!$img->isFile()) continue;
+                    $record['path'] = $color_dir->getPathname();
+                    if(substr($img->getFilename(),0,5)=='model' && substr($img->getFilename(),-4) == '.txt') {
+                        $model_id = mb_substr($img->getFilename(), 5, -4);
+                        $model = $this->model_model->filter(array('model_id'=>$model_id));
+                        if(empty($model)) {
+                                $this->_record_error($error_records, $record, '模特编号不存在');
+                                continue;
+                        }
+                        $this->product_model->update(array('model_id'=>$model_id), $product->product_id);
+                        $this->_record_success($success_records, $record);
+                        continue;
+                    }
+                    if (!in_array(strtolower(substr($img->getFilename(),-4)), array('.jpg','.png','.gif'))) continue;
+
+                    $gallery = $this->_upload_gallery($img, $product->product_id, $color->color_id);
+
+                    if ($gallery['image_type'] == 'default' && isset($all_gallery['default'])) {
                         $this->_delete_gallery($all_gallery['default']);
+                    }
+                    if ($gallery['image_type'] == 'tonal' && isset($all_gallery['tonal'])) {
+                            $this->_delete_gallery($all_gallery['tonal']);
+                    }
+                    $gallery['create_admin'] = $this->admin_id;
+                    $gallery['create_date'] = $this->time;			
+                    $this->product_model->insert_gallery($gallery);
+                    $this->_record_success($success_records, $record);
                 }
-                if ($gallery['image_type'] == 'tonal' && isset($all_gallery['tonal'])) {
-                        $this->_delete_gallery($all_gallery['tonal']);
-                }
-                $gallery['create_admin'] = $this->admin_id;
-                $gallery['create_date'] = $this->time;			
-                $this->product_model->insert_gallery($gallery);
-                $this->_record_success($success_records, $record);
             }
-		}
-		if(!$has_dir) {
-			sys_msg('未找到图片文件，请将图片放在public/import/gallery/目录下', 0 ,array() ,FALSE);
-		}
-		file_put_contents(APPPATH.'../public/import/_result/gallery_success', serialize($success_records));
-		file_put_contents(APPPATH.'../public/import/_result/gallery_error', serialize($error_records));
-		$this->db->trans_commit();
-		sys_msg('成功导入 '.count($success_records).' 条记录， 失败 '.count($error_records).' 条记录',0, array(array('text'=>'查看结果','href'=>'import/gallery_result'), array('text'=>'返回','href'=>'import')),FALSE);
-
+            if(!$has_dir) {
+                sys_msg('未找到图片文件，请将图片放在public/import/gallery/目录下', 0 ,array() ,FALSE);
+            }
+            file_put_contents(APPPATH.'../public/import/_result/gallery_success', serialize($success_records));
+            file_put_contents(APPPATH.'../public/import/_result/gallery_error', serialize($error_records));
+            $this->db->trans_commit();
+            sys_msg('成功导入 '.count($success_records).' 条记录， 失败 '.count($error_records).' 条记录',0, array(array('text'=>'查看结果','href'=>'import/gallery_result'), array('text'=>'返回','href'=>'import')),FALSE);
 	}
 
 	public function gallery_result()
@@ -858,13 +909,17 @@ class Import extends CI_Controller
 				break;
 			}
 		}
+                
+                if (!copy($img->getPathname(), $base_dir.$sub_dir.'/'.$new_basename.$ext)){
+                    return array();
+                }
 		$thumb_arr = $this->config->item('product_fields');
 		foreach ($thumb_arr as $field=>$thumb) {
-			$gallery[$field] = $sub_dir.'/'.$new_basename.$thumb['sufix'].$ext;
+			$gallery_thumb = $sub_dir.'/'.$new_basename.$thumb['sufix'].$ext;
 			//TODO 第一版本就有过滤掉这个规格的图片，待确认 if($field=='img_850_850') continue;
 			$this->image_lib->initialize(array(
 				'source_image' => $img->getPathname(),
-				'new_image' => $base_dir.$gallery[$field],
+				'new_image' => $base_dir.$gallery_thumb,
 				'quality'=>85,
 				'maintain_ratio'=>FALSE,
 				'width'=>$thumb['width'],
@@ -874,7 +929,7 @@ class Import extends CI_Controller
 			$this->image_lib->clear();
 			if($thumb['wm']){
 				$this->image_lib->initialize(array(
-					'source_image' => $base_dir.$gallery[$field],
+					'source_image' => $base_dir.$gallery_thumb,
 					'quality'=>85,
 					'create_thumb'=>FALSE,
 					'wm_type'=>'overlay',	
@@ -886,6 +941,7 @@ class Import extends CI_Controller
 				$this->image_lib->clear();
 			}
 		}
+                $gallery['img_url'] = $sub_dir.'/'.$new_basename.$ext;
 		$gallery['img_desc'] = '';
 		$gallery['sort_order'] = intval(preg_replace('/[a-zA-Z\_\.]/','',$basename));
 		return $gallery;
@@ -1198,6 +1254,7 @@ class Import extends CI_Controller
 	    $this->load->model("product_model");
 	    $this->load->model('style_model');
 	    $this->load->model('model_model');
+	    $this->load->model('provider_model');
 	    $this->load->model('carelabel_model');
 	    $this->load->model('product_type_model');
 	    $file = APPPATH.'../public/import/product_sub/product_sub.xml';
@@ -1209,133 +1266,100 @@ class Import extends CI_Controller
 	    $dom = new SimpleXMLElement($content);
 	    $dom->registerXPathNamespace('c', 'urn:schemas-microsoft-com:office:spreadsheet');
 	    $rows = $dom->xpath('//c:Workbook//c:Worksheet//c:Table//c:Row');
-	    $keys = array('product_sn','provider_productcode','product_name','style_id','product_sex_name',
-			   'unit_name','type_code','goods_carelabel','model_id',
-			   'desc_composition','desc_dimensions','desc_material','desc_waterproof','desc_crowd','desc_notes','desc_expected_shipping_date','desc_use_explain','desc_function_explain');
+	    // $keys = array('product_sn','provider_productcode','product_name','style_id','product_sex_name',
+			  //  'unit_name','type_code','goods_carelabel','model_id',
+			  //  'desc_composition','desc_dimensions','desc_material','desc_waterproof','desc_crowd','desc_notes','desc_expected_shipping_date','desc_use_explain','desc_function_explain');
+
+	    $keys = array('product_sn','provider_productcode','product_name','subhead','product_weight','unit_name','type_code','provider_name','package_name', 'pack_method');
+
 	    $success_records = array();
 	    $error_records = array();
 	    
-	    $all_style = index_array($this->style_model->all_style(),'style_name');
-	    $all_model = index_array($this->model_model->all_model(), 'model_id');
+	    // $all_style = index_array($this->style_model->all_style(),'style_name');
+	    // $all_model = index_array($this->model_model->all_model(), 'model_id');
+	    $all_provider = index_array($this->provider_model->all_provider(), 'provider_name');
 	    $all_type = index_array($this->product_type_model->filter(array('parent_id <>'=>0,'parent_id2 <>'=>0)), 'type_code');
-	   
-	    $all_sex = array('m'=>1,'w'=>2,'a'=>3);
 
 	    //开启事务，批量操作
 	    $this->db->trans_begin();
 	    foreach ($rows as $key => $row) {
-		if ($key == 0)  continue;
-		$product = array();
-		foreach ($row as $cell) $product[] = trim(strval($cell->Data));
-		if (!isset($product[0]) || empty($product[0])) continue;
-		$product = array_pad($product, count($keys), '');
-		$product = array_slice($product, 0, count($keys));
-		$product = array_combine($keys, $product);
+
+			if ($key == 0)  continue;
+
+			$product = array();
+
+			foreach ($row as $cell) $product[] = trim(strval($cell->Data));
+
+			if (!isset($product[0]) || empty($product[0])) continue;
+
+			$product = array_pad($product, count($keys), '');
+			$product = array_slice($product, 0, count($keys));
+			$product = array_combine($keys, $product);
 		
-		$update = array();
-		$update["product_name"] = $product['product_name'];
-		$db_product = $this ->product_model->filter(array("product_sn"=>$product['product_sn']));
-		if(empty($db_product)){
-		    $this->_record_error($error_records, $product, '不存在对应商品');
-		    continue;
-		}
-		//风格
-		if (!isset($all_style[$product['style_id']])) {
-			$this->_record_error($error_records, $product, '风格不存在');
-			continue;
-		}
-		$update["style_id"] = $all_style[$product['style_id']]->style_id;
-		//性别
-		$product_sex = $product['product_sex_name'];
-		if(!empty($product_sex)){
-		    $product_sex = strtolower($product_sex);
-		    if (!isset($all_sex[$product_sex])) {
-			    $this->_record_error($error_records, $product, '性别不存在');
+			$update = array();
+			
+			$update["product_name"] = $product['product_name'];
+
+			$db_product = $this ->product_model->filter(array("product_sn"=>$product['product_sn']));
+
+			if(empty($db_product)){
+			    $this->_record_error($error_records, $product, '不存在对应商品');
 			    continue;
-		    }
-		    $update["product_sex"] = $all_sex[$product_sex];
-		}
-		//unit_name
-		$update["unit_name"] = $product['unit_name'];
-		//type_code
-		$type_codes = $product["type_code"];
-		if(!empty($type_codes)){
-		    $type_code_array = explode('|', $type_codes);
-		    $type_check_flag = true;
-		    $type_id_array = array();
-		    foreach ($type_code_array as $type_code){
-			if (!isset($all_type[$type_code])) {
-			    $this->_record_error($error_records, $product, '前台分类不存在[' . $type_code . ']');
-			    $type_check_flag = false;
-			    break;
 			}
-			$type_id_array[] = $all_type[$type_code]->type_id;
-		    }
-		    if($type_check_flag)
-			$this ->product_model->set_product_type(array("product_id"=>$db_product ->product_id,"type_ids"=>$type_id_array));
-		    else
-			continue;
-		}
-		//goods_carelabel
-		$goods_carelabel = str_replace('|',',',$product['goods_carelabel']);
-		$goods_carelabel_array = explode(',', $goods_carelabel);
-		$carelabel_check_flag = true;
-		foreach ($goods_carelabel_array as $carelabel){
-		   $val =  $this ->carelabel_model ->filter(array("carelabel_id"=>$carelabel));
-		   if(empty($val)){
-		       $this->_record_error($error_records, $product, '商品保养编码不存在['.$carelabel.']');
-		       $carelabel_check_flag = false;
-		       break;
-		   }
-		}
-		 if($carelabel_check_flag)
-		    $update['goods_carelabel'] = $goods_carelabel;
-		else
-		    continue;
-		//model_code
-		if(!empty($product['model_id'])){
-		    if (!isset($all_model[$product['model_id']])) {
-			    $this->_record_error($error_records, $product, '商品模特不存在');
-			    continue;
-		    }
-		    $update['model_id'] = $product['model_id'];
-		}
-		//desc_composition','desc_dimensions','desc_material','desc_waterproof','desc_crowd','desc_notes,desc_expected_shipping_date
-		$desc_array = array();
-		$desc_array["desc_composition"] = $product['desc_composition'];
-		$desc_array["desc_dimensions"] = $product['desc_dimensions'];
-		$desc_array["desc_material"] = $product['desc_material'];
-		$desc_array["desc_waterproof"] = $product['desc_waterproof'];
-		$desc_array["desc_crowd"] = $product['desc_crowd'];
-		$desc_array["desc_notes"] = $product['desc_notes'];
-		$desc_array["desc_expected_shipping_date"] = $product['desc_expected_shipping_date'];
-                $desc_array["desc_use_explain"] = $product['desc_use_explain'];
-		$desc_array["desc_function_explain"] = $product['desc_function_explain'];
-		if(!empty($desc_array["desc_expected_shipping_date"]))
-		    if (!is_date_str_check($update['desc_expected_shipping_date'])) {//^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/s
-			$this->_record_error($error_records, $product, "预计发货日期错误，必须为yyyy-mm-dd格式：如2013-02-01");
-			continue;
-		    }
-		$update["product_desc_additional"] = serialize($desc_array);
-		
-		try {
-		    $this->product_model->update($update,$db_product ->product_id);
-		    $this->_record_success($success_records, $product);
-		} catch (Exception $e) {
-			$this->_record_error($error_records, $product, $e->getMessage());
-			continue;
-		}
+
+			//供应商名称			
+			if (!isset($all_provider[$product['provider_name']])) {
+				$this->_record_error($error_records, $product, '供应商不存在');
+				continue;
+			}
+			$update['provider_id'] = $all_provider[$product['provider_name']]->provider_id;
+
+			//unit_name
+			$update["provider_productcode"] = $product['provider_productcode'];
+			$update["subhead"] = $product['subhead'];
+			$update["product_weight"] = $product['product_weight'];
+			$update["package_name"] = $product['package_name'];
+                        $update["pack_method"] = $product['pack_method'];
+			$update["unit_name"] = $product['unit_name'];
+			//type_code
+			$type_codes = $product["type_code"];
+			if(!empty($type_codes)){
+			    $type_code_array = explode('|', $type_codes);
+			    $type_check_flag = true;
+			    $type_id_array = array();
+			    foreach ($type_code_array as $type_code){
+					if (!isset($all_type[$type_code])) {
+					    $this->_record_error($error_records, $product, '前台分类不存在[' . $type_code . ']');
+					    $type_check_flag = false;
+					    break;
+					}
+					$type_id_array[] = $all_type[$type_code]->type_id;
+			    }
+			    if($type_check_flag)
+					$this ->product_model->set_product_type(array("product_id"=>$db_product ->product_id,"type_ids"=>$type_id_array));
+			    else
+				continue;
+			}
+
+			try {
+			    $this->product_model->update($update,$db_product ->product_id);
+			    $this->_record_success($success_records, $product);
+			} catch (Exception $e) {
+				$this->_record_error($error_records, $product, $e->getMessage());
+				continue;
+			}
 	    }
 	    file_put_contents(APPPATH.'../public/import/_result/product_sub_success', serialize($success_records));
 	    file_put_contents(APPPATH.'../public/import/_result/product_sub_error', serialize($error_records));
 	    $msg = "";
 	    if(count($error_records)>0){
-		$this->db->trans_rollback();
-		$msg = "导入出错，数据回滚对数据库无任何影响，请根据结果修改后再次导入";
+			$this->db->trans_rollback();
+			$msg = "导入出错，数据回滚对数据库无任何影响，请根据结果修改后再次导入";
 	    }else{
-		$this->db->trans_commit();
-		$msg = "全部导入成功,共".count($success_records)." 条记录";
+			$this->db->trans_commit();
+			$msg = "全部导入成功,共".count($success_records)." 条记录";
 	    }
+	    
 	    sys_msg($msg,0, array(array('text'=>'查看结果','href'=>'import/product_sub_result'), array('text'=>'返回','href'=>'import')),FALSE);
 
     }
@@ -1619,6 +1643,11 @@ class Import extends CI_Controller
 		$this->_record_error($error_records, $product, '请设置商品条形码(新)');
 		continue;
 	    }
+            
+            if(strlen($provider_barcode_new) > 16){
+		$this->_record_error($error_records, $product, '商品条形码(新)长度不能超过17位');
+		continue;
+	    }           
             
 	    $db_product = $this ->product_model->filter(array("product_sn"=>$product_sn));
 	    if(empty($db_product)){

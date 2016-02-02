@@ -30,15 +30,15 @@ class Rush extends CI_Controller
             'perm_audit' => check_perm('rush_audit'),
 	    'perm_set' =>check_perm('rush_set_properties'),
         ));
-        $this->load->vars('all_nav', index_array($this->frontnav_model->all(),'nav_id'));
+        // $this->load->vars('all_nav', index_array($this->frontnav_model->all(),'nav_id'));
         $filter = $this->uri->uri_to_assoc(3);
 	
 	$query_rush_id = $this->input->post("query_rush_id");
 	if(!empty($query_rush_id)) $filter['query_rush_id'] = $query_rush_id;
         $rush_index = $this->input->post("rush_index");
         if(!empty($rush_index)) $filter['rush_index'] = $rush_index;
-        $nav_id = $this->input->post("nav_id");
-        if(!empty($nav_id)) $filter['nav_id'] = intval($nav_id);
+        // $nav_id = $this->input->post("nav_id");
+        // if(!empty($nav_id)) $filter['nav_id'] = intval($nav_id);
         $status = $this->input->post("status");
         if(!empty($status)) $filter['status'] = $status;
         $start_time = $this->input->post("start_time");
@@ -70,7 +70,7 @@ class Rush extends CI_Controller
     {
         auth('rush_edit');
         $this->load->model('frontnav_model');
-        $this->load->vars('all_nav', index_array($this->frontnav_model->all(array('nav_name <>'=>'首页')),'nav_id'));
+        // $this->load->vars('all_nav', index_array($this->frontnav_model->all(array('nav_name <>'=>'首页')),'nav_id'));
         $this->load->view('rush/add');
     }
 
@@ -78,10 +78,10 @@ class Rush extends CI_Controller
     {
         auth('rush_edit');
         $data['rush_index'] = trim($this->input->post('rush_index'));
-	$data["rush_brand"] = $this->input->post('rush_brand');
-	$data["rush_category"] = $this->input->post('rush_category');
-	$data["rush_discount"] = $this->input->post('rush_discount');
-        $data['nav_id'] = intval($this->input->post('nav_id'));
+	    $data["campaign_id"] = $this->input->post('campaign_id');
+	    // $data["rush_category"] = $this->input->post('rush_category');
+	    // $data["rush_discount"] = $this->input->post('rush_discount');
+        // $data['nav_id'] = intval($this->input->post('nav_id'));
         $data['sort_order'] = trim($this->input->post('sort_order'));
         $data['jump_url'] = trim($this->input->post('jump_url'));
         $data['status'] = 0;
@@ -111,11 +111,11 @@ class Rush extends CI_Controller
         if (!$this->form_validation->run()) {
                 sys_msg(validation_errors(), 1);
         }
-	$this->vali_length($data["rush_index"], 26 , '限抢名称');
-	
-	$this->vali_length($data["rush_brand"], 16 , '限抢品牌');
-	$this->vali_length($data["rush_category"], 20 , '限抢分类');
-	$this->vali_length($data["rush_discount"], 4 , '限抢折扣');
+    	$this->vali_length($data["rush_index"], 26 , '限抢名称');
+    	
+    	// $this->vali_length($data["rush_brand"], 16 , '限抢品牌');
+    	// $this->vali_length($data["rush_category"], 20 , '限抢分类');
+    	// $this->vali_length($data["rush_discount"], 4 , '限抢折扣');
         $rush_id = $this->rush_model->insert($data);
         // 上传图片
         $this->load->library('upload');
@@ -209,10 +209,10 @@ class Rush extends CI_Controller
         attach_sub($link_product);
         $this->load->vars('perms' , get_rush_perm($check));
         $this->load->vars('all_depot' , $this->depot_model->all_depot(array('depot_type' => 1)));
-        $this->load->vars('all_brand' , $this->brand_model->all_brand());
+        // $this->load->vars('all_brand' , $this->brand_model->all_brand());
         $this->load->vars('style_arr' ,  $this->style_model->all_style());
         $this->load->vars('season_arr' ,  $this->season_model->all_season());
-        $this->load->vars('all_category',category_flatten(category_tree($this->category_model->all_category()),'-- '));
+        // $this->load->vars('all_category',category_flatten(category_tree($this->category_model->all_category()),'-- '));
         $this->load->vars('link_product' , $link_product);
         $this->load->vars('start_arr' , $start_arr);
         $this->load->vars('end_arr' , $end_arr);
@@ -232,10 +232,10 @@ class Rush extends CI_Controller
         $perms=get_rush_perm($rush);
         if(!$perms['rush_edit']) sys_msg('没有权限',1);
         $data['rush_index'] = trim($this->input->post('rush_index'));
-	$data["rush_brand"] = $this->input->post('rush_brand');
-	$data["rush_category"] = $this->input->post('rush_category');
-	$data["rush_discount"] = $this->input->post('rush_discount');
-        $data['nav_id'] = intval($this->input->post('nav_id'));
+	$data["campaign_id"] = $this->input->post('campaign_id');
+	// $data["rush_category"] = $this->input->post('rush_category');
+	// $data["rush_discount"] = $this->input->post('rush_discount');
+        // $data['nav_id'] = intval($this->input->post('nav_id'));
         $data['sort_order'] = trim($this->input->post('sort_order'));
         $data['jump_url'] = trim($this->input->post('jump_url'));
 
@@ -246,9 +246,9 @@ class Rush extends CI_Controller
         $data['end_date_p'] = trim($this->input->post('end_date_p'));
         $data['end_time'] = trim($this->input->post('end_time'));
 	$this->vali_length($data["rush_index"], 26 , '限抢名称');
-	$this->vali_length($data["rush_brand"], 16 , '限抢品牌');
-	$this->vali_length($data["rush_category"], 20 , '限抢分类');
-	$this->vali_length($data["rush_discount"], 4 , '限抢折扣');
+	// $this->vali_length($data["rush_brand"], 16 , '限抢品牌');
+	// $this->vali_length($data["rush_category"], 20 , '限抢分类');
+	// $this->vali_length($data["rush_discount"], 4 , '限抢折扣');
 	
         if(!preg_match('/^\d{4}-\d{2}-\d{2}$/i', $data['start_date_p'])
            ||!preg_match('/^\d{4}-\d{2}-\d{2}$/i', $data['end_date_p'])
@@ -280,7 +280,7 @@ class Rush extends CI_Controller
         $update = array();
         //$base_path = APPPATH.'../public/upload/rush/';
         $sub_dir = ($rush_id-$rush_id%100)/100;
-        if(!file_exists(UPLOAD_PATH_RUSH.UPLOAD_TAG_RUSH.$sub_dir)) mkdir(UPLOAD_PATH_RUSH.UPLOAD_TAG_RUSH.$sub_dir);
+        if(!file_exists(UPLOAD_PATH_RUSH.UPLOAD_TAG_RUSH.$sub_dir)) mkdir(UPLOAD_PATH_RUSH.UPLOAD_TAG_RUSH.$sub_dir, 0777, true);
 
         $this->upload->initialize(array(
                 'upload_path' => UPLOAD_PATH_RUSH.UPLOAD_TAG_RUSH.$sub_dir,
@@ -341,9 +341,11 @@ class Rush extends CI_Controller
 
         $depot_id = intval($this->input->post('depot_id'));
         if ($depot_id) $filter['depot_id'] = $depot_id;
-	$percent = floatval($this->input->post('percent'));
+	
+        $percent = floatval($this->input->post('percent'));
         if(empty($percent)){$percent = 0;}
-	$filter['percent'] = $percent;
+        $filter['percent'] = $percent;
+        
         $filter = get_pager_param($filter);
         $data = $this->rush_model->link_rush_search($filter);
         
@@ -587,7 +589,7 @@ class Rush extends CI_Controller
         // 上传图片
         //$base_path = APPPATH.'../public/upload/rush_product/';
         $sub_dir = ($rec_id-$rec_id%100)/100;
-        if(!file_exists(UPLOAD_PATH_RUSH_PRODUCT.UPLOAD_TAG_RUSH_PRODUCT.$sub_dir)) mkdir(UPLOAD_PATH_RUSH_PRODUCT.UPLOAD_TAG_RUSH_PRODUCT.$sub_dir);
+        if(!file_exists(UPLOAD_PATH_RUSH_PRODUCT.UPLOAD_TAG_RUSH_PRODUCT.$sub_dir)) mkdir(UPLOAD_PATH_RUSH_PRODUCT.UPLOAD_TAG_RUSH_PRODUCT.$sub_dir, 0777, true);
         $this->upload->initialize(array(
             'upload_path' => UPLOAD_PATH_RUSH_PRODUCT.UPLOAD_TAG_RUSH_PRODUCT.$sub_dir,
             'allowed_types' => 'gif|jpg|png',

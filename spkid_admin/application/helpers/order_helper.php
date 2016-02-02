@@ -1,7 +1,7 @@
 <?php
 function get_order_sn(){
 	mt_srand((double) microtime() * 1000000);
-    return "MM".substr(date('Ymd'),2) . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
+    return "DD".substr(date('Ymd'),2) . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
 }
 
 function format_order($order)
@@ -77,6 +77,7 @@ function get_order_perm($order)
 {
     $perms = array(
         'edit_order'=>FALSE,
+        'edit_other'=>FALSE,
         'edit_pay'=>FALSE,'pay'=>FALSE,
         'lock'=>FALSE,'unlock'=>FALSE,
         'confirm'=>FALSE,'unconfirm'=>FALSE,
@@ -95,12 +96,15 @@ function get_order_perm($order)
     //$order->waiting_S = !$order->shipping_status && ($order->routing=='S'||$order->routing=='F'&&$order->pay_status);
     $order->waiting_S = !$order->shipping_status && ($order->routing=='F'&& $order->pay_status);
     $order->order_amount = fix_price($order->order_price + $order->shipping_fee - $order->paid_price);
-    // 编辑商品|收货人信息|其它信息|支付方式 被自己锁定 订单未审核 有编辑权限
+    // 编辑商品|收货人信息|支付方式 被自己锁定 订单未审核 有编辑权限
     $perms['edit_order'] = $order->order_status==0 && check_perm('order_edit');
+    //可编辑其他信息,
+    $perms['edit_other'] = check_perm('order_edit');
     // 添加删除支付记录
     $perms['edit_pay'] = $order->order_status==1 && check_perm('order_payment') && $order->waiting_F;
     // 财审
     $perms['pay'] = $order->order_amount==0 && $order->order_status && $order->waiting_F && check_perm('order_pay');
+    $perms['unpay'] = $order->pay_status==1 && !$order->shipping_status && check_perm('order_pay');
     // 发货
     $perms['shipping'] = $order->order_status==1 && $order->waiting_S && check_perm('order_shipping');
     // 更改发货方式    
@@ -147,18 +151,35 @@ function update_shipping_fee($order,$shipping_fee=NULL)
 function calc_shipping_fee($order){
     $CI = & get_instance();
     $CI->load->model('order_model');
-    $CI->load->model('provider_model');    
-    $CI->config->load('provider');
-    $default_shipping_config = $CI->config->item('provider_shipping_config');
-    
+    $CI->load->model('region_model');
+    //$CI->load->model('provider_model');    
+    //$CI->config->load('provider');
+    //$default_shipping_config = $CI->config->item('provider_shipping_config');
+    if (empty($order->shipping_id) || empty($order->province)){
+        return 0;
+    }
+    $weight_obj = $CI->order_model->get_order_product_weight($order->order_id);
+    $weight = $weight_obj['weight'];
+    $fee = $CI->region_model->get_shipping_fee_province($order->shipping_id, $order->province);
+
+    if (!$fee){
+        $shipping_fee = SHIPPING_FEE_DEFAULT;
+    } else {
+        if ($weight <= 1000){
+            $shipping_fee = $fee->shipping_fee1;
+        } else {
+            $shipping_fee = $fee->shipping_fee1 + ceil($weight-1000)/1000*$fee->shipping_fee2;
+        }
+    }
+    return fix_price($shipping_fee);
     // 取订单商品,判断供应商
-    if(empty($order->province)){
+    /*if(empty($order->province)){
         return SHIPPING_FEE_DEFAULT;
     }
     $provider_shipping_config = $CI->order_model->get_shipping_config($order->order_id);
     $shipping_config = $provider_shipping_config?$provider_shipping_config[$order->province]:$default_shipping_config[$order->province];
     $shipping_fee = $order->order_price>=$shipping_config[1]?0:$shipping_config[0];
-    return fix_price($shipping_fee);
+    return fix_price($shipping_fee);*/
 	/*
 	if($order->province > 0 && $order->pay_id > 0){
 		$CI = & get_instance();
@@ -237,6 +258,7 @@ function check_gifts($order_id)
     $now_gifts = $CI->order_model->all_product(array('order_id'=>$order_id,'discount_type'=>4));
     
     $gifts = $CI->order_model->all_gifts(array(
+        'campaign_type' => 1,
         'is_use' => 1,
         'start_date <=' =>$CI->time,
         'end_date >=' =>$CI->time,

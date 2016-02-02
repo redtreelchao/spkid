@@ -209,7 +209,7 @@ class Return_model extends CI_Model
                     ." WHERE trans_status in (1,2,4) and trans_sn ".$cond
                     ." GROUP BY product_id,color_id,size_id,batch_id";
             */
-            $sql = "SELECT product_id,color_id,size_id,batch_id,shop_price,consign_price,cost_price,consign_rate,product_cess,SUM(product_number) as product_num"
+            $sql = "SELECT product_id,color_id,size_id,batch_id,shop_price,consign_price,cost_price,consign_rate,product_cess,SUM(product_number) as product_num,expire_date"
                     ." FROM ".$this->db->dbprefix('transaction_info')
                     ." WHERE trans_status in (1,2,4) and trans_sn ".$cond
                     ." GROUP BY product_id,color_id,size_id,batch_id HAVING product_num < 0 ";
@@ -231,6 +231,7 @@ class Return_model extends CI_Model
                 $result[$key][$row['batch_id']]['cost_price'] = $row['cost_price'] ;
                 $result[$key][$row['batch_id']]['consign_rate'] = $row['consign_rate'] ;
                 $result[$key][$row['batch_id']]['product_cess'] = $row['product_cess'] ;
+                $result[$key][$row['batch_id']]['expire_date'] = $row['expire_date'] ;
                 
             }
             return $result;

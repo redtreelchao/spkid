@@ -12,6 +12,9 @@ class Product_type extends CI_Controller
 		$this->admin_id = $this->session->userdata('admin_id');
 		if(!$this->admin_id) redirect('index/login');
         $this->load->model('product_type_model');
+        //商品所属大类
+        $this->load->model('product_genre_model');
+
     }
     /*
      * 列表
@@ -31,6 +34,7 @@ class Product_type extends CI_Controller
             $filter['first_type_id']=$this->input->post('first_type_id');
             $filter['second_type_id']=$this->input->post('second_type_id');
         }
+        $filter['genre_id']=$this->input->post('genre_id');
         $filter = get_pager_param($filter);
 		$data = $this->product_type_model->product_type_list($filter);
         $this->load->vars('perm_edit',check_perm('product_type_edit'));
@@ -45,10 +49,11 @@ class Product_type extends CI_Controller
 			echo json_encode($data);
 			return;
 		}
-        //一级分类
-        $first_type=$this->product_type_model->filter(array('parent_id'=>0));
 		$data['full_page'] = TRUE;
-        $data['first_type']=$first_type;
+        //一级分类
+        //$first_type=$this->product_type_model->filter(array('parent_id'=>0));
+        //$data['first_type']=$first_type;
+        $data['all_genre'] = $this->product_genre_model->all_genre();
         $this->load->view('product/product_type_list',$data);
     }
 
@@ -79,6 +84,11 @@ class Product_type extends CI_Controller
         $first_type=$this->product_type_model->filter(array('parent_id'=>0));
         $data['first_type']=$first_type;
         $data['all_category'] = category_tree($this->category_model->all_category());
+
+        //商品所属大类
+        $this->load->model('product_genre_model');
+        $data['all_genre'] = $this->product_genre_model->all_genre();
+
         $this->load->view('product/product_type_add',$data);
     }
 
@@ -87,6 +97,7 @@ class Product_type extends CI_Controller
      */
     function proc_add($type_id=0)
     {
+        $arr['genre_id']=$this->input->post('genre_id');
         $arr['parent_id']=$this->input->post('first_type');
         $arr['parent_id2']=$this->input->post('second_type');
 //        $arr['type_code']=$this->input->post('type_code');
@@ -150,7 +161,15 @@ class Product_type extends CI_Controller
         $this->product_type_model->delete($type_id);
         echo json_encode(array('error'=>0));
     }
-
+    /*
+     * 取一级分类
+     * @param $genre_id 一级分类id
+     */
+    function get_first_type($genre_id)
+    {
+        $first_type=$this->product_type_model->filter(array('genre_id'=>$genre_id,'parent_id'=>0));
+        echo json_encode($first_type);
+    }
     /*
      * 取二级分类
      * @param $first_type_id 一级分类id

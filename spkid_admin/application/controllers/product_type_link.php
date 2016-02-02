@@ -85,7 +85,7 @@ class product_type_link extends CI_Controller {
 	
 	//Init
     $selected = array_keys(index_array($owner_types, 'type_id'));
-    $types = category_tree($this->product_type_model->filter(array()), 0, 'type_id');
+    $types = category_tree($this->product_type_model->filter(array('genre_id'=>$data->genre_id)), 0, 'type_id');
     foreach($types as $key=>$sub_types)
     {
         foreach($sub_types->sub_items as $k=>$type){

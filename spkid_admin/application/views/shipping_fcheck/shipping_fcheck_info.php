@@ -1,8 +1,6 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
 	<script type="text/javascript">
 		//<![CDATA[
 		listTable.filter.page_count = '<?php echo $filter['page_count']; ?>';
@@ -78,7 +76,7 @@
 				<option value="1">已财审</option>
 				<option value="0">未财审</option>
 			</select>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			-->
 		</form>
 		</div>

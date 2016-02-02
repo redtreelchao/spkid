@@ -6,7 +6,7 @@
 			类型
 			<select name="data_type">
 				<option value="product">新货主要信息导入</option>
-				<option value="color_size">新货颜色尺寸导入</option>
+				<option value="color_size">新货颜色规格导入</option>
 				<option value="product_sub">新货次要信息导入</option>
 				<option value="product_cost">商品成本价</option>
 				<option value="product_price">商品售价修改</option>
@@ -15,7 +15,7 @@
                                 <option value="provider_barcode">修改条形码导入</option>
 			</select>
 			数据文件：<input type="file" name="data_file" value="" />
-			<input type="submit" class="button" value="上传" />
+			<input type="submit" class="am-btn am-btn-primary" value="上传" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -43,7 +43,7 @@
 					</td>
 				</tr>
 				<tr class="row">
-					<td>新货颜色尺寸导入</td>
+					<td>新货颜色规格导入</td>
 					
 					<td>
 						将要导入的数据按照模板格式整理好后，(Excel XML 表格， UTF-8编码)格式， 并上传到 <font color="red">public/import/color_size/</font>目录下。<br/>注:第一行默认为标题,将不执行导入操作，

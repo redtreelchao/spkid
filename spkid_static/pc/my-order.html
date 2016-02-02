@@ -1,0 +1,294 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv=Content-Type content="text/html;charset=utf-8">
+<title>我的订单</title>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/personal.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script>
+//页面加载完成执行
+$(function(){
+	//给这个personal-center-left样式下的li 的a标签 绑定点击事件
+	$('.personal-center-left li a').bind("click",function(){
+		//移除personal-center-left样式下所有//
+		$('.personal-center-left li a').removeClass('active');
+		$(this).addClass('active');
+	});
+	 
+	 // dingdan-status样式下li 的a标签绑定点击事件
+	$('.dingdan-status li a').bind("click",function(){
+		//移除dingdan-status样式下所有a标签currt样式
+		$('.dingdan-status li a').removeClass('currt');
+		//当前点击a标签添加currt样式
+		$(this).addClass('currt');
+	});
+	  
+	  //track-order这个样式所在的元素鼠标移上去事件
+	$(".track-order").mouseover(function(){
+	  	$(".track-panel").show();//显示面板
+	 });
+	 
+	 $(".track-order").mouseout(function(){
+	  	$(".track-panel").hide();//隐藏面板
+	 });	
+	 
+	 $(".dingdanzt").mouseover(function(){
+	  	$(".dingdan-status").show();
+	  	$(this).addClass("test");
+	 });
+	  
+	 $(".dingdanzt").mouseout(function(){
+	 	$(".dingdan-status").hide();
+	  	$(this).removeClass("test");
+	 });
+	  
+	  $(".dingdan-status").mouseover(function(){
+		$(".dingdan-status").show();
+		$(".dingdanzt").addClass("test");
+	  });
+	  $(".dingdan-status").mouseout(function(){
+		  $(".dingdan-status").hide();
+		  $(".dingdanzt").removeClass("test");
+	  }); 
+	
+});
+
+
+
+
+
+</script>
+
+
+</head>
+<body>
+<!--nav start-->
+<div class="nav-wrap min-wrapper">
+     <div class="nav clearfix">
+          <a href="#" class="logo"><img src="images/logo2.png"></a>
+          <div class="nav-right">
+               <div class="textbox">
+                   <div class="nav-search"><input name="" type="text" class="nav-search-input" id="navtion-input"><span class="search-ico"></span></div>
+              </div>
+              <div class="nav-lb">
+                   <div class="naver-login"><a href="#" class="nav-user">登录</a></div>
+                   <a href="#" class="nav-order">我的订单</a>
+                   <a href="#" class="nav-cart">购物车</a>
+              </div>
+          </div>
+    </div>
+</div>
+<!--nav end-->
+
+<div class="min-personal">
+     <div class="home-wrapper">
+          <div class="personal-center clearfix">
+               <ul class="personal-center-left clearfix">
+               <li><a href="#" class="active">我的订单</a></li>
+               <li><a href="#">我的优惠</a></li>
+               <li><a href="#">我的积分</a></li>
+               <li><a href="#">我的关注</a></li>
+               <li class="split"></li>
+               <li><a href="#">个人中心</a></li>
+               <li><a href="#">我的评价</a></li>
+                <li><a href="#">我的讨论</a></li>
+               <li><a href="#">回复提醒</a></li>
+               <li class="split"></li>
+               <li><a href="#">个人信息</a></li>
+               <li><a href="#">收货地址</a></li>
+               <li><a href="#">安全设置</a></li>
+               </ul>  
+               
+               <div class="personal-center-right">
+                    <h1 class="page-title">我的订单</h1>
+                    <ul class="order-status clearfix">
+                    <li><a href="#">全部订单</a></li>
+                    <li><a href="#">待付款<i>11</i></a></li>
+                    <li><a href="#" class="active">待收货<i>11</i></a></li>
+                    <li><a href="#">待评价<i>11</i></a></li>
+                    </ul>
+                    
+                    <ul class="my-order-list clearfix">
+                        <li class="order-infor">订单信息</li>
+                        <li class="unit-price">单价</li>
+                        <li class="unit-price">数量</li>
+                        <li class="total-order">订单总额</li>
+                        <li class="order-statuss">
+                                <a class="dingdanzt" href="javascript:void(0);">订单状态</a>
+                                <ul class="dingdan-status" style="display:none;">
+                                <li><a href="#" class="currt">全部订单</a></li>
+                                <li><a href="#">待收货</a></li>
+                                <li><a href="#">待付款</a></li>
+                                <li><a href="#">已完成</a></li>
+                                <li><a href="#">已取消</a></li>
+                                </ul>
+                        </li>
+                        <li class="operation">操作</li>
+                    </ul>
+                    
+                 <div class="my-order-content" style="display:none;">
+                         <p class="empty">还没有订单哦，赶紧去<a href="#">购物吧~</a></p>
+                 </div>
+                    
+                 <table class="olist-table">
+                      <thead class="serial-number">
+                      <tr>
+                        <th colspan="4" class="ordersn">订单编号：16012785441622457<span>下单时间：2016-01-27 17:04:01</span></th>
+                        </tr>
+                     </thead>
+                     
+                      <tr>
+                        <td class="my-order-xx">
+                           <a href="#" target="_blank" class="my-order-of">
+                              <div class="center-pic"><img width="100%" src="images/exhibition-1.jpg"></div>
+                              <div class="center-title"><h3>金玛克藻酸盐印模材材可以换行</h3><p><span>颜色：白色</span><span>规格：标准</span></p></div>
+                           </a>
+                           <div class="my-order-sprice">￥669.00</div>
+                           <div class="my-order-shuliang">2</div>
+                        </td>
+                        
+                        <td class="total">￥669.00</td>
+                        <td class="st">
+                            <div><em>等待支付</em></div>
+                            <div class="order-track">
+                                <a class="track-order" href="javascript:void(0);">订单跟踪</a>
+                                <div class="track-panel" style=" display:none;">
+                                     <div class="t-summary" >
+                                          <div class="t-title">
+                                               <span>订单编号：858999874950789299</span>
+                                               <span class="fl-right">等待支付</span>
+                                          </div>
+                                         <div class="chuli2">请在<em>2016-01-29 13:24:34</em>前完成支付，逾期订单将被系统做超时关闭处理</div>
+                                    </div>
+                                   <div class="t-detail">
+                                        <div class="t-title">订单跟踪</div>
+                                        <p class="t-current"><span class="t-time">2016-01-28 13:24:34</span><span>您提交了订单，请等待系统确认</span></p>
+                                   </div>
+                               </div>
+                         </div>
+                         
+                        </td>
+                        <td class="operate">
+                            <div><button class="btn lijifukuai">立即付款</button></div>
+                            <div>详情</div>
+                            <div>取消订单</div>
+                        </td>
+                      </tr>
+                      
+                      <tfoot class="chuli">
+                          <tr><td colspan="4" class="tip"><p>请在<em>2015-12-29 17:20:38</em>前完成支付，逾期订单将被系统做超时关闭处理</p></td></tr>
+                      </tfoot>
+                    
+                    </table>
+                    
+                    
+                    
+                    
+               
+              </div>
+          
+          
+          
+          
+          </div>
+          
+        
+         
+     
+     
+     
+     </div>
+   
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--copyright-start-->
+<div class="copyright clearfix">
+     <div class="copyright-show clearfix">
+          <div class="copyright-lb">
+               <ul class="f-regular-list clearfix">
+               <li class="copyright-bz">严格准入标准</li>
+               <li class="copyright-tuihuo">7天无理由退货</li>
+               <li class="copyright-mianfei">15天免费换货</li>
+               <li class="copyright-pinpai">品牌授权</li>
+               <li class="copyright-rongyu">权威荣誉</li>
+               </ul>
+          </div>
+     </div>
+     
+     <div class="f-product-info min-width clearfix">
+          <div class="f-product-left">
+                 <div class="copyright-tel"><img src="images/tel.png"></div>
+                 <div class="f-info-inner">
+                      <a target="_blank" href="#">关于悦牙网</a>
+                      <a target="_blank" href="#">服务条款</a>
+                      <a target="_blank" href="#">意见反馈</a>
+                      <a target="_blank" href="#">售后政策</a>
+                      <a target="_blank" href="#">合作咨询</a>
+                      <a target="_blank" href="#">加入我们</a>
+                </div>
+          </div>
+          <div class="f-focus-us">
+               <div class="copyright-txt">
+                    关注我们:
+                    <div class="f-focus-icon">
+                         <a class="c-weixin" target="_blank" href="#"></a>
+                         <a class="c-weibo" target="_blank" href="#"></a>
+                         <a class="c-QQ" target="_blank" href="#"></a>
+                   </div>
+              </div>
+              <div class="phone-wx"><p>手机悦牙网</p><img src="images/code.png"></div>
+              
+              
+        </div>
+    
+    
+    </div>
+     
+     
+
+</div>    
+     
+
+<!--copyright-end-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

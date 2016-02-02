@@ -77,6 +77,7 @@
 					<li><a href="/user/xinlang_login" title="新浪微博" class="sina_login"></a></li>
 					<li><a href="/user/alipay_login" title="支付宝" class="alipay_login"></a></li>
 					<li><a href="#" onclick="toQzoneLogin();return false;" title="QQ登录" class="qq_login"></a></li>
+                                        <li><a href="/user/weixin_login" title="微信" class="alipay_login">微信登陆</a></li>
 				</ul>
 			</div>
 

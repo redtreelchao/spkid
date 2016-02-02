@@ -34,7 +34,7 @@ class Product_api extends CI_Controller
 		$result = array(
 			'err'=>0,
 			'msg'=>'',
-			'data'=>get_pair($this->size_model->all_size($filter),'size_id','size_name')
+			'data'=>get_pair($this->size_model->all_size($filter),'size_id','size_sn,size_name')
 			);
 		print json_encode($result);
 	}
@@ -205,7 +205,7 @@ class Product_api extends CI_Controller
 		$file_name = $product->product_id.'_'.$color->color_id.'_'.substr($update['image_type'],0,1).'_'.mt_rand (10000,99999).'.jpg';
 		$this->upload->initialize(array(
 				'upload_path' => $base_dir.$sub_dir.'/',
-				'allowed_types' => 'jpg|gif|png',
+				'allowed_types' => 'jpg',
 				'file_name' => $file_name
 			));
 		if ($this->upload->do_upload('cs_upload_image')) {

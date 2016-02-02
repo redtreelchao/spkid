@@ -1,4 +1,7 @@
 <?php
+function pass_hash($pass){
+    return hash('sha512', $pass.md5('yyw').'zesxW6qHePNZwcX6');
+}
 function db_create_in($item_list)
 {
 	if (empty($item_list))
@@ -87,7 +90,7 @@ function sys_msg($msg_detail, $msg_type = 0, $links = array(), $auto_redirect = 
 		$links[0]['href'] = 'javascript:history.go(-1)';
 	}
 	if ($CI->input->is_ajax_request()) {
-		echo json_encode(array('err' => $msg_type, 'msg' => $msg_detail));
+		echo json_encode(array('err' => $msg_type, 'msg' => $msg_detail, 'links' => $links));
 	}else {
 		$data = array(
 		'msg_detail' => $msg_detail,
@@ -111,6 +114,7 @@ function sys_msg($msg_detail, $msg_type = 0, $links = array(), $auto_redirect = 
 // static_style_url
 function static_style_url($path='')
 {
+    $path = str_replace('version', JSCSS_DIST_VERSION, $path);
     return static_url($path);
 }
 
@@ -193,8 +197,9 @@ function get_cart_sn()
 	return $CI->session->userdata('cart_sn');
 }
 
-function m_encode($string)
+function m_encode($str)
 {
+    return pass_hash( $str );
     $td = mcrypt_module_open(MCRYPT_DES, '', 'ecb', ''); //使用MCRYPT_DES算法,ecb模式
     $iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
     $ks = mcrypt_enc_get_key_size($td);
@@ -312,8 +317,13 @@ function get_pager_param($filter)
 }
 
 function adjust_path($content)
-{
-	return str_replace('/public/data/images/upload/',img_url('/upload/'),$content);
+{   
+	$pattern=array('/width:\s*\d+px/','/width="\d{3}"/');
+	$replace=array('width:100%','width="100%"');
+	$content = preg_replace($pattern,$replace, $content);
+
+	$content = str_replace('<img','<img style="width:100%;" ',$content);
+	return str_replace('/public/data/images/upload/',img_url('upload/'),$content);
 }
 
 function goto_login($back_url='')
@@ -664,4 +674,168 @@ if (!function_exists('get_page_value')) {
         return json_encode($page_value);
 
     }
+}
+
+//访问量
+// 返回某个产品的访问量
+// 涉及到的memcache key
+// @type: product/article/course
+// pv_@type_@date('dH')         : 小时内的产品/文章ids
+// pv_@type_@date('dH')_$id     : 小时内的产品/文章访问量
+// pv_@type_$id                 : 产品/文章的访问量
+// $autoAdd : 是否自动增加
+    function get_page_view($type,$id, $autoAdd=true){
+        $CI = &get_instance();
+        $CI->load->model('product_model');
+        $CI->load->model('wordpress_model');
+        $CI->load->library('memcache');
+
+        //定义某商品的key 
+        $key =  'pv_'.$type.'_'.$id;
+
+        //获取key的值
+        $pv = $CI->memcache->get($key);
+
+        //如果访问量为空，那么从数据库取得最新的值
+        if(empty($pv) && $id >0){
+            //如果是产品，那么从产品表取出访问量
+            if($type == "product" || $type == "course"){
+                // TODO  那么从产品表取出访问量
+                $obj = $CI->product_model->product_info($id);
+                $pv=$obj->pv_num;
+            }elseif($type=='article'){
+                // TODO  那么从wordpress中表取出文章的访问量
+                $obj = $CI->wordpress_model->get_article_views($id);
+                $pv=$obj->pv_num;
+            }
+        }
+        //访问量+1
+        if( !$autoAdd ) return $pv;
+        $pv += 1;
+
+        //将新值写进mencache
+        if( $id > 0 ){
+	        $CI->memcache->delete($key);
+	        $CI->memcache->save($key,$pv, 7200);
+        }
+
+
+        //每个小时的key，记录一个小时内 有多少产品被访问到
+        $hour = date('dH');
+        $key_type_hour_ids = 'pv_'.$type.'_'.$hour.'_ids';
+
+        $pv_type_hour_ids = $CI->memcache->get($key_type_hour_ids);
+
+        //判断 将当前的产品id加到小时内
+        if(empty($pv_type_hour_ids)){
+            $pv_type_hour_ids = array($id);
+        }else{
+            array_push($pv_type_hour_ids, $id);
+            $pv_type_hour_ids = array_unique($pv_type_hour_ids);
+        }
+        //将一个小时内的被访问的产品id，写进memcache
+        $CI->memcache->delete($key_type_hour_ids);
+        $CI->memcache->save($key_type_hour_ids,$pv_type_hour_ids, 7200);
+
+        // 记录产品的小时访问量
+        $key_type_hour_id = 'pv_'.$type.'_'.$hour."_".$id;
+
+        $pv_type_hour_id = $CI->memcache->get($key_type_hour_id);
+
+        //判断 将当前的产品id 访问量+1
+        if(empty($pv_type_hour_id)){
+            $pv_type_hour_id = 1;
+        }else{
+            $pv_type_hour_id += 1;
+        }
+        //将新值写进memcache
+        $CI->memcache->delete($key_type_hour_id);
+        $CI->memcache->save($key_type_hour_id,$pv_type_hour_id, 7200);
+
+        return $pv;
+
+    }
+
+    /**
+     * 用户的商品 收藏
+     * @$user_id  用户id
+     * 'collect_'.$user_id  用户的 收藏商品的数组
+     */
+    if (!function_exists('get_collect_data')) {
+        function get_collect_data(){
+            $CI=&get_instance();
+            $user_id=$CI->session->userdata('user_id');
+            return $CI->session->userdata('collect_'.$user_id);
+        }
+    }
+
+    /**
+     * 用户的文章 点赞
+     * @$user_id  用户id
+     * 'praise_'.$user_id  用户的 点赞文章的数组
+     */
+    if (!function_exists('get_praise_data')) {
+        function get_praise_data(){
+            $CI=&get_instance();
+            $user_id=$CI->session->userdata('user_id');
+            return $CI->session->userdata('praise_'.$user_id);
+        }
+    }
+
+    /**
+     * 判断值是否在二维数组中
+     *
+     */
+    if (!function_exists('deep_in_array')) {
+        function deep_in_array($value, $array) {   
+        foreach($array as $item) {   
+            if(!is_array($item)) {   
+                if ($item == $value) {  
+                    return true;  
+                } else {  
+                    continue;   
+                }  
+            }   
+               
+            if(in_array($value, $item)) {  
+                return true;      
+            } else if(deep_in_array($value, $item)) {  
+                return true;      
+            }  
+        }   
+        return false;  
+    }
+} 
+function is_mobile_number($str){
+return preg_match("/1\d{10}$/",$str);
+}
+
+/**
+ * 生成随机现金券号,规则:根据年份以大写字母‘A-Z’+11随机数组成
+ */
+if (!function_exists('getVoucherDes')){
+    function getVoucherDes(){
+        srand((double)microtime()*1000000000000);
+        $voucher_sn = mt_rand();
+        if(strlen($voucher_sn) < 11)
+        {
+            $voucher_sn = str_pad($voucher_sn,11,'0',STR_PAD_LEFT);
+        }
+        elseif(strlen($voucher_sn) > 11)
+        {
+            $voucher_sn = substr($voucher_sn,0,11);
+        }
+        $year_diff = date('Y') - 2015;
+        $alphabets =  array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        for($i = 0; $i <= $year_diff; $i++){
+            $str = $alphabets[$i];
+        }
+        $voucher_sn = $str . $voucher_sn;
+        return $voucher_sn;
+    }
+}
+
+function isReqFromWechat() {
+    $CI = &get_instance();
+    return strpos($CI->input->server('HTTP_USER_AGENT'), 'MicroMessenger') !== false;
 }

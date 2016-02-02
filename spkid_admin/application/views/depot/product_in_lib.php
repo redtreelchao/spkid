@@ -8,8 +8,8 @@
 					<th>供应商名称</th>
 					<th>售价</th>
 					<th>条码</th>
-					<th>颜色</th>
-					<th>尺码</th>
+					<th>颜色|尺码</th>
+					<th>包装名称</th>
 					<th>批次</th>
 					<th>最大入库数</th>
 					<th>完成数</th>
@@ -22,8 +22,8 @@
 					<td><?php print $row->provider_name; ?></td>
 					<td><?php print $row->shop_price; ?></td>
 					<td><?php print $row->provider_barcode; ?></td>
-					<td><?php print $row->color_name.'['.$row->color_sn.']'; ?></td>
-					<td><?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
+					<td><?php print $row->color_name.'['.$row->color_sn.']'; ?>|<?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
+					<td class="editable"><?php print $row->package_name; ?></td>
 					<td><?php print $row->batch_code; ?></td>
 					<td><?php print $row->max_num; ?></td>
 					<td><?php print $row->product_finished_number; ?></td>

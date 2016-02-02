@@ -81,7 +81,7 @@
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">
-                <input name="mysubmit" class="button" type="submit" value="提交" <?php echo $perms['payment_edit'] == 1 ? '' : 'disabled="disabled"';?>/>
+                <input name="mysubmit"  type="submit"  class="am-btn am-btn-secondary" value="提交" <?php echo $perms['payment_edit'] == 1 ? '' : 'disabled="disabled"';?>/>
 					
 				</td>
 			</tr>

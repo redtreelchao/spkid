@@ -24,7 +24,7 @@
                 <input type="text" name="cps_name" id="cps_name" />
                 SN：
                 <input type="text" name="cps_sn" id="cps_sn" />
-                <input type="submit" class="button" value="搜索" />
+                <input type="submit" class="am-btn am-btn-primary" value="搜索" />
             </form>
         </div>
         <div class="blank5"></div>

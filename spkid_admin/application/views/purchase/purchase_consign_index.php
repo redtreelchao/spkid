@@ -1,10 +1,6 @@
 <?php if ($full_page): ?>
     <?php include(APPPATH . 'views/common/header.php'); ?>
     <script type="text/javascript" src="public/js/listtable.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-    <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-    <link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
     <script type="text/javascript">
         $(function() {
             $('input[type=text][name=end_date]').datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, nextText: '', prevText: '', yearRange: '-100:+0'});
@@ -160,12 +156,12 @@
         <div class="blank5"></div>
         <div class="search_row">
             <form name="search" action="javascript:search(); ">
-                <?php print form_dropdown('provider_id', get_pair($all_provider, 'provider_id', 'provider_name', array('' => '供应商')), '', 'onchange=get_batch()'); ?>
+                <?php print form_dropdown('provider_id', get_pair($all_provider, 'provider_id', 'provider_code,provider_name', array('' => '供应商')), '', 'onchange=get_batch() data-am-selected="{searchBox:1, max_height:300}"'); ?>
                 <span id="batch_panel" style="color:red"></span>
                 时间段：<input type="text" name="start_time" id="start_time" readonly />-
                 <input type="text" name="end_date" id="end_date" style="width:100px;" value="<?php print substr($end_time, 0, 10); ?>" />
                 <input type="text" name="end_time" id="end_time" style="width:100px;" value="<?php print substr($end_time, 11); ?>" />
-                <input type="submit" class="button" value="搜索" />
+                <input type="submit" class="am-btn am-btn-primary" value="搜索" />
             </form>
         </div>
         <div style="height:5px;"></div>
@@ -236,8 +232,8 @@
                             <input type="hidden" id="export_batch_id" name="batch_id" value="<?php print $batch_info->batch_id; ?>" />
                             <input type="hidden" id="export_start_time" name="start_time" value="<?php print $start_time; ?>" />
                             <input type="hidden" id="export_end_time" name="end_time" value="<?php print $end_time; ?>" />
-                            <!--<input type="button" id="export" value="导出采购单" class="button" onclick="doexport();"/>-->
-                        <?php if (check_perm('purchase_consign_create') && $cost): ?><input type="button" id="create" value="生成采购单" class="button" onclick="docreate();"/><?php endif; ?>
+                            <!--<input type="button" id="export" value="导出采购单" class="am-btn am-btn-primary" onclick="doexport();"/>-->
+                        <?php if (check_perm('purchase_consign_create') && $cost): ?><input type="button" id="create" value="生成采购单" class="am-btn am-btn-primary" onclick="docreate();"/><?php endif; ?>
                         <a href="javascript:void(0);" onclick="show_detail_order(this);">展示订单详情</a>
                         </div>
 

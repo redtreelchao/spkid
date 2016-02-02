@@ -70,7 +70,7 @@ ul,li{list-style:none;}
 		<?php endforeach;?>
 	    </ul>
 	</div>
-	<input id="btn" type="submit" class="button" onclick="sort_rush();" value="保存">
+	<input id="btn" type="submit" class="am-btn am-btn-primary" onclick="sort_rush();" value="保存">
 </div>
 <script type="text/javascript" src="/public/js/creatSequence.js"></script>
 <script type="text/javascript">

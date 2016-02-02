@@ -5,14 +5,14 @@
 	//<![CDATA[
 	function check_form(){
 		var validator = new Validator('mainForm');
-			validator.required('size_name', '请填写尺寸名称');
+			validator.required('size_name', '请填写规格名称');
 //			validator.reg('size_sn',/^.{4}$/,'请正确填写尺寸编码');
 			return validator.passed();
 	}
 	//]]>
 </script>
 <div class="main">
-	<div class="main_title"><span class="l">尺寸管理 >> 编辑 </span><a href="size/index" class="return r">返回列表</a></div>
+	<div class="main_title"><span class="l">规格管理 >> 编辑 </span><a href="size/index" class="return r">返回列表</a></div>
 	<div class="blank5"></div>
 	<?php print form_open('size/proc_edit',array('name'=>'mainForm','onsubmit'=>'return check_form()'),array('size_id'=>$row->size_id));?>
 		<table class="form" cellpadding=0 cellspacing=0>
@@ -20,11 +20,11 @@
 				<td colspan=2 class="topTd"></td>
 			</tr>
 			<tr>
-				<td class="item_title">尺寸名称:</td>
+				<td class="item_title">规格名称:</td>
 				<td class="item_input"><?php print form_input('size_name',$row->size_name,'class="textbox require" '.($perm_edit?'':'disabled'));?></td>
 			</tr>
 			<tr>
-				<td class="item_title">尺寸编码:</td>
+				<td class="item_title">规格编码:</td>
 				<td class="item_input"><?php print form_input('size_sn',$row->size_sn,'class="textbox require" disabled');?></td>
 			</tr>
 			<tr>
@@ -45,7 +45,7 @@
 				<tr>
 					<td class="item_title"></td>
 					<td class="item_input">
-						<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+						<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
 					</td>
 				</tr>	
 			<?php endif ?>

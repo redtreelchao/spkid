@@ -1,6 +1,5 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 	<div class="main">
 		<div class="main_title">
 		<span class="l">系统设置&gt;&gt; 店铺列表</span>

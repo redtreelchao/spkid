@@ -3,8 +3,6 @@
 	<script type="text/javascript" src="public/js/utils.js"></script>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/cluetip.js"></script>
-	<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
 	<link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
 	<script type="text/javascript">
 		//<![CDATA[
@@ -31,7 +29,7 @@
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
 			模特名称：<input type="text" class="ts" name="model_name" value="" style="width:100px;" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>

@@ -937,6 +937,10 @@ class Purchase extends CI_Controller
                     echo json_encode(array('error'=>1,'msg'=>'该采购单还未添加商品'));
                     return;
                 }
+                
+                //判断采购单商品是否有商品成本价
+                $product_ids = $this->purchase_model->get_purchase_pro_ids( $purchase_info->batch_id );
+                
                 //判断采购单商品是否通过审核
                 $audit_num = $this->product_model->is_no_audit_pros($product_ids );
                 if( !$audit_num == 0){
@@ -944,8 +948,6 @@ class Purchase extends CI_Controller
                     return;
                 }
                 
-                //判断采购单商品是否有商品成本价
-                $product_ids = $this->purchase_model->get_purchase_pro_ids( $purchase_info->batch_id );
                 $pro_ids = array();
                 foreach ($product_ids as $key => $value) {
                     if ($value['product_id'] > 0)
@@ -1071,6 +1073,110 @@ class Purchase extends CI_Controller
 		echo json_encode($data);
 		return;
 	}
+        
+        public function export($purchase_id = 0){
+            $this->load->model('provider_model');
+            $purchase_info = $this->depot_model->filter_purchase(array('purchase_id' => $purchase_id));
+            if ( empty($purchase_info) )
+            {
+                    sys_msg('记录不存在！', 1);
+            }
+            $this->load->vars('purchase_info', $purchase_info);
+
+
+            $purchase_goods = $this->depot_model->purchase_products($purchase_id,$purchase_info->purchase_code);
+            $data['goods_list'] = $purchase_goods;
+            $provider = $this->provider_model->filter(array('provider_id' => $purchase_info->purchase_provider));
+            $data['provider'] = $provider;
+            $data['realname'] = $this->session->userdata('realname');
+            $data['tag'] = '?';
+            $this->load->view('purchase/purchase_export', $data);
+            $file_name = "purchase-".$purchase_info->purchase_code.".xls";
+            header("Content-type:application/vnd.ms-excel");
+            header("Content-Disposition:attachment;filename=".$file_name);               
+        }
+        //导入产品修改过期日期
+        public function product_import(){
+            $this->load->model('product_model');
+            $this->load->model("purchase_model");
+            $data = array();
+            if (isset($_FILES['data_file'])){
+                if (empty($_FILES['data_file']['tmp_name'])) sys_msg("请上传文件");
+                if($_FILES['data_file']['type'] != 'text/xml') {
+			sys_msg("请上传XML格式的文件", 1);
+		}
+                $content = file_get_contents($_FILES['data_file']['tmp_name']);
+		$content = preg_replace('/&.*;/','',$content);
+		$dom = new SimpleXMLElement($content);
+		$dom->registerXPathNamespace('c', 'urn:schemas-microsoft-com:office:spreadsheet');
+		$rows = $dom->xpath('//c:Workbook//c:Worksheet//c:Table//c:Row');
+                $index = 1;
+                foreach($rows as $row){
+                    $row_cache = array();
+                    $tmp_arr = array();
+                    foreach($row as $cell) {
+                        $row_cache[] = strval($cell->Data);
+                    }
+                    switch($index){
+                        case 1:
+                            $purchase_sn = trim($row_cache[1]);
+                            if(empty($purchase_sn)) sys_msg('采购单号不能为空',1);
+                            $purchase_info = $this->depot_model->filter_purchase(array('purchase_code' => addslashes($purchase_sn)));
+                            if(empty($purchase_info)) sys_msg('采购单不存在',1);
+                            if ($purchase_info->purchase_shelved_number > 0) sys_msg('采购单商品已上架，不能导入',1);
+                            $data['purchase'] = $purchase_info;
+                            break;
+                        case 2:
+                            break;
+                        default:
+                            if(empty($row_cache)) break;
+                            if(empty($row_cache[0]) || empty($row_cache[1])) {
+                                break;
+                            }
+                            $product = $this->product_model->get_product_ids(array(trim($row_cache[0])));
+                            $tmp_arr['product_sn'] = trim($row_cache[0]);
+                            $tmp_arr['exdate'] = date("Y-m-d", strtotime(trim($row_cache[1])));                        
+                            if (empty($product)) {
+                                $tmp_arr['err_msg'] = '商品不存在';
+                            } else {
+
+                                $purchase_sub = $this->purchase_model->get_purchase_sub($data['purchase']->purchase_id, $product[0]['product_id']);
+                                if (empty($purchase_sub)){
+                                    $tmp_arr['err_msg'] = '商品不存在于采购单';
+                                } else {
+                                    $tmp_arr['purchase_sub_id'] = $purchase_sub->purchase_sub_id;
+                                }
+                            }
+                            $data['sub'][] = $tmp_arr;
+
+                    }
+                    $index += 1;
+                }
+                if (empty($data['sub'])) sys_msg('您导入的文件中，没有商品信息',1);
+            }
+            
+            $this->load->view('purchase/product_import', $data);
+        }
+        //导入产品修改过期日期处理
+        public function product_import_proc(){
+            $this->load->model("purchase_model");
+            $purchase_code = trim($this->input->post('purchase_code'));
+            $sub_arr = $this->input->post('purchase_sub_id');
+            $date_arr = $this->input->post('exdate');
+            if (empty($purchase_code) || empty($sub_arr) || empty($date_arr)){
+                sys_msg("参数错误");
+            }
+            $purchase_info = $this->depot_model->filter_purchase(array('purchase_code' => addslashes($purchase_code)));
+            if(empty($purchase_info)) sys_msg('采购单不存在',1);
+            if ($purchase_info->purchase_shelved_number > 0) sys_msg('采购单商品已上架，不能导入',1);
+            foreach ($sub_arr as $k => $id){
+                if (intval($id) <= 0 || empty($date_arr[$k])){
+                    continue;
+                }
+                $this->purchase_model->update_purchase_sub($purchase_info->purchase_id, $id, array('expire_date' => $date_arr[$k]));
+            }
+            sys_msg('操作成功！',0,array(array('text'=>'返回', 'href'=>'purchase/product_import')));
+        }
 
 
 

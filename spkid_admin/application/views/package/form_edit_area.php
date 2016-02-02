@@ -24,8 +24,8 @@
 		<tr>
 			<td class="item_title"></td>
 			<td class="item_input">
-				<?php print form_submit('mysubmit','提交', 'class="button"');?>
-				<?php print form_button('mycancel','取消', 'class="button" onclick="cancel_area_edit();"');?>
+				<?php print form_submit('mysubmit','提交', 'class="am-btn am-btn-primary"');?>
+				<?php print form_button('mycancel','取消', 'class="am-btn am-btn-primary" onclick="cancel_area_edit();"');?>
 			</td>
 		</tr>
 		<tr>

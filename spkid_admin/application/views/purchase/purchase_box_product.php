@@ -1,7 +1,6 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
-    <script type="text/javascript" src="public/js/jquery.form.js" ></script>
+<!--    <script type="text/javascript" src="public/js/jquery.form.js" ></script> -->
     <script type="text/javascript">
 	function p_updata(){
 	    $("#up_form").ajaxSubmit(function(data){
@@ -53,7 +52,7 @@
 				  <th>名称</th>
 				  <th>品牌</th>
 				  <th>颜色</th>
-				  <th>尺寸</th>
+				  <th>规格</th>
 				  <th>条形码</th>
 				  <th>货号</th>
 				  <th>收货数量</th>
@@ -83,8 +82,8 @@
 			</form>
 			<?php if($edit):?>
 			<div class="r">
-			    <input class="button" type="button" value="提交数量更改" onclick="p_updata();"/>
-			    <input class="button" type="button" value="检查是否完结" onclick="p_audit();"/>
+			    <input  type="button"  class="am-btn am-btn-secondary" value="提交数量更改" onclick="p_updata();"/>
+			    <input  type="button"  class="am-btn am-btn-secondary" value="检查是否完结" onclick="p_audit();"/>
 			</div>
 			<?php endif; ?>
 		</div>

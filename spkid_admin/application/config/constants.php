@@ -71,6 +71,7 @@ define('USE_SQL_AND',FALSE);
  */
 define('SHIPPING_ID_CAC', 1);
 define('SHIPPING_ID_PINGTAI', 2); //平台快递方式
+define('SHIPPING_ID_DEFAULT', 9);
 
 /**
  * 支付方式
@@ -111,11 +112,12 @@ define('SHOP_STATUS_ALL','ALL'); // 所有店铺
  * 采购类型  
  */
 define('COOPERATION_TYPE_COST',      1);//买断(XXX:暂未使用)
-define('COOPERATION_TYPE_CONSIGN',   2);//代销(XXX:暂未使用)
-define('COOPERATION_TYPE_TMALL',     3);//天猫发货
+define('COOPERATION_TYPE_CONSIGN',   7);//代销(XXX:暂未使用)
+define('COOPERATION_TYPE_TMALL',     8);//天猫发货
 define('COOPERATION_TYPE_FW_VIRTUAL',4);//MT服务（虚库）
 define('COOPERATION_TYPE_MT_REAL',   5);//MT代销（实库）
 define('COOPERATION_TYPE_MT_VIRTUAL',6);//MT代销（虚库）
+define('COOPERATION_TYPE_THIRD',2);//MT代销（虚库）
 
 /**
  * 批次类型 
@@ -169,18 +171,21 @@ define('FRONT_FOCUS_IMAGE_DIR','front_focus_image');
 define('FRONT_FOCUS_IMAGE_PATH',CREATE_IMAGE_PATH.FRONT_FOCUS_IMAGE_DIR);
 
 //定义首页焦点图类别
-define('FOCUS_TYPE','$focus_type=array("1"=>"首页焦点图","2"=>"妈咪团");');
+define('FOCUS_TYPE','$focus_type=array("1"=>"手机轮播图片", "2"=>"手机引导页图片", "3"=>"视频轮播图片", "4"=>"电脑轮播图片");');
+
 //首页焦点图静态页面路径 相对index.php路径
 define('FRONT_FOCUS_IMAGE_HTML',CREATE_HTML_PATH .'index/front_focus_image.html');
 //团购首页焦点图静态页面路径 相对index.php路径
 define('TUAN_FRONT_FOCUS_IMAGE_HTML',CREATE_HTML_PATH .'index/tuan_front_focus_image.html');
+## mobile front page的引导页面
+define('MOBILE_FIRST_PAGE_HTML',CREATE_HTML_PATH .'index/mobile_first_page.html');
 //memcache首页焦点图key
 define('FRONT_FOCUS_IMAGE_HTML_KEY','front_focus_image_html');
 //memcache团购首页焦点图key
 define('TUAN_FRONT_FOCUS_IMAGE_HTML_KEY','tuan_front_focus_image_html');
 
 //前台url地址
-define('FRONT_URL','f.test.com');
+define('FRONT_URL','http://f.test.com');
 define("IMG_URL", 'http://img.test.com');
 define("PUBLIC_DATA_IMAGES", "public/data/images/");
 
@@ -191,6 +196,7 @@ define("ERP_HOST", "http://b.test.com");
 
 //上传根目录
 define('UPLOAD_PATH_BATH', CREATE_IMAGE_PATH );
+define('STATIC_HOST_CONFIG','$static_host_arr=array("http://s.test.com","http://s.test.com");');
 /**
  * 限抢图片上传目录
  */
@@ -209,12 +215,27 @@ define("STATIC_CACHES", CREATE_HTML_PATH . 'static_caches/');
 /*
  * 自动客审
  */
-define('CHECK_LOG', true);         //开启日志记录审核成功订单
-define('MIN_CHECK_TIME', 1800);     //下单时间大于多长时间才客审，默认30分钟：60*30
+define('CHECK_LOG', false);         //开启日志记录审核成功订单
+define('MIN_CHECK_TIME', 60);     //下单时间大于多长时间才客审，默认30分钟：60*30
 define('MAX_LIMIT_ORDER', 200);     //每次最多客审多少单
 define('TIME_OUT', 604800);         //自动客审，只做下单据当前时间，默认7天：3600*24*7
 
 // 系统仓库ID定义
+define('DT_RETURN_DEPOT_ID', 5); 		//  代销正常商品退货仓ID
+//define('DT_RETURN_DEPOT_LOCATION_ID', 4); //  代销正常商品退货仓 储位ID
+define('DT_RETURN_DEPOT_LOCATION_NAME', 'DT-01-01-01-01'); //  代销正常商品退货仓 储位ID
+define('DT_RETURN_DEPOT_NAME', '周浦代销退货仓（不可售）' );
+
+define('MT_RETURN_DEPOT_ID', 4); 		//  代销正常商品退货仓ID
+//define('MT_RETURN_DEPOT_LOCATION_ID', 6); //  代销正常商品退货仓 储位ID
+define('MT_RETURN_DEPOT_LOCATION_NAME', 'MT-01-01-01-01'); //  代销正常商品退货仓 储位ID
+define('MT_RETURN_DEPOT_NAME', '周浦买断退货仓（不可售）' );
+
+define('BT_RETURN_DEPOT_ID', 6); 		//  代销正常商品退货仓ID
+//define('BT_RETURN_DEPOT_LOCATION_ID', 1); //  代销正常商品退货仓 储位ID
+define('BT_RETURN_DEPOT_LOCATION_NAME', 'BT-01-01-01-01'); //  代销正常商品退货仓 储位ID
+define('BT_RETURN_DEPOT_NAME', '第三方退货仓（不可售）' );
+
 define('RETURN_DEPOT_ID', 3 ); 		//  代销正常商品退货仓ID
 define('RETURN_DEPOT_LOCATION_ID', 3 ); //  代销正常商品退货仓 储位ID
 define('RETURN_DEPOT_NAME', '代销退货仓（不可售）' );
@@ -224,6 +245,10 @@ define('MD_RETURN_DEPOT_NAME', '买断退货仓（不可售）' );
 define('CTB_RETURN_DEPOT_ID', 10 );	//  代销转买断商品退货仓ID
 define('CTB_RETURN_DEPOT_LOCATION_ID', 27 );	//  代销转买断商品退货仓 储位ID
 define('CTB_RETURN_DEPOT_NAME', '代转买退货仓（不可售）' );
+define('THIRD_DEPOT_ID', 13 ); 		//  三方退货仓退货仓ID
+define('THIRD_DEPOT_LOCATION_ID', 31 ); //  三方退货仓储位ID
+define('THIRD_DEPOT_NAME', '三方退货仓' );
+
 define('CTB_DEPOT_IO_TIME', '23:00:00' );	//  代销转买断商品出库和入库的时间
 define('CTB_DEPOT_IN_TYPE', 15 );	//  系统自动生成代销转买入库类型
 define('CTB_DEPOT_OUT_TYPE', 16 );	//  系统自动生成代销转买出库类型
@@ -234,7 +259,6 @@ define('MD_RETURN_DEPOT_LOCATION_NAME', 'TH-01-01-01');   //  买断正常商品
 // 系统代销转买断相关配置
 define('SYS_CTB_PROVIDER_ID', 1 );	// 系统代销转买断供应商ID
 define('SYS_CTB_BATCH_ID', '1,2,3,4,5,6,7,8,9,10');	// 转买断后可用批次ID
-
 /**
  * 2013-12-13 重新定义仓库及储位
  */
@@ -267,6 +291,7 @@ define('LOCATION_NAME_TMALL_RETURN', 'TT-01-01-01'); //天猫退货储位
 define('LOCATION_NAME_MT_REAL_RETURN', 'DST-01-01-01'); //MT代销(实库)退货储位
 define('LOCATION_NAME_MT_VIRTUAL_SEND', 'DXF-01-01-01'); //MT代销(虚库)发货储位
 define('LOCATION_NAME_MT_VIRTUAL_RETURN', 'DXT-01-01-01'); //MT代销(虚库)退货储位
+define('LOCATION_NAME_THIRD_RETURN', 'A-01-01-02'); //THIRD代销(虚库)退货储位
 
 define('DEPOT_TYPE_TMALL_IN', 'rk888'); //天猫虚拟入库类型
 define('DEPOT_TYPE_FW_VIRTUAL_IN', 'rk788'); //MT服务(虚库)入库类型
@@ -286,7 +311,7 @@ define("DEPOT_IO_TYPE_OUT", "CK");
 //入库默认DEPOT ID
 define("DEPOT_IO_IN_DEPOT_ID", RETURN_DEPOT_ID);
 //出库默认DEPOT ID
-define("DEPOT_IO_OUT_DEPOT_ID", CTB_RETURN_DEPOT_ID);
+//define("DEPOT_IO_OUT_DEPOT_ID", CTB_RETURN_DEPOT_ID);
 
 //专题存放目录
 define('ZHUANTI_HTML_PATH', CREATE_HTML_PATH.'zhuanti/');
@@ -294,17 +319,12 @@ define('ZHUANTI_HTML_PATH', CREATE_HTML_PATH.'zhuanti/');
 //物流对账存放目录
 define('SHIPPING_HTML_PATH', CREATE_HTML_PATH.'shipping/');
 
-//前台静态服务器 HOST 定义
-$static_host_arr=array('http://s.test.com','http://s.test.com');
-$rand_index=rand(0,count($static_host_arr)-1);
-define('STATIC_HOST',$static_host_arr[$rand_index]);
-
 //系统Log 开关
 define('BY_SYSTEM_LOG', true);
 /**
  * SSO
  */
-define("SSO_COOKIE_USERNAME", "_username");
+define("SSO_COOKIE_USERNAME", "_username"); //第三发货
 define("SSO_COOKIE_PASSWORD", "_password");
 define("SSO_COOKIE_EXPRIE", 60 * 60 * 24 * 14);
 define("SSO_COOKIE_DOMAIN", ".test.com");
@@ -321,8 +341,8 @@ define("KUAIDI100_URL", "http://www.kuaidi100.com/poll");
 define('SF_SHIPPING_ID', 2);   //顺丰ID
 define('SF_CHECKWORD', '24d5f7242a9644c5842832abacdb3bfd'); //顺丰的校验码
 define('SF_CUST_ID', '5720310679');     //寄件方客户卡号
-define('BBG_COMPANY', '妈咪树');    	//寄件方公司名称
-define('BBG_CONTACT', '妈咪树');      //寄件方联系人
+define('BBG_COMPANY', '悦牙网');    	//寄件方公司名称
+define('BBG_CONTACT', '悦牙网');      //寄件方联系人
 define('BBG_TEL', '4006 333 999');    //寄件方座机
 define('BBG_PROVINCE', '浙江省');     //寄件人所在省份
 define('BBG_CITY', '湖州市');         //寄件方所属城市
@@ -354,7 +374,7 @@ define('ACT_OTHER',                99);     // 其他类型
 define('ACT_REBATE',   'money_rebate'); //退货运费转入
 
 /**
- * 妈咪团图片上传目录
+ * 团购图片上传目录
  */
 define('UPLOAD_PATH_TUAN', UPLOAD_PATH_BATH);
 define('UPLOAD_TAG_TUAN', 'tuan/');
@@ -374,8 +394,20 @@ $third_parts = array(
     '7' => array('pay_id' => 18, 'payment_remark' => 'QQ网购代付')
 );
 
+$shipping_jzh = array(310000, 330000, 320000);//江浙沪ID
+define('SHIPPING_FEE_NEAR', 10);//江浙沪返还用户运费最高金额
+define('SHIPPING_FEE_FAR', 20);//除江浙沪返还用户运费最高金额
 // 前台数据缓存
 define('CATE_DATA_CACHE_TIME', 172800);//2天
 
 // 短信发送默认价格
 define('DEFAULT_SMS_PRICE', 0.12);
+
+define('ORDER_INVALID_TIME', 259200); //3天
+define('ORDER_INVALID_LIMIT', 50); 
+
+define('PRODUCT_TOOTH_TYPE', 1);//牙科大类ID
+define('PRODUCT_COURSE_TYPE', 2);//课程大类ID
+// 参数配置文件路径
+define('SYSTEM_SETTINGS', ROOT_PATH.'application/config/settings.php');
+require_once( SYSTEM_SETTINGS );

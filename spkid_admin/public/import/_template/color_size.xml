@@ -11,13 +11,16 @@
   <Created>2011-06-20T06:38:30Z</Created>
   <LastSaved>2011-06-20T07:34:09Z</LastSaved>
   <Company>ig</Company>
-  <Version>12.00</Version>
+  <Version>15.00</Version>
  </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
  <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
-  <WindowHeight>11145</WindowHeight>
-  <WindowWidth>18195</WindowWidth>
-  <WindowTopX>120</WindowTopX>
-  <WindowTopY>75</WindowTopY>
+  <WindowHeight>12450</WindowHeight>
+  <WindowWidth>28800</WindowWidth>
+  <WindowTopX>0</WindowTopX>
+  <WindowTopY>0</WindowTopY>
   <ProtectStructure>False</ProtectStructure>
   <ProtectWindows>False</ProtectWindows>
  </ExcelWorkbook>
@@ -38,7 +41,7 @@
    <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">商品款号</Data></Cell>
     <Cell><Data ss:Type="String">颜色名称</Data></Cell>
-    <Cell><Data ss:Type="String">尺寸名称</Data></Cell>
+    <Cell><Data ss:Type="String">规格名称</Data></Cell>
     <Cell><Data ss:Type="String">商品条形码</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
@@ -54,8 +57,8 @@
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>3</ActiveRow>
-     <ActiveCol>4</ActiveCol>
+     <ActiveRow>2</ActiveRow>
+     <ActiveCol>2</ActiveCol>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>

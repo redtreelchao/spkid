@@ -115,7 +115,7 @@
 		品牌名称：<input type="text" class="ts" name="brand_name" style="width:100px;" />
 		品牌首字母：<input type="text" class="ts" name="brand_initial" style="width:100px;" />
 		<label><input type="checkbox" name="skip_set" value="true"/>过滤已设置</label>
-		<input type="submit" class="button" value="搜索"/>
+		<input type="submit" class="am-btn am-btn-primary" value="搜索"/>
 		</form>
 	</div>
 	<div class="blank5"></div>

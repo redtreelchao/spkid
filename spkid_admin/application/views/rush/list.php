@@ -1,12 +1,8 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-	<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-	<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.min.js"></script>
+	<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.js"></script>
 
 	<script type="text/javascript">
 	    $(function(){
@@ -22,7 +18,7 @@
 		function search(){
 			listTable.filter['query_rush_id'] = $.trim($('input[name=query_rush_id]').val());
 			listTable.filter['rush_index'] = $.trim($('input[name=rush_index]').val());
-			listTable.filter['nav_id'] = $.trim($('select[name=nav_id]').val());
+			// listTable.filter['nav_id'] = $.trim($('select[name=nav_id]').val());
 			listTable.filter['status'] = $.trim($('select[name=status]').val());
 			listTable.filter['start_time'] = $.trim($('input[name=start_time]').val());
 			listTable.filter['end_time'] = $.trim($('input[name=end_time]').val());
@@ -165,10 +161,10 @@
 	<form name="search" action="javascript:search(); ">
 	    限抢ID:<input type="text" name="query_rush_id" id="query_rush_id" />
 	    名称：<input type="text" name="rush_index" id="rush_index" />
-              对应导航分类：
+             <!--  对应导航分类：
               <span class="item_input">
               <?php print form_dropdown('nav_id',array(''=>'--请选择--')+get_pair($all_nav,'nav_id','nav_name')); ?>
-              </span> 
+              </span>  -->
 	      状态：<select name="status" id="status">
 			<option value="">--请选择--</option>
 			<option value="1">未激活</option>
@@ -177,7 +173,7 @@
 		    </select>
 	    开始日期：<input type="text" name="start_time" id="start_time" />
               <!--结束时间：<input type="text" name="end_time" id="end_time" />-->
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			<?php if ($perm_edit): ?><a id="sort_rush" class="set" href="javascript:void(0);" onclick="sort_rush();" title="排序">排序</a><?php endif; ?>
 		</form>
 </div>
@@ -193,7 +189,7 @@
 				  <th>名称</th>
 				  <th>可售数量</th>
 				  <th>可售金额</th>
-				  <th width="100">导航分类</th>
+				  <th width="100">现金券ID</th>
 				  <th width="120">开始时间</th>
 				  <th width="120">结束时间</th>
 				  <th width="80">状态</th>
@@ -208,7 +204,7 @@
 			    	<td align="left"><?php print $row->rush_index; ?></td>
 			    	<td><?php print $row->sale_number; ?></td>
 			    	<td><?php print $row->sale_amount; ?></td>
-			    	<td><?php print isset($all_nav[$row->nav_id])?$all_nav[$row->nav_id]->nav_name:'' ?></td>
+			    	<td><?php print $row->campaign_id;?></td> 
 			    	<td><?php print $row->start_date; ?></td>
 					<td><?php print $row->end_date; ?></td>
 					<td id="td_html_<?php print $row->rush_id; ?>"><?php print $this->status_list[$row->status]; ?><?php if($row->end_date<$this->time) print ' 已过期' ?></td>
@@ -227,7 +223,7 @@
 					    <?php if($perm_edit&&$row->status == 0):?>
 						<a id="del_<?php print $row->rush_id; ?>" class="del" href="javascript:void(0);" rel="rush/del/<?php print $row->rush_id; ?>" title="删除" onclick="do_delete(this)"></a>
 					    <?php endif;?>
-					    <?php if($row->status == 1):?><a href="http://116.213.179.188/rush-<?php print $row->rush_id; ?>.html?is_preview=1" target="_blank">预览</a><?php endif;?>
+                        <?php if($row->status == 1):?><a href="<?=FRONT_HOST?>/rush-<?php print $row->rush_id; ?>.html?is_preview=1" target="_blank">预览</a><?php endif;?>
 					    <?php if($perm_audit):?>
 						<span style="cursor:pointer" id='span_html_<?php print $row->rush_id; ?>' onclick="return act(<?php print $row->rush_id; ?>);">
 						<?php if($row->status == 1){echo '停止';}elseif($row->status == 0){echo '激活';}?>

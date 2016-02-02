@@ -711,9 +711,9 @@ class Exchange_model extends CI_Model
 		} else
 		{
 			$sql = "INSERT INTO ".$this->db->dbprefix('exchange_out')." (exchange_id,product_id,color_id,size_id,source_depot_id,source_location_id,shop_price," .
-					"product_number,create_admin,create_date,batch_id) " .
+					"product_number,create_admin,create_date,batch_id,expire_date) " .
 					"SELECT '".$exchange_id."',a.product_id,a.color_id,a.size_id,a.depot_id,a.location_id,b.shop_price,".
-					$product_number.",'".$admin_id."','".date('Y-m-d H:i:s')."',a.batch_id " .
+					$product_number.",'".$admin_id."','".date('Y-m-d H:i:s')."',a.batch_id,a.expire_date " .
 					"FROM " . $this->db->dbprefix('transaction_info') ." a " .
 					" LEFT JOIN " . $this->db->dbprefix('product_info') . " b ON a.product_id = b.product_id " .
 					" LEFT JOIN ".$this->db->dbprefix('product_cost')." AS cost ON cost.product_id = a.product_id AND cost.batch_id = a.batch_id " .
@@ -727,10 +727,10 @@ class Exchange_model extends CI_Model
 			}
 			$sql = "INSERT INTO ".$this->db->dbprefix('transaction_info')."(trans_type,trans_status,trans_sn,product_id,color_id,size_id,product_number," .
 					"depot_id,location_id,batch_id,create_admin,create_date,update_admin,update_date,cancel_admin,cancel_date,trans_direction,sub_id,".
-					"shop_price,consign_price,cost_price,consign_rate,product_cess) ".
+					"shop_price,consign_price,cost_price,consign_rate,product_cess,expire_date) ".
 					" SELECT ".TRANS_TYPE_PACKET_EXCHANGE.",".TRANS_STAT_AWAIT_OUT.",b.exchange_code,a.product_id,a.color_id,size_id,(0-a.product_number),".
 					"a.source_depot_id,a.source_location_id,a.batch_id,a.create_admin,a.create_date,0,'0000-00-00',0,'0000-00-00',0,a.exchange_sub_id,".
-					"a.shop_price,cost.consign_price,cost.cost_price,cost.consign_rate,cost.product_cess " .
+					"a.shop_price,cost.consign_price,cost.cost_price,cost.consign_rate,cost.product_cess,a.expire_date " .
 					" FROM ".$this->db->dbprefix('exchange_out')." a" .
 					" LEFT JOIN ".$this->db->dbprefix('product_cost')." AS cost ON cost.product_id = a.product_id AND cost.batch_id = a.batch_id " .
 					" LEFT JOIN ".$this->db->dbprefix('exchange_main')." b ON b.exchange_id = a.exchange_id WHERE a.exchange_sub_id = '".$sub_id."' ";
@@ -910,9 +910,9 @@ class Exchange_model extends CI_Model
 			}
 
 			$sql = "INSERT INTO ".$this->db->dbprefix('transaction_info')."(trans_type,trans_status,trans_sn,product_id,color_id,size_id,product_number," .
-					"depot_id,location_id,create_admin,create_date,update_admin,update_date,cancel_admin,cancel_date,trans_direction,sub_id,batch_id) ".
+					"depot_id,location_id,create_admin,create_date,update_admin,update_date,cancel_admin,cancel_date,trans_direction,sub_id,batch_id,expire_date) ".
 					" SELECT ".TRANS_TYPE_PACKET_EXCHANGE.",".TRANS_STAT_AWAIT_IN.",b.exchange_code,a.product_id,a.color_id,size_id,a.product_number,".
-					"a.dest_depot_id,a.dest_location_id,a.create_admin,a.create_date,0,'0000-00-00',0,'0000-00-00',1,a.exchange_leaf_id,a.batch_id" .
+					"a.dest_depot_id,a.dest_location_id,a.create_admin,a.create_date,0,'0000-00-00',0,'0000-00-00',1,a.exchange_leaf_id,a.batch_id,a.expire_date" .
 					" FROM ".$this->db->dbprefix('exchange_in')." a" .
 					" LEFT JOIN ".$this->db->dbprefix('exchange_main')." b ON b.exchange_id = a.exchange_id WHERE a.exchange_leaf_id = '".$sub_id."' ";
 			$this->db->query($sql);

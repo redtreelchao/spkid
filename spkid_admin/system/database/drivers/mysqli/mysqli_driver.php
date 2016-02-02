@@ -442,6 +442,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _field_data($table)
 	{
+		return "SHOW FULL FIELDS FROM ".$table;
 		return "DESCRIBE ".$table;
 	}
 

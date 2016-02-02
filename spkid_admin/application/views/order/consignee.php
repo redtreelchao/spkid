@@ -105,11 +105,11 @@
 				<td class="item_title"></td>
 				<td class="item_input">
 				<?php if ($act=='add'): ?>
-					<input type="button" name="myprev" value="上一步" class="button" onclick="location.href=base_url+'order/product/<?php print $order->order_id;?>?act=add'">
+					<input type="button" name="myprev" value="上一步" class="am-btn am-btn-primary" onclick="location.href=base_url+'order/product/<?php print $order->order_id;?>?act=add'">
 					
 				<?php endif ?>
-					<?php print form_submit('mysubmit',$act=='add'?'下一步':'确定','class="button"') ?>	
-					<input type="button" name="mycancel" value="取消" class="button" onclick="location.href=base_url+'order/info/<?php print $order->order_id;?>'">
+					<?php print form_submit('mysubmit',$act=='add'?'下一步':'确定','class="am-btn am-btn-primary"') ?>	
+					<input type="button" name="mycancel" value="取消" class="am-btn am-btn-primary" onclick="location.href=base_url+'order/info/<?php print $order->order_id;?>'">
 				</td>
 			</tr>
 			<tr>

@@ -3,29 +3,16 @@
 <script type="text/javascript" src="public/js/validator.js"></script>
 <script type="text/javascript" src="public/js/order.js"></script>
 <script type="text/javascript" src="public/js/cluetip.js"></script>
-<script type="text/javascript" src="public/js/jui/bgiframe.min.js"></script>
-<script type="text/javascript" src="public/js/jui/hoverIntent.js"></script>
-<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.min.js"></script>
-<link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
-<link type="text/css" href="/public/style/jui/dialog.css" rel="stylesheet" />
+<script type="text/javascript" src="public/js/lhgdialog/lhgdialog.js"></script>
 
-<!-- <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-    <script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
--->    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
-        <link type="text/css" href="/public/style/jui/core.css" rel="stylesheet" />
-        <script type="text/javascript" src="/public/js/jui/core.min.js"></script>
-        <script type="text/javascript" src="/public/js/jui/widget.min.js"></script>
-        <script type="text/javascript" src="/public/js/jui/position.min.js"></script>
-        <script type="text/javascript" src="/public/js/jui/mouse.min.js"></script>
-        <script type="text/javascript" src="/public/js/jui/draggable.min.js"></script>
-        <script type="text/javascript" src="/public/js/jui/resizable.min.js"></script>
-        <script type="text/javascript" src="/public/js/jui/dialog.min.js"></script>
+<link rel="stylesheet" href="public/style/cluetip.css" type="text/css" media="all" />
+
 
 <script type="text/javascript">
 	//<![CDATA[
 	$(function(){
 		$('span.img_tip').cluetip({splitTitle: '|',showTitle:false});
-        $('#h_shipping').dialog({autoOpen:false,width:300,modal:true,resizable:false,title:'手工发货'});
+        $('#btn_shipping').dialog({id:"h_shipping_dlg",width:300,lock:true,modal:true,resizable:false,title:'手工发货',html:$('#h_shipping').html()});
 
     });
 	function check_form(){
@@ -34,13 +21,8 @@
 
 	function load_user_panel()
 	{
-			//var parent_dom = $("div#float_panel");
-			//parent_dom.show();
-			//parent_dom.html(result.content);
-	    	var dg = new $.dialog({ id:'thepanel',height:300,maxBtn:false, title:'',iconTitle:false,cover:true,html:$('#float_panel')[0] });
-	    	dg.ShowDialog();
-	    	//dg.addBtn('ok','确定',function(){post_dianping()});
-	    	return false;
+    	new $.dialog({ id:'thepanel',height:300,width:500,maxBtn:false, title:'用户信息',iconTitle:false,cover:true,html: $('div#float_panel').html() }).ShowDialog();
+    	return false;
 
 	}
 
@@ -56,23 +38,20 @@
 
 					<?php
 						if ($order->lock_admin)
-							print form_button('op_unlock','解锁',($perms['unlock']?'':'disabled').' onclick="switch_lock(\'unlock\')"');
+							print form_button('op_unlock','解锁',($perms['unlock']?'':'disabled').' onclick="switch_lock(\'unlock\')" class="am-btn am-btn-primary am-radius"');
 						else
-							print form_button('op_lock','锁定',($perms['lock']?'':'disabled').' onclick="switch_lock(\'lock\')"')
+							print form_button('op_lock','锁定',($perms['lock']?'':'disabled').' onclick="switch_lock(\'lock\')" class="am-btn am-btn-primary am-radius"')
 					?>
-					<?php print form_button('op_confirm','客审',($perms['confirm']?'':'disabled').' onclick="order_confirm()"'); ?>
-					<?php print form_button('op_unconfirm','反客审',($perms['unconfirm']?'':'disabled').' onclick="order_unconfirm()"'); ?>
-					<?php print form_button('op_shipping','发货',($perms['shipping']?'':'disabled').' onclick="order_shipping()"'); ?>
-					<?php print form_button('op_deny','拒收',($perms['deny']?'':'disabled').' onclick="order_deny()"'); ?>
-					<?php print form_button('op_pay','财审',($perms['pay']?'':'disabled').' onclick="order_pay()"'); ?>
-					<?php print form_button('op_invalid','作废',($perms['invalid']?'':'disabled').' onclick="invalid()"'); ?>
+					<?php print form_button('op_confirm','客审',($perms['confirm']?'':'disabled').' onclick="order_confirm()" class="am-btn am-btn-primary am-radius"'); ?>
+					<?php print form_button('op_unconfirm','反客审',($perms['unconfirm']?'':'disabled').' onclick="order_unconfirm()" class="am-btn am-btn-primary am-radius"'); ?>
+					<?php print form_button('op_shipping','发货',($perms['shipping']?'':'disabled').' class="am-btn am-btn-primary am-radius" id="btn_shipping"'); ?>
+					<?php print form_button('op_deny','拒收',($perms['deny']?'':'disabled').' onclick="order_deny()" class="am-btn am-btn-primary am-radius"'); ?>
+					<?php print form_button('op_pay','财审',($perms['pay']?'':'disabled').' onclick="order_pay()" class="am-btn am-btn-primary am-radius"'); ?>
+                                        <?php print form_button('op_unpay','反财审',($perms['unpay']?'':'disabled').' onclick="order_unpay()" class="am-btn am-btn-primary am-radius"'); ?>
+					<?php print form_button('op_invalid','作废',($perms['invalid']?'':'disabled').' onclick="invalid()" class="am-btn am-btn-primary am-radius"'); ?>
 					<?php if($order->odd):?>
-                                        <?php print form_button('op_odd_cancel','取消问题单标记',($perms['odd_cancel']?'':'disabled').' onclick="odd_cancel()"'); ?>
+                                        <?php print form_button('op_odd_cancel','取消问题单标记',($perms['odd_cancel']?'':'disabled').' onclick="odd_cancel()" class="am-btn am-btn-primary am-radius"'); ?>
                                         <?php endif;?>
-					&nbsp;
-					&nbsp;
-					&nbsp;
-					&nbsp;
 					<?php if ($perms['edit_order'] || $perms['shipping'] || $perms['change_shipping']): ?>
 						<?php print form_dropdown('source_id',array(''=>'订单来源')+get_pair($source_list,'source_id','source_name'),'','onchange="change_source()" '.($perms['edit_order']?'':'disabled')) ?>
 						<?php print form_dropdown('pay_id',array(''=>'支付方式'),'','onchange="change_pay()" '.($perms['edit_order']?'':'disabled')) ?>
@@ -84,7 +63,7 @@
 			<tr>
 				<td colspan="4" class="item_title_1">
 					订单号：<?php print $order->order_sn; ?>
-					【查看用户：<a href="#" onclick="load_user_panel();return false;"><?php print $user->user_name; ?></a>】
+					【查看用户：<a href="javascript:load_user_panel();"><?php print $user->user_name; ?></a>】
                      <?php if (!$order->shipping_true) : ?> <font color="red" style="font-weight:bold;">【虚发】</font> <?php endif; ?>
 				</td>
 			</tr>
@@ -174,7 +153,7 @@
 			<tr>
 				<td colspan="4" class="item_title_1">
 					其它信息
-					<?php if ($perms['edit_order']): ?>
+					<?php if ($perms['edit_other']): ?>
 					<a class="edit" href="order/other/<?php print $order->order_id; ?>" title="编辑"></a>
 					<?php endif ?>
 				</td>
@@ -195,7 +174,7 @@
 			<tr>
 				<td colspan="4" class="item_title_1">
 					订单商品
-					<?php if ($perms['edit_order']): ?>
+					<?php if ($perms['edit_order'] && $order->genre_id != $course_type): ?>
 					<a class="edit" href="order/product/<?php print $order->order_id; ?>" title="编辑"></a>
 					<?php endif ?>
 				</td>
@@ -215,6 +194,18 @@
 					<?php include 'order_payment.php' ?>
 				</td>
 			</tr>
+                        <?php if($order->genre_id == $course_type): ?>
+                        <tr>
+				<td colspan="4" class="item_title_1" >
+					报名人信息
+				</td>
+			</tr>
+                        <tr>
+				<td colspan="4" class="item_input" style="padding:0;">
+					<?php include 'order_client.php' ?>
+				</td>
+			</tr>
+                        <?php endif; ?>
 			<tr>
 				<td colspan="4" class="item_title_1">
 					意见
@@ -223,8 +214,8 @@
 			<tr>
 				<td colspan="4" class="item_input" style=" padding:0 0 5px 0;">
 					<?php include 'order_advice.php' ?>
-					<?php print form_dropdown('advice_type_id',array('意见类型')+get_pair($all_advice_type,'type_id','type_name'),'',$perms['advice']?'':'disabled') ?>
-					<?php print form_input('advice_content','','class="textbox" size="60" '.($perms['advice']?'':'disabled')) ?>
+					<?php print form_dropdown('advice_type_id',get_pair($all_advice_type,'type_id','type_name'),'',$perms['advice']?'':'disabled') ?>
+                    <?php print form_textarea(array('name' => 'advice_content','class' => 'textbox','style'=>'width:40%;height:100px;line-height:18px;')); ?>
 					<?php print form_button('advicesubmit','提交意见','onclick="post_advice()" '.($perms['advice']?'':'disabled')) ?>
 				</td>
 			</tr>
@@ -247,7 +238,7 @@
 	<?php print form_close();?>
 </div>
 <div id="float_panel" style="display:none;">
-<table border="0" width="100%">
+<table border="1" width="100%" style="border:1px solid #7F9DB9; width:100%;">
 <caption>
 <strong> 购货人信息 </strong>
 </caption>
@@ -270,7 +261,7 @@
 <td> <?php print $user->pay_points ?> </td>
 </tr>
 </table>
-<table border="0" width="100%">
+<table border="1" width="100%" style="border:1px solid #7F9DB9; width:100%;">
 <caption>
 <strong> 收货人：<?php print $order->consignee ?> </strong>
 </caption>
@@ -305,7 +296,7 @@
 </tr>
 <tr>
 <td height="30">&nbsp;</td>
-<td><input type="button" value="确定" name="sb_shipping" class="button" onclick="order_shipping();"></td>
+<td><input type="button"  value="确定" name="sb_shipping"  class="am-btn am-btn-secondary" onclick="order_shipping();"></td>
 </tr>
 </table>
 </div>

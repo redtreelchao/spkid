@@ -48,7 +48,7 @@ function order_status($order)
     $status = '';
     switch ($order->order_status) {
         case 0:
-            $status = ($order->is_online && $order->paid_price < ($order->order_price + $order->shipping_fee))  ?'待付款':'待审核';
+            $status = ($order->is_online && $order->paid_price < ($order->order_price + $order->shipping_fee))  ?'待付款':'已付款';
             break;
 
         case 1:

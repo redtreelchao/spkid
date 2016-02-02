@@ -31,7 +31,7 @@
 			<form name="search" action="javascript:search(); ">
 			供应商编码：<input type="text" class="ts" name="provider_code" value="" style="width:100px;" />
 			供应商名称：<input type="text" class="ts" name="provider_name" value="" style="width:100px;" />
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -49,9 +49,9 @@
                                         <th>供应商名称</th>
 					<th>合作方式</th>
 					<th>公司名称</th>
-					<th width="300px;">品牌</th>
+					<th>品牌</th>
 					<th>启用</th>
-					<th width="160px;">操作</th>
+					<th width="250px">操作</th>
 				</tr>
 				<?php foreach($list as $row): ?>
 				<tr class="row">
@@ -73,13 +73,28 @@
 						<?php print toggle_link('provider/toggle','is_use',$row->provider_id, $row->is_use);?>
 					</td>
 					<td>
+<!--
+
 						<a class="edit" href="provider/edit/<?php print $row->provider_id; ?>" title="编辑"></a>
 						<?php if ($perm_delete): ?>
 							<a class="del" href="javascript:void(0)" rel="provider/delete/<?php print $row->provider_id; ?>" title="删除" onclick="do_delete(this)"></a>
 						<?php endif ?>
-						<?php if ($perm_provider_brand_setup): ?><a class="priv" href="provider_brand/index/<?php print $row->provider_id; ?>" title="分配品牌"></a><?php endif ?>
 						<a href="provider/shipping/<?php print $row->provider_id; ?>" title="运费">运费</a>
-                                                <a href="provider/scm_edit/<?php print $row->provider_id; ?>" title="直发设置">直发设置</a>
+                        <a href="provider/scm_edit/<?php print $row->provider_id; ?>" title="直发设置">直发</a>
+                        <a href="provider/scm_index/<?php print $row->provider_id; ?>" title="分销商发货设置">分发</a>
+-->
+<div class="am-btn-group">
+						<a style="padding-left:0px;padding-right:5px;" class="am-icon-edit am-btn am-btn-xs" href="provider/edit/<?php print $row->provider_id; ?>" title="编辑">编辑</a>
+						<?php if ($perm_delete): ?>
+							<a style="padding-left:0px;padding-right:5px;" class="am-icon-trash am-btn am-btn-xs" href="javascript:void(0)" rel="provider/delete/<?php print $row->provider_id; ?>" title="删除" onclick="do_delete(this)">删除</a>
+						<?php endif ?>
+						<?php if ($perm_provider_brand_setup): ?><a style="padding-left:0px;padding-right:5px;" class="am-icon-plus-chain am-btn am-btn-xs" href="provider_brand/index/<?php print $row->provider_id; ?>" title="分配品牌">品牌</a><?php endif ?>
+						<a style="padding-left:0px;padding-right:5px;" class="am-btn am-btn-xs am-btn-lin am-icon-rmb" href="provider/shipping/<?php print $row->provider_id; ?>" title="设置运费">运费</a>
+						<?php if($row->provider_cooperation == THIRD_DELIVERY_COOP_ID){ ?>
+                        <a style="padding-left:0px;padding-right:5px;" class="am-btn am-btn-xs am-btn-link am-icon-long-arrow-right" href="provider/scm_edit/<?php print $row->provider_id; ?>" title="直发设置">直发</a>
+                        <a style="padding-left:0px;padding-right:5px;" class="am-btn am-btn-xs am-btn-link am-icon-th" href="provider/scm_index/<?php print $row->provider_id; ?>" title="分销商发货设置">分发</a>
+						<?php } ?>
+</div>
 					</td>
 				</tr>
 				<?php endforeach; ?>

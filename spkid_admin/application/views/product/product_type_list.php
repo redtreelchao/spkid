@@ -1,6 +1,5 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<div class="main">
 		<div class="main_title">
@@ -16,18 +15,10 @@
 		<div class="search_row">
 			<form name="search" action="javascript:type_search(); ">
                 关键字:<input type='text' name='key_word' id='key_word'>
-                <select name='first_type' id='first_type'>
-                    <option value='0'>一级分类</option>
-                    <?
-                        foreach($first_type as $type):
-                            echo "<option value=".$type->type_id.">".$type->type_name."</option>";
-                        endforeach
-                    ?>
-                </select>
-                <select name='second_type' id='second_type'>
-                    <option value='0'>二级分类</option>
-                </select>
-			    <input type="submit" class="button" value="搜索" />
+			    <?php print form_dropdown('genre_id', array('0'=>'商品类型')+get_pair($all_genre,'id','name'));?>
+			    <?php print form_dropdown('first_type', array('0'=>'一级分类'),'0','id="first_type"');?>
+			    <?php print form_dropdown('second_type', array('0'=>'二级分类'),'0','id="second_type"');?>
+			    <input type="submit" class="am-btn am-btn-primary" value="搜索" />
             </form>
 		</div>
 		<div class="blank5"></div>
@@ -42,7 +33,8 @@
 				  <th>名称</th>
 			      <th>一级</th>
 				  <th>二级</th>
-				  <th>后台分类</th>
+                  <th>后台分类</th>
+				  <th>商品大类</th>
 				  <th>排序</th>
 				  <th>启用</th>
 				  <th>操作</th>
@@ -54,7 +46,8 @@
 					<td><?=$row->type_name?></td>
 					<td><?=empty($row->p1_type_name)?"/":$row->p1_type_name?></td>
 					<td><?=empty($row->p2_type_name)?"/":$row->p2_type_name?></td>
-					<td><?=empty($row->category_name)?"/":$row->category_name?></td>
+                    <td><?=empty($row->category_name)?"/":$row->category_name?></td>
+					<td><?=$row->name?></td>
 					<td><?=$row->sort_order?></td>
 					<td><span class="<?=$row->is_show_cat==1?"yesForGif":"noForGif"?>"></td>
 					<td>
@@ -87,16 +80,32 @@
         {
 			listTable.filter['key_word'] = $.trim($('input[type=text][name=key_word]').val());
             listTable.filter['parent_id']="";
-            var first_type_id=$('#first_type').val();
-			listTable.filter['first_type_id'] =first_type_id;
-            var second_type_id=$('#second_type').val();
-			listTable.filter['second_type_id'] =second_type_id;
+			listTable.filter['first_type_id'] =$('#first_type').val();
+			listTable.filter['genre_id'] = $('select[name=genre_id]').val();
+			listTable.filter['second_type_id'] =$('#second_type').val();
 			listTable.loadList();
         }
         
         $(function(){
-            $('#first_type').change(function(){
-                var second_type=$('#second_type');
+            $('select[name=genre_id]').change(function(){
+                var first_type=$('select[name=first_type]');
+               first_type[0].length=1;
+                if($(this).val()!=0){
+                    $.post('/product_type/get_first_type/'+$(this).val(),
+                        function(data){
+                            for(var i=0;i<data.length;i++){
+                                //过滤3级分类
+                                if(data[i].parent_id2>0){
+                                    continue;
+                                }
+                                first_type.append("<option value='"+data[i].type_id+"'>"+data[i].type_name+"</option>");
+                            }
+                        },
+                        'json');
+                }
+            });
+            $('select[name=first_type]').change(function(){
+                var second_type=$('select[name=second_type]');
                 second_type[0].length=1;
                 if($(this).val()!=0){
                     $.post('/product_type/get_second_type/'+$(this).val(),

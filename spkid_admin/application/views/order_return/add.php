@@ -1,14 +1,10 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
     <script type="text/javascript">
         //选择返回用户运费
         function changeCheckbox(obj,ename){
-            if($(obj).attr('checked') == 'checked'){
+            if($(obj).prop('checked')){
                 $('input[type=text][name='+ename+']').removeAttr('readonly');
             }else{
                 $('input[type=text][name='+ename+']').attr('readonly','readonly');
@@ -215,7 +211,7 @@
 		<div class="pc base">
 		<div class="search_row">
 			订单编号：<input type="text" class="tl" name="order_sn" value="<?php print isset($order_info)?$order_info->order_sn:'' ?>" />
-            <input type="button" class="button" value="载入" onclick="load_order_data()" />
+            <input type="button" class="am-btn am-btn-primary" value="载入" onclick="load_order_data()" />
             <span id="span_input_lang" style="margin-left:200px;display:none;">条型码扫描：</span><input type="text" id="scan_input" name="scan_input" style="ime-mode:disabled; width:186px;display:none;" onkeydown="enterkeyBarcode(event);"/>
             <span id="scan_tip" style="color:#ff0000;"></span>
             <input type="hidden" name="apply_id" value="<?php print $apply_id; ?>"/>

@@ -1,10 +1,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<script type="text/javascript" src="public/js/region.js"></script>
 
 	<style type="text/css">
@@ -123,7 +119,7 @@
 		<div class="pc base">
 		<div class="search_row">
 			订单编号：<input type="text" class="tl" name="order_sn" value="<?php print isset($order_info)?$order_info->order_sn:'' ?>" />
-			<input type="button" class="button" value="载入" onclick="load_order_data()" />
+			<input type="button" class="am-btn am-btn-primary" value="载入" onclick="load_order_data()" />
 		</div>
 		<div class="blank5"></div>
 		<div id="listDiv" style="background-color:#fff;">

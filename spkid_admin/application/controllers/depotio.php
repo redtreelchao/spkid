@@ -614,7 +614,7 @@ class Depotio extends CI_Controller
 			$with_not = trim($this->input->post('with_not'));
 			if (!empty($with_not)) $filter['with_not'] = $with_not;
 
-			$data = $this->depotio_model->query_products_out($filter);
+			$data = $this->depotio_model->query_products_out($filter, false);
 
 			$data['full_page'] = FALSE;
 			$data['content'] = $this->load->view('depot/out_edit_product', $data, TRUE);
@@ -1263,6 +1263,7 @@ class Depotio extends CI_Controller
 
 				$data['full_page'] = TRUE;
 				$data['my_id'] = $this->admin_id;
+                $data['depot_type_id'] = $depot_io_type->depot_type_id;
 				$this->load->view('depot/window_depot_out', $data);
 			}
 
@@ -1289,12 +1290,13 @@ class Depotio extends CI_Controller
 		return;
 	}
 
-	public function show_location_win ($depot_id)
+	public function show_location_win ($depot_id, $target='')
 	{
 		if (!empty($depot_id))
 		{
 			$location_list = $this->depot_model->sel_location_list($depot_id);
 			$data['location_list'] = $location_list;
+                        $data['target'] = $target;
 			$this->load->view('depot/window_location', $data);
 
 		} else
@@ -1754,6 +1756,7 @@ class Depotio extends CI_Controller
 		$data['depot_filter'] = $depot_filter;
 		$data['goods_list'] = $depot_in_goods_limit;
 		$data['row_num'] = count($depot_in_goods_limit);
+                $data['revisable'] = true;
 		$data['content'] = $this->load->view('depot/product_in_lib', $data, TRUE);
 		unset($data['goods_list']);
 		$data['error'] = 0;
@@ -1886,6 +1889,7 @@ class Depotio extends CI_Controller
 		$data['depot_filter'] = $depot_filter;
 		$data['goods_list'] = $depot_in_goods_limit;
 		$data['row_num'] = count($depot_in_goods_limit);
+                $data['revisable'] = true;
 		$data['content'] = $this->load->view('depot/product_in_lib', $data, TRUE);
 		unset($data['goods_list']);
 		$data['error'] = 0;
@@ -2077,6 +2081,7 @@ class Depotio extends CI_Controller
 		$data['depot_filter'] = $depot_filter;
 		$data['goods_list'] = $depot_in_goods_limit;
 		$data['row_num'] = count($depot_in_goods_limit);
+                $data['revisable'] = true;
 		$data['content'] = $this->load->view('depot/product_in_lib', $data, TRUE);
 		unset($data['goods_list']);
 		$data['error'] = 0;

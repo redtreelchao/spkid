@@ -1,15 +1,54 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!doctype html>
+<html>
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="Pragma" content="no-cache">
-	<meta http-equiv="expires" content="Wed, 23 Aug 2006 12:40:27 UTC" />
+
+ <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>悦牙网电子商务管理系统</title>
+
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
+
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+  <link rel="icon" type="image/png" href="public/assets/i/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="public/assets/i/app-icon72x72@2x.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="public/assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+
 	<base href="<?php print base_url(); ?>" target="_self" />
-	<title>妈咪树电子商务管理系统</title>
-	<link rel="stylesheet" href="public/style/style.css" type="text/css" media="all" />
-	<script type="text/javascript" src="public/js/jquery.js"></script>
+	<link rel="stylesheet" href="public/style/style.css?v=2" type="text/css" media="all" />
 	<script type="text/javascript">var base_url='<?php print base_url(); ?>';</script>
+
+<!-- jquery ui -->
+<link type="text/css" href="public/js/jui-1.11.4/jquery-ui.css" rel="stylesheet" />
+<link type="text/css" href="public/js/jui-1.11.4/jquery-ui.theme.css" rel="stylesheet" />
+<!-- amazeui -->
+  <link rel="stylesheet" href="public/assets/css/amazeui.min.css?v=1.4">
+  <link rel="stylesheet" href="public/assets/css/app.css">
+
+<script src="public/assets/js/jquery.min.js"></script>
+<script src="public/js/jquery.form.js"></script>
+<script src="public/assets/js/amazeui.min.js"></script>
+
+<script type="text/javascript" src="public/js/jui-1.11.4/jquery-ui.min.js"></script>
+<!-- jquery editable -->
+<link type="text/css" href="public/js/juieditable/css/jqueryui-editable.css" rel="stylesheet" />
+<script type="text/javascript" src="public/js/juieditable/js/jqueryui-editable.js"></script>
 
 <script language="javascript" type="text/javascript">
 var right_speed = 100;

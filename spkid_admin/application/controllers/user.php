@@ -10,12 +10,15 @@ class User extends CI_Controller
     {
         parent::__construct();
         $this->admin_id = $this->session->userdata('admin_id');
+        // $this->company_type = array(0=> '其他',1=> '医疗器械经营单位',2=> '医疗器械使用单位');
+        $this->company_type = array('请选择', '医疗器械经营单位', '医疗器械使用单位', '民营口腔医疗机构', '公立口腔医疗机构 ', '牙科经销商', '牙科制造企业', '技工/加工厂', '牙科培训机构', '科研院校单位', '医科院校师生', '大众消费者', '其它');
         if ( ! $this->admin_id )
         {
                 redirect('index/login');
         }
         $this->load->model('user_model');
         $this->load->model('useraddress_model');
+
     }
 
     public function index ()
@@ -26,6 +29,9 @@ class User extends CI_Controller
         $filter = $this->uri->uri_to_assoc(3);
         $mobile = $this->input->post('mobile');
         if(!empty($mobile))$filter['mobile'] = $mobile;
+        
+        $user_name = $this->input->post('user_name');
+        if(!empty($user_name))$filter['user_name'] = $user_name;
         $user_type = $this->input->post('user_type');
         if(!empty($user_type))$filter['user_type'] = $user_type;
         $email = $this->input->post('email');
@@ -43,6 +49,7 @@ class User extends CI_Controller
         
         $filter = get_pager_param($filter);
         $data = $this->user_model->user_list($filter);
+        $data['perm_change_discount'] = check_perm(array('discount_manage'));
         if ($this->input->post('is_ajax'))
         {
                 $data['full_page'] = FALSE;
@@ -63,6 +70,33 @@ class User extends CI_Controller
         $this->load->model('region_model');
         $arr = $this->region_model->all_region(array('region_type'=> $type , 'parent_id' => $parent_id));
         echo json_encode(array('list'=>$arr,'type'=>$type));
+    }
+    public function ajax_get_user_discount($uid){
+        if (!check_perm(array('discount_manage'))) 
+            exit('没有权限!');
+        $user  = $this->user_model->filter(Array('user_id' => $uid ));
+        $html = '<div style="text-align:center;margin-top:48px"><label>会员折扣:&nbsp;</label><input id="discount" type="text" class="textbox" value="'.$user->discount_percent.'" /></div>';
+        echo $html;
+
+    }
+    public function ajax_change_discount(){
+        if (!check_perm(array('discount_manage')))
+             exit('没有权限!');
+        $uid = $this->input->post('uid');
+        $discount = $this->input->post('discount');
+        if ($this->user_model->update(array('discount_percent'=>$discount), $uid))
+            echo 1;
+        else
+            echo 0;
+        $data['user_id'] = intval($uid);
+        $data['user_money'] = 0;
+        $data['change_code'] = 'change_member_discount';
+        $data['change_desc'] = '会员折扣改为'.$discount;
+        $data['create_admin'] = $this->admin_id;
+        $data['create_date'] = date('Y-m-d H:i:s');
+        $this->load->model('user_account_log_model');
+        $this->user_account_log_model->insert($data);
+        //echo $uid, ' ', $discount;
     }
     
     public function disable($user_id)
@@ -100,6 +134,7 @@ class User extends CI_Controller
         $this->load->model('region_model');
         $province = $this->region_model->all_region(array('region_type' => 1));
         $this->load->vars('province' , $province);
+        $this->load->vars('company_type_list' ,  $this->company_type);
         $this->load->view('user/add');
     }
 
@@ -135,7 +170,9 @@ class User extends CI_Controller
         $data['discount_percent'] = $this->input->post('discount_percent');
         $data['create_admin'] = $this->admin_id;
         $data['create_date'] = date('Y-m-d H:i:s');
-
+        $data['company_name'] = $this->input->post('company_name');
+        $data['company_type'] = $this->input->post('company_type');
+        $data['company_position'] = $this->input->post('company_position');
         $param['consignee'] = $this->input->post('consignee');
         $param['province'] = $this->input->post('province');
         $param['city'] = $this->input->post('city');
@@ -195,6 +232,7 @@ class User extends CI_Controller
         foreach($district as $item){
             $district[$item->region_id] = $item;
         }
+        $this->load->vars('company_type_list' ,  $this->company_type);
         $this->load->vars('province' , $province);
         $this->load->vars('city' , $city);
         $this->load->vars('district' , $district);
@@ -216,7 +254,8 @@ class User extends CI_Controller
                 return;
             }
         }
-        $mobile_type = $this->input->post('mobile_type');
+        $mobile_type = $this->input->post('mobile_type');  // 原手机号 是否为空 ,已有值不可修改
+        // $mobile_type = 0;   //均可修改 v 2015-10-16
         $mobile = trim($this->input->post('mobile'));
         if($mobile_type == 0 && !empty($mobile)){
             $data['mobile'] = $mobile;
@@ -237,7 +276,10 @@ class User extends CI_Controller
         $data['identity_code'] = $this->input->post('identity_code');
         $data['passport_code'] = $this->input->post('passport_code');
         $data['user_type'] = $this->input->post('user_type') - 2;
-        $data['discount_percent'] = $this->input->post('discount_percent');
+        // $data['discount_percent'] = $this->input->post('discount_percent');
+        $data['company_name'] = $this->input->post('company_name');
+        $data['company_type'] = $this->input->post('company_type');
+        $data['company_position'] = $this->input->post('company_position');
         $data['is_use'] = $this->input->post('is_use');
         $arr = $this->user_model->filter(array('user_id' => $user_id));
         if(empty($arr)){
@@ -246,7 +288,7 @@ class User extends CI_Controller
         }
         $this->load->library('form_validation');
         $this->form_validation->set_rules('user_name', '用户名', 'trim|required');
-        $this->form_validation->set_rules('discount_percent', '会员折扣率', 'trim|required');
+        // $this->form_validation->set_rules('discount_percent', '会员折扣率', 'trim|required');
         if (!$this->form_validation->run()) {
                 sys_msg(validation_errors(), 1);
         }

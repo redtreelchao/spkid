@@ -32,6 +32,7 @@ class Category_model extends CI_Model
 	public function all_category($filter=array())
 	{
 		$this->db->order_by('sort_order', 'desc');
+		$this->db->join('product_genre as g', 'g.id=product_category.genre_id','left');
 		$query = $this->db->get_where('product_category', $filter);
 		return $query->result();
 	}

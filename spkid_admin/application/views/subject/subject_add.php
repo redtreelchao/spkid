@@ -1,12 +1,6 @@
 <?php include(APPPATH.'views/common/header.php');?>
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-<script type="text/javascript" src="public/js/jui/timepicker.addon.js"></script>
-<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-<link type="text/css" href="public/style/jui/timepicker.addon.css" rel="stylesheet" />
-<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <script type="text/javascript">
     //<![CDATA[
     function check_form(){
@@ -61,7 +55,7 @@
             <tr>
                 <td class="item_title">生成文件名:</td>
                 <td class="item_input">
-                    http://baby.fclub.cn/zhuanti/<?php print form_input(array('name'=> 'page_file','class'=> 'textbox require'));?>.html
+                    http://域名/zhuanti/<?php print form_input(array('name'=> 'page_file','class'=> 'textbox require'));?>.html
                 </td>
             </tr>
             <tr>
@@ -79,7 +73,7 @@
             <tr>
                 <td class="item_title"></td>
                 <td class="item_input">
-                        <?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+                        <?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
                 </td>
             </tr>
             <tr>

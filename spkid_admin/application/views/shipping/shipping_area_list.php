@@ -20,13 +20,15 @@
 		<div id="listDiv">
 			<table width="1172" cellpadding=0 cellspacing=0 class="dataTable" id="dataTable">
 				<tr>
-					<td colspan="6" class="topTd"> </td>
+					<td colspan="7" class="topTd"> </td>
 				</tr>
 				<tr class="row">
 				  <th width="42">ID</th>
-			      <th width="140">配送区域名称</th>
-			      <th width="800">所辖地区</th>
-			      <th width="88">货到付款</th>
+                                  <th width="140">配送区域名称</th>
+                                  <th width="800">所辖地区</th>
+                                  <th width="88">货到付款</th>
+                                  <th>首重运费</th>
+                                  <th>续重运费</th>
 				  <th width="100">操作</th>
 				</tr>
 				<?php foreach($all_shipping_area as $row): ?>
@@ -46,7 +48,9 @@
                     </td>
 					<!--<td><img src="public/images/<?php /*echo $row['is_cod'] == 1 ? 'yes' : 'no'*/?>.gif" /></td>样式显示 By Rock-->
                     <td><span class="<?php echo $row['is_cod'] == 1 ? 'yesForGif' : 'noForGif'?>"></span></td>
-					<td>
+                    <td><?=$row['shipping_fee1']?></td>
+                    <td><?=$row['shipping_fee2']?></td>
+		    <td>
                     <?php if($perms['shipping_area_edit'] == 1):?>
                     <a href="shipping/edit_shipping_area/<?php print $row['shipping_area_id']; ?>/<?php echo $shipping_id?>" title="编辑" class="edit"></a>
                     <a onclick="return confirm('确定删除？')" href="shipping/delete_shipping_area/<?php print $row['shipping_area_id']; ?>/<?php echo $shipping_id?>" title="删除" class="del"></a>
@@ -55,7 +59,7 @@
 			    </tr>
 				<?php endforeach; ?>
 			    <tr>
-					<td colspan="6" class="bottomTd"> </td>
+					<td colspan="7" class="bottomTd"> </td>
 				</tr>
 			</table>
 <div class="blank5"></div>

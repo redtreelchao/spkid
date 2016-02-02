@@ -47,7 +47,7 @@
 		<td colspan="11">
          <div class="blank5">
        </div>
-       <input type="button"  onclick="return add_rush_product();"  name="button" id="button" value="添加所选商品为限时抢购" />
+       <input type="button"  onclick="return add_rush_product();"  name="am-btn am-btn-secondary" id="am-btn am-btn-secondary" value="添加所选商品为限时抢购" />
        
        
        <div class="blank5">

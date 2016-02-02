@@ -27,6 +27,11 @@ class Inventory_query extends CI_Controller {
         if (!empty($product_sn)) {
             $filter['product_sn'] = $product_sn;
         }
+        
+        $provider_barcode = trim($this->input->post('provider_barcode'));
+        if (!empty($provider_barcode)) {
+            $filter['provider_barcode'] = $provider_barcode;
+        }
 
         $provider_id = trim($this->input->post('provider_id'));
         if (!empty($provider_id)) {
@@ -56,6 +61,7 @@ class Inventory_query extends CI_Controller {
         $filter = get_pager_param($filter);
 
         $data = $this->purchase_model->search_inventory($filter);
+	$data['inventory_export'] = check_perm( 'all_inventory_export');
         if ($this->input->post('is_ajax')) {
             $data['full_page'] = FALSE;
             $data['content'] = $this->load->view('purchase/inventory_query', $data, TRUE);
@@ -67,6 +73,16 @@ class Inventory_query extends CI_Controller {
         $data['full_page'] = TRUE;
 
         $this->load->view('purchase/inventory_query', $data);
+    }
+    public function export(){
+	auth( 'all_inventory_export');
+
+	$data = $this->purchase_model->get_export_inventory();
+	$data['tag'] = '?';
+	$this->load->view('purchase/inventory_export', $data);
+	$file_name = "inventory_".(date('YmdHis')).".xls";
+	header("Content-type:application/vnd.ms-excel");
+	header("Content-Disposition:attachment;filename=".$file_name);
     }
 
     public function search_inventory() {
@@ -80,6 +96,18 @@ class Inventory_query extends CI_Controller {
 
     public function get_inventory_brand($provider_id) {
         echo json_encode($this->purchase_model->get_inventory_brand($provider_id));
+    }
+    
+    public function get_product_location(){
+        $product_id = $this->input->post('product_id');
+        $color_id = $this->input->post('color_id');
+        $size_id = $this->input->post('size_id');
+        $data = $this->purchase_model->get_product_location($product_id, $color_id, $size_id);
+        $data['content'] = $this->load->view('/purchase/view_product_location', $data, TRUE);
+        $data['error'] = 0;
+        unset($data['list']);
+        echo json_encode($data);
+        return;
     }
 
 }

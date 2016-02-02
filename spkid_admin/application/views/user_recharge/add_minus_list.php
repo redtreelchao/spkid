@@ -6,7 +6,7 @@
         <b>账户文件：</b>
         <input type="file" name="unload_file" value=""/>
         <input type="hidden" name="act" value="upload"/>
-        <input type="submit" class="button" value="提交" style='margin-left:30px;' />
+        <input type="submit" class="am-btn am-btn-primary" value="提交" style='margin-left:30px;' />
     </div>
     <div>
         <label><b>文件模板：</b></label>
@@ -74,8 +74,8 @@
     <?php if($unavail_accounts):?><input type="hidden" name="unavail_accounts_encoded" value="<?php echo $unavail_accounts_encoded;?>" /><?php endif;?>
     <input type="hidden" name="act" value="minus" />
     <input type="hidden" name="flag" value="<?php echo $flag;?>" />
-    <?php if($flag==1&&$show_button):?><input type="button" name="abc" value="减款" class='button' id="minus"/><?php endif;?>
-    <?php if($flag==2&&$show_button):?><input type="button" name="abc" value="充值" class='button' id="minus" /><?php endif;?>
+    <?php if($flag==1&&$show_button):?><input type="button" name="abc" value="减款" class='am-btn am-btn-primary' id="minus"/><?php endif;?>
+    <?php if($flag==2&&$show_button):?><input type="button" name="abc" value="充值" class='am-btn am-btn-primary' id="minus" /><?php endif;?>
 </form>
 <?php endif;?>
 <?php endif;?>

@@ -102,32 +102,80 @@ class Product_api extends CI_Controller
 		print json_encode(array('err'=>0,'msg'=>'','html'=>$html));
 	}
 
+	//收藏
 	public function add_to_collect()
 	{
+		$this->load->model('package_model');
 		$this->load->model('product_model');
+		$this->load->model('wordpress_model');
+
+		$types = array(
+					0 => '商品',
+					1 => '礼包',
+					2 => '文章',
+					3 => '课程',
+					4 => '视频'
+				); 
+
+		//判断用户是否登录
 		if(!$this->user_id) {
-			print json_encode(array('err'=>0,'msg'=>0,'need_login'=>true));
+			print json_encode(array('err'=>0,'msg'=>0));
 			return;
 		}
+
 		$product_id = intval($this->input->post('product_id'));
-		$product_type = intval($this->input->post('product_type'))==1?1:0;
+		$product_type = intval($this->input->post('product_type'));
+
+		//判断收藏的商品是否已收藏
 		$col=$this->product_model->filter_collect(array('product_id'=>$product_id,'product_type'=>$product_type,'user_id'=>$this->user_id));
-		if($col) sys_msg('此'.($product_type?'礼包':'商品').'已在您的收藏夹中！',1);
+		if(!empty($col)){
+			if(array_key_exists($product_type,$types)) {
+				$pt_type = $types[$product_type];
+				sys_msg('您已成功关注'.$pt_type,1);
+			}			
+		} 
+
+		//判断收藏的商品是否存在
 		if($product_type==1){
-			$this->load->model('package_model');
 			$pkg=$this->package_model->filter(array('package_id'=>$product_id,'check_admin >'=>0));
-			if(!$pkg) sys_msg('礼包不存在',1);
-		}else{
+			if(empty($pkg)) sys_msg('此'.$types[$product_type].'不存在',1);  //礼包
+		}elseif($product_type==0 || $product_type==3){
 			$p=$this->product_model->filter(array('product_id'=>$product_id,'is_audit'=>1));
-			if(!$p) sys_msg('商品不存在',1);
+			if(empty($p)) sys_msg('此'.$types[$product_type].'不存在',1);    // 商品和课程
+		}elseif($product_type==2 || $product_type==4){
+			$p=$this->wordpress_model->filter(array('ID'=>$product_id,'post_status'=>'publish'));
+			if(empty($p)) sys_msg('此'.$types[$product_type].'不存在',1);    // 文章和视频
 		}
-		$this->product_model->insert_collect(array(
+
+		$collect = array(
 			'user_id' => $this->user_id,
-			'product_id' => $product_type?$pkg->package_id:$p->product_id,
+			'product_id' => $product_id,
 			'product_type' => $product_type,
 			'create_date' => $this->time
-		));
-		print json_encode(array('err'=>0,'msg'=>''));
+		);
+		//将某个商品的 收藏记录写入db
+		$this->product_model->insert_collect($collect);
+
+		$collect_data = array();
+		$collect_data[] =$collect;
+
+		//将 用户 收藏的 某商品 写入session
+		if(isset($_SESSION['collect_'.$this->user_id])){
+			array_push($collect_data[],$_SESSION['collect_'.$this->user_id]);
+		}
+		$this->session->set_userdata('collect_'.$this->user_id, $collect_data);
+
+		//将某商品的收藏数量写入session
+		$collect_num = 0;
+		if(isset($_SESSION['collect_'.$product_type.$product_id])){
+			$collect_num = $_SESSION['collect_'.$product_type.$product_id] + 1;
+			$this->session->set_userdata('collect_'.$product_type.$product_id, $collect_num);
+		}else{
+			$collect_num = 1;
+			$this->session->set_userdata('collect_'.$product_type.$product_id, $collect_num);
+		}
+
+		print json_encode(array('err'=>0,'msg'=>'', 'collect_num'=>$collect_num));
 	}
 
 	public function float_cart()

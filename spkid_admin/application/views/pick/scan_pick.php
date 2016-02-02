@@ -1,11 +1,7 @@
 <?php if($full_page): ?>
 <?php include(APPPATH.'views/common/header.php'); ?>
-	<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-    <link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-    <script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
 		<script type="text/javascript">
 		//<![CDATA[
         $(document).click(function(){
@@ -190,7 +186,7 @@
 				</tr>
                 <?php endforeach; ?>
                 <tr>
-                    <td colspan="9" style="text-align:right;" height="30"><input type="submit" name="scan_finish" class="button" value="拣货完成"></td>
+                    <td colspan="9" style="text-align:right;" height="30"><input type="submit" name="scan_finish" class="am-btn am-btn-primary" value="拣货完成"></td>
                 </tr>
 				<tr>
 					<td colspan="9" class="bottomTd"> </td>

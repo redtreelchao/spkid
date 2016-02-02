@@ -1,18 +1,11 @@
 <?php include(APPPATH.'views/common/header.php');?>
-<link type="text/css" href="public/style/jui/datepicker.css" rel="stylesheet" />
-<link type="text/css" href="public/style/jui/theme.css" rel="stylesheet" />
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
-<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-<script type="text/javascript" src="public/js/jui/core.min.js"></script>
 <script type="text/javascript" src="public/js/listtable.js"></script>
 
 
 
 <script type="text/javascript">
-	    $(function(){
-        $('input[type=text][name=birthday]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:'', yearRange:'-80:-3'});
-    	});
 
 	//<![CDATA[
 	function check_form(){
@@ -22,9 +15,9 @@
 			if($('input[name=password]').val() != '' || $('input[name=password_check]').val() != ''){
 				validator.equal('password', 'password_check' , '两次密码输入不一致');
 			}
-			if(/^0\.[0-9]{1,2}$/.test($('input[name=discount_percent]').val()) == false && /^1\.0{1,2}$/.test($('input[name=discount_percent]').val()) == false && $('input[name=discount_percent]').val() != 1){
-				validator.addErrorMsg('请填写会员折扣率');
-			}
+			// if(/^0\.[0-9]{1,2}$/.test($('input[name=discount_percent]').val()) == false && /^1\.0{1,2}$/.test($('input[name=discount_percent]').val()) == false && $('input[name=discount_percent]').val() != 1){
+			// 	validator.addErrorMsg('请填写会员折扣率');
+			// }
 			return validator.passed();
 	}
 	
@@ -137,7 +130,12 @@
 	<?php print form_open_multipart('user/proc_edit/'.$user_arr->user_id,array('name'=>'mainForm','onsubmit'=>'return check_form()'));?>
   <table class="form" cellpadding=0 cellspacing=0>
 			<tr>
-				<td colspan=4 class="topTd"></td>
+				<td colspan=4 class="topTd">
+<!-- //用于阻止 chrome表单自动填充的占位符 -->
+<input class='item-hide' type="text" />
+<input class='item-hide' type="password"/>
+<!-- //用于阻止 chrome表单自动填充的占位符 -->
+</td>
 			</tr>
 			<tr>
 			  <td class="item_title">&nbsp;</td>
@@ -156,8 +154,8 @@
 			<tr>
 			  <td class="item_title">手机:</td>
 			  <td class="item_input">
-              <input  <?php echo $perms['user_edit'] == 2 ? 'disabled="disabled"' : '';?> name="mobile" <?php echo !empty($user_arr->mobile) ? 'readonly="readonly"' : '';?> value="<?php echo $user_arr->mobile?>" class="textbox require" type="text" />
-              <input name="mobile_type"  type="hidden" value="<?php echo !empty($user_arr->mobile) ? '1' : '0';?>" />
+              	<input  <?php echo $perms['user_edit'] == 2 ? 'disabled="disabled"' : '';?> name="mobile" value="<?php echo $user_arr->mobile?>" class="textbox require" type="text" />
+              	<input name="mobile_type"  type="hidden" value="<?php echo !empty($user_arr->mobile) ? '1' : '0';?>" />
               </td>
 			  <td class="item_title">性别:</td>
 			  <td class="item_input">
@@ -174,7 +172,7 @@
 				</td>
 				<td class="item_title">生日:</td>
 				<td class="item_input">
-				<input name="birthday" type="text" <?php echo $perms['user_edit'] == 2 ? 'disabled="disabled"' : '';?> class="textbox" value="<?php echo $user_arr->birthday?>" />
+				<input name="birthday" type="text" <?php echo $perms['user_edit'] == 2 ? 'disabled="disabled"' : '';?> class="textbox" value="<?php if(!empty($user_arr->birthday)) {echo $user_arr->birthday;}?>" />
                 </td>
 			</tr>
 			<tr>
@@ -205,19 +203,20 @@
 			    <option value="2" <?php echo $user_arr->user_type == 0 ? 'selected="selected"' : '';?>>普通会员</option>
 			  </select>
               </td>
-			  <td class="item_title">&nbsp;</td>
-			  <td class="item_input">&nbsp;</td>
+			   <td class="item_title">单位名称:</td>
+			  <td class="item_input">
+			  <input type="text" name="company_name" <?php echo $perms['user_edit'] == 2 ? 'disabled="disabled"' : '';?> class="textbox" value="<?php echo $user_arr->company_name?>" />
+			  </td>
 		  </tr>
 			<tr>
 			  <td class="item_title">会员折扣率：</td>
 			  <td class="item_input">
-              
-              
-              
-			  <input type="text" name="discount_percent" <?php echo $user_arr->user_type == 0 ? 'readonly="readonly"' : '';?> <?php echo ($perms['user_edit'] == 2 || $perms['user_type'] == 2) ? 'readonly="readonly"' : '';?> class="textbox require" value="<?php echo $user_arr->discount_percent?>" />
+              <?php echo $user_arr->discount_percent?>             
 			  </td>
-			  <td class="item_title">&nbsp;</td>
-			  <td class="item_input">&nbsp;</td>
+			  <td class="item_title">单位职务:</td>
+			  <td class="item_input">
+			  <input type="text" name="company_position" <?php echo $perms['user_edit'] == 2 ? 'disabled="disabled"' : '';?> class="textbox" value="<?php echo $user_arr->company_position?>" />
+			  </td>
 		  </tr>
 			<tr>
 			  <td class="item_title">启用：</td>
@@ -230,16 +229,22 @@
 			        停用
                     <?php endif;?>
               </td>
-			  <td class="item_title">&nbsp;</td>
-			  <td class="item_input">&nbsp;</td>
+			  <td class="item_title">单位类型:</td>
+			  <td class="item_input">
+	              <select <?php echo $perms['user_edit'] == 2 ? 'disabled="disabled"' : '';?> name="company_type">
+						<?php foreach($company_type_list as $key => $type):?>
+				    	<option value="<?php echo $key;?>" <?php echo $user_arr->company_type == $key ? 'selected="selected"' : '';?>><?php echo $type;?></option>
+						<?php endforeach;?>
+				  </select>
+              </td>
     </tr>
 			<tr>
 				<td class="item_title">&nbsp;</td>
 				<td class="item_input">
 				<?php if($perms['user_edit'] == 1):?>
-				<?php print form_submit(array('name'=>'mysubmit','class'=>'button','value'=>'提交'));?>
+				<?php print form_submit(array('name'=>'mysubmit','class'=>'am-btn am-btn-primary','value'=>'提交'));?>
                 <?php endif;if($perms['useraddr_edit'] == 1):?>
-                <input type="button" value="新增地址" onclick="javascript:location.href='/user/add_address/<?php echo $user_arr->user_id?>'" class="button" />
+                <input type="button"  value="新增地址" onclick="javascript:location.href='/user/add_address/<?php echo $user_arr->user_id?>'"  class="am-btn am-btn-secondary" />
                 <?php endif;?>
                 </td>
 				<td class="item_title">&nbsp;</td>

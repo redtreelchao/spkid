@@ -16,7 +16,7 @@
 			listTable.loadList();
 		}
 
-		var   moOBJ   =   dialogArguments;
+		//var   moOBJ   =   dialogArguments;
 		function gotoLogin()
 		{
 			var temp=document.getElementsByName("is_choose");
@@ -34,9 +34,11 @@
 				return false;
 			}
 			var check_arr = check_id.split("|||");
-		    moOBJ.pass=true;
-			moOBJ.order_id=check_arr[0];
-			moOBJ.order_sn=check_arr[1];
+		    //moOBJ.pass=true;
+			//moOBJ.order_id=check_arr[0];
+			//moOBJ.order_sn=check_arr[1];
+            window.opener.document.getElementById('order_id').value = check_arr[0];
+            window.opener.document.getElementById('order_sn').value = check_arr[1];
 		    window.close();
 		}
 		//]]>
@@ -48,10 +50,10 @@
 			<form name="search" action="javascript:search(); ">
 			出库单编号：<input type="text" class="ts" name="depot_out_code" value="" style="width:100px;" />
 			商品款号或名称：<input type="text" class="ts" name="provider_goods" value="" style="width:100px;" /><br />
-			出库类型：<?php print form_dropdown('depot_out_type',$type_list);?>
+			出库类型：<?php print form_dropdown('depot_out_type',$type_list, $depot_type_id, 'disabled=true');?>
 			供应商：<?php print form_dropdown('provider_id',$provider_list);?>
 			出库仓库：<?php print form_dropdown('depot_depot_id',$depot_list);?>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>
@@ -98,8 +100,8 @@
 			<div class="blank5"></div>
 			<BR><BR><BR>
 			  <div   align=center>
-			  <input type="button" value="确定" class="button" onclick="gotoLogin();" />
-			  <input type="button" value="取消" class="button" onclick="window.close();" />
+			  <input type="button"  value="确定"  class="am-btn am-btn-secondary" onclick="gotoLogin();" />
+			  <input type="button"  value="取消"  class="am-btn am-btn-secondary" onclick="window.close();" />
 
 			  </div>
 <?php if($full_page): ?>

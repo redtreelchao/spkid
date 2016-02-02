@@ -2,10 +2,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 	<script type="text/javascript" src="public/js/listtable.js"></script>
 	<script type="text/javascript" src="public/js/utils.js"></script>
-	<script type="text/javascript" src="public/js/jui/core.min.js"></script>
-	<script type="text/javascript" src="public/js/jui/datepicker.min.js"></script>
-	<link rel="stylesheet" href="public/style/jui/theme.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="public/style/jui/datepicker.css" type="text/css" media="all" />
 	<script type="text/javascript">
 
 		$(function(){
@@ -113,7 +109,7 @@
             
         //选择返回用户运费
         function changeCheckbox(obj,ename){
-            if($(obj).attr('checked') == 'checked'){
+            if($(obj).prop('checked')){
                 $('input[type=text][name='+ename+']').removeAttr('readonly');
             }else{
                 $('input[type=text][name='+ename+']').attr('readonly','readonly');
@@ -140,16 +136,16 @@
 			      <div align="center">
 					<input type="hidden" name="order_id" value="<?php print $return['order_id']; ?>" />
 					<input type="hidden" name="return_id" value="<?php print $return['return_id']; ?>" />
-				      	<input name="save" type="submit" value="保存" <?php print $operable_list['save']?'':'style="color:grey;" disabled'; ?> onclick="return check_save();" />
-					    <input name="lock" type="submit" value="锁定" <?php print $operable_list['lock']?'':'style="color:grey;" disabled'; ?> />
-					    <input name="unlock" type="submit" value="解锁" <?php print $operable_list['unlock']?'':'style="color:grey;" disabled'; ?> />
-					    <input name="service_confirm" type="submit" value="客审" <?php print $operable_list['service_confirm']?'':'style="color:grey;" disabled'; ?> />
-				        <input name="unservice_confirm" type="submit" value="反客审" <?php print $operable_list['unservice_confirm']?'':'style="color:grey;" disabled'; ?> />
-				        <input name="pay" type="submit" value="财审" <?php print $operable_list['pay']?'':'style="color:grey;" disabled'; ?> />
-				        <input name="ship" type="submit" value="入库"  <?php print $operable_list['ship']?'':'style="color:grey;" disabled'; ?>/>
-				        <input name="invalid" type="submit" value="作废" <?php print $operable_list['invalid']?'':'style="color:grey;" disabled'; ?> />
-				        <input name="is_ok" type="submit" value="完结" <?php print $operable_list['is_ok']?'':'style="color:grey;" disabled'; ?> />
-				    <!--<input type="button" onclick="window.open('/order_return/edit/print/1/<?php print $return['return_id']; ?>')" class="button" value="打印退货单"  />-->
+				      	<input name="save" type="submit" class="am-btn am-btn-secondary" value="保存" <?php print $operable_list['save']?'':'style="color:grey;" disabled'; ?> onclick="return check_save();" />
+					    <input name="lock" type="submit" class="am-btn am-btn-secondary" value="锁定" <?php print $operable_list['lock']?'':'style="color:grey;" disabled'; ?> />
+					    <input name="unlock" type="submit" class="am-btn am-btn-secondary" value="解锁" <?php print $operable_list['unlock']?'':'style="color:grey;" disabled'; ?> />
+					    <input name="service_confirm" type="submit" class="am-btn am-btn-secondary" value="客审" <?php print $operable_list['service_confirm']?'':'style="color:grey;" disabled'; ?> />
+				        <input name="unservice_confirm" type="submit" class="am-btn am-btn-secondary" value="反客审" <?php print $operable_list['unservice_confirm']?'':'style="color:grey;" disabled'; ?> />
+				        <input name="pay" type="submit" class="am-btn am-btn-secondary" value="财审" <?php print $operable_list['pay']?'':'style="color:grey;" disabled'; ?> />
+				        <input name="ship" type="submit" class="am-btn am-btn-secondary" value="入库"  <?php print $operable_list['ship']?'':'style="color:grey;" disabled'; ?>/>
+				        <input name="invalid" type="submit" class="am-btn am-btn-secondary" value="作废" <?php print $operable_list['invalid']?'':'style="color:grey;" disabled'; ?> />
+				        <input name="is_ok" type="submit" class="am-btn am-btn-secondary" value="完结" <?php print $operable_list['is_ok']?'':'style="color:grey;" disabled'; ?> />
+				    <!--<input type="button" onclick="window.open('/order_return/edit/print/1/<?php print $return['return_id']; ?>')" class="am-btn am-btn-primary" value="打印退货单"  />-->
 			    </div>
 			    </td>
 			  </tr>

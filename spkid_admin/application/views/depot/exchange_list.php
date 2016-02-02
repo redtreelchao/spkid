@@ -278,7 +278,7 @@
 			调仓单状态：<?php print form_dropdown('exchange_status',$status_list);?>
 			出库仓库：<?php print form_dropdown('out_depot_id',$out_depot_list);?>
 			入库仓库：<?php print form_dropdown('in_depot_id',$in_depot_list);?>
-			<input type="submit" class="button" value="搜索" />
+			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
 		<div class="blank5"></div>
