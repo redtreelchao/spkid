@@ -269,7 +269,7 @@ $config['sess_time_to_update']	= 1200;
 |
 */
 $config['cookie_prefix']	= "";
-$config['cookie_domain']	= "test.com";
+$config['cookie_domain']	= ".redtravel.cn";
 $config['cookie_path']		= "/";
 $config['cookie_secure']	= FALSE;
 
@@ -364,7 +364,10 @@ $config['proxy_ips'] = '';
 define('FRONT_HOST', 'http://pc.test.com');
 $config['IMG_HOSTS']=array('http://img.test.com');
 
-$config['memcache'] = array(array('hostname'=>'192.168.20.204','port'=>11211,'weight'=>1));
+// memcache设置
+$config['memcache'] = array(
+	array('hostname'=>'127.0.0.1','port'=>11211,'weight'=>1)
+);
 $config['memcache_prefix'] = '';
 // memcache设置
 // 在memcache.php中配置

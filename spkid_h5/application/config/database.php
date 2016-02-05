@@ -48,9 +48,9 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '192.168.20.239';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '123456';
+$db['default']['hostname'] = '127.0.0.1';
+$db['default']['username'] = 'lichao';
+$db['default']['password'] = '123456a';
 $db['default']['database'] = 'mars';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = 'ty_';
@@ -64,9 +64,9 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
-$db['default_r']['hostname'] = '192.168.20.239';
-$db['default_r']['username'] = 'root';
-$db['default_r']['password'] = '123456';
+$db['default_r']['hostname'] = '127.0.0.1';
+$db['default_r']['username'] = 'lichao';
+$db['default_r']['password'] = '123456a';
 $db['default_r']['database'] = 'mars';
 $db['default_r']['dbdriver'] = 'mysqli';
 $db['default_r']['dbprefix'] = 'ty_';
@@ -81,9 +81,9 @@ $db['default_r']['autoinit'] = TRUE;
 $db['default_r']['stricton'] = FALSE;
 
 
-$db['wordpress']['hostname'] = '192.168.20.239';
-$db['wordpress']['username'] = 'root';
-$db['wordpress']['password'] = '123456';
+$db['wordpress']['hostname'] = '127.0.0.1';
+$db['wordpress']['username'] = 'lichao';
+$db['wordpress']['password'] = '123456a';
 $db['wordpress']['database'] = 'wordpress';
 $db['wordpress']['dbdriver'] = 'mysqli';
 $db['wordpress']['dbprefix'] = 'wp_';
