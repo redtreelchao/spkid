@@ -279,4 +279,5 @@ function submit_cart() {
     });
 }
 </script>
-<?php include APPPATH."views/mobile/footer.php"; ?>
+</body>
+</html>

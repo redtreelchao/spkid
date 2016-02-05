@@ -169,13 +169,6 @@
 </div>
 <script type="text/javascript" src="<?php echo static_style_url('mobile/js/framework7.js?v=version')?>"></script>
 <script>
-
-//record the referer 
-var referer = document.referrer;
-if (!referer) {
-    referer = '<?php echo $_SERVER['HTTP_REFERER'];?>';
-};
-
 function isEmpty(dom){
     if ('' == $$(dom).val())
         return true;
@@ -269,8 +262,6 @@ var myApp = new Framework7({
                     v_submit_flag = false;
                 }
                 })
-            self.go = true;
-            v_submit_flag = false;
             } else if('register-step3' == prevPage) {
                 if (isEmpty('#password')){
                     myApp.alert('密码不能为空!');
@@ -289,21 +280,7 @@ var myApp = new Framework7({
                 $$.ajax({url:'/user/proc_register', method:'POST', data:{user_name:user_name, password:password}, success:function(data){
                     if ('success' == data.substr(0, 7)){
                         myApp.alert(data.substr(8), '注册成功!', function(){
-                            
-                            if (referer.indexOf('pdetail-') > -1) {
-                                location.href = referer + (referer.indexOf('?') != -1 ? '&' : '?') + 'v=' + Math.random();    
-                            } else if(referer.indexOf('login') > -1 ) {
-                                //history.go(-2);
-                                var ref = localStorage.getItem('login_referer');
-                                if(ref) {
-                                    location.href = ref + (referer.indexOf('?') != -1 ? '&' : '?') + 'v=' + Math.random();    
-                                } else {
-                                    history.go(-4);
-                                }
-                            } else {
-                                location.href = '/user/profile' + '?v=' + Math.random();    
-                            }
-                            
+                            location.href = '/user/profile';
                         });
                         //login();
                         self.go = true;

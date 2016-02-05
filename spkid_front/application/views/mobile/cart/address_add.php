@@ -21,7 +21,6 @@
 	        <div class="page-content">
 	            <div class="content-block wrap2">
 		           	<form id="my-form">
-		           		<input type="hidden" name="v_url_address" value="<?php echo $_SERVER['HTTP_REFERER'];?>">
 			       		<ul class="receiving-address">
 			           		<li>
 							    <div class="edit-list">

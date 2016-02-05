@@ -34,7 +34,7 @@ class Lib_ad{
            //不符合时间的unset掉
            if($item->start_date>date('Y-m-d H:i:s')||$item->end_date<date('Y-m-d H:i:s'))
            {
-               unset($ad[$key]);
+               //unset($ad[$key]);
            }
        }
        return $ad;
@@ -55,5 +55,27 @@ class Lib_ad{
        
         return $img_arr;      
     }
+
+    function get_focus_image_pc($cache_key, $type = 1){
+         $img_arr = array();
+         $img_arr = $this->CI->cache->get($cache_key);
+         $is_preview = intval(trim($this->CI->input->get('is_preview', true)));
+         $is_preview = $is_preview == 1 ? true : false;
+         if ($is_preview) {
+         	unset($img_arr);
+         	$img_arr = array();
+         }
+
+         if (empty($img_arr)) {
+             $this->load->model('ad_model');
+             $img_arr = $this->CI->ad_model->get_focus_image_pc($type);
+             if (empty($img_arr)) {
+                 return array();
+             }
+             $this->CI->cache->save($cache_key, $img_arr,CACHE_TIME_INDEX_FOCUS_IMAGE);
+         }
+        
+         return $img_arr;      
+     }
 }
 ?>

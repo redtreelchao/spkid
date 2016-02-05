@@ -21,7 +21,7 @@
 <div class="hu-kc-list">	  
 	  <div class="order-lists">
                <div class="ov-h ph20 clearfix">
-                   <div class="fl color-block"><a class="external" href="/order/course_info/<?php print $order->order_id ?>">课程编号: <?php echo $order->order_sn?></a></div>
+                   <div class="fl color-block"><a href="/order/course_info/<?php print $order->order_id ?>">课程编号: <?php echo $order->order_sn?></a></div>
 	          <div class="fr color-red"><?php echo order_status($order);?></div>
                </div>
           </div>
@@ -32,7 +32,7 @@
        <li class="swipeout coll-hu item-content">
             <div class="swipeout-content">
                  <div class="item-inner clearfix">
-                   <a href="/product-<?=$order->product_id?>.html" class="external">
+                   <a href="/product-1.html" class="external">
                       <div class="col-v-img"><img src="<?php echo img_url($order->img_url);?>" /></div>
                       <div class="item-after">
 	                   <span class="public-text2"><?php echo $order->brand_name . ' ' . $order->product_name;?></span>

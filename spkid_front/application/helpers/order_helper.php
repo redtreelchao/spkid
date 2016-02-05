@@ -11,38 +11,6 @@ function calc_point_amount($order,$order_payment,$rank)
     return round($point);
 }
 
-function split_package_product($order_product)
-{
-    $CI = & get_instance();
-    $CI->load->model('package_model');
-    $package_ids = array();
-    $order_package = array();
-    foreach ($order_product as $key => $product) {
-        if (!$product->package_id) continue;
-        $package_ids[] = $product->package_id;
-        if (!isset($order_package[$product->extension_id])) {
-            $order_package[$product->extension_id] = (object)array(
-                'product_list' => array(),
-                'package_id' => $product->package_id,
-                'extension_id' => $product->extension_id,
-                'package_real_amount' => 0
-            );
-        }
-        $order_package[$product->extension_id]->product_list[] = $product;
-        $order_package[$product->extension_id]->package_real_amount += $product->total_price;
-        unset($order_product[$key]);
-    }
-    if ($package_ids) {
-        $package_list = $CI->package_model->all_package(array('package_id'=>$package_ids));
-        $package_list = index_array($package_list,'package_id');
-        foreach ($order_package as &$package) {
-            $package->package_name = $package_list[$package->package_id]->package_name;
-            $package->package_image = $package_list[$package->package_id]->package_image;
-        }
-    }
-    return array($order_product, $order_package);
-}
-
 function order_status($order)
 {
     $status = '';
@@ -162,13 +130,13 @@ function update_shipping_fee($order,$shipping_fee=NULL)
 {
     //自提不需要运费
     $CI = & get_instance();
-    if($shipping_fee===NULL) $shipping_fee = calc_shipping_fee($order);
+    if($shipping_fee===NULL) $shipping_fee = calc_shipping_fee2($order);
     if($order->shipping_fee!=$shipping_fee){
         $CI->order_model->update(array('shipping_fee'=>$shipping_fee),$order->order_id);
     }
 }
 
-function calc_shipping_fee($order){
+function calc_shipping_fee2($order){
     $shipping_fee = SHIPPING_FEE_DEFAULT;
     if($order->shipping_id==SHIPPING_ID_CAC) $shipping_fee = 0;
     if($order->order_price>=SHIPPING_FREE_ORDER_PRICE && SHIPPING_FREE_ORDER_PRICE!=-1) $shipping_fee = 0;
@@ -221,4 +189,41 @@ function check_order_apply_return($order,$check_goods_num=false){
        }
    }
    return $apply_return;
+}
+
+function wxpay_qrcode($data){
+    $CI=&get_instance();
+    $CI->load->library('Wxpay');
+    //使用统一支付接口
+    $unifiedOrder = new UnifiedOrder_pub();
+    //设置统一支付接口参数
+    //设置必填参数
+    //appid已填,商户无需重复填写
+    //mch_id已填,商户无需重复填写
+    //noncestr已填,商户无需重复填写
+    //spbill_create_ip已填,商户无需重复填写
+    //sign已填,商户无需重复填写
+    $unifiedOrder->setParameter("body",$data['pay_title']);//商品描述
+
+    //自定义订单号，此处仅作举例
+    $timeStamp = time();
+
+//	$total_fee = 0.01;
+    $unifiedOrder->setParameter("out_trade_no",$data['out_trade_no']);//商户订单号
+    $unifiedOrder->setParameter("total_fee", $data['money'] * 100);//总金额
+    $unifiedOrder->setParameter("notify_url",FRONT_HOST.'/pay/wxpay_notify');//通知地址
+    $unifiedOrder->setParameter("trade_type", "NATIVE");//交易类型
+    //非必填参数，商户可根据实际情况选填
+    //$unifiedOrder->setParameter("sub_mch_id","XXXX");//子商户号  
+    //$unifiedOrder->setParameter("device_info","XXXX");//设备号 
+    //$unifiedOrder->setParameter("attach","XXXX");//附加数据 
+    //$unifiedOrder->setParameter("time_start","XXXX");//交易起始时间
+    //$unifiedOrder->setParameter("time_expire","XXXX");//交易结束时间 
+    //$unifiedOrder->setParameter("goods_tag","XXXX");//商品标记 
+    //$unifiedOrder->setParameter("openid","XXXX");//用户标识
+    //$unifiedOrder->setParameter("product_id","XXXX");//商品ID
+
+    //获取统一支付接口结果
+    $unifiedOrderResult = $unifiedOrder->getResult();
+    return $unifiedOrderResult;
 }

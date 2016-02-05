@@ -50,6 +50,7 @@ function checkLogin(page,app,callback_str){
 
         }else{
             is_login=true;
+            window.user_id = res.user_id;
         } 
     } 
     });

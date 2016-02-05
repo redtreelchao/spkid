@@ -54,7 +54,8 @@ $route['category-(.+)'] = 'category/index/$1.html';
 $route['brand-(.+)'] = 'category/brand/$1.html';
 $route['provider-(.+)'] = 'category/provider/$1.html';
 //商品详情
-$route['product-(.+)'] = 'product/info/$1.html';
+$route['product-(.+)'] = 'product/course_info/$1.html';
+//$route['course_info-(.+)'] = 'product/course_info/$1.html';
 
 $route['tuan-(.+)'] = 'tuan/index/$1.html';
 $route['tuanDetail-(.+)'] = 'tuanDetail/info/$1.html';
@@ -62,6 +63,8 @@ $route['tuanDetail-(.+)'] = 'tuanDetail/info/$1.html';
 //$route['brand-(.+)'] = 'product/brand/$1';
 $route['search'] = 'product/search';
 $route['searchResult'] = 'product/searchResult';
+//$route['pdetail-(\d+)'] = 'product/pdetail/$1.html';
+$route['prodetail-(\d+)'] = 'product/pdetail/$1.html';
 $route['pdetail-(\d+)'] = 'product/pdetail/$1.html';
 $route['brands'] = 'product/brands';
 $route['shops'] = 'product/shops';
@@ -74,5 +77,6 @@ $route['baby'] = '/index/index/24';
 //专题
 $route['zhuanti/(:any)'] = 'zhuanti/index/$1';
 $route['temaiqu'] = '/product/temaiqu';
+$route['course_all'] = '/product/course_all';
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

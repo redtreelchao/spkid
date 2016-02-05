@@ -3826,7 +3826,7 @@ a.btn-disabled:visited {
 }
 
 .product-part.product-detail {
-	text-align: center;
+	-text-align: center;
 	-font-size: 0
 }
 

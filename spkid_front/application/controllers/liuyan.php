@@ -57,18 +57,20 @@ class Liuyan extends CI_Controller
 			case 1:
 			case 2:
 			case 3:
-			case 4:
+			case 4:			
 				$view = 'pingjia_list';
 				break;			
 			default:
 				$view = 'error';
 				break;
 		}
-		$html = $this->load->view('mobile/liuyan/'.$view,array(
+
+		$html = $this->load->view('liuyan/'.$view,array(
 			'param' => $param,
 			'list' => $data['list'],
 			'filter' => $data['filter']
 		),TRUE);
+
 		print json_encode(array('err'=>0,'msg'=>'','html'=>$html,'count'=>$data['filter']['record_count']));
 	}
 
@@ -86,6 +88,7 @@ class Liuyan extends CI_Controller
 	    $update['reply_content'] = '';
 	    $update['name'] = trim($this->input->post('name', TRUE));
 	    $update['mobile'] = trim($this->input->post('mobile', TRUE));
+	    $update['at_comment_id'] = trim($this->input->post('at_comment_id', TRUE));
 
 //	    $user_name = trim($this->input->post('user_name'));
 //	    $password = trim($this->input->post('pwd'));
@@ -94,33 +97,40 @@ class Liuyan extends CI_Controller
 //		    sys_msg('用户名或密码错误,请重试', 1);
 //		}
 //	    }
+	    if(!preg_match("/[\x7f-\xff]/", $update['comment_content'])){
+	    		sys_msg('咨询内容应包含汉字', 1);
+	    }
 	    
-		if(!preg_match("/[\x7f-\xff]/", $update['comment_content'])){
-				sys_msg('咨询内容应包含汉字', 1);
-		}
 	    if(mb_strlen($update['comment_content']) < 5 ){
-			sys_msg('咨询内容至少为5个汉字', 1);
+		sys_msg('咨询内容至少为5个汉字', 1);
 	    }else if( mb_strlen($update['comment_content']) > 200 ) {
-			sys_msg('咨询内容至多为200个汉字', 1);
+		sys_msg('咨询内容至多为200个汉字', 1);
 	    }
 	    
 	    if (!in_array($update['comment_type'], array(1, 2, 3, 4)))
-			sys_msg('参数错误', 1);
-	    if (!in_array($update['tag_type'], array(1, 2, 3)))
-			sys_msg('参数错误', 1);
+		sys_msg('参数错误', 1);
+	    if (!in_array($update['tag_type'], array(1, 2, 3, 4))) //4表示视频
+		sys_msg('参数错误', 1);
 	    if (!$update['comment_content'])
-			sys_msg('请填写咨询内容', 1);
+		sys_msg('请填写咨询内容', 1);
+		$this->load->helper('sensivewords');
+		if (!filter($update['comment_content'])) {
+			sys_msg('内容中还有非法词汇', 1);
+		} else {
+			$update['is_audit'] = 1;
+		}
 
 	    switch ($update['tag_type']) {
 		case 1:
 		case 3:		
+		case 4:
 		    # 商品
 		    $this->load->model('product_model');
 		    $p = $this->product_model->filter(array('product_id' => $update['tag_id']));
 		    if (!$p)
 			sys_msg('发表失败，参数错误', 1);
 		    $this->liuyan_model->insert($update);{
-			sys_msg('发表成功，客服将第一时间回复您的问题', 0);
+			sys_msg('发表成功，谢谢您的留言', 0);
 		    }
 		    break;
 

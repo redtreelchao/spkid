@@ -35,20 +35,6 @@
 			vertical-align:middle;
 			margin-left:2px;
 		}
-		body {
-			background:rgb(250,250,250);
-		}
-
-		.am-list-news-bd ul {
-			list-style:none;
-			background: white;
-			border:1px solid gray;
-			padding:1em 1em;
-		}
-		a {
-			text-decoration:none;
-			color:black;
-		}
 	</style>
   </head>
   
@@ -60,7 +46,7 @@
 
     <div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="my-modal-loading">
       <div class="am-modal-dialog">
-        <div class="am-modal-hd"></div>
+        <div class="am-modal-hd">正在载入...</div>
         <div class="am-modal-bd">
           <span class="am-icon-spinner am-icon-spin"></span>
         </div>
@@ -69,7 +55,7 @@
     
     <div data-am-widget="list_news" class="am-list-news am-list-news-default">
   <!--列表标题-->
-  <div class="am-list-news-hd am-cf" style="text-align:center">
+  <div class="am-list-news-hd am-cf">
     <!--带更多链接-->
     <a href="##">
       <h2>微信支付</h2>      
@@ -79,7 +65,7 @@
     <ul class="am-list">
     <li class="am-g am-list-item-dated">
         
-	<a href="##" class="am-list-item-hd ">商　品：悦牙网订单</a>
+	<a href="##" class="am-list-item-hd ">商　品：<?php echo $goodsTitle?></a>
         
       </li>
       <li class="am-g am-list-item-dated">
@@ -91,17 +77,18 @@
         <a href="##" class="am-list-item-hd ">金　额：<?php echo $total_fee?>元</a>
         
       </li>
+      
+      <li class="am-g am-list-item-dated">
+        <div align="center">
+		<button style="margin:10px 0; width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >确认支付</button>
+	</div>
+        
+        <div align="center">
+		<button style="margin:10px 0; width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="location.href='http://m.yueyawang.com'" >返回首页</button>
+		</div>
+      </li>
+      
     </ul>
-
-  <div class="am-g am-list-item-dated">
-    <div align="center">
-	<button style="margin:10px 0; width:100%; height:30px; background-color:red; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >确认支付</button>
-	</div>
-    
-    <div align="center">
-	<button style="margin:10px 0; width:100%; height:30px; background-color:white; border:0px #FE6714 solid; cursor: pointer;  color:black;  font-size:16px;" type="button" onclick="location.href='http://m.yueyawang.com'" >返回首页</button>
-	</div>
-  </div>
   </div>
 </div>
 
@@ -143,4 +130,3 @@
 	</script>
   </body>
 </html>
-

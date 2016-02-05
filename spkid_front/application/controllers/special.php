@@ -37,11 +37,8 @@ class Special extends CI_Controller {
 
         //判断用户是否已经领取
         $special_voucher = $this->voucher_model->is_special_row($release_id,$user_id);  // 现金券 活动 信息
-        if(!empty($special_voucher) && $special_voucher->voucher_status == 0){
-            echo json_encode(array('error'=>0,'msg_hd'=>'您已经领过咯!'));
-            return;
-        }elseif(!empty($special_voucher) && $special_voucher->voucher_status == 1){
-            echo json_encode(array('error'=>0,'msg_hd'=>'您有未付款订单，请付款后再来领取！'));
+        if(!empty($special_voucher)){
+            echo json_encode(array('error'=>1,'msg_hd'=>'您已经领过咯!'));
             return;
         }
 
@@ -56,7 +53,7 @@ class Special extends CI_Controller {
 
         //根据时间，判断活动是否过期
         if(empty($voucher_release)){
-            echo json_encode(array('error'=>0,'msg_hd'=>'活动已过期!'));
+            echo json_encode(array('error'=>1,'msg_hd'=>'活动已过期!'));
             return;
         }
 

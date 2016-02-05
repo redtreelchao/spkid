@@ -166,8 +166,15 @@ function mask_str($str,$head_len, $tail_len,$sep='...')
 
 	return $result;
 }
-
-
+//过滤html所有的标签
+function filter_html_des($des){
+    if (strlen($des) <= 0) return;
+    $html_reg = "/<\/?[^>]+>/i";
+    $des = preg_replace( $html_reg, '', $des);
+    $des = preg_replace("/&nbsp;|\r|\n|\s/i", '', $des);
+    $des = mask_str($des, 60, 0);
+    return $des;
+}
 
 // 是否以超级用户的方式访问
 function valid_ghost()
@@ -318,11 +325,7 @@ function get_pager_param($filter)
 
 function adjust_path($content)
 {   
-	$pattern=array('/width:\s*\d+px/','/width="\d{3}"/');
-	$replace=array('width:100%','width="100%"');
-	$content = preg_replace($pattern,$replace, $content);
-
-	$content = str_replace('<img','<img style="width:100%;" ',$content);
+    $content = str_replace('<img','<img style="width:100%;" ',$content);
 	return str_replace('/public/data/images/upload/',img_url('upload/'),$content);
 }
 
@@ -834,8 +837,37 @@ if (!function_exists('getVoucherDes')){
         return $voucher_sn;
     }
 }
+//解析js中用escape处理过的值
+function js_unescape($str)
+{
+    $ret = '';
+    $len = strlen($str);
+    for ($i = 0; $i < $len; $i++)
+    {
+        if ($str[$i] == '%' && $str[$i+1] == 'u')
+        {
+            $val = hexdec(substr($str, $i+2, 4));
+            if ($val < 0x7f) $ret .= chr($val);
+            else if($val < 0x800) $ret .= chr(0xc0|($val>>6)).chr(0x80|($val&0x3f));
+            else $ret .= chr(0xe0|($val>>12)).chr(0x80|(($val>>6)&0x3f)).chr(0x80|($val&0x3f)); 
+            $i += 5;
+        }
+        else if ($str[$i] == '%')
+        {
+            $ret .= urldecode(substr($str, $i, 3));
+            $i += 2;
+        }
+        else $ret .= $str[$i];
+    }
+    return $ret;
+}
 
-function isReqFromWechat() {
-    $CI = &get_instance();
-    return strpos($CI->input->server('HTTP_USER_AGENT'), 'MicroMessenger') !== false;
+//该函数基于php mbstring扩展
+function cutstr($str, $start, $len, $postfix = '...') {
+    $str = strip_tags($str);
+    if (function_exists('mb_substr')) {
+        return mb_strlen($str) < $len ? $str : (mb_substr($str, $start, $len) . $postfix);
+    } else {
+        return $str;
+    }
 }

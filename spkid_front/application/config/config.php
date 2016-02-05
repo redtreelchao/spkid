@@ -361,7 +361,7 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 //====================danger config begin=================================
-define('FRONT_HOST', 'http://f.test.com');
+define('FRONT_HOST', 'http://pc.test.com');
 $config['IMG_HOSTS']=array('http://img.test.com');
 
 $config['memcache'] = array(array('hostname'=>'192.168.20.204','port'=>11211,'weight'=>1));

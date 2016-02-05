@@ -54,42 +54,45 @@ label.label-checkbox i.icon-form-checkbox:after {
                         </div>
                     </div>
                 </div> 
-            	<!-- 底部工具栏开始 -->    
+            <!-- 底部工具栏开始 -->    
                 <div class="toolbar">
                     <div class="toolbar-inner row no-gutter hu-cart-settlement">
-                        <div class="col-60"><a href="#" class="link" style="color:#fff;">合计：<span class="heji-car-hu" id="h_total_price">￥<?php print fix_price($cart_summary['product_price']); ?></span> 不含运费</a></div>
-                        <div class="col-40 settlemen-hu"><a href="/cart/checkout/<?=$default_provider?>" class="link external" style="color:#fff;">结算(<span id="h_total_num"><?php print $cart_summary['product_num']; ?></span>)</a></div>
+                        <div class="col-60"><a href="#" class="link" style="color:#fff;">合计：<span class="heji-car-hu">￥<?php print fix_price($cart_summary['product_price']); ?></span> 不含运费</a></div>
+                        <div class="col-40 settlemen-hu"><a href="/cart/checkout/<?=$default_provider?>" class="link external" style="color:#fff;">结算(<?php print $cart_summary['product_num']; ?>)</a></div>
                     </div>
                 </div>
-            	<!-- 底部工具栏结束 -->    
+            <!-- 底部工具栏结束 -->    
+        
                 <div class="page-content article-bg no-top2">
-		     		<div class="page-content-inner edu-fot">
-	                    <div class="list-block media-list no-top" style="margin-top:0;">
-	                    	<div class="v-activity-postage">10kg内购满399元包邮</div>			    
-	                        <ul class="hu-cart-shops">
-							<?php foreach ($cart_summary['product_list'] as $provider): ?>
-	                          	<?php foreach ($provider['product_list'] as $product): ?>
-	                          	<li class="c_rec<?=$product->rec_id?>">
-	                              	<a href="#" class="item-link item-content">
-		                                <div class="item-media col-v-img">
-		                                    <img src="<?php print img_url($product->img_url); ?>.85x85.jpg" alt="<?php print $product->brand_name . ' ' . $product->product_name; ?>"  />
-		                                </div>
-		                              	<div class="item-inner">
-			                                <div class="public-text"><?php print $product->brand_name . ' ' . $product->product_name; ?></div>
-			                                <div class="item-text hu-gwc">规格：<span class="c_size<?=$product->rec_id?>" data-subid="<?=$product->sub_id;?>"><?php print $product->size_name; ?><span></div>
-			                                <div class="item-title-row hu-cart-nobg" style="padding-top:10px;">
-			                                  	<div class="guanzhu-jiage">￥<?php print fix_price($product->product_price); ?></div>
-			                                  	<div class="item-after">X <?php print $product->product_num; ?></div>
-			                                </div>          
-		                              	</div>
-	                              	</a>
-	                          	</li>
-	                          	<?php endforeach; ?>
-				  			<?php endforeach; ?>
-	                        </ul>
-	                    </div>
-	                </div>
-				</div>
+		     <div class="page-content-inner edu-fot">
+                    
+                    <div class="list-block media-list no-top" style="margin-top:0;">
+		    
+                        <ul class="hu-cart-shops">
+			<?php foreach ($cart_summary['product_list'] as $provider): ?>
+                          <?php foreach ($provider['product_list'] as $product): ?>
+                          <li class="c_rec<?=$product->rec_id?>">
+                              <a href="#" class="item-link item-content">
+                                <div class="item-media col-v-img">
+                                    <img src="<?php print img_url($product->img_url); ?>.85x85.jpg" alt="<?php print $product->brand_name . ' ' . $product->product_name; ?>"  />
+                                </div>
+                              <div class="item-inner">
+                                <div class="public-text"><?php print $product->brand_name . ' ' . $product->product_name; ?></div>
+                                <div class="item-text hu-gwc">规格：<span class="c_size<?=$product->rec_id?>" data-subid="<?=$product->sub_id;?>"><?php print $product->size_name; ?><span></div>
+                                <div class="item-title-row hu-cart-nobg" style="padding-top:10px;">
+                                  <div class="guanzhu-jiage">￥<?php print fix_price($product->product_price); ?></div>
+                                  <div class="item-after">X <?php print $product->product_num; ?></div>
+                                </div>          
+                              </div>
+                              </a>
+                          </li>
+                          <?php endforeach; ?>
+			  <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    
+                </div>
+		</div>
             </div>
             <!-- 购物车默认页面结束-->
             
@@ -285,8 +288,6 @@ function delete_cart(rec_id)
             var goods_cnt = $$(".c_rec"+rec_id).parent().children("li").length;
             
 	    $$(".c_rec"+rec_id).remove();
-            $$("#h_total_price").html('￥'+result.total_price);
-            $$("#h_total_num").html(result.total_num);
             if (goods_cnt <= 2) 
                 location.href = '/cart';
         }

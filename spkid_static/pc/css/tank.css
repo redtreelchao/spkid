@@ -1,7 +1,10 @@
 /*body { font: 12px/1.5  Arial,Verdana,"Microsoft YaHei"; color: #909090; }*/
 
 *:focus {outline: none} 
+input,button,select,textarea{outline:none}
 
+
+input:-webkit-autofill {-webkit-box-shadow: 0 0 0px 1000px white inset;}
 ol, ul { list-style:none;}
 img{ border:0 none;  max-width: 100%;}
 html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video { margin: 0; padding: 0; outline: 0; font-size: 100%; font: inherit; vertical-align: baseline;}
@@ -16,12 +19,12 @@ body,html{height: 100%;}
 .login-main {position: relative; top: -50%;width: 400px;margin: 0 auto;} /* for explorer only */
 .form-wrapper{ width:100%; -moz-box-sizing:border-box; box-sizing:border-box; overflow: hidden;}
 .login-main>.logo { text-align:center; padding-bottom:50px;}
-.Logincom{ width:300px; margin:10px auto 0;}
+.Logincom{ width:305px; margin:10px auto 0;}
 .loginUser{  height:40px; line-height:40px; margin-top:10px; position:relative; border-radius:5px; -webkit-border-radius:5px; -moz-border-radius:5px; -o-border-radius:5px; -ms-border-radius:5px; margin-bottom:24px; background-color:#fff;}
 .loginUser .userLogo{  background:url(../images/user-ico.png) 10px bottom no-repeat; background-size:20px auto; }
 .loginplic{ display: inline-block; float: left; height:30px; width:30px;}
 .loginUser:last-Child{ margin-bottom:0;}
-.loginUser .loginInput{ float: left; height:40px; width:260px; line-height:40px; border:none; background: none; font-family: 微软雅黑;font-size: 14px; color:#909090; top:0; left:40px; position:absolute;}
+.loginUser .loginInput{ float: left; height:38px; width:260px; line-height:38px; border:none; background: none; font-family: 微软雅黑;font-size: 14px; color:#909090; top:0; left:40px; position:absolute;}
 .passWord{ background:url(../images/passwrod-ico.png) 10px bottom no-repeat; background-size:20px auto;}
 .user-ico{  background-size:20px auto; height:20px; width:40px; display:inline-block; padding-top:15px;}
 .Loginipnut{ -moz-border-bottom-colors: none; -moz-border-left-colors: none; -moz-border-right-colors: none; -moz-border-top-colors: none; color: #909090; float: left;
@@ -43,14 +46,14 @@ input:focus{ outline:none }
 .btn {display: inline-block; margin-bottom: 0; font-weight: 400; border: none; outline: 0; -ms-touch-action: manipulation; touch-action: manipulation; cursor: pointer;}
 .fr{ float:right; font-size:14px; margin-top:5px;}
 .fr a{ padding-left:10px; color:#0078b9;}
-.horizontal{ border-bottom:solid 1px #c7c8cc; text-align:center; height:35px;}
-.horizontal span{ display:inline-block; margin-top:21px; padding:0 10px; background-color:#ededef; color:#333;}
+.horizontal{ border-bottom:solid 1px #c7c8cc; text-align:center; height:35px; margin-top:20px;}
+.horizontal span{ display:inline-block; margin-top:21px; padding:0 10px; background-color:#ededef; color:#333; position: absolute;}
 .other, .other1 { width:100%; text-align:center; margin-top:20px;}
-.other a{ background:url(../images/ico2.png) no-repeat; height:30px; width:40px;  display:inline-block;}
+.other a{ background:url(../images/ico2.png) no-repeat; height:30px; width:35px;  display:inline-block;}
 .other .qq{ background-position:0 0;}
-.other .weixin{ background-position:-40px 0;}
-.other .alipay{ background-position:-79px 0;}
-.other .sina{ background-position:-119px 0;}
+.other .weixin{ background-position:-35px 0;}
+.other .alipay{ background-position:-74px 0;}
+.other .sina{ background-position:-114px 0;}
 
 /*register-now start*/
 .register-now{ margin:0 auto; width:450px;}

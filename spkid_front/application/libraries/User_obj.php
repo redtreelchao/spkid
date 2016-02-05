@@ -115,44 +115,44 @@ class User_obj {
     	$this->CI->load->model('user_model');
 
         $now = date('Y-m-d H:i:s');
-		$user_input['password'] = '******';
-		$user_input['visit_count'] = 1;
-        $user_input['create_date'] = $now;
-		
-		$this->CI->db->trans_begin();//transaction start. dadada...
-		$user_id = $this->CI->user_model->insert($user_input);
-		if (empty($user_id)) {
-			$this->CI->db->trans_rollback();
-			return FALSE;
-		}
+        $user_input['password'] = '******';
+        $user_input['visit_count'] = 1;
+        $user_input['create_date'] = $now;	
+        $this->CI->db->trans_begin();//transaction start. dadada...
+        $user_id = $this->CI->user_model->insert($user_input);
+        if (empty($user_id)) {
+            $this->CI->db->trans_rollback();
+            return FALSE;
+        }
 
     	$user = $this->CI->user_model->filter(array('user_id' => $user_id));
-		if ($user_id > 0)
-		{
-			$this->_user_id = (int) $user->user_id;
-			$this->CI->session->set_userdata(array(
-				'user_id'=>$this->_user_id,
-				'user_name'=>$user->user_name,
-				'union_sina'=>$user->union_sina,
-				'union_zhifubao'=>$user->union_zhifubao,
-				'union_qq'=>$user->union_qq,
-				'union_fclub' => $user->union_fclub,
-				'email'=>$user->email,
-				'mobile'=>$user->mobile,
-				'user_type'=>$user->user_type,
-				'email_validated'=>$user->email_validated,
-				'mobile_checked'=>$user->mobile_checked,
-				'discount_percent'=>round(floatval($user->discount_percent),2)
-			));
-	        //发放现金券			
-			$this->CI->load->model('voucher_model');
-			$this->CI->voucher_model->release_register_voucher($user->user_id);
-			
-			$this->CI->db->trans_commit();
-			return TRUE;
-		}
-		$this->CI->db->trans_rollback();
-		return FALSE;
+        
+        if ($user_id > 0)
+        {
+            $this->_user_id = (int) $user->user_id;
+            $this->CI->session->set_userdata(array(
+                    'user_id'=>$this->_user_id,
+                    'user_name'=>$user->user_name,
+                    'union_sina'=>$user->union_sina,
+                    'union_zhifubao'=>$user->union_zhifubao,
+                    'union_qq'=>$user->union_qq,
+                    'union_fclub' => $user->union_fclub,
+                    'union_weixin' => $user->union_weixin,
+                    'email'=>$user->email,
+                    'mobile'=>$user->mobile,
+                    'user_type'=>$user->user_type,
+                    'email_validated'=>$user->email_validated,
+                    'mobile_checked'=>$user->mobile_checked,
+                    'discount_percent'=>round(floatval($user->discount_percent),2)
+            ));
+            //发放现金券			
+            $this->CI->load->model('voucher_model');
+            $this->CI->voucher_model->release_register_voucher($user->user_id);
+            $this->CI->db->trans_commit();
+            return TRUE;
+        }
+        $this->CI->db->trans_rollback();
+        return FALSE;
     }
         
     public function get_back_url() {
@@ -251,7 +251,24 @@ class User_obj {
         	return array();
         }
     }
+    
+    public function filter_weixin($weixin_id)
+    {
+    	$this->CI->load->model('user_model');
+    	if (empty($weixin_id)) return array();
 
+    	$user = $this->CI->user_model->filter(array(
+                    'union_weixin' => $weixin_id
+                ));
+        if (!empty($user) && $user->is_use == 0)
+        {
+            return $user;
+        } else
+        {
+            return array();
+        }
+    }
+    
     public function filter_fclub($u_id)
     {
     	$this->CI->load->model('user_model');

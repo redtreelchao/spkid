@@ -35,7 +35,7 @@ class Cart_model extends CI_Model
          * @param type $package_product
          * @return type
          */
-	public function cart_info ($cart_sn,$gallery=FALSE,$package_product=FALSE, $provider_id=0)
+	public function cart_info ($cart_sn,$gallery=FALSE,$package_product=FALSE, $provider_id=0, $rec_id_arr = array())
 	{
 		$CI = &get_instance();
 		$select = "select ct.*,
@@ -61,6 +61,9 @@ class Cart_model extends CI_Model
                 $where = '';
                 if ($provider_id){
                     $where .= " AND p.shop_id = ".$provider_id;
+                }
+                if (!empty($rec_id_arr)){
+                    $where .= " AND ct.rec_id IN (".implode(",", $rec_id_arr).")";
                 }
 		$sql = $select.$from."where  ct.session_id = ? ".$where. " ORDER BY ct.create_date DESC ";
 		$query = $this->_db->query($sql,array($cart_sn));
@@ -107,7 +110,14 @@ class Cart_model extends CI_Model
 
 	public function delete_where ($filter)
 	{
-		$this->_db->delete('front_cart',$filter);
+            foreach ($filter as $key => $v){
+                if (is_array($v)){
+                    $this->_db->where_in($key, $v);
+                } else {
+                    $this->_db->where($key,$v);
+                }
+            }
+            $this->_db->delete('front_cart');
 	}
 
 	public function last_order ($user_id)
@@ -162,7 +172,7 @@ class Cart_model extends CI_Model
 			LEFT JOIN ".$this->_db->dbprefix('voucher_release')." AS r ON v.release_id = r.release_id
 			LEFT JOIN ".$this->_db->dbprefix('voucher_campaign')." AS c ON v.campaign_id = c.campaign_id
 			WHERE v.user_id=? AND v.start_date <=? AND v.end_date>=?
-			AND v.used_number<v.repeat_number ORDER BY v.create_date DESC";
+			AND v.used_number<v.repeat_number";
 		$query = $this->_db->query($sql,array($user_id,$CI->time,$CI->time));
 		return $query->result();
 	}
@@ -367,7 +377,7 @@ WHERE fc.rec_id = ".$rec_id;
     }
     //获取所有的快递公司
     public function get_shipping_list(){
-        $sql = "SELECT shipping_id, shipping_name FROM `ty_shipping_info` WHERE is_use = 1 ORDER BY sort_order ASC";
+        $sql = "SELECT shipping_id, shipping_name FROM `ty_shipping_info` WHERE is_use = 1 ORDER BY sort_order ASC LIMIT 2";
         return $this->_db->query($sql)->result();
     }
     
@@ -379,7 +389,7 @@ WHERE fc.rec_id = ".$rec_id;
     
     //获取用户的发票信息
     public function get_user_invoice_list($user_id){
-        $sql = "SELECT title FROM `ty_user_invoice` WHERE user_id = ".$user_id." ORDER BY add_date DESC";
+        $sql = "SELECT id, title FROM `ty_user_invoice` WHERE user_id = ".$user_id." ORDER BY add_date DESC";
         return $this->_db->query($sql)->result();
     }  
     //添加用户的发票信息
@@ -395,22 +405,18 @@ WHERE fc.rec_id = ".$rec_id;
         $this->_db->insert('ty_user_invoice',$data);
 	return $this->_db->insert_id();
     }
+    
+    public function user_invoice_del($filter){
+        $this->_db->delete('ty_user_invoice',$filter);
+    }
 
     //免邮商品
  	public function campaign_product($product_id_data,$campaign_type){
- 		$where = 'campaign_type ='.$campaign_type." and unix_timestamp(start_date) <= unix_timestamp() and unix_timestamp(end_date)>unix_timestamp() and ";
- 		
- 		$more = sizeof($product_id_data)>1?true:false;
- 		$where .= $more?"(":"";
- 		foreach ($product_id_data as $i=>$p) {
- 			if( $i>0 ) $where .= " or ";
- 			$where .= $more?"(":"";
- 			$where .= "product_id=". $p[0]. ' and limit_price<='.$p[1];
- 			$where .= $more?")":"";
- 		}
- 		$where .= $more?")":"";
-		$sql = "select * from ". $this->_db->dbprefix('front_campaign'). " where ". $where;
- 		$query = $this->_db->query($sql);
+ 		$this->_db->where('campaign_type',$campaign_type);
+ 		$this->_db->where_in('product_id', $product_id_data);
+ 		$query = $this->_db->get('front_campaign');
     	return $query->result();
- 	}        
+ 	}
+        
+        
 }

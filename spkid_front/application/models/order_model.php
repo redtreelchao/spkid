@@ -94,10 +94,10 @@ class Order_model extends CI_Model
         //$row->order_amount>0 && 
         foreach ($rows as &$row){
             $row->format_create_date=date("Y-m-d",strtotime($row->create_date));
-            $row->order_amount = $row->order_price + $row->shipping_fee - $row->paid_price;  //订单金额 + 运费 - 已经支付金额
-            $row->can_pay = $row->order_amount>0 && $row->is_online == 1 && 0 == $row->pay_status;   //未付款
-            $row->total_fee=$row->order_price+$row->shipping_fee;  //订单金额 + 运费
-            $row->total_fee=sprintf('%.2f',$row->total_fee);       //订单金额 + 运费
+            $row->order_amount = $row->order_price + $row->shipping_fee - $row->paid_price;
+            $row->can_pay = $row->order_amount>0 && $row->is_online == 1 && 0 == $row->pay_status;
+            $row->total_fee=$row->order_price+$row->shipping_fee;
+            $row->total_fee=sprintf('%.2f',$row->total_fee);
             $row->order_amount=sprintf('%.2f',$row->order_amount);
         }
         return $rows;
@@ -133,6 +133,12 @@ class Order_model extends CI_Model
 				case '5' : //已作废
 					$where .= " AND o.order_status in ('4','5') AND o.is_ok = '1' ";
 					break;
+                                case '6'://待付款
+                                        $where .= " AND o.order_status in (0, 1) AND o.order_price + o.shipping_fee > o.paid_price ";
+                                        break;
+                                case '7'://待收货
+                                        $where .= " AND o.order_status = '1' AND o.shipping_status = '0' AND o.pay_status = '1'";
+                                        break;
 				default:
 					break;
 		}
@@ -144,6 +150,7 @@ class Order_model extends CI_Model
 		$query = $this->_db->query($sql);
 		$row = $query->row();
 		$query->free_result();
+
 		$filter['record_count'] = (int) $row->ct;
 		$filter = page_and_size($filter);
 		if ($filter['record_count'] <= 0)
@@ -152,7 +159,8 @@ class Order_model extends CI_Model
 		}
 
 		/* 查询记录 */
-	    $sql = "SELECT o.*,p.pay_code,p.is_online,p.is_online as online_pay, a.action_note, pr.region_name as province_name " .$from.
+	    $sql = "SELECT o.*,p.pay_code,p.is_online,p.is_online as online_pay, a.action_note, pr.region_name as province_name, s.shipping_name " .$from.
+                    " LEFT JOIN ".$this->_db->dbprefix('shipping_info')." s ON o.shipping_id = s.shipping_id ".
 	            " LEFT JOIN ".$this->_db->dbprefix('payment_info')." AS p ON o.pay_id = p.pay_id".
 	            " LEFT JOIN ".$this->_db->dbprefix('order_action')." AS a ON o.order_id = a.order_id AND a.is_return=1 AND a.order_status = 4 ".
                     " LEFT JOIN ".$this->_db->dbprefix('region_info')." AS pr ON o.province = pr.region_id ".
@@ -166,6 +174,7 @@ class Order_model extends CI_Model
 		{
 			foreach ($rows as &$row)
 			{
+                            $row->order_goods = $this->order_product($row->order_id);
 				//格式化状态值
 		    	$row->format_create_date=date("Y-m-d",strtotime($row->create_date));
 		    	$row->order_amount = $row->order_price + $row->shipping_fee - $row->paid_price;
@@ -358,16 +367,6 @@ class Order_model extends CI_Model
         return $query->row();
     }
 
-    //获取订单 使用的 余额与现金券
-    public function get_payment_money($order_id) {
-    	$sql = " SELECT pf.`pay_code`, pf.`pay_id`,op.`payment_money` 
-    	FROM ty_order_payment AS op 
-    	LEFT JOIN ty_payment_info AS pf ON pf.`pay_id` = op.`pay_id` 
-    	WHERE pf.`pay_code` in( 'balance' ,'coupon') AND op.`order_id` = ".$order_id;
-    	$query = $this->_db->query($sql);
-        return $query->result();
-    }
-
     public function order_product($order_id)
     {
     	$sql = "SELECT op.*, p.product_name, p.product_sn,p.provider_productcode, p.unit_name, c.color_name, c.color_sn, s.size_name, s.size_sn, b.brand_id, b.brand_name
@@ -438,7 +437,13 @@ class Order_model extends CI_Model
          */
         public function order_list_by_ids($arr_order_id, $genre_id=0)
         {
-            $sql = "select * from ty_order_info where order_id ".  db_create_in($arr_order_id);
+            //$sql = "select * from ty_order_info left join  where order_id ".  db_create_in($arr_order_id);
+            $sql = "  SELECT oi.*, p.region_name AS province_name, c.region_name AS city_name, d.region_name AS district_name 
+                FROM ty_order_info oi 
+                LEFT JOIN ty_region_info p ON oi.province = p.region_id 
+                LEFT JOIN ty_region_info c ON oi.city = c.region_id 
+                LEFT JOIN ty_region_info d ON oi.district = d.region_id 
+                WHERE order_id ".  db_create_in($arr_order_id);;
             if ($genre_id > 0) 
                 $sql .= " AND genre_id = ".$genre_id;
             $query = $this->_db->query($sql);
@@ -486,6 +491,18 @@ class Order_model extends CI_Model
         public function lock_pay_track($track_sn)
 	{
 		$sql="SELECT * FROM ".$this->db->dbprefix('order_pay_track')." WHERE track_sn = ? LIMIT 1 FOR UPDATE";
+                $query = $this->_db->query($sql,array($track_sn));
+                return $query->row();
+	}
+        
+        /**
+         * 获取一条支付跟踪记录
+         * @param type $track_sn
+         * @return type
+         */
+        public function get_pay_track($track_sn)
+	{
+		$sql="SELECT * FROM ".$this->db->dbprefix('order_pay_track')." WHERE track_sn = ? LIMIT 1";
                 $query = $this->_db->query($sql,array($track_sn));
                 return $query->row();
 	}
@@ -567,5 +584,17 @@ class Order_model extends CI_Model
             $this->_db->insert('order_client_info',$data);
             return $this->_db->insert_id();
 	}
-
+        
+        public function insert_order_advice($data)
+	{
+            $this->_db->insert('order_advice',$data);
+            return $this->_db->insert_id();
+	}
+        
+        public function get_order_advice($order_id)
+	{
+            $sql="SELECT * FROM ".$this->db->dbprefix('order_advice')." WHERE type_id = 2 AND is_return = 1 AND order_id = '".$order_id."' LIMIT 1";
+            $query = $this->_db->query($sql);
+            return $query->row();
+	}
 }

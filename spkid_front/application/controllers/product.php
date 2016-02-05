@@ -15,8 +15,8 @@ class Product extends CI_Controller
 	}
         
         # 商品详情页, COURSE
-	public function info($param)
-	{
+	public function course_info($param)
+	{		
 		ENVIRONMENT=='development' || $this->output->cache(CACHE_HTML_INFO);
 		//$this->load->model("rush_model");
                 
@@ -30,6 +30,7 @@ class Product extends CI_Controller
 		$provider_brand = array();
 		$is_preview = isset($_GET['is_preview']) && $_GET['is_preview']== 1 ?TRUE:FALSE; 
 		$p = $this->cache->get('p-'.$product_id);		
+
 		if (!$p || $is_preview )
 		{
 			$p = $this->product_model->product_info($product_id); // 商品信息
@@ -74,6 +75,7 @@ class Product extends CI_Controller
 		}
 
 		if(!$is_preview && !$p->is_audit) redirect('index');
+
 		// 供应商售卖前五的品牌
                 //$provider_brand = $this->rush_model->get_provider_brand($p->provider_id);
 		// 取尺码
@@ -117,6 +119,7 @@ class Product extends CI_Controller
 		}
 
 		if(!$sub_list) sys_msg('该商品不存在',1);//已下架
+
 		//if(!$color_id && $sub_list ||!isset($sub_list[$color_id])){
 			$color_id = end(array_keys($sub_list));
 		//}
@@ -150,7 +153,7 @@ class Product extends CI_Controller
 	*/
                 $genre_info = $this->get_goods_genre($p->genre_id);
                 if ($p->genre_id == PRODUCT_COURSE_TYPE) {//科程商品
-                    $view_page = 'mobile/product/course_info';
+                    $view_page = 'product/course_info';
                 } else {//默认为牙科类商品
                     $view_page = 'product/info';
                 }        
@@ -171,8 +174,31 @@ class Product extends CI_Controller
         $p->detail4 = adjust_path($p->detail4);
         $user_name = $this->session->userdata('user_name') ? $this->session->userdata('user_name') : '';
         $mobile = $this->session->userdata('mobile') ? $this->session->userdata('mobile') : '';
+
+        //判断课程是否过期
+        $is_outofdate = false;        
+        $tmp = json_decode($p->product_desc_additional, true);
+        if (isset($tmp['desc_waterproof'])) {
+        	$is_outofdate = strtotime($tmp['desc_waterproof']) < time() ? true : false;
+        }
+
+        //获取相关课程
+        $related_courses = $this->product_model->get_related_courses($product_id);    
+        foreach ($related_courses as $k => $c) {
+        	format_product($c);
+        }
+        
+        //课程报名人数和招收人数对比，测试是否超员
+        $is_exceed_num = false;        
+        if($sub_list[$color_id]['sub_list'][0]->consign_num == -2) {
+        	//do nothing 
+        } else {
+        	$is_exceed_num = $p->ps_num >= $sub_list[$color_id]['sub_list'][0]->consign_num ? true : false;
+        } 
+        
 		$this->load->view($view_page,array(
-			'title'		=> $seo['title'],
+			//'title'		=> $seo['title'],
+			'title'		=> $p->product_name,
 			'description' => $seo['description'],
 			'keywords'	=> $seo['keywords'],
                         'genre_info'    => $genre_info,
@@ -189,7 +215,11 @@ class Product extends CI_Controller
 			'color_id'	=> $color_id,
 			'page_title'	=> $p->product_name."_",
 			'user_name' => $user_name,
-			'mobile' => $mobile
+			'mobile' => $mobile,
+			'user_id' => $this->session->userdata('user_id'),
+			'is_outofdate' => $is_outofdate,
+			'related_courses' => $related_courses,
+			'is_exceed_num' => $is_exceed_num,
                                 //,
 //			'css'		=> array('css/plist.css'),
 			//'gifts_list'	=> $this->rush_model->get_campaign(),
@@ -209,7 +239,7 @@ class Product extends CI_Controller
 
 	# 商品详情页
 	public function pdetail($param)
-	{
+	{	
 		ENVIRONMENT=='development' || $this->output->cache(CACHE_HTML_INFO);
 		$this->load->model("rush_model");
                 
@@ -223,7 +253,7 @@ class Product extends CI_Controller
 		$p = NULL;
 		$provider_brand = array();
 		$is_preview = isset($_GET['is_preview']) && $_GET['is_preview'] == 1 ?TRUE:FALSE; 
-		if (!$ghost) $p = $this->cache->get('pdetail-'.$product_id);
+		if (!$ghost) $p = $this->cache->get('prodetail-'.$product_id);
 		if (!$p || $is_preview )
 		{
 			$p = $this->product_model->product_info($product_id); // 商品信息
@@ -264,12 +294,12 @@ class Product extends CI_Controller
 			}
 			$p->g_list = $g_list;
 
-			if(!$ghost && !$is_preview) $this->cache->save('pdetail-'.$product_id, $p, CACHE_TIME_PRODUCT);
+			if(!$ghost && !$is_preview) $this->cache->save('prodetail-'.$product_id, $p, CACHE_TIME_PRODUCT);
 		} else {
 			$g_list = $p->g_list;
 		}
 		
-		
+		//var_export($g_list);exit();
 		if(!$is_preview && !$p->is_audit && !$ghost) redirect('index');
 		
 		// 供应商售卖前五的品牌
@@ -357,10 +387,6 @@ class Product extends CI_Controller
         //产品描述说明
         $product_additional = null;
         $product_additional = $this->product_model->get_product_additional($product_id);
-
-        //获取该产品的现金券活动
-        $product_voucher = null;
-        $product_voucher = $this->product_model->get_product_voucher($product_id);
         
         // 这里获取动态的seo
         $this->load->library('lib_seo');
@@ -374,29 +400,20 @@ class Product extends CI_Controller
         $mobile = $this->session->userdata('mobile') ? $this->session->userdata('mobile') : '';
         $p->detail1 = adjust_path($p->detail1);
         $p->detail2 = adjust_path($p->detail2);
-        $campaign = $this->product_model->get_campaign($product_id);
 
-        //取得商品相关留言
-        $param=array(
-        	'tag_id'=>$product_id,
-        	'tag_type'=>1,
-        	'comment_type'=>2
-        	);		
-        $this->load->model('liuyan_model');
-        $liuyan_list = $this->liuyan_model->liuyan_list($param);
-        //var_export($liuyan_list);exit();
 
-		$this->load->view('mobile/product/pdetail',array(
-			'title'		=> $seo['title'],
+		$this->load->view('product/pdetail',array(
+			'title'		=> $p->product_name,
 			'description'	=> $seo['description'],
 			'keywords'	=> $seo['keywords'],
 			'user_name'	=> "{$this->session->userdata("user_name")}",
+			'user_id' => $this->session->userdata('user_id'),
 			'rank_name'	=> "{$this->session->userdata('rank_name')}",
 			'p'		=> $p,
 			'g_list' 	=> $p->g_list,
                         'default_sub_id' => $default_sub_id,
 			'collect_data' => get_collect_data(),
-			// 'url_map'	=> $url_map,
+//			'url_map'	=> $url_map,
                         'provider_brand' => $provider_brand,
 			'left_ad'	=> array(),
 //			'gallery'	=>$gallery,
@@ -406,10 +423,7 @@ class Product extends CI_Controller
 			'link_product_list' => $link_product_list,
 			'product_additional' => $product_additional,
 			'user_name' => $user_name,
-			'mobile' => $mobile,
-			'product_voucher' => $product_voucher,
-			'campaign' => $campaign,
-			'liuyan_list' => $liuyan_list['list']
+			'mobile' => $mobile
                                 //,
 //			'css'		=> array('css/plist.css'),
 			//'gifts_list'	=> $this->rush_model->get_campaign(),
@@ -744,30 +758,6 @@ class Product extends CI_Controller
 			));
 	}
 
-	public function autoComplete() {
-		$data = $this->input->get_post('data', null);
-		$result = '';
-	    if (isset($data) && !empty($data)) {
-	      $data = strip_tags(stripcslashes($data));
-	      $result = array();
-	      $list = array();
-	      $data = explode('-', $data);
-	      $list = $this->product_model->get_words_from_sphinx($data);
-	      $arr = array();
-	      foreach ($list as $key => $value) {
-
-	          $temp = '<li class="swipeout"> <div class="item-content"><div class="item-inner"><div class="item-title">';
-	          
-	          $temp .= '<span class="keyword">' . $value['name'] . '</span>';           
-	          $temp .=  '</div><div class="item-after"></div></div></div></li>';
-	          $arr[] = $temp;
-	      }
-	      $result =  implode(array_unique($arr));
-	      $result = '<ul>' . $result . '</ul>';
-	    }
-	    echo $result;
-	}
-
 	// 搜索自动提示
 	/**
 	* @param null
@@ -878,7 +868,7 @@ class Product extends CI_Controller
             //$this->sphinxclient->SetSelect('product_id, brand_name');
             //$cl->SetSortMode(SPH_SORT_ATTR_ASC, 'shop_price');
             //$cl->SetLimits($cur-$size, $size, $cur, 40000);
-            $res = $this->sphinxclient->Query($kw, 'base');
+            $res = $this->sphinxclient->Query($kw, 'test1');
             $count = $res['total_found'];
             if ($count){
                 $idArr = array_keys($res['matches']);
@@ -892,11 +882,9 @@ class Product extends CI_Controller
             }
 
             //搜索记录
-            if (preg_match('/[\x{4e00}-\x{9fa5}]+/u',$kw)){
-                $this->load->model('search_history_model');
-                $history = array('keyword' => $kw, 'count' => $count, 'created' => date('Y-m-d H:i'));
-                $this->search_history_model->insert($history);
-            }
+            $this->load->model('search_history_model');
+            $history = array('keyword' => $kw, 'count' => $count, 'created' => date('Y-m-d H:i'));
+            $this->search_history_model->insert($history);
         }
         $cache_key = 'searchResult-'.implode('-',$param);
         if (!isset($data)){
@@ -1044,6 +1032,117 @@ class Product extends CI_Controller
 			$this->product_model->update_product_detail($value['product_id'], $update);
 		}
     }
+
+    public function autoComplete() {
+		$data = $this->input->get_post('data', null);
+		$result = '';
+	    if (isset($data) && !empty($data)) {
+	      $data = strip_tags(stripcslashes($data));
+	      $result = array();
+	      $list = array();
+	      $data = explode('-', $data);
+	      $list = $this->product_model->get_words_from_sphinx($data);
+	      $arr = array();
+	      foreach ($list as $key => $value) {
+
+	          $temp = '<li>';
+	          
+	          $temp .= '<span class="keyword">' . $value['name'] . '</span>';           
+	          $temp .=  '</li>';
+	          $arr[] = $temp;
+	      }
+	      $result =  implode(array_unique($arr));	      
+	    }
+	    echo $result;
+	}
+
+	private function listCalendarByRange($sd, $ed, $cnt){
+
+	  //结果数据初始化
+	  $ret = array();
+	  $ret['events'] = array();
+	  $ret["issort"] =true;
+	  $ret["start"] = php2JsTime($sd);
+	  $ret["end"] = php2JsTime($ed);
+	  
+	  $ret['error'] = null;
+
+	  $data = $this->product_model->get_course_by_time($ret["start"], $ret["end"], 'week');
+	  
+	  
+	  foreach ($data as $k => &$v) {
+	  	if (isset($v['product_desc_additional']) && !empty($v['product_desc_additional'])) {
+	  		$tmp = json_decode($v['product_desc_additional'], true);	  		
+	  		$v['course_end_date'] = isset($tmp['desc_waterproof']) ? strtotime($tmp['desc_waterproof']) : 0;
+	  		$v['location'] = isset($tmp['desc_crowd']) ? $tmp['desc_crowd'] : '';	  		
+	  	}
+	  	$v['course_start_date'] = strtotime(($v['package_name']));
+	  	//$v['course_end_date'] = strtotime(($v['package_name'])) + 3600 * 8;
+	  	$rsd = $v['course_start_date'];
+	    $red = $v['course_end_date'];	  
+	    
+	    
+	  	$alld = $red - $rsd >= 24 * 3600 ? 1 : 0;
+
+	  	$alld = 0;
+	  	
+	  	$ret['events'][] = array(
+	  	  $v['product_id'],
+	  	  //'【' . $v['location'] . '】' . $v['product_name'] . $v['subhead'],
+	  	  $v['product_name'] . $v['subhead'],
+	  	  php2JsTime($v['course_start_date']),
+	  	  php2JsTime($v['course_end_date']),
+	  	  $alld,
+	  	  $alld, //more than one day event
+	  	  0,//Recurring event
+	  	  rand(-1,13),
+	  	  1, //editable
+	  	  $v['location'], 
+	  	  ''//$attends
+	  	);
+	  }
+
+	  return $ret;
+	}
+
+	private function listCalendar($day, $type){
+	  $this->load->helper('wdCalendar');
+	  //$phpTime = js2PhpTime($day);
+	  $phpTime = strtotime($day);
+	  
+	  switch($type){
+	    case "month":
+	      $st = mktime(0, 0, 0, date("m", $phpTime), 1, date("Y", $phpTime));
+	      $et = mktime(0, 0, -1, date("m", $phpTime)+1, 1, date("Y", $phpTime));
+	      $cnt = 50;
+	      break;
+	    case "week":
+	      //suppose first day of a week is monday 
+	      $monday  =  date("d", $phpTime) - date('N', $phpTime) + 1;
+	      //echo date('N', $phpTime);
+	      $st = mktime(0,0,0,date("m", $phpTime), $monday, date("Y", $phpTime));
+	      $et = mktime(0,0,-1,date("m", $phpTime), $monday+7, date("Y", $phpTime));
+	      $cnt = 20;
+	      break;
+	    case "day":
+	      $st = mktime(0, 0, 0, date("m", $phpTime), date("d", $phpTime), date("Y", $phpTime));
+	      $et = mktime(0, 0, -1, date("m", $phpTime), date("d", $phpTime)+1, date("Y", $phpTime));
+	      $cnt = 50;
+	      break;
+	  }
+	  //echo $st . "--" . $et;
+	  return $this->listCalendarByRange($st, $et, $cnt);
+	}
+
+	function course_data() {	
+		$curdate = $this->input->get('curdate', true);
+		$ret = $this->listCalendar($curdate, 'month');
+		echo json_encode($ret);
+	}
+
+	public function course_all(){           
+		$this->load->view('product/course_all', array('index' => 3));
+	}
 
 }
 

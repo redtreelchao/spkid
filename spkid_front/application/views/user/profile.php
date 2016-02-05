@@ -1,521 +1,669 @@
-<?php if ($full_page): ?>
-    <?php include APPPATH . "views/common/header.php"; ?>
-    <link rel="stylesheet" href="<?php print static_style_url('css/ucenter.css'); ?>" type="text/css" />
-    <script type="text/javascript">
-        function add_baby()
-            {
-                var v_flag = true;
-                $('#newBabyBox .newBaby').each(function(i){
-                    if(!v_flag) return;
-                    var container = $(this);
-                    var v_name = $("input[name=baby_name]", container).val();
-                    var v_sex = $('input.baby_sex:checked', container).val();
-                    var v_year = $('select[name=baby_birthdayYear]', container).val();
-                    var v_month = $('select[name=baby_birthdayMonth]', container).val();
-                    var v_day = $('select[name=baby_birthdayDay]', container).val();
-                    if (v_name == undefined || v_sex == undefined || v_year == '' || v_month == '' || v_day == '') {
-                        v_flag = false;
-                    }
-                });
-                if (v_flag == false) {
-                    alert('请先将已添加的宝宝资料填写完整');
-                    return fales;
-                }
-                var obj = $('div.newBaby_tmp').clone();
-                $('#newBabyBox').append(obj);
-                $(':radio', obj).attr('name', new Date().getTime());
-                obj.attr('class', 'newBaby').show();
-            }
-        $(function () {
-                $('.profileEdit').click(function () {
-                    $('a[name=add_submit]').parent().parent().parent().show();
-                });
-                if($('.newEditBaby').length<1){
-                        add_baby();
-                    }
+<?php include APPPATH."views/common/user_header.php"; ?>
+<style>
+    canvas {
+        border: solid thin #ccc;
+        cursor: pointer;
+    }
 
-                });
-        var is_email_check = 0;
-        function check_add_form()
-        {
-            // 取消错误显示的样式
-            $('.list_block_content input').each(function(i){
-                if($(this).css('border-color')=='rgb(255, 0, 0)'){
-                    $(this).css('border-color', '');
-                }
-            });
-            $('.list_block_content select').each(function(i){
-                if($(this).css('border-color')=='rgb(255, 0, 0)'){
-                    $(this).css('border-color', '');
-                }
-            });
-            var email = document.getElementById('email').value;
-            var mobile = document.getElementById('mobile').value;
-            var user_name = $('input[type=hidden][name=user_name]').val();
-            var real_name = $('input[type=text][name=real_name]').val();
-            var sex = $('input[type=radio][name=sex]:checked').val();
-            var birthdayYear = $('select[name=birthdayYear]').val();
-            var birthdayMonth = $('select[name=birthdayMonth]').val();
-            var birthdayDay = $('select[name=birthdayDay]').val();
-            var real_name_len = real_name.replace(/[^\x00-\xff]/g, "**").length;
-            var user_name_len = user_name.replace(/[^\x00-\xff]/g, "**").length;
-            var favoriteCategory = $('select[name=favoriteCategory]').val();
-            $('input[type=text][name=user_name]').css("border-color","");
-            $('input[type=text][name=real_name]').css("border-color","");
-            //$('input[type=text][name=baby_name]').css("border-color","");
+    #canvasContainer {
+        position: relative;
+    }
 
-                    var obj = null;
-                    var err_msg = '';
+    #picker {
+        position: absolute;
+        border: solid thin #ccc;
+        cursor: move;
+        overflow: hidden;
+        z-index: 2;
+    }
 
-                    $("#msgShow").html(err_msg);
-                    if(err_msg == '' && $.trim(user_name) =='')
-                    {
-                        err_msg = "请输入您的昵称";
-                        obj = $('input[type=text][name=user_name]');
-                    }
+    #resize {
+        width: 0;
+        height: 0;
+        border-bottom: 15px solid rgba(200,200,200,0.8);
+        border-left: 15px solid transparent;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        cursor: se-resize;
+        z-index: 3;
+    }
 
-                    if(err_msg == '' && user_name_len < 3)
-                    {
-//                        err_msg = '您的昵称过短，不能少于3个字符';
-//                        obj = $('input[type=text][name=user_name]');
-                    }
+    .a-upload {
+        padding: 4px 10px;
+        height: 20px;
+        line-height: 20px;
+        position: relative;
+        cursor: pointer;
+        color: #888;
+        background: #fafafa;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+        display: inline-block;
+        *display: inline;
+        *zoom: 1
+    }
 
-                    if(err_msg == '' && user_name_len > 12)
-                    {
-//                        err_msg = '您的昵称过长，不能超过12个字符';
-//                        obj = $('input[type=text][name=user_name]');
-                    }
+    .a-upload  input {
+        position: absolute;
+        font-size: 100px;
+        right: 0;
+        top: 0;
+        opacity: 0;
+        filter: alpha(opacity=0);
+        cursor: pointer;
+    }
 
-                    if(err_msg == '' && $.trim(real_name) =='')
-                    {
-                        err_msg = "请填写真实姓名";
-                        obj = $('input[type=text][name=real_name]');
-                    }
+    .a-upload:hover {
+        color: #444;
+        background: #eee;
+        border-color: #ccc;
+        text-decoration: none;
+    }
 
-                    if(err_msg == '' && real_name_len > 10)
-                    {
-                        err_msg = '您的姓名过长，不能超过10个字符';
-                        obj = $('input[type=text][name=real_name]');
-                    }
-                    sex = sex == null ? 0 : sex;
-                    if(err_msg == '' && sex ==0)
-                    {
-                        err_msg = "请选择您的性别";
-                        obj = $('select[name=sex]');
-                    }
+    
+    select {
+        border: solid 1px #c7c8cc;      
+        appearance:none;
+        -moz-appearance:none;
+        -webkit-appearance:none;
+        padding-right: 14px;
+        background: url("<?php echo static_style_url('pc/images/arrows.png');?>") no-repeat scroll right center transparent;
+        font-size: 12px;
+        width: 250px;
+        outline: medium none;
+        height: 26px;
+        line-height: 26px;
+        box-shadow: 2px 3px 3px #e7e7e7 inset;
+        margin-left: -10px;
+        width: 273px;
+        height: 30px;
+    }
+    select option p {
+        padding:4px 4px;
+    }
+    select::-ms-expand { display: none; }
+    .save_info {
+        display:inline-block;
+        background-color: rgb(0,174,249);
+        color: white;
+        width: 6em;
+        border: none;
+        margin-top: 40px;
+        margin-left: 97px;
+        text-align:center;
+    }
 
-                    if(err_msg == '' && birthdayYear == '')
-                    {
-                        err_msg = "请选择您的出生年份";
-                        obj = $('select[name=birthdayYear]')
-                    }
+    ul.choose-picture li img.selected {
+        border:1px solid rgba(255, 0, 0, 0.5);
+    }
+    
+    .pass-portrait-filebtn {
+        -webkit-appearance: button;
+        cursor: pointer;
+    }
+    
 
-                    if(err_msg == '' && birthdayMonth =='')
-                    {
-                        err_msg = "请选择您的出生月份";
-                        obj = $('select[name=birthdayMonth]')
-                    }
+</style>
+    <div class="personal-center-right">
+                   
+    <h1 class="order-details-bt">个人设置</h1>
+         <div class="personal-rr">
+              <ul class="personal-bt clearfix">
+              <li data-value="0" class="current">基本资料</li>
+              <li data-value="1">头像照片</li>
+              </ul>
+              
+             <div class="personal-info-tab"> 
+                  <ul class="personal-list">
+                  <form class="user_info">
+                      <li><label>昵　　称：</label><input name="user_name" type="text" class="mod-cus-input -mod-cus-red" value="<?php echo $user->user_name?>" ><!-- <em class="personal-empt">不能为空</em> --></li>
+                      <li><label>姓　　名：</label><input name="real_name" type="text" class="mod-cus-input" value="<?php echo $user->real_name?>" ></li>
+                      <li><label>职　　务：</label><input name="company_position" type="text" class="mod-cus-input" value="<?php echo $user->company_position?>" ></li>
+                      <li>
+                        <label>单位性质：</label>                    
+                        <select name="company_type">
+                          <?php foreach ($values as $key => $value): ?>
+                        
+                          <option value="<?php echo $value;?>">
+                            <p><?php echo $company_type[$key];?></p>
+                          </option>
+                          <?php endforeach;?>
+                        </select>
 
-                    if(err_msg == '' && birthdayDay =='')
-                    {
-                        err_msg = "请选择您的出生日期";
-                        obj = $('select[name=birthdayDay]')
-                    }
-                    if(err_msg == '' && favoriteCategory =='')
-                    {
-                        err_msg = "请选择您最喜欢的分类";
-                        obj = $('select[name=favoriteCategory]')
-                    }
-                    var v_baby_list = {};
-                    var v_flag = true;
-                     $('#newBabyBox .newBaby').each(function(i){
-                            if(!v_flag) return;
-                            j=i+1;
-                            var container = $(this);
-                            var v_name = $.trim($("input[name=baby_name]", container).val());
-                            var v_sex = $('input[type=radio].baby_sex:checked', container).val();
-                            var v_year = $('select[name=baby_birthdayYear]', container).val();
-                            var v_month = $('select[name=baby_birthdayMonth]', container).val();
-                            var v_day = $('select[name=baby_birthdayDay]', container).val();
-                            var baby_name_len = v_name.length;
-                            // 如果只有一个 baby 表单并且没有填写任何信息，pass
-                            if(i==0 && v_name=='' && v_sex==undefined && v_year=='' && v_month=='' && v_day=='' && $('#newBabyBox .newBaby').length==1){
-                                return;
-                            }
-                            if (v_name=='') {
-                                err_msg = "请输入您第" + j + "个宝宝的姓名";
-                                obj = $("input[name=baby_name]", container);
-                                v_flag = false;
-                                return;
-                            }
-                            if (baby_name_len>10) {
-                                err_msg = "您第" + j + "个宝宝的姓名过长";
-                                obj = $("input[name=baby_name]", container);
-                                v_flag = false;
-                                return;
-                            }
-
-                            if (v_sex == undefined) {
-                                err_msg = "请选择您第" + j + "个宝宝的姓别";
-                                obj = $('input[name=mbaby_sex]:checked', container);
-                                v_flag = false;
-                                return;
-                            }
-
-                            if (v_year == '') {
-                                err_msg = "请选择您第" + j + "个宝宝的出生年份";
-                                obj = $('select[name=baby_birthdayYear]', container);
-                                v_flag = false;
-                                return;
-                            }
-
-                            if (v_month == '') {
-                                err_msg = "请选择您第" + j + "个宝宝的出生月份";
-                                obj = $('select[name=baby_birthdayMonth]', container);
-                                v_flag = false;
-                                return;
-                            }
-
-                            if (v_day == '') {
-                                err_msg = "请选择您第" + j + "个宝宝的出生月份";
-                                obj = $('select[name=baby_birthdayDay]', container);
-                                v_flag = false;
-                                return;
-                            }
-                            
-                            v_baby_list[i] = {};
-                            v_baby_list[i]['baby_name'] = v_name;
-                            v_baby_list[i]['baby_sex'] = v_sex;
-                            v_baby_list[i]['baby_birthdayYear'] = v_year
-                            v_baby_list[i]['baby_birthdayMonth'] = v_month;
-                            v_baby_list[i]['baby_birthdayDay'] = v_day
-                    });
-		
-                    if(err_msg != '')
-                    {
-                        if(obj)
-                        {
-                            obj.css("border-color","red");
-                        }
-                        $("#msgShow").html(err_msg);
-                        //alert(err_msg);
-                        return false;
-                    }
-
-                    $('input[type=button][name=add_submit]').attr("disabled", "disabled");
-
-                    $.ajax({
-                        url:'/user/profile_edit',
-                        data:{is_ajax:true,email:email,mobile:mobile,user_name:user_name,real_name:real_name,sex:sex,
-                            birthdayYear:birthdayYear,birthdayMonth:birthdayMonth,birthdayDay:birthdayDay,favoriteCategory:favoriteCategory,
-                            baby_list:v_baby_list,
-                            rnd:new Date().getTime()},
-                        dataType:'json',
-                        type:'POST',
-                        success:function(result){
-                            if(result.error==0){
-                                alert(result.msg);
-                                window.location.href = window.location.href;
-                            }else{
-                                alert(result.msg);
-                            }
-                            $('input[type=button][name=add_submit]').attr("disabled", "");
-                        },
-                        error:function(err) {
-                            alert("提交失败，请重新尝试！");
-                            location.href = location.href;
-                        }
-                    });
-
-                    return false;
-                }
-
-                function valid_email()
-                {
-                    if (is_email_check == 1)
-                    {
-                        return false;
-                    }
-                    var email = document.getElementById('email').value;
-                    if ($.trim(email) =='')
-                    {
-                        alert('请输如正确的Email地址');
-                        return false;
-                    }
-                    if (isEmail(email) == false)
-                    {
-                        alert('请输如正确的Email地址');
-                        return false;
-                    }
-                    $('#email_msg').html(" 正在发送中");
-                    is_email_check = 1;
-                    $.ajax({
-                        url:'/user/send_email_valid',
-                        data:{is_ajax:true,email:email,rnd:new Date().getTime()},
-                        dataType:'json',
-                        type:'POST',
-                        success:function(result){
-                            if(result.error==0){
-                                alert(result.msg);
-                                $('#email_msg').html(" 发送完成");
-                                $('input[type=text][id=email]').attr("readOnly", "readonly");
-                                is_email_check = 0;
-                            }else{
-                                alert(result.msg);
-                                $('#email_msg').html(" 发送失败");
-                                is_email_check = 0;
-                            }
-                        }
-                    });
-                    return false;
-                }
-
-
-                function change_region (region_id, num, target)
-                {
-                    if (region_id > 0)
-                    {
-                        $.ajax({
-                            url:'/user/region_change',
-                            data:{is_ajax:true,region_id:region_id,type:num,rnd:new Date().getTime()},
-                            dataType:'json',
-                            type:'POST',
-                            success:function(result){
-                                if(result.error==0){
-                                    var sel = document.getElementById(target);
-                                    sel.length = 1;
-                                    sel.selectedIndex = 0;
-                                    if (result.regions)
-                                    {
-                                        for (i = 0; i < result.regions.length; i ++ )
-                                        {
-                                            var opt = document.createElement("OPTION");
-                                            opt.value = result.regions[i].region_id;
-                                            opt.text  = result.regions[i].region_name;
-                                            sel.options.add(opt);
-                                        }
-                                    }
-                                }else{
-                                    alert(result.msg);
-                                }
-                            }
-                        });
-                    }
-                }
-
-                function isEmail(email)
-                {
-                    var reg1 = /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/;
-                    return reg1.test( email );
-                }
-    </script>
-    <div id="content">
-        <div class="now_pos">
-            <a href="/">首页</a>
-            >
-            <a href="/user">会员中心</a>
-            >
-            <a class="now">基本资料</a>
-                <!-- come soon
-		<a class="notice" href="/">全场满200减20!</a>
-                -->
-        </div>
-        <div class="ucenter_left">
-            <?php include APPPATH . "views/user/left.php"; ?>
-        </div>
-        <div class="ucenter_main">
-            <div class="list_block" id="listdiv">
-            <?php endif; ?>
-            <h2>
-                编辑个人资料
-            </h2>
-            <div class="list_block_content profileList">
-                <table width="748" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td>
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                <tr>
-                                    <th colspan="2">
-                                        <font class="font14">绑定手机、邮箱</font>
-                                        <font class="bred bold"><?php if (!$user->email_validated || !$user->mobile_checked): ?>（注册并验证，即送<?php echo $user->arr_invite_rank->regist_point ?>积分！）<?php endif; ?></font>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <td width="12%" align="right">会员帐号 ：</td>
-                                    <td width="88%"><?php echo isset($user->email) ?  $user->email : $user->mobile; ?>
-                                        <input type="hidden" name="user_name" id="user_name" value="<?php echo $user->user_name ?>" />
-                                    </td>
-                                </tr>
-                                
-                                    <tr <?php if($user->union_sina || $user->union_qq || $user->union_zhifubao) print 'style="display:none;"';?>>
-                                        <td align="right">绑定邮箱 ：</td>
-                                        <td>
-                                            <input type="text" name="email" id="email" value="<?php echo $user->email ?>" <?php if (!empty($user->email)) { ?> readonly="readonly"  <?php } ?>/>
-                                            <!-- <font class="w150 inblock"><?php echo $user->email ?></font>已验证 -->
-                                            <?php if ($user->email_validated): ?>已验证<?php else: ?><a href="#" onclick="valid_email();return false;" class="btn_g_122">去邮箱验证</a><?php endif; ?>
-                                            <span id="email_msg"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">
-                                            <span class="red l marginL10">*</span>绑定手机 ：
-                                        </td>
-                                        <td>
-                                            <input type="hidden" id="mobile" value="<?php echo $user->mobile ?>" />
-                                            <?php if (!empty($user->mobile)): ?>
-                                                <span  class="c_o"><?php echo $user->mobile ?></span>
-                                            <?php endif; ?><?php if ($user->mobile_checked): ?>已验证<?php else: ?>
-                                            <a class="btn_g_122" id="mobileVv" href="/user/validate_mobile" onclick="void(0);" >验证手机</a>
-                                            <!-- come soon <a class="btn_g_122" id="mobileV">免费获取短信验证码</a> -->
-                                                <?php endif; ?>
-                                            <div class="inblock" id="countdown">
-                                                <a class="btn_gray_93">重新获取</a>
-                                                <font>已发送,1分钟后可重新获取</font>
-                                            </div>
-                                        </td>
-                                    </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-                <!--我的资料-->
-                <div class="myInfoDiv">
-		            <h5>
-			        	<font class="font14">我的资料</font>
-			        	<input type="hidden" name="real_name" id="real_name" value="<?php echo (isset($user->real_name) ? $user->real_name : "default"); ?>" />
-			        	<font class="bred bold">（完善资料，即送<?php echo $user->arr_invite_rank->profile_point ?>积分！）</font>
-		        	</h5>
-		        	<div class="editorBox">
-		        		<h4>
-		        			<p class="pLeft">真实姓名：</p>
-		        			<p name="perEdit" class="pRight"><input type="text" name="real_name" value="<?php print $user->real_name;?>"></p>
-		        		</h4>
-		        		<h4>
-		        			<p class="pLeft">我的性别：</p>
-		        			<p name="perEdit" class="pRight">
-		        				<label for="sex_man1">
-                                    <input id="sex_man1" class="inputRadio" type="radio" name="sex" value="1" <?php echo $user->sex == 1 ? 'checked' : ''; ?>>
-                                    <font>男</font>
-                                </label>
-                                <label for="sex_women1">
-                                    <input id="sex_women1" class="inputRadio" type="radio" name="sex" value="2" <?php echo $user->sex == 2 ? 'checked' : ''; ?>>
-                                    <font>女</font>
-                                </label>
-                            </p>
-		        		</h4>
-		        		<h4>
-		        			<p class="pLeft">我的生日：</p>
-		        			<p name="perEdit" class="pRight">
-                                <select name="birthdayYear">
-                                    <option value="">请选择年</option>
-                                    <?php for ($i = 1941; $i < 2010; $i++) { ?>
-                                        <option <?php echo!empty($user->birthday) && substr($user->birthday, 0, 4) == $i ? 'selected' : '' ?> value="<?php echo $i ?>"><?php echo $i ?></option>
-                                    <?php } ?>
-                                </select>
-                                <select name="birthdayMonth">
-                                    <option value="">请选择月</option>
-                                    <?php for ($i = 1; $i <= 12; $i++) { ?>
-                                        <option <?php echo!empty($user->birthday) && substr($user->birthday, 5, 2) == sprintf("%02d", $i) ? 'selected' : '' ?> value="<?php echo sprintf("%02d", $i) ?>"><?php echo sprintf("%02d", $i) ?></option>
-                                    <?php } ?>
-                                </select>
-                                <select name="birthdayDay">
-                                    <option value="">请选择日</option>
-                                    <?php for ($i = 1; $i <= 31; $i++) { ?>
-                                        <option <?php echo!empty($user->birthday) && substr($user->birthday, 8, 2) == sprintf("%02d", $i) ? 'selected' : '' ?> value="<?php echo sprintf("%02d", $i) ?>"><?php echo sprintf("%02d", $i) ?></option>
-                                    <?php } ?>
-                                </select>
-		        			</p>
-		        		</h4>
-		        		<h4>
-		        			<p class="pLeft">最喜欢的分类 ：</p>
-		        			<p name="perShow" class="pRight" style="display:none;"><?php print $user->favorite_category_name;?></p>
-		        			<p name="perEdit" class="pRight">
-		        				<select name="favoriteCategory" style="width:120px;">
-                                    <option value="">请选择</option>
-                                    <?php foreach($category_list as $cat):?>
-                                    <option value="<?php print $cat['category_id'];?>" <?php print $cat['category_id']==$user->favorite_category?'selected':'';?>><?php print $cat['category_name'];?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </p>
-		        		</h4>
-		        		
-		        	</div>
-		        </div>   
-                
-					
-                <!-- 宝宝资料 -->
-		        <div class="myInfoDiv">
-		            <h5>
-			        	<font class="font14">宝宝资料</font>
-			        	<a id="btnAddBabyInfo" class="wGreen profileEdit" >[新增]</a>
-		        	</h5>
-		        	<!-- <h4><p><span>宝宝姓名 ：</span><s>东子</s><span>宝宝性别 ：</span><s>男</s><span>宝宝生日 ：</span><s>2013-10-01</s></h4> -->
-		        	<?php foreach ($user->baby_list as $baby) : ?>
-					<div class="newEditBaby"><p><span>宝宝姓名 ：</span><?=$baby['baby_name']?><span>宝宝性别 ：</span><?php echo $baby['baby_sex'] == 1 ? '男' : ($baby['baby_sex'] == 2 ? '女' : '') ?> <span>宝宝生日 ：</span><?= substr($baby['baby_birthday'], 0, 4) ?>年<?= substr($baby['baby_birthday'], 5, 2) ?>月<?= substr($baby['baby_birthday'], 8, 2) ?>日</p></div>
-		            <?php endforeach; ?>
-				</div>	
-
-		        <!-- 新增宝宝资料 -->
-		        <div id="newBabyBox">
-            		
-            		
-            	</div>
-                            <div class="bottomCtrl">
-                            <input id="baby_id" type="hidden" value="0"/>
-                                <a name="add_submit" onclick="check_add_form();" class="btn_g_75">提交</a>&nbsp;
-                                <font id="msgShow" class="red"></font>
-                                <font class="bottomText">请如实填写您的信息，<?php print SITE_NAME;?>不会透露您的私人信息，我们会根据信息为您提供更好的商品和服务！</font>
-                            </div>
-
+                      </li>
+                      <li><label>单位名称：</label><input name="company_name" type="text" class="mod-cus-input" value="<?php echo $user->company_name?>"></li>
+                      <a class="save_info">保存</a>
+                    </form>
+                  </ul>
             </div>
-            <?php if ($full_page): ?>
-            </div>
+            
+            <div class="personal-info-tab" style="display:none;">
+                 <div class="profile-pic clearfix">
+                      <div class="profile-left">
+                          <div class="touxiang-jl">
+                                <p class="pass-portrain-commonp">方法一：选择本地照片，上传编辑自己的头像</p>
+                                <div class="pass-portrait-openimg clearfix">
+                                    <form id="uploadForm">
+                                          <a href="javascript:;" class="a-upload">
+                                            <input type="file" id="up_file" value="" class="pass-portrait-filebtn" name="user_advar">选择文件
+                                          </a>
+                                          <div id="canvasContainer">
+                                              <canvas id="container"></canvas>
+                                              <div id="picker">
+                                                  <div id="resize"></div>
+                                              </div>
+                                          </div>
+                                          
+                                          <span class="pass-portrait-msg">支持jpg、jpeg、gif、png、bmp格式的图片</span>
+                                          
+                                    </form>
+                                 </div>
+                                <p class="pass-portrain-commonp">方法二：选择悦牙网为您推荐的头像</p>
+                                <ul class="choose-picture clearfix">
+                                   <li><img class="selected" src="<?php echo static_url('mobile/touxiang/img1.jpg')?>" ></li>
+                                   <li><img src="<?php echo static_url('mobile/touxiang/img2.jpg')?>" ></li>
+                                   <li><img src="<?php echo static_url('mobile/touxiang/img3.jpg')?>" ></li>
+                                   <li><img src="<?php echo static_url('mobile/touxiang/img4.jpg')?>" ></li>
+                                   <li><img src="<?php echo static_url('mobile/touxiang/img5.jpg')?>" ></li>
+                                   <li><img src="<?php echo static_url('mobile/touxiang/img6.jpg')?>" ></li>
+                                   <li><img src="<?php echo static_url('mobile/touxiang/img7.jpg')?>" ></li>
+                                   <li><img src="<?php echo static_url('mobile/touxiang/img8.jpg')?>" ></li>
+
+                               </ul>
+                               <div class="pass-portrait-save "><input id="submit_upload" type="button" class="pass-portrait-savebtn" value="保存头像"></div> 
+                           </div>
+                   </div>
+
+                   <div class="profile-right">
+                         <p class="image-preview">头像预览</p>
+                         <p class="big-head">
+
+                          <canvas id="res1" class="big-head-img"></canvas>
+
+                          <span>100*100</span>
+                          </p>
+                         <p class="big-head2">
+                          <canvas id="res2" class="big-head-img2"></canvas>                         
+                         <span>50*50</span>
+                         </p>
+                         <p class="big-head3">
+                          <canvas id="res3" class="big-head-img3"></canvas>
+                         <span>20*20</span>
+                         </p>
+                         <!--
+                         <div class="user-picture">
+                              <p>使用过头像</p>
+                               <ul class="choose-picture  choose-picture2 clearfix">
+                               <li><img src="images/profile-pictures.png"></li>
+                               <li><img src="images/profile-pictures.png"></li>
+                               <li><img src="images/profile-pictures.png"></li>
+                               <li><img src="images/profile-pictures.png"></li>
+                               <li><img src="images/profile-pictures.png"></li>
+                               <li><img src="images/profile-pictures.png"></li>
+                              </ul>
+                         </div>
+                         -->
+                   </div>
+              </div> 
+         </div>
         </div>
     </div>
-    <div class="newBaby_tmp" style="display: none;">
-            <div class="newBabyLeft">
-                <p><span>宝宝姓名 ：</span> <input class="newInput" type="text" name="baby_name"><span>宝宝性别 ：</span>
-                    <label>
-                        <input class="inputRadio baby_sex" type="radio"  value="1">
-                        <font>男</font>
-                    </label>
-                    <label>
-                        <input class="inputRadio baby_sex" type="radio"  value="2">
-                        <font>女</font>
-                    </label>
-                    &nbsp;&nbsp;
-                    <span>宝宝生日 ：</span>
-                    <select name="baby_birthdayYear" class="birthday">
-                        <option value="">年</option>
-                        <?php for ($i = 1995; $i <= intval(date('Y')); $i++): ?>
-                            <option value="<?php echo $i ?>"><?php echo $i ?></option>
-                        <?php endfor; ?>
-                    </select>
-                    <select name="baby_birthdayMonth" class="birthday">
-                        <option value="">月</option>
-                        <?php for ($i = 1; $i <= 12; $i++): ?>
-                            <option value="<?php echo sprintf("%02d", $i) ?>"><?php echo sprintf("%02d", $i) ?></option>
-                        <?php endfor; ?>
-                    </select>
-                    <select name="baby_birthdayDay" class="birthday">
-                        <option value="">日</option>
-                        <?php for ($i = 1; $i <= 31; $i++): ?>
-                            <option value="<?php echo sprintf("%02d", $i) ?>"><?php echo sprintf("%02d", $i) ?></option>
-                        <?php endfor; ?>
-                    </select>
-                    <font class="c66">生日不可更改，请仔细填写！</font>
-                </p>
+</div>
+</div>
+</div>
 
-            </div>
-            <div class="newBabyRigth">
-                <b class="subBabyInfo" onclick="$(this).parent().parent().remove();"></b>
-            </div>
-        </div>
-	<script type="text/javascript">
-$(function(){
-	$('#btnAddBabyInfo').click(add_baby);
-})
-	
+
+<script>
+  var advar_type = 0; // 0表示用户没有进行任何选择,1表示用户选择上传，2表示用户选择用提供图片
+  function fileChange(target){  
+    advar_type = 1;
+    //检测上传文件的类型 
+    var imgName = document.all.up_file.value;
+    var ext,idx;   
+    if (imgName == ''){  
+       document.all.submit_upload.disabled=true; 
+       alert("请选择需要上传的文件!");  
+       return; 
+    } else {   
+        idx = imgName.lastIndexOf(".");   
+        if (idx != -1){   
+            ext = imgName.substr(idx+1).toUpperCase();   
+            ext = ext.toLowerCase( ); 
+           // alert("ext="+ext);
+            if (ext != 'jpg' && ext != 'png' && ext != 'jpeg' && ext != 'gif' && ext != 'bmp'){
+              document.all.submit_upload.disabled=true;   
+              alert("只能上传.jpg  .png  .jpeg  .gif .bmp类型的文件!"); 
+              return;  
+            }   
+        } else {  
+          document.all.submit_upload.disabled=true; 
+          alert("只能上传.jpg  .png  .jpeg  .gif .bmp类型的文件!"); 
+          return;
+        }   
+    }
+    
+    //检测上传文件的大小        
+    var isIE = /msie/i.test(navigator.userAgent) && !window.opera;  
+    var fileSize = 0;           
+    if (isIE && !target.files){       
+        var filePath = target.value;       
+        var fileSystem = new ActiveXObject("Scripting.FileSystemObject");          
+        var file = fileSystem.GetFile (filePath);       
+        fileSize = file.Size;      
+    } else {      
+        fileSize = target.files[0].size;       
+    }     
+
+    var size = fileSize / 1024*1024;   
+
+    if(size>(1024* 1024 * 5)){    
+      document.all.submit_upload.disabled=true;
+          alert("文件大小不能超过5MB");   
+          return;
+      }else{
+      document.all.submit_upload.disabled=false;
+    }
+  }
+
+ $(".personal-bt li").bind("click", function () {
+
+        $(".personal-bt li").removeClass("current");
+        $(this).addClass("current");
+        var i = $(this).attr("data-value");
+        $(".personal-info-tab").hide();
+        $(".personal-info-tab:eq(" + i + ")").show();
+    });
+
+ $(function(){
+    var is_ok = true;
+
+    $('.user_info input').click(function(){
+        if (!is_ok) {
+            $(this).removeClass('mod-cus-red');
+            $(this).siblings('.personal-empt').remove();    
+            is_ok = true;
+        };        
+    });
+
+    $('.save_info').click(function(){
+        $('.mod-cus-red').removeClass('mod-cus-red');
+        $('.personal-empt').remove();
+        $('.user_info input').each(function(){
+            if (!$(this).val()) {
+                is_ok = false;
+                $(this).addClass('mod-cus-red');
+                $(this).after('<em class="personal-empt">不能为空</em>');
+            };
+        });
+        
+        if (is_ok) {
+            $.ajax({
+                type:'POST',
+                url:'/user/edit',
+                data:$('.user_info').serialize(),
+                dataType:'json',
+                success:function(data, textStatus){
+                    if (data.msg) {
+                        alert(data.msg);
+                    }
+                },
+                error:function(xhr, textStatus, errorThrown) {
+
+                },
+                complete:function(){
+                    is_ok = true;
+                }
+
+            });
+        } else {
+            return false;
+        }
+    });
+
+    $('.choose-picture li img').click(function(){
+        advar_type = 2;
+        $('.choose-picture li img.selected').removeClass('selected');
+        $(this).addClass('selected');
+
+        $('.big-head img, .big-head2 img, .big-head3 img').attr('src', $(this).attr('src'));
+    });
+
+    $('.pass-portrait-savebtn').click(function(){
+      if (advar_type == 2) {
+        //保存头像
+        var advar = $('.choose-picture li img.selected').attr('src');
+        advar_ = advar.split('/').pop();
+        $.post('/user/save_advar', {advar:advar_}, function(data){
+          alert('更新成功');
+        });
+        return;  
+      } else if(advar_type == 1) {
+        /*var data = new FormData($('#uploadForm')[0]);
+        
+        $.ajax({url:'/user/profile_upload', data:data, cache:false, method:'POST', dataType:'json', contentType:false, processData: false, success:function(data){
+            if (data.uploaded){
+                console.log(data);
+                alert('更新成功');
+            }
+        }
+        });*/
+        var fileServer = '/user/profile_upload';
+        var imgData = $("#res1")[0].toDataURL("png");
+        imgData = imgData.replace(/^data:image\/(png|jpg);base64,/, "");
+        
+
+        var blobBin = atob(imgData);
+        var array = [];
+        for (var i = 0; i < blobBin.length; i++) {
+            array.push(blobBin.charCodeAt(i));
+        }
+        var blob = new Blob([new Uint8Array(array)], { type: 'image/png' });
+        var file = new File([blob], "user_advar.png", { type: 'image/png' });
+        var formdata = new FormData();
+        formdata.append("user_advar", file);
+        $.ajax({
+            type: 'POST',
+            url: fileServer,
+            data: formdata,
+            processData: false,
+            contentType: false,
+            dataType:'json',
+            success: function (msg) {
+                console.log(msg);
+                alert('更新成功');
+            }
+        });
+        return;
+      } else {
+        alert('未选择图片');
+        return;
+      }
+      
+
+        
+    });
+ });
 </script>
-    <?php include APPPATH . 'views/common/footer.php'; ?>
-    <?php endif; ?>
+
+<script>
+    $(function () {
+        var canvas = document.getElementById("container"),
+            context = canvas.getContext("2d"),
+            //文件服务器地址
+            fileServer = null,
+            //适配环境，随时修改事件名称
+            eventName = { down: "mousedown", move: "mousemove", up: "mouseup", click: "click" };
+        //////////canvas尺寸配置
+        var canvasConfig = {
+            //容器canvas尺寸
+            width: 400,
+            height: 300,
+            //原图放大/缩小
+            zoom: 1,
+            //图片对象
+            img: null,
+            //图片完整显示在canvas容器内的尺寸
+            size: null,
+            //图片绘制偏移，为了原图不移出框外，这个只能是负值or 0
+            offset: { x: 0, y: 0 },
+            //当前应用的滤镜
+            filter: null
+        }
+        canvas.width = canvasConfig.width;
+        canvas.height = canvasConfig.height;
+        ///////////设置选择工具配置
+        var config = {
+            //图片选择框当前大小、最大大小、最小大小
+            pickerSize: 100,
+            minSize: 50,
+            maxSize: 200,
+            x: canvas.width / 2 - 100 / 2,
+            y: canvas.height / 2 - 100 / 2
+        }
+        /////////////结果canvas配置
+        var resCanvas = [$("#res1")[0].getContext("2d"), $("#res2")[0].getContext("2d"), $("#res3")[0].getContext("2d")];
+        //结果canvas尺寸配置
+        var resSize = [100, 50, 32]
+        resSize.forEach(function (size, i) {
+            $("#res" + (i + 1))[0].width = size;
+            $("#res" + (i + 1))[0].height = size;
+        });
+        //////// 滤镜配置
+        var filters = [];
+        filters.push({
+            name: "灰度", func: function (pixelData) {
+                //r、g、b、a
+                //灰度滤镜公式： gray=r*0.3+g*0.59+b*0.11
+                var gray;
+                for (var i = 0; i < canvasConfig.width * canvasConfig.height; i++) {
+                    gray = pixelData[4 * i + 0] * 0.3 + pixelData[4 * i + 1] * 0.59 + pixelData[4 * i + 2] * 0.11;
+                    pixelData[4 * i + 0] = gray;
+                    pixelData[4 * i + 1] = gray;
+                    pixelData[4 * i + 2] = gray;
+                }
+            }
+        });
+        filters.push({
+            name: "黑白", func: function (pixelData) {
+                //r、g、b、a
+                //黑白滤镜公式： 0 or 255
+                var gray;
+                for (var i = 0; i < canvasConfig.width * canvasConfig.height; i++) {
+                    gray = pixelData[4 * i + 0] * 0.3 + pixelData[4 * i + 1] * 0.59 + pixelData[4 * i + 2] * 0.11;
+                    if (gray > 255 / 2) {
+                        gray = 255;
+                    }
+                    else {
+                        gray = 0;
+                    }
+                    pixelData[4 * i + 0] = gray;
+                    pixelData[4 * i + 1] = gray;
+                    pixelData[4 * i + 2] = gray;
+                }
+            }
+        });
+        filters.push({
+            name: "反色", func: function (pixelData) {
+                for (var i = 0; i < canvasConfig.width * canvasConfig.height; i++) {
+                    pixelData[i * 4 + 0] = 255 - pixelData[i * 4 + 0];
+                    pixelData[i * 4 + 1] = 255 - pixelData[i * 4 + 1];
+                    pixelData[i * 4 + 2] = 255 - pixelData[i * 4 + 2];
+                }
+            }
+        });
+        filters.push({ name: "无", func: null });
+        // 添加滤镜按钮
+        filters.forEach(function (filter) {
+            var button = $("<button>" + filter.name + "</button>");
+            button.on(eventName.click, function () {
+                canvasConfig.filter = filter.func;
+                //重绘
+                draw(context, canvasConfig.img, canvasConfig.size);
+            })
+            $("#filters").append(button);
+        });
+        //下载生成的图片(只下载第一张)
+        $("#download").on(eventName.click, function () {
+
+            //将mime-type改为image/octet-stream，强制让浏览器直接download
+            var _fixType = function (type) {
+                type = type.toLowerCase().replace(/jpg/i, 'jpeg');
+                var r = type.match(/png|jpeg|bmp|gif/)[0];
+                return 'image/' + r;
+            };
+            var saveFile = function (data, filename) {
+                var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+                save_link.href = data;
+                save_link.download = filename;
+                var event = document.createEvent('MouseEvents');
+                event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                save_link.dispatchEvent(event);
+            };
+            var imgData = $("#res1")[0].toDataURL("png");
+            imgData = imgData.replace(_fixType("png"), 'image/octet-stream');//base64
+            saveFile(imgData, "头像created on" + new Date().getTime() + "." + "png");
+        });
+        //上传图片
+        $("#upload").on(eventName.click, function () {
+            var imgData = $("#res1")[0].toDataURL("png");
+            imgData = imgData.replace(/^data:image\/(png|jpg);base64,/, "");
+            if (!fileServer) {
+                alert("请配置文件服务器地址");
+                return;
+            }
+
+            var blobBin = atob(imgData);
+            var array = [];
+            for (var i = 0; i < blobBin.length; i++) {
+                array.push(blobBin.charCodeAt(i));
+            }
+            var blob = new Blob([new Uint8Array(array)], { type: 'image/png' });
+            var file = new File([blob], "userlogo.png", { type: 'image/png' });
+            var formdata = new FormData();
+            formdata.append("userlogo", file);
+            $.ajax({
+                type: 'POST',
+                url: fileServer,
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (msg) {
+                    $("#uploadres").text(JSON.stringify(msg));
+                }
+            });
+        });
+        //绑定选择图片事件
+        $("#up_file").change(function () {
+            advar_type = 1;
+            var file = this.files[0],
+                URL = (window.webkitURL || window.URL),
+                url = URL.createObjectURL(file),
+                img = new Image();
+            img.src = url;
+            img.onload = function () {
+                canvasConfig.img = img;
+                canvasConfig.size = getFixedSize(img, canvas);
+                draw(context, img, canvasConfig.size);
+                setPicker();
+            }
+
+        });
+        //移动选择框
+        //绑定鼠标在选择工具上按下的事件
+        $("#picker").on(eventName.down, function (e) {
+            e.stopPropagation();
+            var start = { x: e.clientX, y: e.clientY, initX: config.x, initY: config.y };
+            $("#canvasContainer").on(eventName.move, function (e) {
+                // 将x、y限制在框内
+                config.x = Math.min(Math.max(start.initX + e.clientX - start.x, 0), canvasConfig.width - config.pickerSize);
+                config.y = Math.min(Math.max(start.initY + e.clientY - start.y, 0), canvasConfig.height - config.pickerSize);
+                setPicker();
+            })
+        });
+        //原图移动事件
+        $("#container").on(eventName.down, function (e) {
+            e.stopPropagation();
+            var start = { x: e.clientX, y: e.clientY, initX: canvasConfig.offset.x, initY: canvasConfig.offset.y };
+            var size = canvasConfig.size;
+            $("#canvasContainer").on(eventName.move, function (e) {
+                // 将x、y限制在框内
+                // 坐标<0  当图片大于容器  坐标>容器-图片   否则不能移动
+                canvasConfig.offset.x = Math.max(Math.min(start.initX + e.clientX - start.x, 0), Math.min(canvasConfig.width - size.width * canvasConfig.zoom, 0));
+                canvasConfig.offset.y = Math.max(Math.min(start.initY + e.clientY - start.y, 0), Math.min(canvasConfig.height - size.height * canvasConfig.zoom, 0));
+                //重绘蒙版
+                draw(context, canvasConfig.img, canvasConfig.size);
+            })
+        });
+        //改变选择框大小事件
+        $("#resize").on(eventName.down, function (e) {
+            e.stopPropagation();
+            var start = { x: e.clientX, init: config.pickerSize };
+            $("#canvasContainer").on(eventName.move, function (e) {
+                config.pickerSize = Math.min(Math.max(start.init + e.clientX - start.x, config.minSize), config.maxSize);
+                $("#picker").css({ width: config.pickerSize, height: config.pickerSize });
+                draw(context, canvasConfig.img, canvasConfig.size);
+            })
+        });
+        $(document).on(eventName.up, function (e) {
+            $("#canvasContainer").unbind(eventName.move);
+        })
+        //原图放大、缩小
+        $("#bigger").on(eventName.click, function () {
+            canvasConfig.zoom = Math.min(3, canvasConfig.zoom + 0.1);
+            //重绘蒙版
+            draw(context, canvasConfig.img, canvasConfig.size);
+        })
+        $("#smaller").on(eventName.click, function () {
+            canvasConfig.zoom = Math.max(0.4, canvasConfig.zoom - 0.1);
+            //重绘蒙版
+            draw(context, canvasConfig.img, canvasConfig.size);
+        })
+
+        // 定位选择工具
+        function setPicker() {
+            $("#picker").css({
+                width: config.pickerSize + "px", height: config.pickerSize + "px",
+                top: config.y, left: config.x
+            });
+            //重绘蒙版
+            draw(context, canvasConfig.img, canvasConfig.size);
+        }
+        //绘制canvas中的图片和蒙版
+        function draw(context, img, size) {
+            var pickerSize = config.pickerSize,
+                zoom = canvasConfig.zoom,
+                offset = canvasConfig.offset;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(img, 0, 0, img.width, img.height, offset.x, offset.y, size.width * zoom, size.height * zoom);
+            //绘制挖洞后的蒙版
+            context.save();
+            context.beginPath();
+            pathRect(context, config.x, config.y, pickerSize, pickerSize);
+            context.rect(0, 0, canvas.width, canvas.height);
+            context.closePath();
+            context.fillStyle = "rgba(255,255,255,0.9)";
+            context.fill();
+            context.restore();
+            //绘制结果
+            var imageData = context.getImageData(config.x, config.y, pickerSize, pickerSize)
+            resCanvas.forEach(function (resContext, i) {
+                resContext.clearRect(0, 0, resSize[i], resSize[i]);
+                resContext.drawImage(canvas, config.x, config.y, pickerSize, pickerSize, 0, 0, resSize[i], resSize[i]);
+                //添加滤镜效果
+                if (canvasConfig.filter) {
+                    var imageData = resContext.getImageData(0, 0, resSize[i], resSize[i]);
+                    var temp = resContext.getImageData(0, 0, resSize[i], resSize[i]);// 有的滤镜实现需要temp数据
+                    canvasConfig.filter(imageData.data, temp);
+                    resContext.putImageData(imageData, 0, 0, 0, 0, resSize[i], resSize[i]);
+                }
+            });
+        }
+        //逆时针用路径自己来绘制矩形，这样可以控制方向，以便挖洞
+        // 起点x，起点y，宽度，高度
+        function pathRect(context, x, y, width, height) {
+            context.moveTo(x, y);
+            context.lineTo(x, y + height);
+            context.lineTo(x + width, y + height);
+            context.lineTo(x + width, y);
+            context.lineTo(x, y);
+        }
+        // 根据图片和canvas的尺寸，确定图片显示在canvas中的尺寸
+        function getFixedSize(img, canvas) {
+            var cancasRate = canvas.width / canvas.height,
+                imgRate = img.width / img.height, width = img.width, height = img.height;
+            if (cancasRate >= imgRate && img.height > canvas.height) {
+                height = canvas.height;
+                width = imgRate * height;
+            }
+            else if (cancasRate < imgRate && img.width > canvas.width) {
+                width = canvas.width;
+                height = width / imgRate;
+            }
+            return { width: width, height: height };
+        }
+    });
+</script>
+
+<?php include APPPATH . "views/common/footer.php";?>

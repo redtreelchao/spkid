@@ -13,28 +13,29 @@ class Pay extends CI_Controller
 		$this->load->model('order_model');
 	}
 
-	public function wxpay_notify() {
-		
-    	$post = array_merge($_POST, $_GET);
+	public function wxpay_notify() {	
+    	$this->load->helper('file');
+	//$log_name ='./cache/paylogs/'.'m_wxpay_'.time().rand(100, 999).'.db';
+        $log_name ='./cache/paylogs/'.'m_wxpay_'.date("Ymdhis").'.db';
+	$this->load->library('wxpay');
+	//使用通用通知接口
+	$notify = new Notify_pub();
+	//存储微信的回调
+	$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+
+	$notify->saveData($xml);
+
+
 	try {
             $this->order_model->insert_onlinepay_log(array(
                 'pay_code' => 'wxpay',
-                'data' => json_encode($post),
+                'data' => $xml,
                 'create_date' => $this->time
             ));
         } catch (Exception $e) {
             
         }
-	
-    	$this->load->helper('file');
-	$log_name ='./cache/paylogs/'.'m_wxpay_'.time().rand(100, 999).'.db';
-	$this->load->library('wxpay');
-	//使用通用通知接口
-	$notify = new Notify_pub();
-	//存储微信的回调
-	$xml = $GLOBALS['HTTP_RAW_POST_DATA'];	
-	$notify->saveData($xml);
-	
+        
 	//验证签名，并回应微信。
 	//对后台通知交互时，如果微信收到商户的应答不是成功或超时，微信认为通知失败，
 	//微信会通过一定的策略（如30分钟共8次）定期重新发起通知，
@@ -93,7 +94,7 @@ class Pay extends CI_Controller
 			// 订单状态预检测
 			foreach ($order_list as $order) {
 			    // 订单状态不对，不添加支付记录
-			    if ($order->order_status != 0 || $order->pay_status != 0 || $order->pay_id != $pay_track->pay_id || $order->bank_code != $pay_track->bank_code) {
+			    if ($order->order_status != 0 || $order->pay_status != 0) {
 			        append_write_file($log_name, '订单状态不对，不添加支付记录');
 			        continue;
 			    }
@@ -118,7 +119,7 @@ class Pay extends CI_Controller
 			        break;
 			    }
 			    // 订单状态不对，不添加支付记录
-			    if ($order->order_status != 0 || $order->pay_status != 0 || $order->pay_id != $pay_track->pay_id || $order->bank_code != $pay_track->bank_code) {
+			    if ($order->order_status != 0 || $order->pay_status != 0) {
 			        continue;
 			    }
     
@@ -141,7 +142,7 @@ class Pay extends CI_Controller
 			        'payment_remark' => 'weixin notify'
 			    ));
 			    append_write_file($log_name, 'insert pay log' . $this->db->last_query());
-			    $this->order_model->update(array('paid_price' => round($order->paid_price + $unpay_price, 2)), $order->order_id);
+			    $this->order_model->update(array('paid_price' => round($order->paid_price + $unpay_price, 2), 'pay_id' => PAY_ID_WXPAY), $order->order_id);
     			    append_write_file($log_name, 'update paid_price' . $this->db->last_query());
 			    $genre_id = $order->genre_id;
 			    $arr_order[$order->order_id] = $order;
@@ -161,8 +162,9 @@ class Pay extends CI_Controller
 			$this->order_model->update_pay_track_by_sn(array('pay_status' => 1),$track_sn);
 			$this->db->trans_commit();   
 			append_write_file($log_name, $this->db->last_query().':@'.date("Y-m-d H:i:s"));
+                        $this->alipay_success_return($pay_track);
+                        
 			if ($genre_id == PRODUCT_COURSE_TYPE) {
-			    
 			   append_write_file($log_name, '课程订单支付成功'.':@'.date("Y-m-d H:i:s"));
 			   
 			} else {
@@ -175,12 +177,33 @@ class Pay extends CI_Controller
    	}
     
 	}
+        
+        public function wxpay_check($track_sn)
+	{
+            //$track_sn = $this->input->get('sn');
+            /*if(!$track_sn)
+            {
+                echo 'fail';
+                return;
+            }*/
+            //$pay_track = $this->order_model->get_pay_track($track_sn);
+            $info = $this->cache->get('pt_pay_status'.$track_sn);
 
+            //if($pay_track->pay_status) 
+            if (!empty($info)) 
+            {
+                echo 'success';
+            }else {
+                usleep(500);
+                $this->wxpay_check($track_sn);
+                //echo 'fail';
+            }
+	}
     
 
     public function alipay($type = 'return') {
 		$this->load->helper('file');
-		$write_filename = 	'./cache/paylogs/alipay-'. $type . '_' . time(). '.txt';
+		$write_filename = 	'./cache/paylogs/alipay-'. $type . '_' . date("Ymdhis"). '.txt';
 		append_write_file($write_filename, 'alpay_return:@'.date("Y-m-d H:i:s"));
 		append_write_file($write_filename, 'alpay_return:POST=:@'.date("Y-m-d H:i:s"));
 		append_write_file($write_filename, var_export($_POST,true));
@@ -210,10 +233,6 @@ class Pay extends CI_Controller
         $this->db->trans_begin();
         $pay_track = $this->order_model->lock_pay_track($track_sn);
 
-
-
-
-
         $order_ids = explode('-', $pay_track->order_ids);
         append_write_file($write_filename, 'order_list' . var_export($order_list, true));
         $order_list = $this->order_model->order_list_by_ids($order_ids);
@@ -228,7 +247,7 @@ class Pay extends CI_Controller
         if (empty($pay_track) || $pay_track->pay_status != 0) {
             append_write_file($write_filename, '记录状态不对');
 
-            $type == 'return' ? $this->alipay_success_return($genre_id, $order_list):die('fail');
+            $type == 'return' ? $this->alipay_success_return($pay_track):die('fail');
         }
         // 检查支付金额
         if (round($pay_track->pay_price, 2) != round($post['total_fee'], 2)) {
@@ -277,20 +296,18 @@ class Pay extends CI_Controller
             }
             $payment_money = min($unpay_price, $total_price);
             $total_price -= $payment_money;
-            if($type != 'return') {
-            	$this->order_model->insert_payment(array(
-            	    'order_id' => $order->order_id,
-            	    'pay_id' => PAY_ID_ALIPAY,
-            	    'is_return' => 0,
-            	    'payment_account' => trim($post['buyer_email']),
-            	    'payment_money' => $payment_money,
-            	    'trade_no' => trim($post['trade_no']),
-            	    'payment_date' => $this->time,
-            	    'payment_remark' => $type
-            	));
-            	$this->order_model->update(array('paid_price' => round($order->paid_price + $unpay_price, 2)), $order->order_id);	
-            }
-            
+
+            $this->order_model->insert_payment(array(
+                'order_id' => $order->order_id,
+                'pay_id' => PAY_ID_ALIPAY,
+                'is_return' => 0,
+                'payment_account' => trim($post['buyer_email']),
+                'payment_money' => $payment_money,
+                'trade_no' => trim($post['trade_no']),
+                'payment_date' => $this->time,
+                'payment_remark' => $type
+            ));
+            $this->order_model->update(array('paid_price' => round($order->paid_price + $unpay_price, 2)), $order->order_id);
             
             $genre_id = $order->genre_id;
             $arr_order[$order->order_id] = $order;
@@ -312,11 +329,20 @@ class Pay extends CI_Controller
         $this->db->trans_commit();   
 	
         append_write_file($write_filename, $this->db->last_query().':@'.date("Y-m-d H:i:s"));
-        $type == 'return' ? $this->alipay_success_return($genre_id, $arr_order) : die('success');
-    }
+	//$this->alipay_success_return($pay_track);
+        $type == 'return' ? $this->alipay_success_return($pay_track) : die('success');
 
-    private function alipay_success_return($genre_id, $arr_order) {    	
-    	 $str = '';
+        if ($genre_id == PRODUCT_COURSE_TYPE) {
+            redirect('/pay/success_return');
+        }
+    }
+    public function alipay_success_return($pay_track) {
+         //$this->input->set_cookie('pt_pay_status'.$pay_track->order_ids, 1, CART_SAVE_SECOND);
+        $this->cache->save('pt_pay_status'.$pay_track->order_ids,1,CART_SAVE_SECOND);       
+    }
+    
+    public function success_return() {         
+    	/* $str = '';
     	 $info_type = '';
     	 if ($genre_id == PRODUCT_COURSE_TYPE) {
     	 	$str = '课程';
@@ -330,8 +356,11 @@ class Pay extends CI_Controller
     	     'title' => '订单支付成功',
     	     'order_list' => $arr_order,
     	     'info_type' => $info_type
-    	 ));
-    	 $this->load->view('mobile/cart/paid_course');
+    	 ));*/
+	 $this->load->vars(array(
+            'page_type' => 'course'
+            ));
+    	 $this->load->view('cart/paid_course');
     }
 
     public function recharge($type='return')

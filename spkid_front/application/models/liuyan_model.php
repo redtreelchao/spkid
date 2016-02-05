@@ -53,9 +53,9 @@ class Liuyan_model extends CI_Model
 		$filter['record_count'] = 0;
 		$filter['page_count']=0;	
 		
-		$select = "SELECT l.user_name AS admin_user_name,l.comment_id,l.comment_title,
+		$select = "SELECT l.user_name AS admin_user_name,l.comment_id,l.comment_title, l.at_comment_id,
 				l.comment_content,l.reply_content,l.comment_date,l.reply_date,l.weight,
-				l.height,l.suitable,l.user_id,u.user_name,u.rank_id,r.rank_name,s.size_name";
+				l.height,l.suitable,l.user_id,u.user_name,u.rank_id,u.user_advar, r.rank_name,s.size_name";
 		$from = "FROM ".$this->_db->dbprefix('product_liuyan')." AS l
 				LEFT JOIN ".$this->_db->dbprefix('user_info')." AS u ON u.user_id = l.user_id
 				LEFT JOIN ".$this->_db->dbprefix('user_rank')." AS r ON u.rank_id=r.rank_id
@@ -76,17 +76,30 @@ class Liuyan_model extends CI_Model
 		if(!$row) return array('filter'=>$filter,'list'=>array());
 		$filter['record_count'] = $row->ct;
 		$filter['page_count']=ceil($filter['record_count']/$filter['page_size']);
-		if (isset($filter['page'])) {
-			$filter['page'] = max(min($filter['page'],$filter['page_count']-1),0);
-			$start=$filter['page']*$filter['page_size']; //开始条数
-		}
-		
-		
+		$filter['page'] = max(min($filter['page'],$filter['page_count']-1),0);
+		$start=$filter['page']*$filter['page_size']; //开始条数
        	//$sql = "{$select} {$from} {$where} {$sort} LIMIT {$start},{$filter['page_size']}";
        	$sql = "{$select} {$from} {$where} {$sort}";
-       	$query = $this->_db->query($sql);    
+       	$query = $this->_db->query($sql);
        	
        	$list = $query->result();
+       	$where2 = $where . ' and l.comment_id = ? ';
+       	$sql_find_at = "{$select} {$from} {$where2} {$sort}";
+       	foreach ($list as $k => &$v) {
+       		if ($v->at_comment_id) {
+       			$query = $this->_db->query($sql_find_at, array($v->at_comment_id));
+       			$comment = $query->result();
+       			if (count($comment)) {
+       				$v->at_comment = $comment[0];
+       			} else {
+       				$v->at_comment = false;
+       			}
+       			
+       		} else {
+       			$v->at_comment = false;
+       		}
+       	}
+       	//exit(json_encode($list));
        	return array('filter'=>$filter,'list'=>$list);
 	}
 }

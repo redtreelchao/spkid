@@ -149,6 +149,9 @@ define('CACHE_TIME_SALE_RUSH',15*60);   //正在进行的rush缓存时间
 define('CACHE_TIME_TODAY_OVER_RUSH',15*60); //今日结束的rush缓存时间
 define('CACHE_TIME_PROVIDER_SHIPPING_FEE_CONFIG', 3600); //供应商运费配置key:provider_shipping_fee_config_n (n=供应商ID)
 define('CACHE_TIME_INDEX_PRODUCT',3600);//首页商品缓存时间
+define('CACHE_TIME_BRAND_M_CATEGORYES',86400);// 品牌M获取分类
+define('CACHE_TIME_BRAND_LIST_BY_CATEGORY',86400);// 品牌列表
+
 // 购物车商品保存时间
 define('CART_SAVE_TIME', 'PT1200S');
 define('CART_SAVE_SECOND', 1800);
@@ -166,6 +169,7 @@ define('NAV_INDEX_ID',26);
 define('INDEX_ARTICEL_CAT_ID',25);
 
 define('INDEX_FOCUS_IMAGE_TAG', 'index_focus_image');
+define('VIDEO_FOCUS_IMAGE_TAG', 'video_focus_image');
 //超值促销广告位position_tag
 define('INDEX_FOOTER_PROMOTIONS_TAG','index_footer_promotions');
 //define('BRAND_AD_TAG', 'm_index_brand_row');
@@ -204,13 +208,12 @@ define('IMG_ERROR_URL','img/common/error_t.png');//错误提示图
 //rush,category 分页size 
 //@changed by tony 2013-08-23 将分页数由原来的30改为60 
 define('LIST_PAGE_SIZE',60);
-define('M_LIST_PAGE_SIZE',10);//手机端每页显示多少商品
+define('M_LIST_PAGE_SIZE',12);//手机端每页显示多少商品
 define('M_INDEX_PAGE_MAX',3);//手机端首页最多加载几页
-define('M_COURSE_PAGE_MAX',20);//手机端课程最多加载几页
 
 //seo
 define('SITE_NAME', '悦牙网');
-define('SITE_NAME_MOBILE', '手机悦牙网 yueyawang.com');
+define('SITE_NAME_MOBILE', '悦牙网 www.yueyawang.com');
 define('PAGE_KEYWORDS' , SITE_NAME.'，keywords content.');
 define('PAGE_DESCRIPTION' , SITE_NAME.'description content！');
 define('PAGE_TITLE_SITE_NAME' , SITE_NAME.'_site_name_here');
@@ -228,7 +231,12 @@ define("CACHE_HTML_INDEX", 1);
 define("CACHE_HTML_RUSH", 3);
 define("CACHE_HTML_LIST", 3);
 define("CACHE_HTML_INFO", 5);
+define('FRONT_HOST', 'http://pc.yueyawang.com');
 define('STATIC_DIR', FRONT_HOST.'/static');
+define('STATIC_STORE_DIR', '/var/www/yyw151018/static');
+define('IMAGE_STORE_DIR', '/var/www/yyw151018/image');
+define('VIDEO_COVER_PATH', IMAGE_STORE_DIR.'/wp_img');
+define('USER_AV_PATH', STATIC_STORE_DIR.'/mobile/touxiang');
 
 define("ENCRYPT_TYPE", "HASH");
 
@@ -241,10 +249,12 @@ define('APPLY_RETURN_REASON', '$return_reason_arr=array(5=>"商品质量有问�
                     3=>"配送错误",4=>"其他");');
 define('POST_FORMAT_VIDEO', 223);
 // 使用js/css的发行版本
-define('JSCSS_DIST_VERSION', '160107.2' );
+define('JSCSS_DIST_VERSION', '151125.1' );
 // 是否注册送积分
 define ('USE_REGIST_POINT', true);
 // sphinx server ip
 define ('SPHINX_SERVER_IP', '127.0.0.1');
+
+define('ORDER_INVALID_TIME', 259200); //3天
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

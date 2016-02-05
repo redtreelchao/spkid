@@ -26,14 +26,15 @@ class Cart extends CI_Controller {
             goto_login('cart/index');
         }
         $this->load->model('user_model');
+        $this->load->model('product_model');
         $this->load->library('memcache');
         $cart_sn = get_cart_sn();
         $cart_list = $this->cart_model->cart_info($cart_sn, TRUE);
-        if (!$cart_list) {
+        /*if (!$cart_list) {
             $this->load->view('mobile/cart/blank_cart', array('title' => '购物车'));
             return;
-        }
-        
+        }*/
+
         $checkout = get_checkout();
         $cart_summary = summary_cart($cart_list, $checkout['payment']['voucher']);
         list($product_list, $package_list) = split_package_product($cart_list);
@@ -42,21 +43,29 @@ class Cart extends CI_Controller {
             $this->load->vars('user', $user);
         }
 	
-	$provider_id_arr = array_keys($cart_summary['product_list']);
-
+	//$provider_id_arr = array_keys($cart_summary['product_list']);
+        $relation_goods = array();
+        if (!empty($cart_summary['category_ids'])){
+            $relation_goods = $this->product_model->get_relation_product($cart_summary['category_ids']);//取购物车中商品分类相关商品
+        } else {
+            $relation_goods = $this->product_model->get_hot_product(0, 1);//取is_new为1的商品
+        }
+        $hot_goods = $this->product_model->get_hot_product(1);//取is_hot为1的商品
 	
         $this->load->vars(array(
             'title' => '购物车',
             'cart_goods_buy_num' => MAX_SALE_NUM,
             'package_list' => $package_list,
             'cart_summary' => $cart_summary,
-	    'default_provider' => $provider_id_arr[0],
-            'voucher_list' => $this->cart_model->available_voucher_list($this->user_id),
-            'gifts_list' => memcache_get_gifts()//取赠品
+            'relation_goods' => $relation_goods, 
+            'hot_goods' => $hot_goods
+	    //'default_provider' => $provider_id_arr[0],
+            //'voucher_list' => $this->cart_model->available_voucher_list($this->user_id),
+            //'gifts_list' => memcache_get_gifts()//取赠品
         ));
 	
         //$this->load->view('mobile/cart/index');
-	$this->load->view('mobile/cart/index');
+	$this->load->view('cart/index2');
 	//$this->load->view('mobile/cart/edit');
         //$this->load->view('cart/index');
     }
@@ -369,14 +378,14 @@ class Cart extends CI_Controller {
         $checkout = get_checkout();
         $cart_summary = summary_cart($cart_list, $checkout['payment']['voucher']);
         $this->input->set_cookie('cart_num', $cart_summary['product_num'], CART_SAVE_SECOND);
-        $result = array('err' => 0, 'total_price' => $cart_summary['product_price'], 'total_num' => $cart_summary['product_num']);
+        $result = array('err' => 0, 'total_price' => $cart_summary['product_price']);
         if ($is_return){
             return $result;
         }
         print json_encode($result);
     }
 
-    public function checkout($shop_id=0) {
+    public function checkout($shop_id=0, $rec_ids='') {
         global $alipay_bank_list;
         $cart_sn = get_cart_sn();
         $default_address = array();
@@ -384,8 +393,10 @@ class Cart extends CI_Controller {
         $this->load->model('region_model');
         $this->load->library('lib_iplocation');
         $this->config->load('provider');
+        $rec_id_arr = array();
+        if (!empty($rec_ids)) $rec_id_arr = explode("-", $rec_ids);
         /* 购物车信息 */
-        $cart_list = $this->cart_model->cart_info($cart_sn, TRUE, false, $shop_id);
+        $cart_list = $this->cart_model->cart_info($cart_sn, TRUE, false, $shop_id, $rec_id_arr);
         if (!$cart_list)
             redirect('cart');
 
@@ -461,15 +472,25 @@ class Cart extends CI_Controller {
 
         //免邮
         $v_product_id_data = array();
-        $v_product_price_data = array();
-        foreach ($cart_summary['product_list'] as $provider_id => $provider){        
+        foreach ($cart_summary['product_list'] as $provider_id => $provider){
             foreach ($provider['product_list'] as $product_v){
-                $v_product_id_data[] = array($product_v->product_id, $product_v->product_num * $product_v->product_price); //商品数组(id,price)
+                $v_product_id_data[] = $product_v->product_id;
             }
         }
-
         $v_campaign_package = campaign_package_product_v($v_product_id_data);
         if(!empty($v_campaign_package)) $shipping_fee = 0;
+        //改变结算的商品时，要取消之前使用的券
+        if (!$cart_summary['voucher'] && !empty($checkout['payment']['voucher'])) {
+            $checkout['payment']['voucher'] = array();
+            $this->session->set_userdata('checkout', $checkout);            
+        }
+        
+        $invoice_cookie = array();
+        if (!empty($_COOKIE['invoice_msg'])){
+            $invoices = js_unescape($_COOKIE['invoice_msg']);
+            $invoice_cookie = explode("#", $invoices);
+        }
+        
 
         $this->load->vars(array(
             'title' => '结算',
@@ -479,6 +500,7 @@ class Cart extends CI_Controller {
             'shipping' => $checkout['shipping'],
             'payment' => $checkout['payment'],
             'pay_list' => $pay_list,
+            'default_pay_id' => PAY_ID_ALIPAY,
             'best_times' => $this->config->item('best_times'),
             'voucher_list' => $this->cart_model->available_voucher_list($this->user_id),
             'address_list' => $address_list,
@@ -487,15 +509,17 @@ class Cart extends CI_Controller {
             'shipping_list' => $shipping_list,
             'invoice_list' => $invoice_list,
             'shipping_fee' => $shipping_fee, 
-            'shop_id' => $shop_id
+            'shop_id' => $shop_id, 
+            'rec_ids' => $rec_ids, 
+            'invoice_cookie' => $invoice_cookie
             //'alipay_bank_list' => $alipay_bank_list,
             //'region_shipping_fee' => $region_shipping_fee           
         ));
         
-        $this->load->view('mobile/cart/checkout');
+        $this->load->view('cart/checkout2');
     }
 
-    public function proc_checkout($shop_id=0) {
+    public function proc_checkout($shop_id=0, $rec_ids='') {
         //global $alipay_bank_list;
         $cart_sn = get_cart_sn();
         $this->load->model('user_model');
@@ -511,7 +535,7 @@ class Cart extends CI_Controller {
         $use_balance = intval($this->input->post('use_balance'));
         $pay_id = intval($this->input->post('pay_id'));
         $shipping_id = intval($this->input->post('shipping_id'));
-        $invoice_title = trim($this->input->post('invoice'));
+        //$invoice_title = trim($this->input->post('invoice'));
         $remark = trim($this->input->post('remark'));
         $balance_payment_amount = 0; // 余额支付金额
         
@@ -519,9 +543,10 @@ class Cart extends CI_Controller {
             print json_encode(array('err' => 1, 'msg' => '提交购物车前请先登录', 'url' => '/user/login'));
             return false;
         }
-
+        $rec_id_arr = array();
+        if (!empty($rec_ids)) $rec_id_arr = explode("-", $rec_ids);
         /* 购物车信息 */
-        $cart_list = $this->cart_model->cart_info($cart_sn, false, false, $shop_id);
+        $cart_list = $this->cart_model->cart_info($cart_sn, false, false, $shop_id, $rec_id_arr);
         if (!$cart_list) {
             print json_encode(array('err' => 1, 'msg' => '您的购物车内没有商品', 'url' => '/cart'));
             return false;
@@ -543,7 +568,7 @@ class Cart extends CI_Controller {
         $checkout['payment']['pay_id'] = $pay_id;
         //$checkout['payment']['pay_id'] = intval(mb_substr($pay, 0, strpos($pay, '_')));
         //$checkout['payment']['bank_code'] = mb_substr($pay, strpos($pay, '_') + 1);
-        $checkout['payment']['invoice_title'] = $invoice_title;
+        //$checkout['payment']['invoice_title'] = $invoice_title;
         //$checkout['payment']['invoice_title'] = trim($this->input->post('invoice_title'));
         //$checkout['payment']['invoice_content'] = trim($this->input->post('invoice_content'));
         $this->session->set_userdata('checkout', $checkout);
@@ -621,6 +646,15 @@ class Cart extends CI_Controller {
                 }
             }*/
         }
+        
+        $invoice_cookie = array();
+        $invoice_cnt = 0;
+
+        if (!empty($_COOKIE['invoice_msg'])){
+            $invoices = js_unescape($_COOKIE['invoice_msg']);
+            $invoice_cookie = explode("#", $invoices);
+            $invoice_cnt = count($invoice_cookie);
+        }
      
         $update = array(
             'user_id' => $this->user_id,
@@ -636,8 +670,8 @@ class Cart extends CI_Controller {
             'tel' => !empty($address->tel) ? $address->tel : '',
             'best_time' => '',
             'user_notice' => $remark,
-            'invoice_title' => $invoice_title,
-            'invoice_content' => '',
+            'invoice_title' => ($invoice_cnt == 2) ? $invoice_cookie[0] : '',
+            'invoice_content' => ($invoice_cnt == 2) ? $invoice_cookie[1] : '',
             'product_num' => 0,
             'order_price' => 0,
             'shipping_fee' => 0,
@@ -735,6 +769,17 @@ class Cart extends CI_Controller {
                 sys_msg('生成订单失败', 1);
             }
             $order['order_id'] = $order_id;
+            
+            if ($invoice_cnt == 3) {
+                $this->order_model->insert_order_advice(array(
+                    'order_id' => $order_id,
+                    'type_id' => 2,
+                    'is_return' => 1,
+                    'advice_content' => '姓名：'.$invoice_cookie[0].'#手机号：'.$invoice_cookie[1].'#留言：'.$invoice_cookie[2], 
+                    'advice_date' => $this->time
+                ));
+            }                       
+            
             // 提交订单商品
             foreach ($provider['product_list'] as $cart) {
                 $op = array(
@@ -774,7 +819,7 @@ class Cart extends CI_Controller {
                 ));
                 $this->cart_model->update_voucher(array('used_number' => $voucher->used_number + 1), $voucher->voucher_sn);
             }
-            if ($balance > 0) {
+            if ($balance) {
                 $this->cart_model->insert_payment(array(
                     'order_id' => $order_id,
                     'is_return' => 0,
@@ -796,7 +841,7 @@ class Cart extends CI_Controller {
                     'change_code' => 'order_pay',
                     'create_date' => $this->time
                 ));
-            }
+            }           
             
             // 处理CPS
             $cpstag = $this->input->cookie("cpstag");
@@ -807,10 +852,10 @@ class Cart extends CI_Controller {
                     $this->cps_model->add($order_id, $cps_params);
                 }
             }
-            $arr_order_id[] = $order_id; 
-            $this->cart_model->delete_where(array('session_id' => $cart_sn, 'shop_id' => $provider_id));
+            $arr_order_id[] = $order_id;  
         }
         
+        $this->cart_model->delete_where(array('session_id' => $cart_sn, 'rec_id' => $rec_id_arr));         
         // 清除购物车
         
         // 清除session
@@ -818,25 +863,33 @@ class Cart extends CI_Controller {
         $this->db->trans_commit();
         
         $this->input->set_cookie('cart_num', $cart_num, CART_SAVE_SECOND);
+        $this->input->set_cookie('invoice_msg', '', 0);
         print json_encode(array('err' => 0, 'msg' => '', 'order_id' => implode('-', $arr_order_id)));
     }
 
     public function success($order_ids, $genre_id=PRODUCT_TOOTH_TYPE) {
         global $alipay_bank_list;
         $this->load->model('order_model');
+	$this->load->model('user_model');
+        $this->load->helper('order');
         $order_ids = trim($order_ids);
+        $user = $this->user_model->filter(array('user_id' => $this->user_id));
+        
         $arr_order_id = array_filter(array_map('intval',explode('-', $order_ids)));
         $order_list = $this->order_model->order_list_by_ids($arr_order_id, $genre_id);
         $product_list = $this->order_model->product_list_by_order_ids($arr_order_id);
         $payment_list = $this->order_model->payment_list_by_order_ids($arr_order_id);
         // 对数据进行汇总
         $arr_order = array();
+        $arr_order_id = array();
         $order_amount = 0; // 待付金额
         $order_price = 0; // 订单商品总额
         $shipping_fee = 0; // 运费总额
         $voucher = 0; // 现金券总额
         $product_num = 0; // 商品总件数
         $default_order = 0;
+        $pay_price = 0;
+        $pay_title = '';
         foreach($order_list as $order)
         {
             if($order->order_status!=0 and $order->order_status!=1) continue;
@@ -850,6 +903,8 @@ class Cart extends CI_Controller {
             $shipping_fee += $order->shipping_fee;
             $product_num += $order->product_num;
             $arr_order[$order->order_id] = $order;
+            $pay_price += round($order->order_price + $order->shipping_fee - $order->paid_price, 2);
+            $arr_order_id[] = intval($order->order_id);
         }
         foreach($payment_list as $payment)
         {
@@ -867,7 +922,7 @@ class Cart extends CI_Controller {
             if(!isset($arr_order[$product->order_id]->shop_price)) 
                 $arr_order[$product->order_id]->shop_price = 0;
             $arr_order[$product->order_id]->shop_price += $product->shop_price * $product->product_num;
-            
+            if (empty($pay_title)) $pay_title = $product->product_name;
             $arr_order[$product->order_id]->product_list[] = $product;
             if (!$default_order) $default_order = $product->order_id;
 
@@ -880,7 +935,11 @@ class Cart extends CI_Controller {
         if(empty($arr_order)){
             sys_msg('订单不存在', 1);
         }
-        
+        $pay_track = $this->order_model->create_pay_track($arr_order_id, PAY_ID_WXPAY, '', $pay_price, $this->user_id);
+        if(empty($pay_track)){
+            sys_msg('系统繁忙，请重试',1);
+        }
+        $wx_result = wxpay_qrcode(array('out_trade_no' => $pay_track->track_sn, 'money' => $pay_track->pay_price, 'pay_title' => $pay_title));
        /*
         $cps_script = "";
         $cpstag = $this->input->cookie("cpstag");
@@ -895,10 +954,11 @@ class Cart extends CI_Controller {
         */
         $pay_list = index_array($this->cart_model->available_pay_list(), 'pay_id');
         $this->load->helper('cart');
-        format_pay_list($pay_list);
+        //format_pay_list($pay_list);
 
         $this->load->vars(array(
             'title' => '订单提交成功',
+            'user' => $user,
             'order_list' => $arr_order,
             'order_price' => $order_price,
             'order_amount' => $order_amount,
@@ -906,12 +966,21 @@ class Cart extends CI_Controller {
             'shipping_fee' => $shipping_fee,
             'product_num' => $product_num,
             'pay_list' => $pay_list, 
-            'default_order' => $default_order
+            'default_order' => $default_order, 
+            'page' => 'success', 
+            'weixin_pay_id' => PAY_ID_WXPAY, 
+            'alipay_pay_id' => PAY_ID_ALIPAY, 
+            'pay_track' => $pay_track, 
+            'wx_result' => $wx_result
         ));
         if ($genre_id == PRODUCT_COURSE_TYPE) {
-            $this->load->view('mobile/cart/success_course');
+            $this->load->vars(array(
+            'page_type' => 'course'
+            ));
+            
+            $this->load->view('cart/success_course');
         } else {
-            $this->load->view('cart/success');
+            $this->load->view('cart/success2');
         }
     }
 
@@ -982,6 +1051,9 @@ class Cart extends CI_Controller {
         $cart_sn = get_cart_sn();
         $voucher_sn = trim($this->input->post('voucher_sn'));
         $provider_id = intval($this->input->post('provider_id'));
+        $rec_ids = $this->input->post('rec_ids');
+        $rec_id_arr = array();
+        if(!empty($rec_ids)) $rec_id_arr = explode("-", $rec_ids);
 
         if (!$this->user_id)
             sys_msg('请选登录', 1);
@@ -990,9 +1062,14 @@ class Cart extends CI_Controller {
             sys_msg('请先指定商家');
         }*/
         
-        $cart_list = $this->cart_model->cart_info($cart_sn);
+        
         //voucher_gc($cart_list); // 回收无效的现金券
-        $checkout = $this->session->userdata('checkout');       
+        $checkout = $this->session->userdata('checkout'); 
+        
+        $this->cart_model->lock_voucher($voucher_sn);
+        $voucher = $this->cart_model->voucher_info($voucher_sn);
+        if (!$voucher)
+            sys_msg('现金券不可用', 1);
         
         if(!empty($checkout['payment']['voucher'])){
             // 如果该券已经在其它供应商下使用过了或者当前供应商已经用过其它的券了，报错返回
@@ -1000,10 +1077,7 @@ class Cart extends CI_Controller {
                 if($v->voucher_sn==$voucher_sn){
                     sys_msg('现金券不能重复使用，请先取消。', 1);
                 }
-                //由于每结算一次，只能使用一张券，所以这里要取消上一张券
-                $checkout['payment']['voucher'] = array();
-                $this->session->set_userdata('checkout', $checkout);
-                //sys_msg('您已使用了另一张现金券，请先取消。', 1);
+                sys_msg('您已使用了另一张现金券，请先取消。', 1);
                 //if($pid==$provider_id){
                 //if($pid==$voucher->provider){
                     //sys_msg('您已使用了另一张现金券，请先取消。', 1);
@@ -1012,13 +1086,11 @@ class Cart extends CI_Controller {
             }
         }
         
-        $this->cart_model->lock_voucher($voucher_sn);
-        $voucher = $this->cart_model->voucher_info($voucher_sn);
-        if (!$voucher)
-            sys_msg('现金券不可用', 1);
+        
         if ($voucher->user_id && $voucher->user_id != $this->user_id)
             sys_msg('现金券不可用', 1);
-        $cart_list = $this->cart_model->cart_info($cart_sn);
+        //$cart_list = $this->cart_model->cart_info($cart_sn);
+        $cart_list = $this->cart_model->cart_info($cart_sn, false, false, 0, $rec_id_arr);
         $voucher->payment_amount = calc_voucher_payment_amount($voucher, $cart_list, $provider_id);
         if (!$voucher->payment_amount)
             sys_msg('不满足现金券使用条件', 1);
@@ -1071,7 +1143,7 @@ class Cart extends CI_Controller {
             'province' => $address->province,
             'city' => $address->city
         ));
-        $html = $this->load->view('cart/address_block', array(
+        $html = $this->load->view('cart/address_block2', array(
             'shipping' => (array) $address,
             'province_list' => $province_list,
             'city_list' => $city_list,
@@ -1094,7 +1166,9 @@ class Cart extends CI_Controller {
         $update['province'] = intval($this->input->post('province'));
         $update['city'] = intval($this->input->post('city'));
         $update['district'] = intval($this->input->post('district'));
-        if (!$update['consignee'] || !$update['zipcode'] || !$update['province'] || !$update['city'])
+        $update['is_used'] = intval($this->input->post('is_used'));
+        
+        if (!$update['consignee'] || !$update['province'] || !$update['city'])
             sys_msg('信息填写不完整', 1);
         if (!$update['mobile'] && !$update['tel'])
             sys_msg('信息填写不完整', 1);
@@ -1104,6 +1178,9 @@ class Cart extends CI_Controller {
                 sys_msg('信息填写不完整', 1);
         }
         $address = $this->user_model->filter_address(array('address_id' => $address_id));
+        if ($update['is_used']){
+            $this->user_model->update_address_unused($this->user_id);
+        }
         if (!$address) {
             $update["user_id"] = $this->user_id;
             $address_id = $this->user_model->insert_address($update);
@@ -1111,8 +1188,8 @@ class Cart extends CI_Controller {
         } else {
             $this->user_model->update_address($update, $address_id);
         }
+        $this->user_model->update(array('address_id'=>$address_id),$this->user_id);
         
-
         $checkout = $this->session->userdata('checkout');
         if (is_array($checkout) && isset($checkout['shipping'])) {
             $checkout['shipping']['address_id'] = $address_id;
@@ -1120,7 +1197,7 @@ class Cart extends CI_Controller {
         } else {
             $checkout['shipping']['address_id'] = $address_id;
         }
-        $html = $this->load->view('cart/address_list', array(
+        $html = $this->load->view('cart/address_list2', array(
             'shipping' => $checkout['shipping'],
             'address_list' => $this->user_model->address_list($this->user_id),
                 ), TRUE);
@@ -1210,15 +1287,23 @@ class Cart extends CI_Controller {
         if (!$result){
             die(json_encode(array('err' => 1, 'msg' => '该发票抬头已存在，不可重复添加！')));
         }
+        die(json_encode(array('err' => 0, 'msg' => '', 'id' => $result)));
+    }
+    
+    public function invoice_del(){
+        $id = intval($this->input->post('id'));
+        $this->cart_model->user_invoice_del(array('id' => $id));
         die(json_encode(array('err' => 0, 'msg' => '')));
     }
     // 按重量收取运费
-    public function get_shipping_fee2($shipping_id, $address_id, $shop_id=0, $is_return=0){
+    public function get_shipping_fee2($shipping_id, $address_id, $shop_id=0, $is_return=0, $rec_ids=''){
         $this->load->model('region_model');
         $this->load->model('user_model');
         $result = 0;
+        $rec_id_arr = array();
         $cart_sn = get_cart_sn();
-        $cart_list = $this->cart_model->cart_info($cart_sn, TRUE, false, $shop_id);
+        if (!empty($rec_ids)) $rec_id_arr = explode("-", $rec_ids);
+        $cart_list = $this->cart_model->cart_info($cart_sn, TRUE, false, $shop_id, $rec_id_arr);
         $checkout = get_checkout();
         $cart_summary = summary_cart(
             $cart_list, $checkout['payment']['voucher'], isset($checkout['payment']['balance']) ? $checkout['payment']['balance'] : NULL
@@ -1227,6 +1312,9 @@ class Cart extends CI_Controller {
         
         $fee = $this->region_model->get_shipping_fee_province($shipping_id, $address->province);
         if ($cart_summary['unpay_price'] >= SHIPPING_FREE_ORDER_PRICE && $cart_summary['product_weight'] <= 10000){
+            if (!$is_return){
+                die(json_encode(array('err' => 0, 'msg' => '', 'data' => $result)));
+            }
             return $result;
         }
         if (!$fee){
@@ -1243,7 +1331,7 @@ class Cart extends CI_Controller {
         $v_product_id_data = array();
         foreach ($cart_summary['product_list'] as $provider_id => $provider){
             foreach ($provider['product_list'] as $product_v){
-                $v_product_id_data[] = array($product_v->product_id, $product_v->product_num * $product_v->product_price); //商品数组(id,price)
+                $v_product_id_data[] = $product_v->product_id;
             }
         }
         $v_campaign_package = campaign_package_product_v($v_product_id_data);
@@ -1258,6 +1346,8 @@ class Cart extends CI_Controller {
     //课程结算页
     public function checkout_course($sub_id) {
         $this->load->helper('product');
+        $this->load->model('user_model');
+        $user = $this->user_model->filter(array('user_id' => $this->user_id));
         $sub_info = $this->product_model->sub_info($sub_id);
         if(!$sub_info || !$sub_info->is_audit || !$sub_info->is_on_sale) redirect('index');
         format_product($sub_info);
@@ -1267,22 +1357,29 @@ class Cart extends CI_Controller {
         if ($sub_info->sale_num <= 0){
             redirect('index');
         }
-        
+        if ($sub_info->genre_id == PRODUCT_COURSE_TYPE){
+            $login_url = 'product-'.$sub_info->product_id.'.html';
+            $page = 'cart/checkout_course';
+        } else {
+            $login_url = 'prodetail-'.$sub_info->product_id.'.html';
+            $page = 'cart/checkout_goods';
+        }
         if (!$this->user_id) {
             $this->session->set_userdata(array(
-                'login_return_url' => 'product/info/'.$sub_info->product_id,
+                'login_return_url' => $login_url,
                 'login_msg' => '订单结算之前请先登录'
             ));
-            goto_login('product/info/'.$sub_info->product_id);
+            goto_login($login_url);
         }
 
         $this->load->vars(array(
-            'title' => '课程培训报名',
             'product' => $sub_info, 
-            'genre_id' => PRODUCT_COURSE_TYPE
+            'genre_id' => PRODUCT_COURSE_TYPE, 
+            'user' => $user,
+            'page_type' => 'course'
         ));
 
-	$this->load->view('mobile/cart/checkout_course');
+	$this->load->view($page);
     }
     
     public function proc_checkout_course() {
@@ -1397,7 +1494,7 @@ class Cart extends CI_Controller {
         $order = $update;
         $balance = 0;
         $order['product_num'] = $num;
-        $order['order_price'] = $sub_info->product_price;            
+        $order['order_price'] = $sub_info->product_price*$num;            
         $order['pay_id'] = PAY_ID_ALIPAY;
         while (true) {
             $order['order_sn'] = get_order_sn();

@@ -18,15 +18,6 @@
     </div>
     
 </div>
-
-<script>
-	var referer = document.referrer;
-	if (!referer) {
-		referer = '<?php echo $_SERVER['HTTP_REFERER']?>'
-	};
-	localStorage.setItem('login_referer', referer);
-	console.log('login_referer' + referer);
-</script>
 <?php
 include APPPATH . "views/mobile/common/footer-js.php";
  ?>

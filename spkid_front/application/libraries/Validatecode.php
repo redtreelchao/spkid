@@ -4,8 +4,8 @@ class Validatecode {
 private $charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789';    //随机因子
     private $code;                            //验证码
     private $codelen = 4;                    //验证码长度
-    private $width = 130;                    //宽度
-    private $height = 50;                    //高度
+    private $width = 120;                    //宽度
+    private $height = 40;                    //高度
     private $img;                                //图形资源句柄
     private $font;                                //指定的字体
     private $fontsize = 20;                //指定字体大小
@@ -46,10 +46,10 @@ private $charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789';    //�
             $color = imagecolorallocate($this->img,mt_rand(0,156),mt_rand(0,156),mt_rand(0,156));
             imageline($this->img,mt_rand(0,$this->width),mt_rand(0,$this->height),mt_rand(0,$this->width),mt_rand(0,$this->height),$color);
         }
-        for ($i=0;$i<100;$i++) {
+        /*for ($i=0;$i<100;$i++) {
             $color = imagecolorallocate($this->img,mt_rand(200,255),mt_rand(200,255),mt_rand(200,255));
             imagestring($this->img,mt_rand(1,5),mt_rand(0,$this->width),mt_rand(0,$this->height),'*',$color);
-        }
+        }*/
     }
 
     //输出

@@ -28,20 +28,37 @@ class Ad_model extends CI_Model
 
     function get_ad_by_position_tag($position_tag,$size=0)
     {
-        $sql="select ad_id,ad_name,ad_code,ad_link,start_date,end_date,pic_url from "
+        // $sql="select ad_id,ad_name,ad_code,ad_link,start_date,end_date,pic_url, position_name from "
+        //         .$this->db_r->dbprefix('front_ad')." a
+        //         left join ".$this->db_r->dbprefix('front_ad_position')." ap
+        //         on a.position_id=ap.position_id
+        //         where ap.position_tag='$position_tag' and a.is_use=1
+        //         and a.start_date<=now() and a.end_date>=now()
+        //         order by ad_id desc";
+
+        $sql="select ad_id,ad_name,ad_code,ad_link,start_date,end_date,pic_url, position_name from "
                 .$this->db_r->dbprefix('front_ad')." a
                 left join ".$this->db_r->dbprefix('front_ad_position')." ap
                 on a.position_id=ap.position_id
                 where ap.position_tag='$position_tag' and a.is_use=1
-                and a.start_date<=now() and a.end_date>=now()
+                
                 order by ad_id desc";
         if($size>0) $sql.=" limit $size";
+
         $query=$this->db_r->query($sql);
+        //var_export($query->result());exit;
         return $query->result();
     }
     
     function get_focus_image($type) {
-        $sql = "SELECT focus_name AS title, focus_url AS href, focus_img AS img_src FROM ty_front_focus_image WHERE focus_type = ".$type." AND NOW() BETWEEN start_time AND end_time AND focus_order > 0 ORDER BY focus_order ASC";
+        $sql = "SELECT focus_name AS title, focus_url AS href, focus_img AS img_src FROM ty_front_focus_image WHERE focus_type = ".$type." AND NOW() BETWEEN start_time AND end_time AND focus_order > 0 ORDER BY focus_order ASC";        
+        $query = $this->db_r->query($sql);
+        return $query->result_array();
+    }
+
+    function get_focus_image_pc($type) {
+        // $sql = "SELECT focus_name AS title, focus_url AS href, focus_img AS img_src FROM ty_front_focus_image WHERE focus_type = ".$type." AND focus_order > 0 ORDER BY focus_order ASC";  
+        $sql = "SELECT focus_name AS title, focus_url AS href, focus_img AS img_src FROM ty_front_focus_image WHERE focus_type = ".$type;        
         $query = $this->db_r->query($sql);
         return $query->result_array();
     }

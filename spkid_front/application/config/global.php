@@ -37,7 +37,7 @@ $config['alipay_new'] = array(
 $config['weixin'] = array('appid' => 'wxc25a0104ead394c1', 
                           'appsecret' => '8425d7fd75ba373b7bee6bfd758db3b5',
                           'site_url' => FRONT_HOST,
-                          'callback_url' => FRONT_HOST . '/pay/wxpay_notify',
+                          'callback_url' => FRONT_HOST . '/user/weixin_callback',
                           'notify' => FRONT_HOST . '/pay/wxpay_notify');
 
 $config['qq'] = array(

@@ -1,7 +1,3 @@
-
-<?php include APPPATH."views/mobile/header.php";?>
-
-    <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/yyw-app.css')?>">
 <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/tank.css')?>">
 <div data-page="index" class="page no-toolbar">
      <!-- navbar start -->
@@ -12,14 +8,14 @@
                      </div>
                 </div>
    <!-- navbar end -->
-   <?php if( $status == 'pending' ) { ?>
-	   <div class="yywtoolbar">
-		   <div class="yywtoolbar-inner row no-gutter">
-		   	<div class="col-20 meiqia">客服</div>
-		   	<div class="col-80 payment-hu"><a class="link external" href="#" onclick="j_order_pay('<?php print $order->order_id; ?>');">付款</a></div>
-		   </div>
-	 </div>
-   <?php } ?>
+   
+   <div class="yywtoolbar">
+                <div class="yywtoolbar-inner row no-gutter">
+                     <div class="col-50 order-contact-customer"><a class="link" href="#">联系客服</a></div>
+                     <div class="col-50 payment-hu"><a class="link" href="#" onclick="j_order_pay('<?php print $order->order_id; ?>');">付款</a></div>
+              </div>
+        </div>
+   
    
    
     <div class="page-content public-bg no-top2">
@@ -51,21 +47,21 @@
 			     <ul>
 			     <li>
 			        <div class="order-details-rr">
-				     <div class="details-yunfei">早鸟价: </div>
-				     <div class="details-jiage">&yen;<?php echo $course->product_price?><span class="baoming-renshu">/人</span></div>
+				     <div class="details-yunfei">早鸟优惠: </div>
+				     <div class="details-jiage">&yen;<?php echo $course->save_price?><span class="baoming-renshu">/人</span></div>
 			        </div>
 			     </li>
-	    			 
+	     
 			     <li>
 			        <div class="order-details-rr">
 				     <div class="details-yunfei">报名人数: </div>
-				     <div class="details-jiage"><?php echo $order->product_num?><span class="baoming-renshu">/人</span></div>
+				     <div class="details-jiage"><?php echo $course->ps_num?><span class="baoming-renshu">/人</span></div>
 			        </div>
 			     </li>
 	     
 			     <li class="none-line">
 			        <div class="order-details-rr">
-				     <div class="shifukuan-hu">应付款: <span>&yen;<?php echo $order->order_price?></span></div>
+				     <div class="shifukuan-hu">应付款: <span>&yen;<?php $order->order_price?></span></div>
 				</div>
 			     </li>
 			    </ul>
@@ -76,7 +72,7 @@
 		         <div class="trains-details-dc clearfix">
 			      <ul>
 			      <li>
-			      <span class="peixun-ren shuliangs-hu"><?php echo $order->product_num?>人</span><span class="peixun-ren renming"><?php echo $client->name?></span><span class="peixun-ren Phone-number-hu no-right"><?php echo $client->mobile_phone?></span>
+			      <span class="peixun-ren shuliangs-hu"><?php echo $course->ps_num?>人</span><span class="peixun-ren renming"><?php echo $client->name?></span><span class="peixun-ren Phone-number-hu no-right"><?php echo $client->mobile_phone?></span>
 			      </li>
 			      <li>
 			      <span class="peixun-ren youjian-hu"><?php echo $client->field_1?></span><span class="peixun-ren icon-dizhi"><?php echo $client->field_2?></span>
@@ -206,6 +202,3 @@ $$(document).on('click', '.pay_list', function (e) {
     </div>
 </div>
 
-	<!-- 支付弹层结束-->	
-<?php include APPPATH . "views/mobile/common/meiqia.php"; ?>	
-<?php include APPPATH . "views/mobile/footer.php"; ?>

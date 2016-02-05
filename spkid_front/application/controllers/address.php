@@ -15,8 +15,12 @@ class Address extends CI_Controller {
 
     public function index() {
         $user_id = $this->user_id;
-        $data['address'] = $this->address_model->address_list($user_id);    //收货地址列表
-        $this->load->view('mobile/cart/address_list',$data);
+        if ($user_id){
+            $data['address'] = $this->address_model->address_list($user_id);    //收货地址列表
+            $this->load->view('user/address',$data);
+        } else {
+            redirect('/user/login');
+        }
     }
 
     public function address_add() {
@@ -33,17 +37,8 @@ class Address extends CI_Controller {
 
     public function address_check() {
         $formdata = json_decode($this->input->get('formdata'));
-
+        $address_id = intval($this->input->get('address_id'));
         if(isset($formdata)){
-
-            if(isset($formdata->v_url_address) && stripos($formdata->v_url_address,'cart/checkout')){
-                $v_url_address = $formdata->v_url_address; //存在
-            }else{
-                $v_url_address = '/address/index';  //不存在
-            }
-
-            unset($formdata->v_url_address);   //删除链接
-
             if ($formdata->consignee == '')
             {
                 $err_msg = "收件人姓名不能为空！";
@@ -83,22 +78,19 @@ class Address extends CI_Controller {
             //判断是否是默认地址 
             if(!empty($formdata->is_used)){
                 $formdata->is_used = 1;
-            }else{
-                $formdata->is_used = 0;
             }
+
             //写入数据db
-            if(!isset($formdata->address_id) && empty($formdata->address_id)){
+            if(empty($address_id)){
                 //如果为空，则插入新纪录
                 $address_id = $this->address_model->address_insert($formdata);
                 if(!empty($address_id)){
-                    echo json_encode(array('mobile_check_err' => 1,'v_url_add' =>$v_url_address));
+                    echo json_encode(array('mobile_check_err' => 1));
                 }else{
                     echo json_encode(array('mobile_check_err' => '收货地址添加失败！'));
                 }
             }else{
                 // 否则，更新一条记录
-                $address_id = $formdata->address_id;
-                unset($formdata->address_id);  
                 $update_num = $this->address_model->address_update($formdata, $address_id);
                 if(!empty($update_num)){
                     echo json_encode(array('mobile_check_err' => 1));
@@ -123,15 +115,23 @@ class Address extends CI_Controller {
     }
     
     public function address_delete() {
-        $formdata = json_decode($this->input->get('formdata'));
 
-        $address_id = $formdata->address_id;
+        $address_id = intval($this->input->get('address_id'));
 
         $delete_num= $this->address_model->delete_address($address_id);
 
         if(!empty($delete_num)){
             echo json_encode(array('mobile_check_err' => 2));
         }
+    }
+    
+    public function address_default(){
+        $this->load->model('user_model');
+        $address_id = intval($this->input->get('address_id'));
+        $user_id = $this->session->userdata('user_id');
+        $this->user_model->update_address_used($address_id,$user_id);
+	$this->user_model->update(array('address_id'=>$address_id),$user_id);
+        echo json_encode(array('error' => 0, 'msg' => '设置成功'));
     }
 
 }

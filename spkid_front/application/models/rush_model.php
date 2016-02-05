@@ -89,6 +89,22 @@ class Rush_model extends CI_Model {
                 LIMIT 5;";
         return $this->db_r->query($sql, $provider_id)->result_array();
     }
+/**
+ * 获取所有的一级分类
+ *
+*/
+function get_front_types($genre_id=1){
+        $cache_time = CACHE_TIME_SELECT_TYPE;
+	$cache_key="rand_front_types";
+	if (($cache_data = $this->cache->get($cache_key) ) === FALSE ) {
+		$this->cache->delete($cache_key);
+		$sql = "SELECT * FROM ty_product_type WHERE parent_id=0 and genre_id=".$genre_id;
+		$cache_data= $this->db_r->query($sql)->result();
+		$this->cache->save($cache_key, $cache_data, $cache_time);
+	}
+	return $cache_data;
+
+}
 
 
     /**
@@ -104,8 +120,8 @@ class Rush_model extends CI_Model {
 		$cache_key = 'product_';
 		if ($args['nav_type'] == 1 && isset($args['type_id']) ) {
 			$cache_key .= 'type_' . $args['type_id'];
-			$this->cache->delete($cache_key);
 			if (($cache_data = $this->cache->get($cache_key) ) === FALSE ) {
+				$this->cache->delete($cache_key);
 					if ($args['type_id'] != 0) {
 						$sql = "SELECT * FROM ty_product_type WHERE type_id = ? ";
 						$row = $this->db_r->query($sql, $args['type_id'])->row_array();
@@ -209,6 +225,20 @@ class Rush_model extends CI_Model {
      * @param type $filter
      * @return type 
      */
+    public function brand_product_list($brand_id, $page){
+        $page_size = M_LIST_PAGE_SIZE;
+        $page = ($page < 1) ? 1 : intval($page);
+        $start = ($page-1)*$page_size;       
+        $sql = "SELECT p.product_name,p.market_price,p.shop_price,si.size_name,pg.`img_url`,p.price_show FROM ty_product_info AS p LEFT JOIN ty_product_sub AS ps USING(product_id) LEFT JOIN ty_product_size si USING(size_id) LEFT JOIN ty_product_gallery AS pg ON ps.`product_id`=pg.`product_id` AND ps.`color_id`=pg.`color_id` LEFT JOIN ty_product_brand pb USING(brand_id) WHERE pb.`brand_id`=$brand_id AND pg.image_type='default' AND p.`is_audit`=1 AND  ps.is_on_sale = 1 AND (ps.consign_num>0 OR ps.consign_num=-2 OR ps.gl_num>ps.wait_num) GROUP BY p.`product_id` LIMIT $start, $page_size";
+        $result = $this->db->query($sql)->result();
+        if (1 == $page){
+            $sql = 'SELECT brand_id,brand_name,brand_logo,brand_banner,brand_info,brand_story from ty_product_brand WHERE brand_id='.$brand_id;
+            $brand = $this->db->query($sql)->row(); 
+            return array('brand' => $brand, 'product_list' => $result);
+        } else {
+            return $result;
+        }
+    }
     public function product_list($filter , $slave = TRUE ,$is_preview = FALSE) {
 		$this->adoEx = $slave ? $this->db_r : $this->db;
 		$this->load->helper("product");
@@ -244,8 +274,7 @@ class Rush_model extends CI_Model {
 	  $select = "SELECT sub.product_id,sub.gl_num as sub_gl_num,sub.consign_num,sub.wait_num,
 				 if(SUM(GREATEST(sub.gl_num-sub.wait_num,0))+SUM(GREATEST(sub.consign_num,0)+IF(sub.consign_num=-2,1000,0))>0,1,0) AS gl_num,
 					p.product_name,p.product_sn,p.shop_price,p.market_price,p.ps_num,p.pv_num,p.is_hot,p.is_new,p.is_offcode,p.is_best as is_zhanpin,
-					p.is_promote,p.promote_price,p.promote_start_date,p.promote_end_date,
-					p.is_new,p.is_hot,p.is_offcode,p.is_best,p.is_gifts,p.product_desc_additional,p.price_show,
+					p.is_promote,p.promote_price,p.promote_start_date,p.promote_end_date,p.is_gifts,p.product_desc_additional,p.price_show,p.product_desc,
 					b.brand_name,g.img_url,pp.display_name,pp.provider_id ";
 				   
 		$from = "FROM ty_product_sub AS sub
@@ -259,7 +288,7 @@ class Rush_model extends CI_Model {
 	if($is_preview){
 	    $where = "WHERE 1 ";
 	}else{
-	   $where = "WHERE sub.is_on_sale=1 AND b.is_use = 1 AND pp.is_use = 1 "; 
+	   $where = "WHERE p.price_show = 0 AND p.shop_price > 0 AND sub.is_on_sale=1 AND b.is_use = 1 AND pp.is_use = 1 "; 
 	}
 	if (!empty($filter['type_id']) )//category_id
 	    $where.=" AND (pt.type_id = '{$filter['type_id']}' OR pt.parent_id = '{$filter['type_id']}' OR pt.parent_id2 = '{$filter['type_id']}')";
@@ -327,9 +356,13 @@ class Rush_model extends CI_Model {
 
 		case 9: //'renqi_desc'
 			$sort="ORDER BY p.pv_num DESC, p.sort_order DESC, p.product_id DESC";
-		break;
-
-
+                    break;
+                case 10: //按最新排序
+                        $sort="ORDER BY p.product_id DESC";
+                    break;
+                case 11: 
+		        $sort = 'ORDER BY p.is_hot DESC';
+                    break;
 		// ends added
 	    default://默认按优先级
 		$sort = "ORDER BY p.pv_num DESC, gl_num DESC, p.sort_order ASC, p.product_id DESC";//has_order DESC,

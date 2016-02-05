@@ -25,7 +25,7 @@
 </div>
 <div class="views">
 <!-- 悦牙商城-->
-<div class="view view-main" data-page="<?=$active_tab?>">
+<div class="view view-main" data-page="index">
 
     <div class="toolbar tabbar-labels tabbar">
       <div class="toolbar-inner">
@@ -41,13 +41,13 @@
 		<div data-page="index" class="page<?php if ($active_tab!='index') echo ' cached';?>">
                    <div class="navbar">
                          <div class="navbar-inner">
-                              <div class="left" style="padding-left:10px; font-size:14px;">悦牙商城</div>
-                              <div class="center"><a href="/product/search" class="index-box external"></a></div>
-                              <div class="item-hide"><H1>国内专业牙科材料，齿科材料，口腔材料一战式展销平台</H1></div>
+                              <div class="left"><a href="/product/search" class="link icon-only open-panel external"> <i class="icon searchico"></i></a></div>
+                              <div class="center c_name">悦牙商城</div>
+<div class="item-hide"><H1>国内专业牙科材料，齿科材料，口腔材料一战式展销平台</H1></div>
                               <div class="right">
-		                           <a href="/cart/" class="link icon-only external"> <i class="icon cartico"></i><span class="number index-number" id="cart_num">0</span></a>
-		                           <a href="/product/ptype_list" data-popover=".popover-links" class="link icon-only open-popover external"><i class="icon csearchico"></i></a>
-                             </div>
+		                   <a href="/cart/" class="link icon-only external"> <i class="icon cartico"></i><span class="number number2" id="cart_num">0</span></a>
+		                   <a href="/product/ptype_list" data-popover=".popover-links" class="link icon-only open-popover external"><i class="icon csearchico"></i></a>
+                              </div>
                         </div>
                    </div>
             <div class="page-content infinite-scroll public-bg" data-template="infiniteProductTemplate" data-source="/index/ajax_goods_list/index" data-parent=".listb ul">
@@ -187,7 +187,7 @@ $now = date('Y-m-d H:i:s');
                                         <div class="status-line2 clearfix">
                                             <div class="attention"><? echo get_page_view('course',$course['product_id'],false);?></div>
                                             <div class="signin_num">已报名:<?=$course['ps_num']?></div>
-                                            <div class="signin_bar"><span class="<?php if(date("Y-m-d", strtotime($course['package_name'])) > date('Y-m-d')): ?>signin<?php else: ?>yibaoming<?php endif; ?>"></span></div>
+                                            <div class="signin_bar"><span class="<?php if($product_desc_additional['desc_waterproof'] >= date("Y-m-d")): ?>signin<?php else: ?>yibaoming<?php endif; ?>"></span></div>
                                         </div>
 					</div>
 
@@ -282,7 +282,7 @@ $now = date('Y-m-d H:i:s');
 	                        <li><a href="/collect/index" class="item-link item-content"><div class="item-inner">我的关注</div></a></li>
                             <li><a href="/user/order" class="item-link item-content"><div class="item-inner">我的订单</div></a></li>
 <li><a href="/user/comment" class="item-link item-content external"><div class="item-inner">我的评价</div></a></li>
-	                        <li><a href="/address/index" class="item-link item-content external"><div class="item-inner">收货地址</div></a></li>
+	                        <li><a href="/address/index" class="item-link item-content"><div class="item-inner">收货地址</div></a></li>
 	                        <li><a href="/user/course" class="item-link item-content"><div class="item-inner">我的课程</div></a></li>
 	                        <li class="center-lb-hu"><a href="/account/index" class="item-link item-content"><div class="item-inner">账户管理</div></a></li>
                             <li class="center-lb-hu"><a href="#" class="item-link item-content"><div class="item-inner">礼品中心</div></a></li>

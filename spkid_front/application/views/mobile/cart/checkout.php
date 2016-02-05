@@ -16,8 +16,7 @@
 <!-- 底部工具栏开始 -->    
 <div class="toolbar">
      <div class="toolbar-inner row no-gutter hu-cart-settlement">
-
-            <div class="col-60"><a href="#" class="link cart_del" style="color:#fff;">实付款：￥<span id="h_unpay_total"><?php print fix_price($cart_summary['product_price'] + $shipping_fee - $cart_summary['voucher']); ?></span></a></div>
+            <div class="col-60"><a href="#" class="link cart_del" style="color:#fff;">应付总价：￥<span id="h_unpay_total"><?php print fix_price($cart_summary['product_price'] + $shipping_fee - $cart_summary['voucher']); ?></span></a></div>
             <div class="col-40 settlemen-hu"><a href="#" onclick="submit_cart();" class="link external" style="color:#fff;">提交订单</a></div>
       </div>
 </div>
@@ -27,31 +26,32 @@
        <div class="content-block wrap">
          
         <div class="receiving-address">   
-        	<?php if(!empty($default_address)): ?>
-		    	<a href="#" class="item-link item-content open-popup"  data-popup=".popup-address">
-		    		<div class="receiving-address-list hu-dingdan">
-						<div class="juli-plick item-title clearfix">
-				            <div class="receiving-lb" id="default_address" data-id="<?=$default_address->address_id?>">
-						        <span class="dizhi-user"><?php echo $default_address->consignee;?></span>
-							    <span class="address-tel"><?php echo (!empty($default_address->mobile))? $default_address->mobile : $default_address->tel;?></span>
-							    <div class="receiving-dizhi"><?php echo $default_address->province_name.'  '.$default_address->city_name.$default_address->district_name.$default_address->address;?></div>
-						    </div>        
-						    <div class="address-returned"></div>
-						</div>
-					</div>
-		    	</a>
-			<?php else: ?>
-				<a href="/address/address_add" class="external">
-		    		<div class="receiving-address-list hu-dingdan">
-		                <div class="juli-plick item-title clearfix">
-					        <div class="receiving-lb" style="padding-top:10px;">没有收货地址</div>
-					        <div class="not-paid-jt"></div>
-				        </div>
-				    </div>
-		    	</a>	
-	  		<?php endif; ?> 		
-      	</div>
-        
+	    <a href="#" class="item-link item-content open-popup"  data-popup=".popup-address">
+	    	<div class="receiving-address-list hu-dingdan">
+		<?php if(!empty($default_address)): ?>
+				<div class="juli-plick item-title clearfix">
+		                       <div class="receiving-lb" id="default_address" data-id="<?=$default_address->address_id?>">
+				            <span class="dizhi-user"><?php echo $default_address->consignee;?></span>
+					    <span class="address-tel"><?php echo (!empty($default_address->mobile))? $default_address->mobile : $default_address->tel;?></span>
+					    <div class="receiving-dizhi"><?php echo $default_address->province_name.'  '.$default_address->city_name.$default_address->district_name.$default_address->address;?></div>
+				       </div>
+		                       
+				       <div class="address-returned"></div>
+				</div>
+				
+				
+				
+			<?php else: ?> 
+                	<div class="juli-plick item-title clearfix">
+			         <div class="receiving-lb" style="padding-top:10px;">没有收货地址</div>
+			         <div class="not-paid-jt"></div>
+		        </div>	
+		  	<?php endif; ?> 
+		    
+				
+		</div>
+	    </a>
+      </div>
         
     <div class="list-block media-list" style="margin:0 0;">
         <ul class="hu-qrdds">
@@ -119,10 +119,8 @@
             <a href="#" class="item-link item-content open-popup" data-popup=".popup-voucher">
 	      <div class="not-paid-wr clearfix">
 	         
-	         使用现金券<span id="h_use_voucher" style="margin-left:10px;">￥<?=$cart_summary['voucher']?></span> 
-                 <!--
-                 <span id="h_use_voucher_sn"><?//=$cart_summary['voucher_sn']?></span>
-                 -->
+	         使用现金券<span id="h_use_voucher" style="margin-left:10px;">￥<?=$cart_summary['voucher']?></span> <span id="h_use_voucher_sn"><?=$cart_summary['voucher_sn']?></span>
+                 
 	     </div>
 	    <div class="not-paid-jt"></div>
             </a>
@@ -136,9 +134,9 @@
 	      <div class="default-address-hu clearfix" style="padding:0 0;">                   
 	           <a href="#" class="item-link item-content" style="display:inline-block;">                    
                     使用余额 <span id="h_user_money" style="margin-left:10px;">￥<?=$user->user_money?></span> 
-		   <span id="h_used_money" class="guanzhu-jiage">￥<?=$cart_summary['balance']?></span>                  
+		   <span id="h_used_money" class="guanzhu-jiage">￥<?=$user->user_money?></span>                  
                    </a>                   
-	           <div class="default-address-anniu" style="padding:0 5px;" id="h_user_money_flag">                      
+	           <div class="default-address-anniu" style="padding:0 5px;">                      
                        <label class="label-switch">                       
                            <input type="checkbox" name="is_used" checked="">
                            <div class="checkbox"></div>                           
@@ -156,18 +154,15 @@
     }
 ?>	    
 <div class="not-paid">
-    <div class="order-details-rr">
-	      <a href="#" class="item-link item-content open-picker" data-picker=".picker-pay">
-	          <div class="not-paid-wr clearfix">	           
-                <div id="default_pay" data-id="<?=$payment['pay_id']?>">
-                    支付方式： 
-                    <img src="<?php print img_url($pay_list[$payment['pay_id']]->pay_logo); ?>" /> 
-                    <?=$pay_list[$payment['pay_id']]->pay_name?>
-                </div>		  
-	          </div>
-	         <div class="not-paid-jt"></div>
-	      </a>
-    </div>
+         <div class="order-details-rr">
+	 <a href="#" class="item-link item-content open-picker" data-picker=".picker-pay">
+	      <div class="not-paid-wr clearfix">	           
+                     <div id="default_pay" data-id="<?=$payment['pay_id']?>">支付方式： <img src="<?php print img_url($pay_list[$payment['pay_id']]->pay_logo); ?>" /> 
+                     <?=$pay_list[$payment['pay_id']]->pay_name?></div>		  
+	      </div>
+	      <div class="not-paid-jt"></div>
+	 </a>
+        </div>
 </div> 
   
 </div>   
@@ -179,49 +174,57 @@
 
 <!-- 地址弹层start -->
 <div class="popup popup-address tablet-fullscreen">
-  	<div class="view navbar-fixed">
-		<div class="pages">
-	  		<div class="page">
-				<div class="navbar">
-		  			<div class="navbar-inner">
+  <div class="view navbar-fixed">
+	<div class="pages">
+	  <div class="page">
+		<div class="navbar">
+		  <div class="navbar-inner">
                         <div class="left">
                             <a href="#" class="link icon-only close-popup">
-                            	<i class="icon icon-back"></i>
+                            <i class="icon icon-back"></i>
                             </a>
                         </div>
-						<div class="center">选择收货地址</div>
-						<div class="right" style="margin-right:8px;"><a href="/address/index" class="external" style="color:#76DEFF;">管理</a></div>
-		  			</div>
-				</div>						
-				<div class="page-content article-bg " style="padding-top:50px;">
-	          		<div class="content-block wrap">		 
-					    <ul class="receiving-address">
-					    <?php foreach($address_list as $id => $address): ?>               	
-					        <li class="address-list<?php if($address->is_used) echo ' default-address';?>" >
-							 	<div class="receiving-address-list ">
-							     	<div class="juli-plick clearfix">
-					                    <div class="receiving-lb" data-id="<?=$address->address_id?>">
-							               	<span class="dizhi-user"><?php echo $address->consignee;?></span>
-								       		<span class="address-tel"><?php echo (!empty($address->mobile))? $address->mobile : $address->tel;?></span>
-								       		<div class="receiving-dizhi"><?php echo $address->province_name.'  '.$address->city_name.$address->district_name.$address->address;?></div>
-							          	</div>
-			                            <?php if($address->is_used): ?>
-					                        <div class="address-returneds"></div>
-										<?php endif; ?>
-								    </div>
-						        </div>
-					        </li>												
-						<?php endforeach; ?>			
-		      			</ul>
-		  			</div>
-	     		</div>	     
-	  		</div>
+			<div class="center">选择收货地址</div>
+			<div class="right" style="margin-right:8px;"><a href="/#!//address/index" class="external" style="color:#76DEFF;">管理</a></div>
+		  </div>
 		</div>
-  	</div>
+		
+		
+		
+		<div class="page-content article-bg " style="padding-top:50px;">
+	          <div class="content-block wrap">
+		  
+		        <ul class="receiving-address">
+		        <?php foreach($address_list as $id => $address): ?>               	
+		        <li class="address-list<?php if($address->is_used) echo ' default-address';?>" >
+				 <div class="receiving-address-list ">
+				     <div class="juli-plick clearfix">
+		                          <div class="receiving-lb" data-id="<?=$address->address_id?>">
+				               <span class="dizhi-user"><?php echo $address->consignee;?></span>
+					       <span class="address-tel"><?php echo (!empty($address->mobile))? $address->mobile : $address->tel;?></span>
+					       <div class="receiving-dizhi"><?php echo $address->province_name.'  '.$address->city_name.$address->district_name.$address->address;?></div>
+				          </div>
+                                          <?php if($address->is_used): ?>
+		                          <div class="address-returneds"></div>
+					  <?php endif; ?>
+				     </div>  
+			        </div>
+		        </li>
+			
+			
+			<?php endforeach; ?>
+			
+		      </ul>
+		  </div>
+	     </div>
+	     
+	     
+	  </div>
+	</div>
+  </div>
 </div>
 <!-- 地址弹层end -->
 <!-- 现金券弹层start -->
-<!--
 <div class="popup popup-voucher tablet-fullscreen ">
   <div class="view navbar-fixed ">
 	<div class="pages ">
@@ -267,67 +270,7 @@
 	</div>
   </div>
 </div>
--->
 <!-- 现金券弹层end -->
-
-<!-- 现金券弹层start -->
-<div class="popup popup-voucher tablet-fullscreen ">
-    <div class="view navbar-fixed ">
-        <div class="pages ">           
-            <div data-page="index" class="page no-toolbar">
-                <div class="navbar">
-                    <div class="navbar-inner">
-                        <div class="left"><a href="#" class="link icon-only close-popup"><i class="icon icon-back"></i></a></div>
-                        <div class="center c_name">选择现金券</div>
-                    </div>
-                </div>
-                       
-                <div class="page-content coupons-juli">
-                    <div class="buttons-row coupons-tab">
-                        <a href="#cat_0" class="tab-link active button coupons-list">已有现金券</a>
-                        <a href="#cat_1" class="tab-link  button coupons-list">手动输入现金券</a>
-                    </div>
-                           
-                    <div class="tabs cash-coupon">
-                         <div id="cat_0" class="tab active">
-                             <?php 
-                             $coupon_input_flag = false;
-                             foreach ($voucher_list as $v): ?>
-                             <div class="cash-coupon1 clearfix">
-                                 <div class="cash-coupon-left">
-                                     <div class="cash-coupon-rr"><span class="cash-jiage">¥ <?php print $v->voucher_amount; ?></span><span class="cash-shiyong">满 <?php print $v->min_order; ?> 使用</span></div>
-                                     <p class="cash-jian"><?php print $v->voucher_name; ?><span>有效至<?php print $v->end_date; ?></span></p>
-                                 </div>
-                                <?php if(!empty($payment['voucher']) && $payment['voucher'][$v->provider]->voucher_sn == $v->voucher_sn): 
-                                    $coupon_input_flag = true;
-                                ?>
-                                <div class="cash-coupon-right"><a href="#" class="cash-coupon-qx coupon_del" data-r="<?php print $v->voucher_sn; ?>">取消使用</a></div>
-                                <div class="cash-coupon-ico"></div>
-                                <?php else: ?>
-                                <div class="cash-coupon-right"><a href="#" class="cash-coupon-qx sel_coupon" data-r="<?php print $v->voucher_sn; ?>">使用</a></div>
-                                <?php endif; ?>
-                             </div>
-                             <?php endforeach ?>
-                         </div>
-                         <div id="cat_1" class="tab">
-                             <ul class="manually clearfix">
-                                  <?php if(!empty($payment['voucher']) && !$coupon_input_flag): 
-                              $key = array_keys($payment['voucher']);
-                              ?>
-                                 <li><span class="manually-bk"><input id="h_voucher_input" type="text" class="manually-input" placeholder="请输入券号" value="<?=$payment['voucher'][$key[0]]->voucher_sn?>" disabled></span><span class="manually-btn"><a href="#" id="use_coupon" class="coupon-button2">取消使用</a></span></li>
-                                 <?php else: ?>                                 
-                                 <li><span class="manually-bk"><input id="h_voucher_input" type="text" class="manually-input" placeholder="请输入券号"></span><span class="manually-btn"><a href="#" id="use_coupon">使用</a></span></li>
-                                 <?php endif; ?>                                   
-                             </ul>                           
-                         </div>                          
-                    </div>
-                </div>
-            </div>           
-        </div>
-    </div>
-</div>
-<!-- 现金券弹层end -->
-
 <!-- 快递弹层start -->
 <div class="picker-modal picker-shipping">
     <div class="toolbar">
@@ -429,117 +372,6 @@
 <?php include APPPATH."views/mobile/common/footer-js.php"; ?>
 <script type="text/javascript">
 var v_shop_id = '<?=$shop_id?>';
-var v_cur_coupon = '<?php if(!empty($payment['voucher'])){$key = array_keys($payment['voucher']); echo $payment['voucher'][$key[0]]->voucher_sn;}?>';
-
-$$("#use_coupon").click(function(){
-    var v_coupon_code = $$("#h_voucher_input").val();
-    if ($$(this).hasClass('coupon-button2')){
-        remove_voucher(v_coupon_code, 1);
-    } else {
-        use_voucher(v_coupon_code, 1);
-    }
-});
-
-$(document).on('click', '.coupon_del', function (e) {
-    var _this = $(this);
-    var v_coupon_code = _this.attr('data-r');
-    remove_voucher(v_coupon_code, 2, _this);
-});
-
-$(document).on('click', '.sel_coupon', function (e) {
-    var _this = $(this);
-    var v_coupon_code = _this.attr('data-r');
-    //if (v_coupon_code == '0'){
-    //    remove_voucher(v_coupon_code, 1);
-    //} else {
-        use_voucher(v_coupon_code, 2, _this);
-    //}   
-});
-
-function remove_voucher(voucher_sn, use_type, p_obj) {
-    if (!voucher_sn) {
-        alert('请选择要取消的现金券号');
-        return false;
-    }
-    $$.ajax({
-        url: '/cart/unpay_voucher',
-        data: {voucher_sn: voucher_sn, rnd: new Date().getTime()},
-        dataType: 'json',
-        type: 'POST',
-        success: function(result) {
-            if (result.msg)
-                alert(result.msg);
-            if (result.err)
-                return false;
-            v_cur_coupon = '';
-            $$("#h_use_voucher").html('￥0');
-            //$$("#h_use_voucher_sn").html('');
-            //location.href = location.href;
-            if (use_type == 1){
-                $$("#use_coupon").removeClass('coupon-button2');
-                $$("#use_coupon").html('使用');
-                $$("#h_voucher_input").removeAttr('disabled');
-                $$("#h_voucher_input").val('');
-            } else {
-                p_obj.removeClass('coupon_del');
-                p_obj.addClass('sel_coupon');
-                p_obj.html('使用');
-                //p_obj.parent().siblings(".sel_coupon").removeAttr('checked');
-                p_obj.parent().siblings(".cash-coupon-ico").remove();
-            }
-            unpay_total();
-        }
-    });
-}
-
-function use_voucher(voucher_sn, use_type, p_obj) {
-    if (!voucher_sn) {
-        alert('请选择或输入现金券号');
-        return false;
-    }
-    $$.ajax({
-        url: '/cart/pay_voucher',
-        data: {voucher_sn: voucher_sn, rnd: new Date().getTime()},
-        dataType: 'json',
-        type: 'POST',
-        success: function(result) {
-            if (result.msg) {
-                if (use_type == 2) p_obj.removeAttr('checked');
-                alert(result.msg);
-            }
-            if (result.err)
-                return false;
-            v_cur_coupon = voucher_sn;
-            $$("#h_use_voucher").html('￥'+result.data.voucher_amount);
-            //$$("#h_use_voucher_sn").html(result.data.voucher_sn);
-            if (use_type == 1){
-                $$("#use_coupon").addClass('coupon-button2');
-                $$("#use_coupon").html('取消使用');
-                $$("#h_voucher_input").attr('disabled', true);
-                
-                $$(".coupon_del").html('使用').addClass('sel_coupon').removeClass('coupon_del');
-                $$(".cash-coupon-ico").remove();                
-            } else {
-                $$(".coupon_del").html('使用').addClass('sel_coupon').removeClass('coupon_del');
-                $$(".cash-coupon-ico").remove();
-                
-                $$("#use_coupon").removeClass('coupon-button2');
-                $$("#use_coupon").html('使用');
-                $$("#h_voucher_input").removeAttr('disabled');
-                $$("#h_voucher_input").val('');
-                
-                p_obj.removeClass('sel_coupon');
-                p_obj.addClass('coupon_del');
-                p_obj.html('取消使用');
-                //p_obj.parent().after('<span><span class="qxsy coupon_del" sid="'+result.data.voucher_sn+'">取消使用</span><span class="shiyong">使用该券后将不能参加其他促销活动</span></span>');
-                p_obj.parent().after('<div class="cash-coupon-ico"></div>');
-            }
-            unpay_total();
-            myApp.closeModal('.popup.modal-in');
-            //location.href = location.href;
-        }
-    });
-}
 //选择地址
 $$(document).on('click', '.address-list', function (e) {
     var _this = this;
@@ -677,30 +509,20 @@ function j_voucher_use(v_voucher_sn){
         }
     });
 }
-
-function use_user_money() {
-	var v_checked = $$("input[name=is_used]").prop('checked');
-	var total = parseFloat($$('#h_goods_total').html());
-	var user_money = parseFloat($$('#h_user_money').html().replace('￥', ''));
-        var shipping_fee = parseFloat($$("#shipping_fee").html());
-        total = total + shipping_fee;
-	var used_money = 0;
-
-	if (v_checked) {
-	    if (total <= user_money){
-	        used_money = total;
-	    } else {
-	        used_money = user_money;
-	    }
-	}
-	$$("#h_used_money").html('￥'+used_money);
-	unpay_total();
-}
 //使用余额
-$$("#h_user_money_flag").on('change', function(){
-    use_user_money();
+$$("#h_user_money_flag").on('click', function(){
+    var v_checked = $$(this).prop('checked');
+    var total = parseInt($$('#h_goods_total').html());
+    var user_money = parseInt($$('#h_user_money').html().replace('￥', ''));
+    var used_money;
+    if (total <= user_money){
+        used_money = total;
+    } else {
+        used_money = user_money;
+    }
+    $$("#h_used_money").html('￥'+used_money);
+    unpay_total();
 });
-
 // 计算应付总金额
 function unpay_total(){
     var used_money = parseFloat($$("#h_used_money").html().replace('￥', ''));//余额
@@ -708,8 +530,7 @@ function unpay_total(){
     var shipping_fee = parseFloat($$("#shipping_fee").html());//运费
     var voucher = parseFloat($$("#h_use_voucher").html().replace('￥', ''));//券
     var unpay_amount = total + shipping_fee - used_money - voucher;
-
-    $("#h_unpay_total").html(unpay_amount.toFixed(2));
+    $("#h_unpay_total").html(unpay_amount);
 }
 var last_cart_submit_time = 0;
 function submit_cart() {
@@ -736,7 +557,7 @@ function submit_cart() {
     }
     // 收集数据，提交
     var data = {rnd:new Date().getTime(),address_id:address_id};
-    data['use_balance'] = $$("input[name=is_used]").prop('checked')?1:0;
+    data['use_balance'] = $$("#h_user_money_flag").prop('checked')?1:0;
     data['pay_id'] = pay_id;
     data['shipping_id'] = shipping_id;
     data['invoice'] = $$("#h_invoice").html();
@@ -752,7 +573,7 @@ function submit_cart() {
             if (result.msg) myApp.alert(result.msg, '');
             if (result.url) {location.href=result.url;};
             if (result.err) return false;
-            if(result.order_id) location.href='/order/info/'+result.order_id ;
+            if(result.order_id) location.href='/#!//order/info/'+result.order_id ;
         },
         error:function()
         {
@@ -760,11 +581,6 @@ function submit_cart() {
         }
     });
 }
-
-
-//默认触发一次，页面初始化
-use_user_money();
-
 </script>
-
-<?php include APPPATH."views/mobile/footer.php"; ?>
+</body>
+</html>

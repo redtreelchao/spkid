@@ -652,7 +652,8 @@ class CI_AlipaySubmit {
 	    $alipay_config = $CI->config->item('alipay_new');
             //构造要请求的参数数组，无需改动
             $parameter = array(
-                    "service" => "alipay.wap.create.direct.pay.by.user",
+                    //"service" => "alipay.wap.create.direct.pay.by.user",
+                    "service" => "create_direct_pay_by_user",
                     "partner" => trim($this->alipay_config['partner']),
                     "seller_id" => trim($this->alipay_config['seller_id']),
                     "payment_type"  => "1",

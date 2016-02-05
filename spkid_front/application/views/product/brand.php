@@ -1,120 +1,166 @@
-<?php include APPPATH."views/common/header.php"; ?>
-<link rel="stylesheet" href="<?php print static_style_url('css/plist.css'); ?>" type="text/css" />
-<script type="text/javascript">
-function change_order (uri) {
-  location.href = base_url+uri;
-}
-$(function(){
-  //筛选区展开伸缩
-  // $(".brand span:gt(9)").hide();
-  // $("#key").toggle(function(){$(this).removeClass("open").addClass("close").text("收起");$(".brand span:gt(9)").show()},
-  //          function(){$(this).removeClass("close").addClass("open").text("展开");$(".brand span:gt(9)").hide()})
-  //lazy load
-  lazyload({defObj:'img.lazy'});
-  load_ad('div.brand_tpic','brand',0,<?php print $brand->brand_id ?>,'banner');
-  load_liuyan('#liuyan_newest',0,<?php print $brand->brand_id ?>,'');
+<?php include APPPATH . 'views/common/header.php'?>
+<link href="<?php echo static_style_url('pc/css/bootstrap.css?v=version')?>" rel="stylesheet" type="text/css">
+<script src="<?php echo static_style_url('pc/js/jquery-1.11.3.js?v=version')?>" type="text/javascript"></script>
+<script src="<?php echo static_style_url('pc/js/bootstrap.js?v=version')?>" type="text/javascript"></script>
+<!--course-bar start-->
+<div class="course-bar">
+     <div class="all-exhibits">
+     <div class="exhibits-map">首页>全部展品><?php echo $brand->brand_name?></div>
+          <div class="exhibits-int clearfix">
+              <div class="exhibits-js">
+<img src="<?php echo img_url($brand->brand_logo)?>">
+                   <p><?php echo $brand->brand_info?></p>
+              </div>
+              <div class="exhibits-pic"><img src="<?php echo img_url($brand->brand_banner)?>"></div>
+          </div>
+    </div>
+    
+    <div class="course-list">
+         <div class="sorting-nr">
+             <ul class="brand-tab clearfix">
+             <li data-value="0" class="brand-currt">全部品牌</li>
+             <li data-value="1">品牌简介与故事</li>
+             </ul>
+             <div class="brand-list">
+                   <ul class="all-goods-lb clearfix">
+<?php foreach($product_list as $product):?>
+                         <li>
+                         <a href="#">
+                         <div class="all-goods-img"><img src="<?php echo img_url($product->img_url)?>"></div>
+                         <p class="all-goods-mc"><?php echo $product->product_name?></p>
+                         <div class="all-goods-js"><?php echo $product->size_name?></div>
+<?php if($product->price_show):?>
+<div class="all-goods-price"><span>&yen;<?php echo $product->shop_price?></span><em>&yen;<?php echo $product->market_price?></em></div> 
+<?php else:?>
+                         <div class="all-goods-price"><input name="" type="button" class="show-xunjia" value="询价"></div>
+<?php endif;?> 
+                         </a>
+                         </li>
+<?php endforeach?>                                                
+                     </ul>
+             </div>
+              
+             <div class="brand-list" style="display:none;">
+                  <div class="brand-tit">品牌故事</div>
+                   <div class="brand-gushi"><?php echo $brand->brand_story?></div>
+             </div>
+            
+          
+            <div class="single-brand-right"><a href="#give-message" data-toggle="modal" data-container="body">联系客服</a></div>
+              
+       </div>
+     
+    
+    
+    </div>
+
+</div>
+
+<!--course-bar end-->
+
+<div id="give-message" class="modal v-pov" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog give-message">
+        <div class="modal-content">
+            <div class="modal-header give-message-tit">
+                <span>给我们留言</span>
+                <button type="button" class="close give-message" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true"><img src="<?php echo static_style_url('pc/images/close.png')?>"></span></button>
+            </div>
+          <div class="modal-body">
+               <div class="give-contact">
+                    <p>小悦悦要忙疯啦，有问题先留言，我们会尽快联系您哈！<span>客服电话：400-9905-920</span></p>
+                    <div class="give-input">
+                        <form action="/api/comment/add" method="POST " class="ct-form" name="ct-form" data-hostid="3179" data-committype="" data-hosttype="2">
+                            <div class="clearfix"><textarea style="height: 90px;" name="comment" aria-required="true" placeholder="留言不能少于10个字"></textarea></div>
+                            <span class="err_tip err_tips">不能为空</span>
+                            <div class="clearfix" style="margin-top:10px;"><input name="mobile" type="text" placeholder="联系电话"></div>
+                            <span class="err_tip err_tips">不能为空</span>
+                       </form>
+                    </div>
+               </div>
+          </div>
+          
+          <div class="modal-body v-button give-message-but">
+              <button class="btn btn-lg btn-blue message-btn" type="submit">留言</button>
+          </div>
+          
+        </div>
+      </div>
+</div>
+
+
+
+
+
+<div id="give-success" class="modal v-pov" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog give-message">
+        <div class="modal-content">
+            <div class="modal-header give-message-tit">
+                <span>给我们留言</span>
+                <button type="button" class="close give-message" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true"></span></button>
+            </div>
+          <div class="modal-body">
+               <div class="give-contact">
+                    <p class="ly-success">留言成功！</p>
+                    <p class="houer-lx">我们会在24小时内与您联系</p>
+                    
+               </div>
+          </div>
+          
+          <div class="modal-body v-button give-message-but" style="margin-top:30px;">
+              <button class="btn btn-lg" type="submit">留言</button>
+              <a href="#" class="zaiciliuyan">再次留言</a>
+              
+          </div>
+          
+        </div>
+      </div>
+</div>
+
+<script>
+ $(".brand-tab li").bind("click", function () {
+        $(".brand-tab li").removeClass("brand-currt");
+        $(this).addClass("brand-currt");
+        var i = $(this).attr("data-value");
+        $(".brand-list").hide();
+        $(".brand-list:eq(" + i + ")").show();
+ });
+var brand_id = <?php echo $brand->brand_id?>;
+$('.message-btn').click(function(){
+    
+    var content = $('textarea[name=comment]').val();
+    var mobile = $('input[name="mobile"]').val();
+    if (content.length<10){
+        //$('textarea[name=comment]').parent().next().show();
+        $('.err_tip').first().show();
+        return false;
+    }
+    $.ajax({url:'/brand/comment', data:{brand_id:brand_id, content:content, mobile:mobile}, dataType:'json', method:'POST', success:function(data){
+        if (data.success){
+            $('#give-message').modal('hide');
+            $('#give-success').modal('show');
+        }
+    }
+    })
+})
+var range = 50;
+var page = 2;
+$(document).on("scroll", function(){  
+    var srollPos = $(window).scrollTop();
+    var totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+    if(($(document).height()-range) <= totalheight) {
+        $.ajax({
+        url:'/brand/index/'+brand_id,
+            data:{page:page},            
+            success:function(data){
+                if(data && '' != data){
+                    $('.all-goods-lb').append(data);
+                    page++;
+                }
+                
+            }
+        })
+    }
 });
 </script>
-<div id="content">
-<div class="bread_line ablack">您现在的位置： <a href="index.html">首页</a> &gt; <a href="brands.html">品牌大全</a> &gt; <?php print $brand->brand_name; ?></div>
-  <div class="right">
-    <div class="brand_tpic"></div>   
-    <div class="screen">
-      <h2 class="b">筛选条件</h2>
-      <div class="sc_list">
-          <div class="c_name">性别：</div>
-          <span class="all"><a href="<?php print brand_link($param,array('sex'=>0,'page'=>0)); ?>">全部</a></span>
-          <span><a <?php if($param['sex']==1) print 'style="color:#DE5B03"' ?> href="<?php print brand_link($param,array('sex'=>1,'page'=>0)); ?>">男童</a></span>
-          <span><a <?php if($param['sex']==2) print 'style="color:#DE5B03"' ?> href="<?php print brand_link($param,array('sex'=>2,'page'=>0)); ?>">女童</a></span>
-      </div>
-      <div class="sc_list">
-          <div class="c_name">岁段：</div>
-          <span class="all"><a href="<?php print brand_link($param,array('age'=>0,'page'=>0)); ?>">全部</a></span>
-          <?php foreach ($age_filter as $k=>$a): ?>
-            <span>
-            <a <?php if($param['age']==$k) print 'style="color:#DE5B03"' ?> href="<?php print brand_link($param,array('age'=>$k,'page'=>0)); ?>"><?php print $a['name'] ?></a>
-            </span>
-          <?php endforeach ?>
-      </div>
-      <?php if ($category_filter): ?>      
-     <div class="sc_list brand">
-       <div id="key" class="open" <?php if(TRUE||count($category_filter)<=9) print 'style="display:none;"'; ?>>展开</div>
-          <div class="c_name">类别：</div>
-           <span class="all"><a href="<?php print brand_link($param,array('category_id'=>0,'size_id'=>0,'page'=>0)); ?>">全部</a></span>
-           <?php foreach ($category_filter as $c): ?>
-           <span><a <?php if($param['category_id']==$c->category_id) print 'style="color:#DE5B03"' ?> href="<?php print brand_link($param,array('category_id'=>$c->category_id,'page'=>0)); ?>"><?php print $c->category_name ?></a></span>
-           <?php endforeach ?>
-      </div>
-      <?php endif ?>
-    </div>
-    <div class="page_top">
-    <div class="px l">排序方式：<select name="sort_order" onchange="change_order(this.value);">
-          <option value="<?php print brand_link($param,array('sort'=>0,'page'=>0)); ?>">默认排列方式</option>
-           <option <?php if($param['sort']==1) print 'selected' ?> value="<?php print brand_link($param,array('sort'=>1,'page'=>0)); ?>">按价格从低到高</option>
-           <option <?php if($param['sort']==2) print 'selected' ?> value="<?php print brand_link($param,array('sort'=>2,'page'=>0)); ?>">按价格从高到低</option>
-           <option <?php if($param['sort']==4) print 'selected' ?> value="<?php print brand_link($param,array('sort'=>4,'page'=>0)); ?>">按上架时间</option>
-           <option <?php if($param['sort']==3) print 'selected' ?> value="<?php print brand_link($param,array('sort'=>3,'page'=>0)); ?>">按销量</option>
-         </select>
-    </div>
-    <div class="page_area r">
-             当前第<?php print $filter['page']+1 ?>页/共<?php print $filter['page_count'] ?>页
-             <?php if ($filter['page']>0): ?>
-               <a href="<?php print brand_link($param,array('page'=>$filter['page']-1)); ?>"> 上一页 </a>
-             <?php endif ?>
-             <?php if ($filter['page']<$filter['page_count']-1): ?>
-               <a href="<?php print brand_link($param,array('page'=>$filter['page']+1)); ?>">下一页</a> 
-             <?php endif ?>  
-      </div>
-    </div>
-     <?php include APPPATH.'views/product/product_list_block.php'; ?>
-     <div class="page_d">
-     <?php if ($filter['page_count']): ?>  
-        
-     当前第<?php print $filter['page']+1 ?>页/共<?php print $filter['page_count'] ?>页     
-     <?php if ($filter['page']>0): ?>
-       <a href="<?php print brand_link($param,array('page'=>$filter['page']-1)); ?>">上一页</a>
-     <?php endif ?>
 
-     <?php for($i=0;$i<$filter['page_count'];$i++): ?>
-     <a <?php if($i==$filter['page']) print 'class="on_page"'; ?> href="<?php print brand_link($param,array('page'=>$i)); ?>"><?php print $i+1; ?></a>     
-     <?php endfor;?>
-
-     <?php if ($filter['page']<$filter['page_count']-1): ?>
-       <a href="<?php print brand_link($param,array('page'=>$filter['page']+1)); ?>">下一页</a> 
-     <?php endif ?>
-
-     <?php endif ?>
-     </div>    
-  </div>
- <div class="left">
-   <div class="mod">
-      <h2 class="bg_y"><span>品牌故事</span> <?php if($brand->brand_story):?><a href="brandstory-<?php print $brand->brand_id ?>.html" target="_blank">更多&gt;&gt;</a><?php endif;?></h2>
-      <div class="mod_c">
-      <span class="brand_logo"><?php if($brand->brand_story):?><a href="brandstory-<?php print $brand->brand_id ?>.html" target="_blank"><img src="<?php print static_style_url('data/brand/logo/'.$brand->logo_160_73); ?>" width="160" height="73" /></a><?php else:?><img src="<?php print static_style_url('data/brand/logo/'.$brand->logo_160_73); ?>" width="160" height="73" /><?php endif;?></span>
-      <span class="brand_name b">品牌发源地：<?php print $brand->flag_name ?></span>
-       <p class="brand_intro"><?php print $brand->brand_info ?> </p>   
-      </div>       
-   </div>
-   <?php if ($other_brand): ?>
-   <div class="mod">
-      <h2 class="bg_x">其他品牌</h2>
-      <div class="other_b">
-        <ul>
-          <?php foreach ($other_brand as $b): if($b->brand_id==$brand->brand_id) continue;?>
-          <li>
-          <a href="brand-<?php print $b->brand_id ?>.html">
-          <img src="<?php print static_style_url('data/brand/logo/'.$b->logo_75_34); ?>" width="75" height="34" />
-          </a>
-          <br />
-          <a href="brand-<?php print $b->brand_id ?>.html"><?php print mask_str($b->brand_name,5,0,'...'); ?></a></li>
-          <?php endforeach ?>
-        </ul>  
-      </div>       
-   </div>
-   <?php endif ?>
-   <div class="mod" id="liuyan_newest" style="display:none;"></div>
- </div>
-
- <div class="cl"></div> 
-</div>
-<?php include APPPATH.'views/common/footer.php'; ?>
+<?php include APPPATH . 'views/common/footer.php'?>

@@ -79,32 +79,15 @@ class Order extends CI_Controller
     public function info($order_id)
     {
         global $alipay_bank_list;
-        //$this->load->helper('order');
+        $this->load->helper('order');
         $this->load->model('user_model');
         if(!$this->user_id) goto_login('order/info/'.$order_id);
         $user=$this->user_model->filter(array('user_id'=>$this->user_id));
-        $order = $this->order_model->order_info($order_id); //订单信息
+        $order = $this->order_model->order_info($order_id);
         if(!$order || $order->user_id!=$this->user_id) sys_msg('订单不存在',1);	
-
-
         $order_product = $this->order_model->order_product($order_id);
-        $order->total_fee = $order->order_price+$order->shipping_fee; //订单金额+运费
+        $order->total_fee = $order->order_price+$order->shipping_fee;
         $order->unpay_price=round($order->total_fee-$order->paid_price,2);
-
-        // 20160114 by v.wang
-        $payment_money = $this->order_model->get_payment_money($order_id); //获取订单使用余额
-        // 循环从从总金额中扣除
-        $order->real_pay = $order->total_fee;
-        foreach ($payment_money as $pm_k => $pm_v) {
-            $order->real_pay -= $pm_v->payment_money;
-
-            if($pm_v->pay_code == 'balance'){
-                $order->balance = $pm_v->payment_money;
-            }elseif($pm_v->pay_code == 'coupon'){
-                $order->coupon = $pm_v->payment_money;
-            }
-        }
-
         if(1 == $order->is_ok && $order->order_status == 4){
             $status = 'invalid';
         } elseif(1 == $order->is_ok && $order->order_status !== 4){
@@ -120,8 +103,9 @@ class Order extends CI_Controller
             else{
                 $status = 'payed';
             }
-        }
-        $message_arr = array('pending' => array('等待您的付款', '剩余3天关闭'), 'payed' => array('已付款', '等待商家发货'), 'shipped' => array('已发货', '收到货品尽早确认, 可获积分哦!'), 'completed' => array('交易成功', ''), 'invalid' => array('交易终止', ''));
+        }       
+        $order_advice = $this->order_model->get_order_advice($order_id);
+        $message_arr = array('pending' => '待支付', 'payed' => '待出库', 'shipped' => '已出库', 'completed' => '已完成', 'invalid' => '已取消');
         $msg = $message_arr[$status];
 		
         //$order_payment = $this->order_model->order_payment($order_id);
@@ -160,7 +144,6 @@ class Order extends CI_Controller
             $order->shipping_name = '快递';
         }
          */
-
         $is_return_from_pay = $this->input->get('returnfpay') != FALSE;
 		$this->load->vars(array(
 			'order' => $order,
@@ -168,9 +151,10 @@ class Order extends CI_Controller
             'msg' => $msg, 
 			'product_list' => $order_product,
             'pay_list' => $pay_list,
-            'is_return_from_pay' => $is_return_from_pay
+            'is_return_from_pay' => $is_return_from_pay, 
+                    'order_advice' => $order_advice
         ));
-		$this->load->view('/mobile/order/info');
+		$this->load->view('/order/info_new');
 		
 	}
 
@@ -258,14 +242,14 @@ class Order extends CI_Controller
             $this->db->trans_begin();
             $order = $this->invalid_model->lock_order($order_id);
             if(!$order) {
-                $arr = array('msg' => '抱歉，此订单不存在，请联系客服!', 'redirect_url' => false);
+                $arr = array('error' => 1, 'msg' => '抱歉，此订单不存在，请联系客服!', 'redirect_url' => false);
                 echo json_encode($arr);
 		exit();
             }
 	    $order_id = intval($order->order_id);
             $perms = get_order_perm($order);
             if(!$perms['invalid']) {
-                $arr = array('msg' => '抱歉，此订单不能作废，请联系客服!', 'redirect_url' => false);
+                $arr = array('error' => 1, 'msg' => '抱歉，此订单不能作废，请联系客服!', 'redirect_url' => false);
                 echo json_encode($arr);
 		exit();
 	    }
@@ -359,7 +343,7 @@ class Order extends CI_Controller
         }
         $this->db->trans_commit();
 
-                $arr = array('msg' => '订单已作废!', 'redirect_url' => true);
+                $arr = array('error' => 0, 'msg' => '订单已作废!', 'redirect_url' => true);
                 echo json_encode($arr);
                 exit();
         }

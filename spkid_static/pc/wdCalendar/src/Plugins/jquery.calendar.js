@@ -1536,7 +1536,7 @@
             if (!course_id && data != null) {
                 course_id = data[0];
             };
-            var course_link = '/course_info-' + course_id;
+            var course_link = '/product-' + course_id;
             console.log(data);
             console.log(course_link); 
             location.href = course_link;

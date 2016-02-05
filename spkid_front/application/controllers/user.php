@@ -12,35 +12,36 @@ class User extends CI_Controller
 		$this->time=date('Y-m-d H:i:s');
 		$this->load->model('user_model');
 		$this->load->library('user_obj');
+		$this->load->model('collect_model');
 	}
 
 	# 会员中心首页
 	public function index()
 	{
-		$this->load->helper('order');
+		// $this->load->helper('order');
                 
-		if(!$this->user_id) goto_login('user');
-		$user_id=$this->user_id;
-		$user_info = $this->user_obj->get_profile($user_id);
-		$user_info->voucher_num = $this->user_model->user_voucher_num($user_id);	//现金券数
-        $user_info->order_num =$this->user_model->user_order_num($user_id);	//订单数量
+		// if(!$this->user_id) goto_login('user');
+		// $user_id=$this->user_id;
+		// $user_info = $this->user_obj->get_profile($user_id);
+		// $user_info->voucher_num = $this->user_model->user_voucher_num($user_id);	//现金券数
+  //       $user_info->order_num =$this->user_model->user_order_num($user_id);	//订单数量
 
-		/** 会员等级*/
+		// /** 会员等级*/
         
-        /** 留言回复条数*/
-        $user_info->liuyan_return_num = $this->user_model->liuyan_num($user_id);
+  //       /** 留言回复条数*/
+  //       $user_info->liuyan_return_num = $this->user_model->liuyan_num($user_id);
 
-        /** 是否完善个人信息*/
+  //       /** 是否完善个人信息*/
 
-        $user_info->arr_invite_rank_count = $this->user_model->user_point_log($user_id);
+  //       $user_info->arr_invite_rank_count = $this->user_model->user_point_log($user_id);
 
-        if (empty($user_info->arr_invite_rank_count))
-        {
-            $user_info->arr_invite_rank = $this->user_obj->get_user_rank_point($user_id);
-        }
+  //       if (empty($user_info->arr_invite_rank_count))
+  //       {
+  //           $user_info->arr_invite_rank = $this->user_obj->get_user_rank_point($user_id);
+  //       }
 
-        // 验证送积分
-        $user_info->registerPoint = $this->user_obj->get_user_rank_point($user_id,'regist_point');
+  //       // 验证送积分
+  //       $user_info->registerPoint = $this->user_obj->get_user_rank_point($user_id,'regist_point');
 
         /** 订单
         $this->load->model('order_model');
@@ -48,10 +49,29 @@ class User extends CI_Controller
         $order = $this->order_model->get_wait_pay_ing_order_num($user_id);
         */
 
+        $data = array();
+        $data['user_id']   = $this->session->userdata('user_id');
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['email']     = $this->session->userdata('email');
+        $mobile = $this->session->userdata('mobile');
+        $data['mobile']    = substr_replace($mobile,'******',3,6);
+        $data['advar']     = $this->session->userdata('advar');
 
-		$this->load->view('mobile/user/index',array(
-			'user' =>$user_info,
-		));
+        //安全等级 
+        $security = 0; 
+        if($data['user_name'] != $mobile ) $security = 1;
+        $data['security']  = $security;
+
+        //用户  待支付的订单
+        $data['wait_pay'] = 0;
+        //用户  待发货的订单
+        $data['await_goods'] = 0;
+        //用户  待评价的商品
+        $data['evaluate_product'] = 0;
+        //用户  喜欢的商品
+        $data['like_product'] = count($this->collect_model->collect_list($data['user_id']));    
+
+		$this->load->view('user/index',$data);
 
     }
 
@@ -185,8 +205,8 @@ class User extends CI_Controller
         else{
             $my_type = $company_type[0];
         }
-        
-		$this->load->view('mobile/user/profile',array(
+
+		$this->load->view('user/profile',array(
 			'user' =>$user_info,
             'company_type' => $company_type,
             'values' => $values,
@@ -354,7 +374,7 @@ class User extends CI_Controller
         $list1 = $this->order_model->order_simple_list($user_id, 1);
         $list2 = $this->order_model->order_simple_list($user_id, 1, 'pending');
         $list3 = $this->order_model->order_simple_list($user_id, 1, 'wait_shipping');
-        $this->load->view('mobile/user/order',array('all' => $list1, 'pending' => $list2, 'wait_shipping' => $list3));
+        $this->load->view('user/order',array('all' => $list1, 'pending' => $list2, 'wait_shipping' => $list3));
     }
     public function course(){
 		$this->load->helper('order');
@@ -369,58 +389,59 @@ class User extends CI_Controller
         $courses = $this->order_model->course_list($user_id);
         $this->load->view('mobile/user/course', array('courses' => $courses));
     }
-	public function order_()
-	{
-		$this->load->helper('order');
-		if ($this->user_obj->is_login())
-		{
-			$user_id = $this->session->userdata('user_id');
-		} else
-		{
-			goto_login('user/order');
-		}
-		$user_info = $this->user_obj->get_profile($user_id);
+    
+    public function order_list()
+    {
+        $this->load->helper('order');
+        if ($this->user_obj->is_login())
+        {
+                $user_id = $this->session->userdata('user_id');
+        } else
+        {
+                goto_login('user/order');
+        }
+        $user_info = $this->user_obj->get_profile($user_id);
 
-		$status = trim($this->input->post('status'));
-		$status = empty($status)?1:$status;
-		$filter['order_status'] = $status;
+        $status = trim($this->input->get_post('status'));
+        $status = empty($status)?1:$status;
+        $filter['order_status'] = $status;
 
-		$page = trim($this->input->post('page'));
-		if (!empty($page)) $filter['page'] = $page;
+        $page = trim($this->input->get_post('page'));
+        if (!empty($page)) $filter['page'] = $page;
 
-		$filter = get_pager_param($filter);
+        $filter = get_pager_param($filter);
 
-		/** 订单*/
-		$this->load->model('order_model');
+        /** 订单*/
+        $this->load->model('order_model');
         $order_list = $this->order_model->order_list($filter,$user_id);
-        if ($this->input->post('is_ajax'))
-		{
-        
-			$data['content'] = $this->load->view('user/order',array(
-													'user' =>$user_info,
-													'order_list' => $order_list['list'],
-													'filter' => $order_list['filter'],
-													'full_page'=>FALSE,
-													'order_status'=>$status,
-												), TRUE);
-			$data['error'] = 0;
-			$data['page_count'] = $order_list['filter']['page_count'];
-			$data['page'] = $order_list['filter']['page'];
-			$data['order_status'] = $status;
-			echo json_encode($data);
-			return;
-		}
+        if ($this->input->get_post('is_ajax'))
+        {
+            $data['content'] = $this->load->view('user/order',array(
+                                                                                            'user' =>$user_info,
+                                                                                            'order_list' => $order_list['list'],
+                                                                                            'filter' => $order_list['filter'],
+                                                                                            'full_page'=>FALSE,
+                                                                                            'order_status'=>$status,
+                                                                                    ), TRUE);
+            $data['error'] = 0;
+            $data['page_count'] = $order_list['filter']['page_count'];
+            $data['page'] = $order_list['filter']['page'];
+            $data['order_status'] = $status;
+            echo json_encode($data);
+            return;
+        }
 
-		$this->load->view('user/order',array(
-			'title' => '我的订单',
-			'user' =>$user_info,
-			'order_list' => $order_list['list'],
-			'filter' => $order_list['filter'],
-			'left_sel' =>11,
-			'full_page'=>TRUE,
-			'order_status'=>$status,
-		));
-	}
+        $this->load->view('user/order',array(
+                'title' => '我的订单',
+                'user' =>$user_info,
+                'order_list' => $order_list['list'],
+                'filter' => $order_list['filter'],
+                'left_sel' =>11,
+                'full_page'=>TRUE,
+                'order_status'=>$status,
+        ));
+    }
+        
     public function edit(){
         if ($this->user_obj->is_login())
 		{
@@ -431,6 +452,7 @@ class User extends CI_Controller
 			return;
 		}
         $info=$this->input->post();
+        
         if ($info['user_name'] != $this->session->userdata('user_name') && $this->user_obj->is_username_register($info['user_name'])){
             echo json_encode(array('res'=>false,'msg'=>'此昵称已存在!'));
             exit();
@@ -545,13 +567,9 @@ class User extends CI_Controller
             }
             
         }
-        public function new_password(){
-            $newpsw = $this->input->post('password');
-            $mobile = $this->session->userdata('mobile');                
-            if( !empty($mobile)  )
-                $res = $this->user_model->update_by_mobile(array('password'=>m_encode($newpsw)),$mobile);
-            $this->session->sess_destroy();
-            echo true;
+        public function forgot()
+        {
+            $this->load->view('user/forgot');
         }
 	public function password()
 	{
@@ -1309,10 +1327,8 @@ class User extends CI_Controller
 		return;
 	}
 
-    public function signin($page_name){
-        $this->load->view('mobile/user/signin',array(
-			'first_page' => $page_name
-			, 'session_id' => $this->session->userdata('session_id')
+    public function signin(){
+        $this->load->view('user/signin',array(
 		));
     }
 
@@ -1333,16 +1349,17 @@ class User extends CI_Controller
 			//}
 		}
 
-                if (empty($back_url)) $back_url = 'index';
-                $back_url = 'external:/'.$back_url;
-                $this->load->vars(array('back_url' => $back_url));
-                
-                $this->load->view('mobile/user/login',array(
-			'title' => '登录',
+		$user_id =  $this->session->userdata('user_id');
+        $v_user_name =  $this->session->userdata('user_name');
+        $this->input->set_cookie("v_user_id",$user_id,time()+(60*60*2));  
+        $this->input->set_cookie("v_user_name",$v_user_name,time()+(60*60*2)); 
+        if (empty($back_url)) $back_url = 'index';
+	        $back_url = 'external:/'.$back_url;
+	        $this->load->vars(array('back_url' => $back_url));
+	        
+	        $this->load->view('user/login',array(
+		'title' => '登录',
 		));
-        /*$this->load->view('mobile/user/login',array(
-			'title' => '登录注册',
-		));*/
 
 	}
 
@@ -1527,10 +1544,12 @@ class User extends CI_Controller
 	    $password = trim($this->input->post('password'));
         //$remember = trim($this->input->post('remember'));
         if ('' == $password){
-            $err_msg = '密码不能为空!';
+            $err_msg = '请输入密码';
+            $name = 'password';
         }
 	    if ($err_msg == '' && $this->user_obj->login($mobile, $password) == FALSE) {
-		$err_msg = "账号或密码错误,请重试";
+            $err_msg = "账号或密码错误,请重试";
+            $name = "username";
 	    }
         //echo $this->session->userdata('user_id');
 
@@ -1547,9 +1566,14 @@ class User extends CI_Controller
             }
             
             $user_id =  $this->session->userdata('user_id');
+            /* v+ */
+            $v_user_name =  $this->session->userdata('user_name');
+            
+            $this->input->set_cookie("v_user_name",$v_user_name,time()+(60*60*2));  
+            /* v- */
 
             //登录 成功 将 该用户收藏的 商品 写入session
-	    	$collect_data  = $this->user_model->get_collect_info(array('user_id'=>$user_id));
+			/*$collect_data  = $this->user_model->get_collect_info(array('user_id'=>$user_id));
 	    	if(isset($_SESSION['collect_'.$user_id])){
 				array_push($collect_data,$_SESSION['collect_'.$user_id]);
 			}
@@ -1561,12 +1585,12 @@ class User extends CI_Controller
 	    	if(isset($_SESSION['praise_'.$user_id])){
 				array_push($praise_data,$_SESSION['praise_'.$user_id]);
 			}
-			$this->session->set_userdata('praise_'.$user_id, $praise_data);
+			$this->session->set_userdata('praise_'.$user_id, $praise_data);*/
 
             die ( json_encode(array('error' => 0,'back_url'=>$back_url, 'user_name' => $this->session->userdata('user_name'), 'rank_name' => $this->session->userdata('rank_name'))) );
             return ;
         } else {
-            die ( json_encode(array('error' => 1, 'message' => $err_msg)) );
+            die ( json_encode(array('error' => 1, 'message' => $err_msg, 'name' => $name)) );
 
         }
     }
@@ -1595,6 +1619,7 @@ class User extends CI_Controller
     
     public function proc_register()
     {
+
         $back_url="/index";
         //if (!$this->input->post('is_ajax')) return FALSE;
         $err_msg = '';
@@ -1603,40 +1628,48 @@ class User extends CI_Controller
         if (strtolower($auth_code) !=strtolower(trim($this->input->post('captcha')))) {
             $err_msg = "请输入正确的验证码！".$auth_code.'<>'.strtolower(trim($this->input->post('captcha')));
         }*/
-        $param['user_name'] = trim($this->input->post('user_name'));
-        $param['mobile'] = trim($this->session->userdata('mobile'));
-        $param['password'] = trim($this->input->post('password'));
+        //$param['user_name'] = trim($this->input->post('user_name'));
+        $param['mobile'] = $mobile = trim($this->input->post('mobile'));
+        $param['password']  = $password = trim($this->input->post('password'));
+        $mobile_code = $this->session->userdata("sending_mobile_code");
         //$param['email'] = trim($this->input->post('email'));
-        if ($this->user_obj->is_username_register($param['user_name'])){
-            $err_msg = "该用户名已存在!";
+        if (!preg_match('/^1[0-9]{10}$/', $mobile))
+		{
+            $err_msg = '手机号码不正确，请重新输入';
+            $name = 'mobile';
+        } elseif ($mobile != $this->session->userdata('mobile')){
+            $err_msg = '请点击发送验证码';
+            $name = 'mobile';
+        } elseif ($this->user_obj->is_mobile_register($mobile)){
+            $err_msg = "此手机已存在，请重新输入";
+            $name = 'mobile';
+        } elseif (strtolower($mobile_code) !=strtolower(trim($this->input->post('authcode')))) {
+            $err_msg = "手机验证码错误";
+            $name = 'authcode';
+        } elseif (strlen($password) < 6 || strlen($password) > 14){
+            $err_msg = '长度为6~14个字符 支持数字,大小写字母和标点符号 不允许有空格';
+            $name = 'password';
+        } elseif ($password != trim($this->input->post('password1'))){
+            $err_msg = '两次次密码不一致';
+            $name = 'password1';
         }
 
 
         if ($err_msg == '' && $this->user_obj->register($param) == FALSE)
         {
             $err_msg = "注册错误，请重试";
+            $name = 'mobile';
         }
 
-        if ('' == $err_msg)
-        {
-        	$this->user_obj->update_user_info();
-            if(!$back_url=$this->session->userdata('back_url')){
-            	$back_url=$this->session->userdata('referer_url');
-            }
-            if(!$back_url) $back_url='user';
-            if(substr($back_url,0,4)!=='http') $back_url=site_url($back_url);
-            $this->session->unset_userdata('back_url');
-            echo 'success请前往个人中心完善资料, 领取500积分, 并参加抽奖活动!';
-        } else
-        {
-        	echo $err_msg;
-        }
-exit;
+        	echo json_encode(array('error' => $err_msg, 'name' => $name));
     }
 
     public function logout()
     {
+    	$this->load->helper('cookie');
         $this->session->sess_destroy();
+        delete_cookie('v_user_id');
+        delete_cookie('v_user_name');
         //退出时购物车数量清0
         redirect("/index");
         /* 
@@ -1985,17 +2018,18 @@ exit;
 	}
 
 	public function show_verify()
-	{
-		$this->load->library('authcode');
-		$this->authcode->show();
+    {        
+        $this->load->library('validatecode');
+        $this->validatecode->show();		
+        $this->session->set_userdata('validate_code', $this->validatecode->getCode());
 	}
-    public function verify_msgcode(){
-        $mobile_code = $this->session->userdata("sending_mobile_code");
-        if (strtolower($mobile_code) !=strtolower(trim($this->input->get('authcode')))) {
-            $err_msg = "手机验证码错误！";
-            echo $err_msg;
+    public function validate_code(){
+        $captcha = $this->input->get('captcha');
+        if (strtolower($captcha) != $this->session->userdata('validate_code')){
+            //$err_msg = '请填写正确的验证码!';
+            echo '验证码错误';
         } else {
-            echo 0;
+            echo false;
         }        
     }
     public function reg_auth(){
@@ -2018,13 +2052,15 @@ exit;
 				$err_msg = '手机号码不正确，请重新输入！';
 			} elseif ($this->user_obj->is_mobile_register($mobile))
 			{
-				$err_msg = "此手机已存在，请重新输入。";
+				$err_msg = "此手机已存在，请重新输入";
 			} 
-			elseif ( $session_id!=$this->session->userdata('session_id')){
-				$err_msg = '请求出错!';
-			}elseif( $this->session->userdata('sending_mobile_code_error') > 5 ){
+			//elseif ( $session_id!=$this->session->userdata('session_id')){
+				//$err_msg = '请求出错!';
+            //}
+            /*elseif( $this->session->userdata('sending_mobile_code_error') > 5 ){
 				$err_msg = '出错次数太多，请稍后再试!';
-			}
+			}*/
+            //elseif ()
 			//elseif (!$this->authcode->check(strtolower($captcha))){
 			//	$err_msg = '请填写正确的验证码!';
 			//}
@@ -2082,81 +2118,39 @@ exit;
                 //$this->session->set_userdata('msg_send_reult', '短信发送失败，请重试!');
             }
 
-        //$this->load->library('mobile');
-        //$this->mobile->auth($mobile);
     }
 
-	public function find_password()
+	public function new_password()
 	{
-		if (!$this->input->post('is_ajax'))
-		{
-			echo json_encode(array('error'=>1,'msg'=>'错误的访问'));
-			return;
-		}
-		$user_name = trim($this->input->post('user_name'));
-		if (empty($user_name))
-        {
-        	echo json_encode(array('error'=>1,'msg'=>'请填写你注册的邮箱或者手机'));
-			return;
+        $step = $this->input->post('step');
+        $mobile_code = $this->session->userdata("sending_mobile_code"); 
+        if ('step2' == $step){
+            if (strtolower($mobile_code) !=strtolower(trim($this->input->post('authcode')))) {
+                $err_msg = "手机验证码错误";
+                $name = 'authcode';
+            } else {
+                $name = 'step2';
+                $err_msg = false;
+            }
+        } else {
+            $password = $this->input->post('password');
+            $password1 = $this->input->post('password1');
+            if (strlen($password) < 6 || strlen($password) > 14){
+                $err_msg = '长度为6~14个字符 支持数字,大小写字母和标点符号 不允许有空格';
+                $name = 'password';
+            } elseif ($password != trim($this->input->post('password1'))){
+                $err_msg = '两次次密码不一致';
+                $name = 'password1';
+            } else {
+                $mobile = $this->session->userdata('mobile');                
+                if( !empty($mobile)  )
+                    $res = $this->user_model->update_by_mobile(array('password'=>m_encode($password)),$mobile);
+                $this->session->sess_destroy();
+                $name = 'step3';
+                $err_msg = false;
+            }
         }
-        $user = $this->user_obj->filter_user($user_name);
-        if (!empty($user))
-		{
-			if (!empty($user->union_sina) || !empty($user->union_qq) || !empty($user->union_zhifubao))
-			{
-				echo json_encode(array('error'=>1,'msg'=>'联合登录用户,请通过相应的联合登录通道登录'));
-				return;
-			}
-
-			$flag = 0;
-			if (!empty($user->email) && $user->email == $user_name)
-			{
-				$this->user_obj->SendSyncMail(array('user_id'=>$user->user_id,'user_name'=>$user->user_name,'to_email'=>$user->email,'email'=>$user->email,'password'=>m_decode($user->password)),'send_password');
-				$flag = 1;
-			}
-			if (!empty($user->mobile)  && $user->mobile == $user_name)
-			{
-				$need_verify = $this->user_model->need_verify($user->mobile,date('Y-m-d'));
-				if ($need_verify)
-				{
-					echo json_encode(array('error'=>0,'msg'=>'','verify'=>1));
-					return;
-				}
-				$args = array(
-		                "user_name"=>$user->user_name,
-		                "user_id"=>$user->user_id,
-		                "password"=>m_decode($user->password),
-		                "mobile"=>$user->mobile
-		        );
-		        $result = $this->user_obj->send_sync_sms($args, 'send_password');
-		        if ($result)
-		        {
-		        	if ($flag == 1)
-		        	{
-		        		$flag = 3;
-		        	} else
-		        	{
-		        		$flag = 2;
-		        	}
-		        }
-			}
-			if ($flag == 1)
-			{
-				$date = array('error'=>0,'msg'=>'密码已经发往您注册的邮箱，请注意查收');
-			} elseif ($flag == 2)
-			{
-				$date = array('error'=>0,'msg'=>'密码已经发往您注册的手机上，请注意查收');
-			} elseif ($flag == 3)
-			{
-				$date = array('error'=>0,'msg'=>'密码已经发往您注册的邮箱和手机上，请注意查收');
-			}
-			echo json_encode($date);
-			return;
-		} else
-		{
-			echo json_encode(array('error'=>1,'msg'=>'此用户未注册,请填写你注册的邮箱或者手机'));
-			return;
-		}
+        echo json_encode(array('error' => $err_msg, 'name' => $name));
 	}
 
 	public function exchange_voucher(){
@@ -2233,7 +2227,7 @@ exit;
 	    $login_url = "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id="
 	        . $appid . "&redirect_uri=" . urlencode($callback)
 	        . "&state=" . $state
-	        . "&scope=".$scope."&display=mobile";
+	        . "&scope=".$scope;
 	    header("Location:$login_url");
 	}
 
@@ -2369,7 +2363,7 @@ exit;
 		$params['redirect_uri'] = $callback;
 		$params['response_type'] = 'code';
 		$params['state'] = NULL;
-		$params['display'] = 'mobile';//默认传default，手机传mobile
+		$params['display'] = 'default';//默认传default，手机传mobile
 		$login_url = $authorizeURL . "?" . http_build_query($params);
 	    header("Location:$login_url");
 	}
@@ -3296,4 +3290,45 @@ exit;
         die(json_encode(Array('success'=>1,'message'=>'ok','data'=>$data)));
         
     }
+
+
+
+    // 个人中心  我的优惠
+	public function privilege()
+	{
+		$data = array();
+		$this->load->view('user/privilege',$data);
+
+    }
+
+
+    public function profile_upload() {
+    	$user_id = $this->user_id;    	
+    	$this->load->library('upload');
+    	$base_path = USER_AV_PATH;
+    	$sub_path = date('Y-m-d') . '/';
+    	$path = $base_path . '/' . $sub_path;
+    	if (!is_dir($path)) {
+    		mkdir($path, 0777);
+    	}
+
+    	$this->upload->initialize(array(
+	        'upload_path' => $path,
+	        'allowed_types' => 'gif|jpg|png|jpeg|bmp',
+	        'encrypt_name' => TRUE
+    	));
+    	$advar = 'default.png';
+    	
+    	if($this->upload->do_upload('user_advar')){
+	        $file = $this->upload->data();
+
+	        $advar = $sub_path . $file['file_name'];	        
+    	}
+    	
+		$this->session->set_userdata('advar', $advar);
+        $res = $this->user_model->update(array('user_advar' => $advar), $user_id);    	
+    	echo json_encode(array('uploaded' => $res,
+    							'msg' => $this->upload->display_errors()));
+    }
+
 }

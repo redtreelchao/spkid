@@ -32,7 +32,7 @@ class Special_model extends CI_Model
 	//获取 指定 现金券 活动
 	public function release_row($release_id)
 	{
-		$sql = " SELECT vc.`campaign_id`,vc.`campaign_name`,vc.`start_date` start,vc.`end_date` end,vr.* FROM `ty_voucher_release` AS vr LEFT JOIN `ty_voucher_campaign` AS vc ON vc.`campaign_id` = vr.`campaign_id` WHERE vr.`release_id` = ".$release_id." AND vc.`campaign_status` = 1  AND vr.`release_status`=1 AND vc.`start_date` <= CURRENT_DATE() AND vc.`end_date` >= CURRENT_DATE()"; 
+		$sql = " SELECT vc.`campaign_id`,vc.`campaign_name`,vc.`start_date` start,vc.`end_date` end,vr.* FROM `ty_voucher_release` AS vr LEFT JOIN `ty_voucher_campaign` AS vc ON vc.`campaign_id` = vr.`campaign_id` WHERE vr.`release_id` = ".$release_id." AND vc.`campaign_status` = 1  AND vr.`release_status`=1 AND vc.`start_date` <= NOW() AND vc.`end_date` >= NOW()"; 
 		$query = $this->_db->query($sql);
 		return $query->row();
 	}

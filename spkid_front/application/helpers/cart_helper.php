@@ -13,7 +13,8 @@ function summary_cart($cart_list, $voucher_list = NULL, $balance = NULL, $region
         'point' => 0,
         'unpay_price' => 0,
         'left_time' => 0,
-        'product_weight' => 0
+        'product_weight' => 0, 
+        'category_ids' => array()
     );
 
     $discount = min($CI->session->userdata('discount_percent'), $CI->session->userdata('rank_discount'));
@@ -44,6 +45,7 @@ $discount = 1;
         $result['product_price'] += $cart->product_price * $cart->product_num * $discount;
         $result['product_num'] += $cart->product_num;
         $result['product_weight'] += $cart->product_num * $cart->product_weight;
+        $result['category_ids'][$cart->category_id] = $cart->category_id;
         if (!$result['left_time'])
             $result['left_time'] = strtotime($cart->update_date) - strtotime($CI->time) + CART_SAVE_SECOND;
     }
@@ -59,6 +61,7 @@ $discount = 1;
         foreach ($voucher_list as $provider_id => $voucher) {
             if (!isset($product_list[$provider_id]))
                 continue;
+
             if (($voucher->payment_amount = calc_voucher_payment_amount($voucher, $product_list[$provider_id]['product_list'], $provider_id)) <= 0)
                 continue;
             $result['voucher'] += $voucher->payment_amount;
@@ -298,11 +301,12 @@ function format_pay_list(&$pay_list) {
 /**
  *  判断 商品是否参加免邮活动
  *  $campaign_type = 2 免邮类型
- *  $product_id_data  商品数组(id,price)
+ *  $product_id_data  商品id(数组)
 */
 function campaign_package_product_v($product_id_data){
     $CI = &get_instance();
     $CI->load->model('cart_model');
+
     if(!empty($product_id_data)){
         return $CI->cart_model->campaign_product($product_id_data,2);       
     }

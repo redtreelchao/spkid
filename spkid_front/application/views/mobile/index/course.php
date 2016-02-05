@@ -22,7 +22,7 @@ $now = date('Y-m-d H:i:s');
                                         <div class="status-line2 clearfix">
                                             <div class="attention"><? echo get_page_view('product',$course['product_id'],false);?></div>
                                             <div class="signin_num">已报名:<?=$course['ps_num']?></div>
-                                            <div class="signin_bar"><span class="<?php if(date("Y-m-d", strtotime($course['package_name'])) > date('Y-m-d')): ?>signin<?php else: ?>yibaoming<?php endif; ?>"></span></div>
+                                            <div class="signin_bar"><span class="signin"></span></div>
                                         </div>
 					</div>
                                     </div>

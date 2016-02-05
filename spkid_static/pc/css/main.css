@@ -130,11 +130,11 @@ text-align: center;  width:124px;}
 .hot-keyword{ color:#17a1e5; font-size:12px; margin:0 19px; color:#17a1e5;}
 
 /*related-products start*/
-.related-products{ margin-top:70px; position:relative; margin:0 auto; width:1000px;}
-.related-products-title{ position:absolute; top:-38px; line-height:14px; background-color:#17a1e5; padding:12px 20px; color:#fff; font-size:18px;}
+.related-products{ padding-top:30px; position:relative; margin:0 auto; width:1000px;}
+.related-products-title{ position:absolute; top:-6px; line-height:14px; background-color:#17a1e5; padding:12px 20px; color:#fff; font-size:18px;}
 .related-products-show{ top:-28px;}
 .related-products-list,.related-video{ min-height:100px; overflow:hidden; }
-.pro-lb{ margin-top:10px; }
+.pro-lb{ margin:10px 0 40px 0; }
 .related-products-list .pro-lb> ul,.related-video .related-video-lb>ul{  margin:0 auto; max-width:1280px;  min-width:980px;}
 .related-products-list .pro-lb li,.related-video-lb li{  float: left; overflow: hidden;  padding: 10px 0; position: relative; width:250px;}
 .related-products-list .pro-lb li a { display:inline-block; text-align:center; margin-right:10px; background-color:#fff; width:240px; height:330px;}
@@ -371,9 +371,7 @@ text-align: center; width: 29px; }
 
 
 
-/*kun-autocomplete start*/
-.autocomplete { border-left:1px solid gray; border-right:1px solid gray; border-bottom:1px solid gray; position:absolute;z-index:999;background:white;margin-top:2.84em;width:100%}
-.autocomplete li { padding:5px; -border-bottom: 1px dotted;}
+
 
 /*回到顶部样式*/
 #back-to-top{  position:fixed;   display:none; bottom:20px;   right:10px;  z-index: 999;}  
@@ -445,10 +443,10 @@ text-align: center; width: 29px; }
 /*课程表样式开始*/
 .course-bar{ width:100%; background-color:#fff; padding-top: 4px;}
 .course-bar .category-container {height:90px; margin: 0 auto; overflow: hidden; text-align: center;  width:1000px;}
-.course-bar .category-container>li>.course-active { font-size:18px; color:#17a1e5; cursor:default; border-bottom-color:#17a1e5}
+.course-bar .category-container>li>.course-active { font-size:18px; color:#333; cursor:default; border-bottom-color:#17a1e5}
 .course-bar .category-container>li:first-child { margin-left: 0;}
 .course-bar .category-container>li { color: #909090; cursor: pointer; display: inline-block; font-size: 18px;  margin-left: 60px; overflow: hidden; text-align: center; width: 95px;-webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; }
-.course-bar .category-container>li>a {height: 66px; display: inline-block; line-height: 66px; padding:10px; border-bottom:4px solid transparent; }
+.course-bar .category-container>li>a { height:66px; display: inline-block; line-height: 66px; padding:10px; border-bottom:4px solid transparent; color:#909090;}
 .course-list{ background-color:#f9f9f9; width:100%; padding-top:40px; min-height:800px;-webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box;}
 .course-container{ width:1000px; margin:0 auto;}
 .filter-bar li{ float:left; width:100px; height:38px; background-color:#fff; border:solid 1px #c7c8cc; display:inline-block; line-height:38px; text-align:center;}
@@ -459,23 +457,28 @@ text-align: center; width: 29px; }
 .tab-pane.active {display:block}
 .course-show { padding-top:40px;}
 .course-show{ font-size: 0; margin-left: -20px;  width: 1100px;}
-.course-outer{ width:470px; border:solid 1px #c7c8cc; display:inline-block; height:180px; font-size:0;  margin: 0 0 30px 20px;  padding:10px 20px 10px 0; position:relative; vertical-align:top;}
+.course-outer{ width:470px; border:solid 1px #c7c8cc; display:inline-block; height:180px; font-size:0;  margin: 0 0 30px 20px;  padding:15px 20px 10px 10px; position:relative; vertical-align:top;}
 .course-outer dt {  text-align: center; vertical-align: middle; float:left; width:175px; position: relative; padding-right:15px;}
 .course-outer dt img {  max-height:170px; max-width:180px;}
 .course-outer dd{ overflow:hidden;}
 .course-outer dd .device-title { color: #333; font-size: 14px; padding-bottom:10px;}
+.course-outer dd .device-title a{ color:#333;}
 .course-outer dd .text-overflow,.xgkctj dd .text-overflow,.video-title{  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .course-outer dd .device-desc{ font-size:12px; color:#909090; line-height:24px;}
-.course-money{ padding-top:22px;}
-.course-money .course-price{ color:#f75555; font-size:18px; font-family:Arial; display:inline-block;}
+.course-money{ padding-top:15px;}
+.course-money .course-price{ color:#f75555; font-size:18px; font-family:Arial; display:inline-block; padding-top:10px;}
 .course-money .baoming{ float:right;}
 .baoming .sign-up{ width:100px; text-align:center; border-radius:3px; -webkit-border-radius:3px; -moz-border-radius:3px; -o-border-radius:3px; -ms-border-radius:3px; background-color:#17a1e5; font-size:16px; color:#fff; border:none; cursor:pointer; }
+
+.filter-bar .filter-bt{ width:100px; height:40px; background-color:#17a1e5; line-height:40px; display:block; color:#fff; text-align:center;}
+
 
 /*医考技考样式开始*/
 .medical-list{ width:1020px; margin:0 auto;  font-size: 0; margin-left: -26px;}
 .medical-list li{ width:230px; height:150px; background-color:#fff; display:inline-block; text-align:center; line-height:150px;  margin: 0 0 30px 25px; color:#333; font-size:18px;}
 .medical-list li.medical-active{ background-color:#17a1e5; color:#fff;}
 .medical-list a{ color:#333;}
+.medical-list a:hover{ color:#333;}
 .medical-list .medical-active a{ color:#fff;}
 .medical-information{ background-color:#fbfbfb; border:solid 1px #eaeaeb; width:1000px; margin:0 auto; overflow:hidden;}
 .medical-tit{  font-size:18px; color:#333; text-decoration:underline; float:left; position: absolute; width:150px; padding:15px 10px;-webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box;}
@@ -487,7 +490,7 @@ text-align: center; width: 29px; }
 .medical-xh span,.medical-dt span,.medical-cz span{ color:#909090;}
 .medical-cz .ljxq{ background-color:#17a1e5; color:#fff;}
 .medical-cz .bt-com{ width:80px; height:30px; border-radius:3px; -webkit-border-radius:3px; -moz-border-radius:3px; -ms-border-radius:3px; -o-border-radius:3px; border:none; }
-.medical-cz .no-login{ background-color:#fff; border:solid 1px #c7c8cc;color: #000;}
+.medical-cz .no-login{ background-color:#fff; border:solid 1px #c7c8cc;color:#909090; font-size:14px;}
 .medical-xh{ width:150px; text-align:center;}
 .medical-dt{ width:450px; text-align:center;}
 .medical-cz{ width:220px; text-align:center;}
@@ -607,8 +610,9 @@ text-align: center; width: 29px; }
 .con-money{ color:#333; font-size:16px; font-weight:bold; font-family:Arial, Helvetica, sans-serif;}
 
 /*全部展品开始*/
-.all-exhibits{ padding-top:20px; margin:0 auto; width:1000px; text-align: center;}
-.exhibits-qb{ display:inline-block; width:100px; height:30px; line-height:30px; border:solid 1px #17a1e5; color:#17a1e5; font-size:14px;}
+.all-exhibits{ padding-top:20px; margin:0 auto; width:1000px;}
+.exhibits-qb{ display:inline-block; width:100px; height:30px; line-height:30px; border:solid 1px #17a1e5; color:#17a1e5; font-size:14px; text-align: center;}
+.exhibits-qb a{ color:#17a1e5;}
 .exhibits-name{ display:inline-block; padding-left:30px;}
 .exhibits-name li{ display:inline-block;  width:120px; display:inline-block;  color:#666; font-size:14px; text-align:center;}
 .exhibits-name a{ border-left:solid 1px #e1e1e1; display:inline-block; width:120px; font-size:12px; color:#666;}
@@ -616,9 +620,9 @@ text-align: center; width: 29px; }
 .exhibits-current a{  font-size:18px; color:#333;}
 .exhibits-map { color:#666; font-size:14px; text-align:left;}
 .pro-categories{ padding-top:20px; z-index:99999; position:relative; background-color:#fff;}
-.pro-categories a{ display:inline-block; width:139px; height:30px; border-left:solid 1px #c7c8cc; border-top:solid 1px #c7c8cc; border-bottom:solid 1px #c7c8cc; line-height:30px; text-align:center; color:#666; border-right:solid 2px #c7c8cc;  font-size:14px; color:#666;}
+.pro-categories a{ float:left; width:139px; height:30px; border-left:solid 1px #c7c8cc; border-top:solid 1px #c7c8cc; border-bottom:solid 1px #c7c8cc; line-height:30px; text-align:center; color:#666; border-right:solid 2px #c7c8cc;  font-size:14px; color:#666;}
 .pro-categories>a:hover,.pro-categories>.pro-current,.pro-level>.pro-current{ background-color:#17a1e5; color:#fff;}
-.pro-level{ border:solid 2px #17a1e5; padding:20px; z-index:999; position:relative; top:-1px; }
+.pro-level{ border:solid 2px #17a1e5; padding:20px; z-index:999; position:relative; top:-1px; clear:both;}
 .pro-level:not(.active) {display:none}
 .pro-level a{ background-color:#ececec; height:30px; line-height:30px; display:inline-block; padding:0 20px;  margin:0 10px 10px 0; text-align:center; color:#909090; font-size:14px;}
 .exhibits-cation{ padding-top:40px;  margin: 0 auto 50px; width: 1000px;}
@@ -628,7 +632,7 @@ text-align: center; width: 29px; }
 .ified-content li{ width:486px; background-color:#fff; margin:0 0 30px 28px; display:inline-block; padding:10px 0; position: relative;font-size:14px;}
 .ified-content .ified-pic{ width:120px; float:left; border-right:solid 1px #e1e1e1;padding:20px 20px 0 20px;}
 .ified-content .ified-pic img{ vertical-align:middle; max-width:120px; max-height:120px; }
-.ified-content .ified-nr{ overflow:hidden; padding-left:10px;height: 130px;line-height: 20px;}
+.ified-content .ified-nr{ overflow:hidden; padding:0 10px; height: 130px;line-height: 20px;}
 
 .ified-nr .flags{ display:inline-block;}
 .ified-nr .flags .guoji-mc{  color:#333; display:inline-block; padding-left:30px; }
@@ -919,51 +923,3 @@ left: 0;  position: absolute;  top: 0; width: 100%; z-index: 1;}
 .video-back a{ color:#17a1e5;}
 
 
-.menu_tips {
-	display: inline-block;		
-	width: 20px;
-	height: 20px;
-}
-
-.arrow_down {
-	background: white url(../images/video-jt-up.png) no-repeat 5px 15px;
-}
-
-.arrow_up {
-	background: white url(../images/video-jt-down.png) no-repeat 5px 15px;
-}
-
-.menu_items {
-	list-style:none;
-	padding:2px 0;	
-	margin-top:-10px;	
-	width:120px;
-	position: absolute; z-index: 1000;
-}
-
-.menu_items li{
-	background:rgba(0, 0, 0, 0.7);
-	text-align:center;
-	margin-bottom:1px;
-	line-height: 2em;
-}
-
-.menu_items li:hover{
-	background:rgba(255, 0, 0, 0.7);
-	text-align:center;
-	margin-bottom:1px;
-	line-height: 2em;
-}
-
-
-
-
-.menu_items a {
-	text-decoration:none;
-	color:white;
-	font-size:1em;
-}
-
-.dentist-chaochu > li > a > img {
-	max-height: 200px;
-}

@@ -180,25 +180,23 @@
 	<div class="view view-main">
 
 		<div class="toolbar">
-			<div class="toolbar-inner2 row no-gutter">
-				<div class="col-20"></div>
+			<div class="toolbar-inner row no-gutter">
+
 				<?php if( !empty($collect_data) && deep_in_array($p->product_id, $collect_data)) { ?>
-				<div class="col-20 heart-hu-red">
+				<div class="col-10 heart-hu-red" >
 					<a class="link" href="#"></a>
 				</div>
 				<?php }else{ ?>
-				<div class="col-20 heart-hu-gray" onclick="add_to_collect (<?php echo $p->product_id;?>,3,this,'heart-hu');" >
+				<div class="col-10 heart-hu-gray" onclick="add_to_collect (<?php echo $p->product_id;?>,3,this,'heart-hu');" >
 					<a class="link" href="#"></a>
 				</div>
 				<?php } ?>
 
-				
-				<div class="col-60 registration-hu">
-				<?php if(date("Y-m-d", strtotime($p->package_name)) > date('Y-m-d')) {?>
-					<a class="link external" href="/cart/checkout_course/<?=$sub_list[$color_id]['sub_list'][0]->sub_id?>" style="color:#fff;">我要报名</a>
-				<?php }else{ ?>
-					<a disabled="disabled" class="link external" href="/cart/checkout_course/<?=$sub_list[$color_id]['sub_list'][0]->sub_id?>" style="color:#fff;">已结束报名</a>
-				<?php } ?>
+				<div class="col-10 questions-hu Iliuya">
+					<a class="link" href="#"></a>
+				</div>
+				<div class="col-80 registration-hu">
+					<a <?php echo $p->is_best ? 'disabled="disabled"' : ''?> class="link external" href="/cart/checkout_course/<?=$sub_list[$color_id]['sub_list'][0]->sub_id?>" style="color:#fff;">我要报名</a>
 				</div>
 			</div>
 		</div>
@@ -336,7 +334,7 @@
                     		<a class="tab-link button open-popup" data-fun="laoshijieshao" href="#tab2" data-popup=".popup-detail2"> 老师介绍 </a> 
                     		<a class="tab-link button open-popup" data-fun="jiaotongluxian" href="#tab3" data-popup=".popup-detail3"> 交通路线 </a> 
                     		<a class="tab-link button open-popup" data-fun="xuanyuanpingjia" href="#tab4" data-popup=".popup-detail4"> 学员评价 </a> 
-                    		<a class="tab-link button open-popup" data-fun="xiangguanpeixun" href="#tab5" data-popup=".popup-detail5"> 电子书下载</a>
+                    		<a class="tab-link button open-popup" data-fun="xiangguanpeixun" href="#tab5" data-popup=".popup-detail5"> 相关培训 </a>
                     </div>
 					
 					<!-- buttons-row end -->
@@ -407,5 +405,4 @@
 <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
 <script type="text/javascript" src="<?php echo static_style_url('mobile/js/tabs.js?v=version'); ?>"></script>
 
-<?php include APPPATH."views/mobile/common/meiqia.php"; ?>
 <?php include APPPATH."views/mobile/footer.php"; ?>

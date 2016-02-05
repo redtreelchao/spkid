@@ -214,23 +214,18 @@ class Article extends CI_Controller
 		$this->load->model('wordpress_model');
 
 		//判断用户是否登录
-		// if(!$this->user_id) {
-		// 	print json_encode(array('err'=>0,'msg'=>0));
-		// 	return;
-		// }
+		if(!$this->user_id) {
+			print json_encode(array('err'=>0,'msg'=>0));
+			return;
+		}
 
 		$article_id = intval($this->input->post('article_id'));
 
 		//判断用户是否点赞
-		if($this->user_id){
-			$col=$this->wordpress_model->filter_praise(array('post_id'=>$article_id,'user_id'=>$this->user_id));
-			if(!empty($col)){
-				sys_msg('已经点过赞咯！',1);
-			}
-		}else{
-			$this->user_id = 0;
-			if(!empty($_COOKIE['praise_anonymous_'.$article_id])) {sys_msg('已经点过赞咯！',1);}
-		}
+		$col=$this->wordpress_model->filter_praise(array('post_id'=>$article_id,'user_id'=>$this->user_id));
+		if(!empty($col)){
+			sys_msg('已经点过赞咯！',1);
+		} 
 
 		//判断 点赞的文章 是否存在
 		$p=$this->wordpress_model->filter(array('ID'=>$article_id,'post_status'=>'publish'));
@@ -248,9 +243,6 @@ class Article extends CI_Controller
 
 		$praise_data = array();
 		$praise_data[] =$praise;
-
-		//将 用户ip 点赞 的文章 写入cookie
-		setcookie("praise_anonymous_".$article_id,'praise_anonymous_'.$article_id); 
 
 		//将 用户 点赞 的文章 写入session
 		if(isset($_SESSION['praise_'.$this->user_id])){

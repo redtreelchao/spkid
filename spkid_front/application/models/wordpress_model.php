@@ -5,6 +5,7 @@
  */
 class Wordpress_model extends CI_Model {
 
+    const FORMAT_VIDEO_TYPE = POST_FORMAT_VIDEO;
     //更新文章访问量
     public function get_article_views($id)
     {
@@ -59,7 +60,7 @@ limit 5";
         $detail->post_date = current(explode(' ', $detail->post_date));
         //unset($detail->meta_value);
         //评论
-        $sql = 'SELECT comment_author,comment_content,comment_date,yyw_user_id FROM wp_comments WHERE comment_post_ID='.$id.' AND comment_approved = 1 ORDER BY comment_ID DESC limit 0,5';
+        $sql = 'SELECT comment_author,comment_content,comment_date,yyw_user_id FROM wp_comments WHERE comment_post_ID='.$id.' AND comment_approved = 1';
         $comments = $this->db_wp->query($sql)->result_array();
         $ids = array();
         foreach($comments as $comment){
@@ -129,6 +130,73 @@ limit 5";
         $result_rows = array_slice($result_rows, $start, $page_size, true);
         
         return $result_rows;
+    }
+    public function hot2new_videos($type){
+        if ('hot' == $type){
+            $videos = array();
+            // 周排行
+            $date = date('Y-m-d 00:00', strtotime('-15 day'));
+            $sql = "SELECT p.ID,p.post_title,pm.meta_value views FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = " .Wordpress_model::FORMAT_VIDEO_TYPE . " LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' AND p.post_status='publish' AND pm.meta_key='views' AND p.post_date > '$date' GROUP BY p.ID ORDER BY views*1000000 DESC LIMIT 10";
+            $videos['week'] = $this->db_wp->query($sql)->result_array();
+            // 月排行
+            $date = date('Y-m-d 00:00', strtotime('-60 day'));
+            $sql = "SELECT p.ID,p.post_title,pm.meta_value views FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = ". Wordpress_model::FORMAT_VIDEO_TYPE . " LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' AND p.post_status='publish' AND pm.meta_key='views' AND p.post_date > '$date' GROUP BY p.ID ORDER BY views*1000000 DESC LIMIT 10";
+            $videos['month'] = $this->db_wp->query($sql)->result_array();
+            
+        } else {
+            $sql = "SELECT p.ID,p.post_title FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = ". Wordpress_model::FORMAT_VIDEO_TYPE . " WHERE p.post_type='post' AND p.post_status='publish' ORDER BY p.post_date DESC LIMIT 10";
+            $videos = $this->db_wp->query($sql)->result_array();
+        }
+
+        return $videos;
+    }
+    public function insert_video($data, $extra){
+        $result = false;
+        $date = date('Y-m-d H:i:s');
+        date_default_timezone_set('UTC');
+        $gmdate = date('Y-m-d H:i:s');
+        $data['post_date'] = $date;
+        $data['post_date_gmt'] = $gmdate;
+        $data['comment_status'] = 'open';
+        $data['ping_status'] = 'open';
+        $data['post_status'] = 'pending';
+		$this->db_wp->insert('wp_posts',$data);
+		$id = $this->db_wp->insert_id();
+        $sql = "INSERT INTO wp_term_relationships values($id, 1, 0), ($id, 10, 0)";
+        $this->db_wp->query($sql);
+
+        extract($extra);
+        //$cover = $extra['cover'];
+        $name = basename($cover);
+        //$mime_type = mime_content_type($name);
+        $data = array('post_title' => $name, 'post_author' => 1, 'post_status' => 'publish', 'post_type' => 'attachment', 'post_parent' => $id, 'post_mime_type' => $mime_type, 'guid' => $cover, 'post_date' => $date, 'post_date_gmt' => $gmdate);
+		$this->db_wp->insert('wp_posts',$data);
+		$aid = $this->db_wp->insert_id();
+
+        $sql = "INSERT INTO wp_postmeta values(null, $id, 'intro', '$intro'), (null, $id, 'cover', $aid)";
+        if ($this->db_wp->query($sql)){
+            $result = true;
+        }
+        return $result;
+
+    }
+    public function fetch_videos($cid){
+        //".POST_FORMAT_VIDEO."
+        $sql = "SELECT p.ID,p.post_title,p.post_date,p.comment_count,u.display_name,GROUP_CONCAT(pm.meta_key, '=', pm.`meta_value` SEPARATOR '&') meta FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = ". Wordpress_model::FORMAT_VIDEO_TYPE . " LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID` LEFT JOIN wp_users u ON u.ID=p.`post_author`
+	LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' AND
+    p.post_status='publish' AND tr.term_taxonomy_id = $cid AND pm.meta_key IN ('views','cover') GROUP BY p.ID ORDER BY p.post_date DESC";
+        //echo $sql;
+        $res = $this->db_wp->query($sql);
+        $articles = $res->result();
+        foreach( $articles as &$article ){
+            $meta = $article->meta;
+            unset($article->meta);
+            parse_str($meta, $article_meta);         
+            $cover = isset($article_meta['cover'])?$article_meta['cover']:null;
+            $article->cover = $this->get_cover($cover);
+            $article->views = $article_meta['views'];
+        }
+        return $articles;
     }
     public function fetch_articles($cid, $page){
         $page_size = M_LIST_PAGE_SIZE;
@@ -219,20 +287,7 @@ limit 5";
         }
         return $ids;
     }
-    private function get_cover($cover){
-        if( !empty($cover) ){	            
-	            $sql = 'SELECT guid FROM wp_posts WHERE id='.$cover.' AND post_type = \'attachment\'';
-	            $res = $this->db_wp->query($sql);
-	            $post = $res->first_row();
-                if (isset($post->guid))
-                    $cover_img = $post->guid;
-                else
-            $cover_img = static_url('mobile/img/hs-pic.png');
-        }
-        else
-            $cover_img = static_url('mobile/img/hs-pic.png');
-        return $cover_img;
-    }
+    
 
     public function filter($filter = array())
     {
@@ -346,4 +401,128 @@ return $content;
         $query = $this->db_wp->get_where('wp_zan',$filter);
         return $query->result_array();
     }
+
+
+    // PC 分词搜索的视频
+    public function get_search_video($ids){
+        $sql = "SELECT wpt.`ID`,wpt.`post_title`, wpm.`meta_value` img FROM wp_posts AS wpt LEFT JOIN wp_postmeta AS wpm ON wpt.`ID` = wpm.`post_id` WHERE wpm.`meta_key` = 'cover' AND wpt.`ID` in (".$ids.")  LIMIT 8 ";
+        $query=$this->db_wp->query($sql);     
+        $result=$query->result();
+
+        foreach ($result as $key => $row){
+            $result[$key]->img = $this->get_cover($row->img);
+        }
+        return $result;
+    }
+
+
+    // PC 视频封面图片
+    private function get_cover($cover){
+        if( !empty($cover) ){               
+                $sql = 'SELECT guid FROM wp_posts WHERE id='.$cover.' AND post_type = \'attachment\'';
+                $res = $this->db_wp->query($sql);
+                $post = $res->first_row();
+                if (isset($post->guid))
+                    $cover_img = $post->guid;
+                else
+            $cover_img = static_url('mobile/img/hs-pic.png');
+        }
+        else
+            $cover_img = static_url('mobile/img/hs-pic.png');
+        return $cover_img;
+    }
+
+    public function get_hot_videos() {
+        $sql = "SELECT
+                p.ID,
+                p.post_title,   
+                pm.meta_value views,
+                p.comment_count
+            FROM
+                wp_posts p
+            INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID`
+
+            LEFT JOIN wp_postmeta pm ON pm.`post_id` = p.`ID`
+            WHERE
+                p.post_type = 'post'
+            AND p.post_status = 'publish'
+            AND pm.meta_key = 'views'
+            AND tr0.term_taxonomy_id = " . Wordpress_model::FORMAT_VIDEO_TYPE . 
+            "
+            GROUP BY
+                p.ID
+            ORDER BY
+                views DESC
+            LIMIT 3";
+
+        $query = $this->db_wp->query($sql);
+        $res = $query->result();
+        // 去相关的封面
+
+        $sql = "select guid from wp_posts p, wp_postmeta pm
+                where p.ID = pm.meta_value
+                and pm.meta_key = 'cover'
+                and pm.post_id = ?
+                ";
+        $sql_comments = "";
+        foreach ($res as $k => &$v) {
+            $query = $this->db_wp->query($sql, array(intval($v->ID)));
+            if ($query->num_rows() > 0) {
+                $v->cover = $query->result()[0]->guid;
+            } else {
+                $v->cover = static_url('mobile/img/hs-pic.png');
+            }
+        }
+        return $res;
+    }
+
+    //获取视频信息
+    public function video_collect_list($user_id)
+    {
+        $sql = " SELECT product_id FROM " .$this->db->dbprefix('front_collect_product')." AS fcp ";
+        $sql .= " WHERE fcp.`user_id` = '".$user_id."'  AND ( fcp.`product_type` = 4) ORDER BY fcp.`create_date` DESC";
+        $query = $this->db->query($sql);
+        $acl = $query->result_array();
+        if(!empty($acl)){
+            foreach ($acl as $val) {
+                $article[] = $val['product_id'];
+            }
+
+            $this->db_wp->select('posts.*,users.display_name,postmeta.meta_value cover');
+            $this->db_wp->join('users', 'users.ID = posts.post_author', 'left');
+            $this->db_wp->join('postmeta', 'postmeta.post_id = posts.ID', 'left');
+            $this->db_wp->where('postmeta.meta_key','cover');
+            $this->db_wp->where_in('posts.ID', $article);
+            $detail = $this->db_wp->get('posts')->result();
+
+            //判断 是否(文章与视频)
+            $sql = " SELECT tr.object_id FROM wp_terms AS tm ";
+            $sql .= " LEFT JOIN wp_term_taxonomy AS tt ON tt.term_id= tm.term_id";
+            $sql .= " LEFT JOIN wp_term_relationships AS tr ON tr.term_taxonomy_id= tt.term_taxonomy_id";
+            $sql .= " WHERE tm.`name` = 'post-format-video'";
+            $query = $this->db_wp->query($sql);
+            $video = $query->result_array();
+
+            //文章与视频的 封面图片
+            foreach ($detail as $key => $det_val) {
+                $sql = 'SELECT ID, guid FROM wp_posts WHERE ID = '.$det_val->cover;
+                $query = $this->db_wp->query($sql);
+                $arc_img = $query->row();
+                $detail[$key]->arc_img = $arc_img->guid;
+
+                //判断 是否(文章与视频)
+                if(deep_in_array($det_val->ID,$video)){
+                    $detail[$key]->video = 1;  // 视频
+                }else {
+                    $detail[$key]->video = 0;  // 文章
+                }
+            }
+           
+            return $detail;
+        }else{
+            return;
+        }
+
+    }
+
 }

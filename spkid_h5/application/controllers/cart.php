@@ -1397,7 +1397,7 @@ class Cart extends CI_Controller {
         $order = $update;
         $balance = 0;
         $order['product_num'] = $num;
-        $order['order_price'] = $sub_info->product_price;            
+        $order['order_price'] = $sub_info->product_price*$num;            
         $order['pay_id'] = PAY_ID_ALIPAY;
         while (true) {
             $order['order_sn'] = get_order_sn();

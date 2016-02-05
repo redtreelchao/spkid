@@ -164,6 +164,11 @@ class User_model extends CI_Model
 		$this->_db->update('user_address', array('is_used'=>0), "user_id = $user_id");
 		$this->_db->update('user_address', array('is_used'=>1), "address_id = $address_id");
     }
+    
+    public function update_address_unused($user_id)
+    {
+        $this->_db->update('user_address', array('is_used'=>0), "user_id = $user_id");
+    }
 
     public function update_login_other($other, $user_id)
     {

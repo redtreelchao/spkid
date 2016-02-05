@@ -11,30 +11,41 @@ class Brand extends CI_Controller {
         $this->user_id = $this->session->userdata('user_id');
         $this->load->model('brand_model');
         $this->load->model('rush_model');
+	// flag_id所对应的洲
+	$this->continent=true;
+
+    }
+    public function lists($fid = 0){
+        $data = $this->brand_model->get_flag_category($this->continent);
+        $data['fid'] = $fid;
+        $data['index'] = 2;
+        $this->load->view('product/brands', $data);
     }
 
-    public function index() {
-
-        //品牌广告位(多个广告)
-        $brand_1 = $this->_get_ad('m_brand_1','m_brand_1');
-        $brand_2 = $this->_get_ad('m_brand_2','m_brand_2');
-        $brand_3 = $this->_get_ad('m_brand_3','m_brand_3');
-        if(!empty($brand_1))
-            $data['brand_1']=$brand_1;
-        if(!empty($brand_2))
-            $data['brand_2']=$brand_2;
-        if(!empty($brand_3))
-            $data['brand_3']=$brand_3;
-
-        //所有品牌,按首字母排序
-        $all_brand = $this->brand_model->all_brand_list();
-        $data['brand_list'] = array();
-        foreach ($all_brand as $value) {
-            $bn = explode(",",$value['brand_name']);
-            $data['brand_list'][$value['brand_initial']] = $bn;
+    public function index($bid) {
+        $this->load->model('rush_model');
+        if ($this->input->is_ajax_request()) {
+            $page = $this->input->get('page');
+            $data = $this->rush_model->brand_product_list($bid, $page);
+            $product_list = $this->load->view('product/brand_product',array('product_list' => $data),true);
+            echo $product_list;
+        } else {
+            $page = 1;
+            $data = $this->rush_model->brand_product_list($bid, $page);
+            $this->load->view('product/brand',$data);
         }
-
-        $this->load->view('mobile/brand/index',$data);
+    }
+    public function comment(){
+        $data = array();
+        $content = $this->input->post('content');
+        $data['mobile'] = $this->input->post('mobile');
+        $this->load->model('liuyan_model');
+        $data['comment_content'] = $content;
+        $data['tag_type'] = 5;
+        $data['tag_id'] = $this->input->post('brand_id');
+        $data['comment_type'] = 1;
+        $res = $this->liuyan_model->insert($data);
+        echo json_encode(array('success' => $res));
     }
 
     public function brand_product($brand_id) {
@@ -54,46 +65,11 @@ class Brand extends CI_Controller {
     }
 
     //无限下拉
-    function ajax_brand_list($page_name){
-        $page = $this->input->get('page');
-        $brand_id = $this->input->get('brand_id');
-        $sort=intval($this->input->get('sort'));
-        $param=array('brand_id'=>$brand_id,'sort'=>$sort?$sort:0,'page'=>$page?$page:0);
-
-        // init 
-        $result = array('success'=>1,'data'=>array(),'msg'=>'','img_domain'=>get_img_host());
-
-        // exception
-        if ($page > M_INDEX_PAGE_MAX){
-            $result['success'] = 0;
-            $result['message'] = 'all empty';
-            die(json_encode($result));
-        }
-
-        if (!$brand_id) {
-            $result['success'] = 0;
-            $result['message'] = 'keywords must not be null!';
-            die(json_encode($result));  
-        }       
-        
-        // result's data
-        if ($page_name == 'brand_product_list'){
-            // $this->load->library('memcache');
-            // $cache_key = 'search-'.implode('-',$param);                 
-            
-            // if(($data=$this->memcache->get($cache_key))===FALSE) {
-                $data = $this->rush_model->product_list($param);                                
-                // $this->memcache->save($cache_key, $data, CACHE_TIME_CATLIST);
-            // }       
-
-            $result['data'] = $data['list'];
-            
-        } else {
-            $result['success'] = 0;
-            $result['message'] = 'all empty';
-        }
-
-        die(json_encode($result));
+    function ajax_brand_list(){
+        $cat_id = $this->input->get('cid');
+        $flag_id = $this->input->get('fid');
+        $data = $this->brand_model->brand_list_by_category($flag_id, $cat_id,$this->continent);
+        echo json_encode($data);
     }
 
     /**

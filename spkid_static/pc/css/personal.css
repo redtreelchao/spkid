@@ -5,6 +5,7 @@
 
 
 
+
 .personal-center{ margin:0 auto; width:1000px; position:relative;  padding-bottom: 150px;}
 /*我的订单左边样式*/
 .personal-center-left{ position:absolute; left:0; top:0; width:100px;}
@@ -19,8 +20,11 @@
 .page-title{ font-size:16px; color:#333;}
 .order-status{ padding-top:30px;}
 .order-status li{ display:inline-block; color:#909090; font-size:14px; width:100px; text-align:center;}
+.order-status2 li{ width:145px;}
 .order-status a{ color:#909090; font-size:14px;}
 .order-status li a.active{ border-bottom:solid 2px #f75555; width:100px; font-size:16px; color:#f75555; display:inline-block;  padding-bottom:10px;}
+.order-status2 li a.active{ width:145px;}
+
 .order-status li i{ background-color:#f75555; border-radius:100%; padding:2px 4px; text-align:center; color:#fff; position:absolute; top:45px; font-size:11px;}
 .my-order-list{ background-color:#f1f1f1; height:40px; border-top:solid 1px #c7c8cc; margin-top:20px;}
 .my-order-list li{ float:left; line-height:40px; text-align:center; font-size:14px; color:#909090;}
@@ -171,33 +175,65 @@ width: 250px; color:#909090;}
 .big-head-img3{ width:20px; height:20px;}
 .big-head3 span{ margin-top:-25px;}
 
+.big-head-img,.big-head-img2, .big-head-img3 {
+	border-radius:50px;
+	-webkit-border-radius:50px;
+	-moz-border-radius:50px;
+}
 .user-picture,.choose-picture2{ width:342px;}
 .user-picture p{ font-size:12px; color:#333; margin-top:25px;}
 
 
 
+/* V + 我的积分  */
+.v-integral-lb { height: 40px; background-color: #F1F1F1; border-top: 1px solid #C7C8CC; margin-top:20px;}
+.v-integral-ul li{ display:inline-block; line-height:40px; text-align:center; font-size:16px; color:#909090; font-weight: bold;}
+.v-integral-balance { width: 20%;}
+.v-integral-jifen li { display:inline-block; line-height:40px; font-size:14px; color:#909090; }
+.v-integral-detail { width: 10%;}
+.v-integral-ul .v-integral-currt,.v-integral-jifen .v-integral-currt { color: #333333;}
+.v-integral-top { margin-top: 15px;margin-bottom: 15px;}
+.v-integral-top { border: 1px solid #C7C8CC; height: 40px; line-height:40px; font-size:14px;}
+.v-integral-top span { padding-left: 20px; padding-right: 200px; }
+.v-integral-top em { color: #F75555; }
+.v-integral-tab, .v-integral-tb{ width: 100%; border:1px solid #C7C8CC; text-align:center; font-size:14px; color:#333333;}
+.v-integral-title th { height:30px; background-color: #F1F1F1; text-align:center;line-height:30px;}
+.v-integral-content td { height:30px; line-height:30px; border: 1px solid #E1E1E1;}
+.v-integral-bottom { margin-top: 50px;}
+.v-integral-why { font-size:16px; color:#333;padding-bottom: 20px;}
+.v-integral-bottom p { font-size:14px; line-height:30px; color: #666666;}
+/* V + 我的积分  */
+
 /* V + 我的优惠  */
-.v-privilege-lb { height: 40px; background-color: #F1F1F1; border-top: 1px solid #C7C8CC; margin-top:20px;}
-.v-privilege-ul li { display:inline-block; line-height:40px; text-align:center; font-size:14px; color:#909090; }
-.v-privilege-vouchers { width: 27%;}
-.v-privilege-balance { width: 20%;}
-.v-privilege-ul .v-privilege-currt { color: #333333;}
-.v-privilege-top { margin-top: 15px;margin-bottom: 15px;}
-.v-privilege-top { border: 1px solid #C7C8CC; height: 50px; line-height:50px; font-size:14px;}
+.chaochu{ width: 900px; overflow: hidden;}
+.v-privilege-lb { height: 40px; background-color: #F1F1F1; border-top: 2px solid #C7C8CC; margin:20px 0 10px 0;}
+.v-privilege-ul li { display:inline-block; line-height:40px; text-align:center; font-size:16px; font-weight: bold; color:#909090; cursor:  pointer;}
+.v-privilege-vouchers { width: 20%;}
+.v-privilege-vouchers span {color:#F75555;}
+.v-privilege-ul .v-privilege-currt { color: #333333; }
+.v-privilege-top { margin-bottom: 15px;}
+.v-privilege-top { border: 1px solid #C7C8CC; height: 30px; line-height:30px; font-size:14px;}
 .v-privilege-top span { padding-left: 20px; padding-right: 200px; }
-.v-privilege-top em { color: #F75555; }
-.v-vouchers-tab { width: 100%; border:1px solid #C7C8CC; text-align:center; font-size:14px; color:#333333;}
-.v-vouchers-title th { height:30px; background-color: #F1F1F1; text-align:center;line-height:30px;}
-.v-vouchers-content td { height:30px; line-height:30px; border: 1px solid #E1E1E1;}
-.v-privilege-bottom { margin-top: 50px;}
-.v-vouchers-why { font-size:16px; color:#333;padding-bottom: 20px;}
+.v-privilege-right li{ float: left; text-align:center; font-size:14px; color:#333333; width: 200px; margin-bottom: 20px;position: relative; margin-right: 13px; display: inline; }
+.v-privilege-unused li{ background:#F1F1F1 url(../images/coupons-bj.png) no-repeat top center; }
+.v-privilege-used li{ background:#F1F1F1 url(../images/been-used.png) no-repeat top center; }
+.v-privilege-expired li{ background:#F1F1F1 url(../images/expired.png) no-repeat top center; }
+.v-voucher-img { background: url(../images/will-expire.png) no-repeat left center; position: absolute; left: 0; height: 69px; width: 68px;}
+.v-privilege-close {  background: transparent none repeat scroll 0 0; border: 0 none; cursor: pointer; padding: 0;border-left: 50px solid transparent; border-top: 50px solid #C7C8CC; color: #fff; height: 0; opacity: 1; position: absolute; right: 0; width: 0;}
+.v-privilege-close span { content: "×"; font-size: 17px; font-weight: bold; position: absolute; right: 6px; top: -42px;}
+.v-privilege-condition { padding-top:70px;}
+.v-privilege-condition .v-voucher-amount { color: #ffffff; font-size: 36px; font-weight: bold;}
+.v-privilege-condition .v-min-order { color: #ffffff; font-size: 18px;}
+.v-privilege-condition .v-voucher-date { color: #ffffff; font-size: 14px;}
+.v-privilege-condition p,.v-privilege-describe p{ line-height: 26px;}
+.v-privilege-describe { padding-top:35px; text-align: left; color: #333333;font-size:14px; padding-left: 10px;}
+.v-privilege-guoqi { padding-top:20px; text-align: right; color: #333333;font-size:14px; padding-right: 10px; padding-bottom: 20px;}
+.v-privilege-bottom { margin-top: 10px;}
+.v-privilege-why { font-size:16px; color:#333;padding-bottom: 10px;}
 .v-privilege-bottom p { font-size:14px; line-height:30px; color: #666666;}
-.v-privilege-page { margin-right: 10px;padding-top: 10px; text-align: right;}
-.v-privilege-page a { display:inline-block; margin-right: 10px; color:#333333; padding:4px 0 0 6px; width:20px; height:20px; line-height: 20px; text-align: center;}
-.v-privilege-page .v-privilege-a { border: 1px solid #C7C8CC;}
-.caret-left { width: 0; height: 0; border-top: 5px solid transparent; border-right: 5px solid #333333; border-bottom: 5px solid transparent; display: block;}
-.caret-right { width: 0; height: 0; border-top: 5px solid transparent; border-left: 5px solid #333333; border-bottom: 5px solid transparent; display: block;}
+.v-privilege-empty { text-align: center;color: #F75555;font-size: 18px;}
 /* V + 我的优惠  */
+
 
 /*我的收藏的右边样式*/
 
@@ -326,3 +362,87 @@ width: 250px; color:#909090;}
 .wenzhangmingchen{ width:290px; padding-top:10px; padding-left:40px;}
 .approved{ width:83px; padding-left:10px; padding-top:10px; color:#333; font-size:14px;}
 .delete-hu{ width:50px; padding-left:30px; padding-top:10px; color:#333; font-size:14px;}
+
+
+/*个人中心样式开始*/
+.my-center{ border:solid 1px #c7c8cc; padding:20px 0; margin-top:20px;} 
+.my-touxiang{ padding-left:100px;}
+.center-mingchen{ vertical-align:middle; margin-top:30px; padding-left:20px;}
+.center-mingchen span{ color:#333; font-size:14px; display:block; padding-bottom:5px;}
+.center-mingchen a{ color:#17a1e5; font-size:12px;}
+
+.center-lsit{ width:300px; padding-left:100px;}
+
+.my-persona-lb{ padding-top:10px;}
+.my-persona-lb li label{ float:left; display:inline-block; color:#333; font-size:14px; width:80px; text-align:right;}
+.my-persona-lb li{ padding-bottom:10px;}
+.my-persona-lb li span{ font-size:14px; color:#333; font-family:Arial, Helvetica, sans-serif; float:left;}
+.my-persona-lb li span a{ color:#17a1e5;}
+
+.personal-center-ico{ padding-top:50px; width:550px; margin:0 auto;}
+.personal-center-ico li{  float:left; margin-right:35px; width:240px; margin-bottom:40px;}
+.personal-center-ico .count-icon{ width:100px; height:100px; line-height:100px; border-radius:100%; display:inline-block; vertical-align:middle;}
+
+.personal-center-ico .count-icon1{ background:#f7a654 url(../images/be-paid.png) no-repeat center center;}
+.personal-center-ico .count-icon2{ background:#8bc34a url(../images/send-goods.png) no-repeat center center;}
+.personal-center-ico .count-icon3{ background:#17a1e5 url(../images/evaluate.png) no-repeat center center;}
+.personal-center-ico .count-icon4{ background:#f75555 url(../images/like.png) no-repeat center center;}
+
+.personal-center-ico .rr-center{ display:inline-block; padding-left:10px;}
+.rr-center .rr-center-dd{ font-size:14px; color:#333;}
+.rr-center .rr-center-dd em{ color:#f75555; font-style:normal;}
+.rr-center  .rr-center-see{ font-size:12px; color:#909090; display:block; margin-top:8px;}
+
+
+
+/*我的评价样式开始*/
+.my-evaluation-tit{ background-color:#f1f1f1; border-top:solid 1px #c7c8cc; height:40px; line-height:40px; margin-top:10px; padding:0 80px; font-size:14px;}
+
+.my-evaluation-lsit li{ border-bottom:solid 1px #e1e1e1;}
+.my-evalution-nr{ padding:20px;}
+.pingjia-left{ width:490px;}
+.evalution-xx{ display:inline-block;}
+.evalution-xx img{ vertical-align: middle; width:70px; height:70px; float:left;}
+.evalution-xx .pingjia-bt{ float:left; margin-top:15px; padding-left:20px; width:400px; color:#333; font-size:12px;word-wrap: break-word; word-break: normal;  display:block;}
+.evalution-xx .pingjia-bt p{ padding-top:20px; font-size:12px; color:#909090;}
+
+.pingjia-right{ width:230px; text-align:center; }
+.click-pingjia{ width:100px; height:30px; line-height:30px; color:#fff; background-color:#17a1e5; border-radius:3px; display:block; text-align:center; margin-left:89px;}
+.click-pingjia:link,.click-pingjia:visited,.click-pingjia:hover,.click-pingjia:active{ color:#fff;}
+.pingjia-right p{ font-size:12px; padding-top:10px; text-align:center;}
+.pingjia-right .pjtj{ padding-left:50px;}
+
+
+.pingjia-pop li{ padding:10px 0 0 20px;}
+.pingjia-pop li label{ float:left; display:inline-block;  text-align:right; font-size:12px; color:#333;}
+.pingjia-pop li label i{ color:#f75555; padding-right:10px;}
+.pingjia-pop{ text-align:left;}
+
+.goods-comment-content.active {  color:#757575; height:196px;}
+.goods-comment-content { border: 1px solid #e0e0e0; color: #f75555; font-size: 12px; height: 38px; line-height: 20px; margin-top: 4px;outline: medium none; padding:10px 0 0 10px; text-align: left; transition: height 0.3s ease-out 0s; width: 660px; margin-left:11px;}
+
+textarea { overflow: auto; vertical-align: top;}
+
+.pingjia-start{ margin-left:60px;}
+.s_star1, .s_star2, .s_star3, .s_star4, .s_star5, .s_star6{ background:url(../images/start2.png) no-repeat left top transparent; }
+.s_star{ float:left; width:99px; height:18px;}
+.s_star{ float:left; width:99px; height:18px;}
+.s_star1, .s_star2, .s_star3, .s_star4, .s_star5{width:99px;height:18px;display:block;}
+.s_star1{background-position:2px 0;}
+.s_star2{background-position:-19px 2px;}
+.s_star3{background-position:-39px 2px;}
+.s_star4{background-position:-59px 2px;}
+.s_star5{background-position:-78px 2px;}
+
+
+
+
+
+
+.btn-red{ background-color:#f75555;}
+.btn-red:hover{ color:#fff;}
+
+
+
+
+

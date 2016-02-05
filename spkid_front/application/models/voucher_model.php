@@ -147,14 +147,7 @@ class Voucher_model extends CI_Model
 	}
 
 	public function is_special_row($release_id,$user_id){
-		$sql = " SELECT * FROM ty_voucher_record AS vr  
-				 WHERE release_id = ".$release_id." AND user_id = ".$user_id."
-				 AND (voucher_status = 0  OR voucher_status=1 AND  EXISTS(
-				 SELECT 1 FROM ty_order_info AS oi 
-				 LEFT JOIN ty_order_payment AS op ON op.`order_id`=oi.`order_id`
-				 WHERE  vr.`voucher_sn`=op.`payment_account` AND oi.`pay_status`!=1 AND oi.`user_id`= ".$user_id."
-				 )) 
-				";
+		$sql = "SELECT * FROM ".$this->_db->dbprefix('voucher_record')." WHERE user_id = ".$user_id." AND release_id = ".$release_id;
 		$query = $this->_db->query($sql);
 		return $query->row();
 	}

@@ -2,7 +2,7 @@
 
 		<style>
 			.page {
-				background-color:#f1f1f1;
+				background-color:#0D7AA5;
 				color:white;
 			}
 
@@ -15,10 +15,6 @@
 			  display: block;
 			  padding: 10px;
 			}
-
-			.page-content{ padding-top:7px;}
-
-			.navbar .center, .subnavbar .center{ line-height: 0;}
 
 			.vcenter {
 				display: -webkit-box;
@@ -59,16 +55,6 @@
 
 			    justify-content:space-between;
 			}
-
-			.coupons-tab .sort {position: absolute; top: 50%; margin-top: -8px; width: 0; right:40px;  height: 0;}
-            .sort .sort-up{ border-bottom:6px solid #aaa;}
-            .sort .sort-active{ border-bottom:6px solid #17a2e5;}
-            .sort .sort-up,.sort .sort-down{ border-left:6px solid transparent; border-right:6px solid transparent; width:0; height:0; display:block;}
-            
-            .sort .sort-down{ border-top:6px solid #aaa; }
-            .sort .sort-active2{ border-top:6px solid #17a2e5;  }
-            .sort .sort-down,.sort .sort-active2{ margin-top: 5px;}
-           
 			
 		</style>
 
@@ -79,7 +65,7 @@
 				<!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
 				<div class="pages">
 					<!-- Index Page-->
-					<div data-page="searchResult"  class="page">
+					<div data-page="searchResult" class="page">
 
 						<!-- navbar -->
 						<div class="navbar">
@@ -105,61 +91,67 @@
 						<!-- ends navbar -->
 						<!-- Scrollable page content-->
 						<div class="page-content  infinite-scroll" data-template="infiniteProductTemplate" data-parent=".listb ul" data-source="/product/ajax_product_list/searchResult" data-params="kw=<?php echo $kw;if (isset($ids)) echo '&ids='.$ids?>">
+							
 							<!-- 广告位 -->	
 							<?php echo isset($ad[0]->ad_code) ? $ad[0]->ad_code : ''?>
 							<!-- ends 广告位-->
-			                <div class="buttons-row tab-qh buttons-sort coupons-tab " style="background-color:#fff;">
-                                <a href="#" id="renqi"      class="tab-link active button coupons-list" >人气</a>
-                                <a href="#" id="xiaoliang"  class="tab-link button coupons-list">销量</a>
-                                <a href="#" id="price"      class="tab-link button coupons-list">价格<span class="sort"><i id="v-sort-up" class="sort-up"></i><em id="v-sort-down" class="sort-down"></em></span></a>
-                            </div>
+							<div class="buttons-row tab-qh buttons-sort">
+					                        <a href="javascript:void(0)" id="renqi"      class="tab-link active button button-secondary">人气</a>
+					                        <a href="javascript:void(0)" id="xiaoliang"  class="tab-link button button-secondary">销量</a>
+					                        <a href="javascript:void(0)" id="price"       class="tab-link button button-secondary">价格</a>
+					                </div>
 
 							<!--搜索结果列表-->
-							<div class="content-block" style="padding-top:0;">
+							<div class="content-block" style="padding-top:10px;">
 								<div class="listb">
-								 	<ul class="sbox clearfix">
-									<?php if (!empty($product_list)){ foreach($product_list as $product){ ?>
-								     	<li data-shopprice="<?php echo $product->shop_price;?>" data-xiaoliang="<?php echo $product->ps_num;?>" data-renqi="<?php echo $product->pv_num;?>">
-											<div class="products-list clearfix">
-												<a class="external" href="/pdetail-<?php echo $product->product_id?>">
-											        <div class="img_sbox"><img class="lazy" data-src="<?php echo img_url($product->img_url);?>.418x418.jpg"></div>
-											        <div class="prod_name"><?php echo $product->brand_name . ' ' . $product->product_name?></div>
-											        <div class="bline clearfix">
-											            <div class="favoheart"><span><?php echo get_page_view('product',$product->product_id)?></span></div>
-											            <?php if(isset($product->price_show) && $product->price_show):?>
-											                <div class="price_bar xunjia_product"><span class="prod_pprice" >询价</span></div>
-											            <?php else:?>
-											                <div class="price_bar" style=""><span class="prod_pprice"><?php echo $product->product_price?></span></div>
-											            <?endif;?>
-											        </div>
-												</a>
-												<?php if ( $product->is_hot ){ ?> 
-												    <div class="mark mark_sale">热品</div>
-												<?php }elseif ( $product->is_new ){ ?> 
-												    <div class="mark mark_new">新品</div>
-												<?php }elseif ( isset($product->is_zhanpin) &&  $product->is_zhanpin){ ?> 
-												    <div class="mark mark_new">展品</div>
-												<?php }elseif ( $product->is_offcode ){ ?> 
-												    <div class="mark mark_offcode">促销</div>
-												<?php } ?>
-											</div>
-								   		</li>
-									<?php } } else{ ?>
-										<div style="margin:2em auto">搜索结果为空</div>
-									<?php }?>
-								 	</ul>
+								 <ul class="sbox clearfix">
+								<?php 
+								if (!empty($product_list)){
+								foreach($product_list as $product){?>
+			
+								     <li data-shopprice="<?php echo $product->shop_price;?>" data-xiaoliang="<?php echo $product->ps_num;?>" data-renqi="<?php echo $product->pv_num;?>">
+									<div class="products-list clearfix">
+									<a class="external" href="/pdetail-<?php echo $product->product_id?>">
+								        <div class="img_sbox"><img class="lazy" data-src="<?php echo img_url($product->img_url);?>.418x418.jpg"></div>
+								        <div class="prod_name"><?php echo $product->brand_name . ' ' . $product->product_name?></div>
+								        <div class="bline clearfix">
+								            <div class="favoheart"><span><?php echo get_page_view('product',$product->product_id)?></span></div>
+								            <!-- <div class="price_bar"><span class="prod_pprice"><?php echo isset($product->is_zhanpin) && $product->is_zhanpin ? '询价' : $product->shop_price?></span></div> -->
+								            <?php if(isset($product->price_show) && $product->price_show):?>
+								                <div class="price_bar xunjia_product"><span class="prod_pprice" >询价</span></div>
+								            <?php else:?>
+								                <div class="price_bar" style=""><span class="prod_pprice"><?php echo $product->product_price?></span></div>
+								            <?endif;?>
+								        </div>
+									</a>
+										<?php if ( $product->is_hot ){ ?> 
+										    <div class="mark mark_sale">热品</div>
+										<?php }elseif ( $product->is_new ){ ?> 
+										    <div class="mark mark_new">新品</div>
+										<?php }elseif ( isset($product->is_zhanpin) &&  $product->is_zhanpin){ ?> 
+										    <div class="mark mark_new">展品</div>
+										<?php }elseif ( $product->is_offcode ){ ?> 
+										    <div class="mark mark_offcode">促销</div>
+										<?php } ?>
+									</div>
+								    </li>
+
+								<?php }} else{?>
+									<div style="margin:2em auto">搜索结果为空</div>
+								<?php }?>
+								 </ul>
 								</div>
-							</div>
 							<!-- ends 搜索结果列表-->
 						</div>
 					</div>
+				</div>
 				</div>
 			</div>
 			<?php include APPPATH."views/mobile/common/template7.php"; ?>
 		</div>
 		
 		<?php include APPPATH."views/mobile/common/footer-js.php"; ?>
-		<script type="text/javascript" src="<?php echo static_style_url('mobile/js/search.js?v=version')?>"></script>
+		
 	<script>
 		$ = Dom7;
 
@@ -261,35 +253,6 @@
 			});
 		};
 
-		$("#renqi").on('click',function(){
-			$(this).addClass("active");
-			$("#xiaoliang").removeClass("active");
-			$("#price").removeClass("active");
-			$("#v-sort-up").removeClass("sort-active");
-			$("#v-sort-down").removeClass("sort-active2");
-			
-		});
-		$("#xiaoliang").on('click',function(){
-			$(this).addClass("active");
-			$("#renqi").removeClass("active");
-			$("#price").removeClass("active");
-			$("#v-sort-up").removeClass("sort-active");
-			$("#v-sort-down").removeClass("sort-active2");
-			
-		});
-		$("#price").on('click',function(){
-			$(this).addClass("active");
-			$("#renqi").removeClass("active");
-			$("#xiaoliang").removeClass("active");
-
-      		if(!$("#v-sort-up").hasClass('sort-active')) {
-	            $("#v-sort-up").addClass('sort-active');
-				$("#v-sort-down").removeClass("sort-active2");
-	        }else{
-	        	$("#v-sort-down").addClass('sort-active2');
-				$("#v-sort-up").removeClass("sort-active");
-	        }
-		});
 	</script>
 	
 	</body>

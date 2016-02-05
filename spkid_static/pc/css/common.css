@@ -20,12 +20,16 @@ h1, h2, h3, h4, h5, h6, abbr, acronym {
     font-weight: 400;
 }
 
-:focus{ outline: 0;} /*button 去除chorme浏览器黄色蓝色输入框*/
 
+
+
+
+textarea{resize:none}
 
 input::-ms-clear { display: none; } /*去除IE浏览器输入框叉*/
 
-input,textarea,select{outline:none;}/*去除chorme浏览器黄色蓝色输入框*/
+
+input,button,select,textarea{outline:none}/*去除chorme浏览器黄色蓝色输入框*/
 
 
 .fl-right, .alignright { float: right;}
@@ -43,8 +47,8 @@ input,textarea,select{outline:none;}/*去除chorme浏览器黄色蓝色输入框
 .logo img{ padding-top:5px;}
 .nav-right{ float:right; margin-top:20px;}
 .textbox{  display: inline-block; width:260px; height:35px; margin-right:20px; vertical-align: middle; position: relative; background-color: #fff; left: 0}
-.nav-search{ border:1px solid #dfdfdf; width:258px; height:33px}
-.nav-search-input{ border: 0; outline: 0; margin-right: 39px; width: 250px; height:20px; line-height:20px; margin-top:5px; margin-left: 2px; padding-left:5px; color:#555; float:left;}
+.nav-search{ border:1px solid #909090; width:258px; height:33px}
+.nav-search-input{ border:0;  margin-right: 39px; width: 250px; height:30px; line-height:30px; margin-left: 2px; padding-left:5px; color:#555; float:left;}
 .nav-search:hover { border:1px solid #999; }
 .search-ico{ background:url(../images/nav-ico.png) no-repeat; position: absolute; top:0; right:5px; display:block; width:25px; height:25px;cursor: pointer;}
 .nav-lb,.naver-login{ display:inline-block;}
@@ -75,6 +79,15 @@ input,textarea,select{outline:none;}/*去除chorme浏览器黄色蓝色输入框
     margin-left: 37px;
     padding-top: 19px;
 }
+
+
+
+
+/*kun-autocomplete start*/
+.autocomplete { border:solid 1px #909090; border-top:none; max-height:300px; overflow-y:auto; position:absolute; z-index:999; background:#fff; top:33px; width:100%; left:-1px;}
+.autocomplete li { font-size:12px; color:#909090; padding-left:10px; height:30px; line-height:30px; cursor:pointer;}
+.autocomplete li:hover{ height:30px; line-height:30px; background-color:#f1f0f0;}
+
 
 
 /*menu start*/
@@ -155,15 +168,20 @@ input,textarea,select{outline:none;}/*去除chorme浏览器黄色蓝色输入框
 .modify-dizhi .err_tip {  bottom: -18px; left: 86px;  position: absolute; font-size:12px; color:#f75555; display:none;}
 
 /* v - 弹框 close 样式*/
-.modal-title{ padding-top:40px;}
+
 .v-pov >.modal-dialog { width: 400px; margin: 300px auto;}
 .v-pov >.modify-address{ width:530px;}
+.v-pov >.eva-pop{ width:880px;}
+
 .v-close { position: relative; border-bottom: 0px; background-color: #fff; text-align: center; color:#333;}
 
 .xiugai{ text-align:left; padding-top:10px;}
 .v-close .triangle-topright { width: 0;  height: 0; border-top: 53px solid #17A1E5; border-left: 65px solid transparent; position: absolute; top:2px; right: 0px; opacity: 1; color: #fff;}
 .v-close span { content: "×"; font-size: 17px; position: absolute; top: -45px; right:10px; font-weight:normal; }
 .v-button { text-align: center; margin: 0 auto; padding:50px 0 50px 0;}
+
+
+.pingjia-button{ padding:0 0 20px 0;}
 
 .v-button button { border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; outline: 0; font-size: 100%; font: inherit; vertical-align: baseline; color: #fff; width:150px; height:40px;}
 .v-button .cancel{ background-color:#fff; border:solid 1px #17a1e5; border-radius:3px; color:#17a1e5; margin-left:10px;}
@@ -177,5 +195,61 @@ input,textarea,select{outline:none;}/*去除chorme浏览器黄色蓝色输入框
 .cartlist .cartlb li .i-checkbox { margin-right:5px;}
 .cartlist .selectall { background-color:#fff; margin-right:5px; margin-top:-2px;}
 .cartlist .i-checkbox { margin-left: 19px;}
-.i-checkbox.checked, .i-checkall.checked{ background:url(../images/check-but.png) no-repeat; }
-.i-checkbox.checked, .i-checkall.checked { background-position:0 0; background-repeat: no-repeat; border: 0 none; height: 12px; width: 12px;}
+.i-checkbox.checked, .i-checkall.checked{ background:url(../images/check-but.png) no-repeat; background-position:0 0; background-repeat: no-repeat; border: 0 none; height: 12px; width: 12px;}
+
+
+.menu_tips {
+	display: inline-block;		
+	width: 20px;
+	height: 20px;
+}
+
+.arrow_down {
+	background: white url(../images/video-jt-up.png) no-repeat 5px 15px;
+}
+
+.arrow_up {
+	background: white url(../images/video-jt-down.png) no-repeat 5px 15px;
+}
+
+.menu_items {
+	list-style:none;
+	padding:2px 0;	
+	margin-top:-10px;	
+	width:120px;
+	position: absolute; z-index: 1000;
+}
+
+.menu_items li{
+	background:rgba(0, 0, 0, 0.7);
+	text-align:center;
+	margin-bottom:1px;
+	line-height: 2em;
+}
+
+.menu_items li:hover{
+	background:rgba(255, 0, 0, 0.7);
+	text-align:center;
+	margin-bottom:1px;
+	line-height: 2em;
+}
+
+
+
+
+.menu_items a {
+	text-decoration:none;
+	color:white;
+	font-size:1em;
+}
+
+.dentist-chaochu > li > a > img {
+	max-height: 200px;
+}
+
+
+
+/*404页面样式*/
+.error-page{ width:340px; margin:0 auto; padding-top:300px; margin-bottom:300px;}
+.error-page .error-tit{ font-size:30px; color:#6b6b6b; font-family:"微软雅黑"; margin-top:20px; font-weight:900;}
+.error-page .error-tit a{ color:#17a1e5;} 
