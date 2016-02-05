@@ -191,7 +191,7 @@ $config['log_threshold'] = 4;
 | application/logs/ folder. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '';
+$config['log_path'] = '/alidata/log/h5/';
 
 /*
 |--------------------------------------------------------------------------
@@ -269,7 +269,7 @@ $config['sess_time_to_update']	= 1200;
 |
 */
 $config['cookie_prefix']	= "";
-$config['cookie_domain']	= "test.com";
+$config['cookie_domain']	= "redtravel.cn";
 $config['cookie_path']		= "/";
 $config['cookie_secure']	= FALSE;
 
@@ -361,10 +361,10 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 //====================danger config begin=================================
-define('FRONT_HOST', 'http://f.test.com');
-$config['IMG_HOSTS']=array('http://img.test.com');
+define('FRONT_HOST', 'http://h5.redtravel.cn');
+$config['IMG_HOSTS']=array('http://img.redtravel.cn');
 
-$config['memcache'] = array(array('hostname'=>'192.168.20.204','port'=>11211,'weight'=>1));
+$config['memcache'] = array(array('hostname'=>'127.0.0.1','port'=>11211,'weight'=>1));
 $config['memcache_prefix'] = '';
 // memcache设置
 // 在memcache.php中配置

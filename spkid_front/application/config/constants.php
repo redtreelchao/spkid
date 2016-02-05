@@ -213,7 +213,7 @@ define('M_INDEX_PAGE_MAX',3);//手机端首页最多加载几页
 
 //seo
 define('SITE_NAME', '悦牙网');
-define('SITE_NAME_MOBILE', '悦牙网 www.yueyawang.com');
+define('SITE_NAME_MOBILE', '悦牙网 www.redtravel.cn');
 define('PAGE_KEYWORDS' , SITE_NAME.'，keywords content.');
 define('PAGE_DESCRIPTION' , SITE_NAME.'description content！');
 define('PAGE_TITLE_SITE_NAME' , SITE_NAME.'_site_name_here');
@@ -221,9 +221,9 @@ define('PAGE_TITLE_SITE_NAME' , SITE_NAME.'_site_name_here');
 //预计发货时间
 define('EXPECTED_SHIPPING_DATE','当天16:00点');
 define('MEMCACHE_ADMIN_USERNAME','admin'); 	// Admin Username
-define('MEMCACHE_ADMIN_PASSWORD','admin@yueyawang.com');  	// Admin Password
+define('MEMCACHE_ADMIN_PASSWORD','admin@redtravel.cn');  	// Admin Password
 
-define("SEND_MAIL", "services@yueyawang.com");
+define("SEND_MAIL", "servicestatic.redtravel.cn");
 define('SESS_CHANGE_SID_PERTIME', false);
 define("SESS_KEEP_IP_MAX_NUM",5);
 
@@ -231,10 +231,10 @@ define("CACHE_HTML_INDEX", 1);
 define("CACHE_HTML_RUSH", 3);
 define("CACHE_HTML_LIST", 3);
 define("CACHE_HTML_INFO", 5);
-define('FRONT_HOST', 'http://pc.yueyawang.com');
+define('FRONT_HOST', 'http://pc.redtravel.cn');
 define('STATIC_DIR', FRONT_HOST.'/static');
-define('STATIC_STORE_DIR', '/var/www/yyw151018/static');
-define('IMAGE_STORE_DIR', '/var/www/yyw151018/image');
+define('STATIC_STORE_DIR', '/alidata/www/spkid/spkid_static');
+define('IMAGE_STORE_DIR',  '/alidata/www/spkid/spkid_image');
 define('VIDEO_COVER_PATH', IMAGE_STORE_DIR.'/wp_img');
 define('USER_AV_PATH', STATIC_STORE_DIR.'/mobile/touxiang');
 

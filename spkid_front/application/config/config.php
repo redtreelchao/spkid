@@ -191,7 +191,7 @@ $config['log_threshold'] = 4;
 | application/logs/ folder. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '';
+$config['log_path'] = '/alidata/log/pc/';
 
 /*
 |--------------------------------------------------------------------------
@@ -361,8 +361,8 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 //====================danger config begin=================================
-define('FRONT_HOST', 'http://pc.test.com');
-$config['IMG_HOSTS']=array('http://img.test.com');
+define('FRONT_HOST', 'http://pc.redtravel.cn');
+$config['IMG_HOSTS']=array('http://img.redtravel.cn');
 
 // memcache设置
 $config['memcache'] = array(
