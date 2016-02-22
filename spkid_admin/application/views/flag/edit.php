@@ -28,6 +28,10 @@
 				<td class="item_input"><?php print form_input('flag_name',$row->flag_name,'class="textbox require" '.($perm_edit?'':'disabled'));?></td>
 			</tr>
 			<tr>
+				<td class="item_title">所属大洲:</td>
+				<td class="item_input"><?php print form_input('continent',$row->continent,'class="textbox require" '.($perm_edit?'':'disabled'));?></td>
+			</tr>
+			<tr>
 				<td class="item_title">图片地址:</td>
 				<td class="item_input">
 					<?php print form_upload('flag_url','','class="textbox" '.($perm_edit?'':'disabled'));?>
@@ -37,7 +41,7 @@
 			<tr>
 				<td class="item_title">排序号:</td>
 				<td class="item_input">
-					<?php print form_input('sort_order',$row->sort_order,'class="textbox" '.($perm_edit?'':'disabled')); ?>
+					<?php print form_input('sort_order',$row->sort_order,'class="textbox" '.($perm_edit?'':'disabled')); ?>数值大的在前
 				</td>
 			</tr>
 			<tr>

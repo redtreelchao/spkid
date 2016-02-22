@@ -166,7 +166,6 @@ class Order_model extends CI_Model
                     " LEFT JOIN ".$this->_db->dbprefix('region_info')." AS pr ON o.province = pr.region_id ".
 	             $where ." ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order']
 				. " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'];
-
 		$query = $this->_db->query($sql);
 		$rows = $query->result();
 		$orderIds = Array();
@@ -354,7 +353,7 @@ class Order_model extends CI_Model
 		$where = 'o.order_sn = ?';
 		$param = array($order_sn);
 	    }
-    	$sql = "SELECT o.*, p.pay_code,p.pay_name,p.pay_logo,p.is_online,s.shipping_code,s.shipping_name,s.shipping_desc,pr.region_name as province_name,
+    	$sql = "SELECT o.*, p.pay_code,p.pay_name,p.pay_logo,p.is_online, s.shipping_code,s.shipping_name,s.shipping_desc,pr.region_name as province_name,
     		cr.region_name as city_name,dr.region_name as district_name
                 FROM ".$this->_db->dbprefix('order_info')." AS o
                 LEFT JOIN ".$this->_db->dbprefix('payment_info')." AS p ON o.pay_id = p.pay_id
@@ -369,7 +368,7 @@ class Order_model extends CI_Model
 
     public function order_product($order_id)
     {
-    	$sql = "SELECT op.*, p.product_name, p.product_sn,p.provider_productcode, p.unit_name, c.color_name, c.color_sn, s.size_name, s.size_sn, b.brand_id, b.brand_name
+    	$sql = "SELECT op.*, p.product_name, p.genre_id, p.product_sn,p.provider_productcode, p.unit_name, c.color_name, c.color_sn, s.size_name, s.size_sn, b.brand_id, b.brand_name
                 , g.img_url
                 FROM ".$this->_db->dbprefix('order_product')." AS op
                 LEFT JOIN ".$this->_db->dbprefix('product_info')." AS p ON op.product_id = p.product_id
@@ -596,5 +595,23 @@ class Order_model extends CI_Model
             $sql="SELECT * FROM ".$this->db->dbprefix('order_advice')." WHERE type_id = 2 AND is_return = 1 AND order_id = '".$order_id."' LIMIT 1";
             $query = $this->_db->query($sql);
             return $query->row();
+	}
+
+	//PC端 个人中心订单状态数量
+	public function get_user_ordernum($order_status,$user_id){
+		if($order_status == 6){
+			$where = " AND o.order_status in (0, 1) AND o.order_price + o.shipping_fee > o.paid_price ";
+		}elseif($order_status == 7){
+        	$where = " AND o.order_status = '1' AND o.shipping_status = '0' AND o.pay_status = '1'";
+		}
+
+		$sql = "SELECT o.*,p.pay_code,p.is_online,p.is_online AS online_pay,a.action_note,pr.region_name AS province_name,s.shipping_name FROM ty_order_info AS o 
+				LEFT JOIN ty_shipping_info s ON o.shipping_id = s.shipping_id 
+				LEFT JOIN ty_payment_info AS p ON o.pay_id = p.pay_id 
+  				LEFT JOIN ty_order_action AS a ON o.order_id = a.order_id AND a.is_return = 1 AND a.order_status = 4 
+  				LEFT JOIN ty_region_info AS pr ON o.province = pr.region_id 
+				WHERE o.user_id = '" . $user_id . "' AND o.order_status != '3' ". $where ." ORDER BY o.create_date DESC ";
+		$query = $this->_db->query($sql);
+        return $query->result();
 	}
 }

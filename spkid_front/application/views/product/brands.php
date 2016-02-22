@@ -58,7 +58,6 @@ $('.pro-categories>a').on('click', function(e){
     $('.pro-level.active').removeClass('active');
     $(this).addClass('pro-current');
     var index = $(this).index();
-    --index;
     $('.pro-level').eq(index).addClass('active');
     $('.pro-level').eq(index).children().first().trigger('click');
 })
@@ -78,7 +77,7 @@ function get_brand_list(cid){
         for( var i in data ){
             var item = data[i];            
             //console.log(item);
-            list += '<li><div class="ified-pic"><a href="#"><img src="'+item['brand_logo']+'"></a></div>';
+            list += '<li><div class="ified-pic"><a href="/brand/index/'+item['brand_id']+'"><img src="'+item['brand_logo']+'"></a></div>';
             list += '<div class="ified-nr"><p class="flags clearfix"><img src="'+item['flag_url']+'"><span class="guoji-mc">'+item['brand_name']+'</span></p>';
             list += '<p class="flags-ction"><a href="/brand/index/'+item['brand_id']+'">'+item['brand_info']+'</a></p></div></li>';
         }

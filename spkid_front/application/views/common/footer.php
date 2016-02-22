@@ -50,6 +50,7 @@
 </body>
 
 <script>
+
     var is_hover = false;
     function hide_menu() {
       if (is_hover) {
@@ -59,6 +60,7 @@
         $('.menu_items').hide('slow');
       }
     }
+    /*
     //判断用户是否登录
     $(function(){
       var cookies = document.cookie ? document.cookie.split('; ') : [];
@@ -73,21 +75,15 @@
       if (!v_user_name) {
         $('.naver-login').html('<a href="/user/login" class="nav-user">登录</a>');
       } else {
-        var str = '<a href="#" class="nav-user">' + v_user_name + '<span class="menu_tips"></a>';
-        str += '<ul class="menu_items" style="display:none">';
-        str += '<li><a href="/user/index.html">个人中心</a></li>';
-        str += '<li><a href="/account/privilege.html">我的优惠</a></li>';
-        str += '<li><a href="/collect/index.html">我的关注</a></li>';
-        str += '<li><a href="">我的回复</a></li>';
-        str += '<li><a href="/user/logout">退出</a></li></ul>';
+        var str = '<a href="/user/index.html" class="nav-user">' + v_user_name + '</a>';
 
         $('.naver-login').html(str);
       }
 
-
-     
-
-      $('.menu_tips').addClass('arrow_up');
+ */
+    $(function(){
+$('#response_num').load('/user/my_response');
+     $('.menu_tips').addClass('arrow_up');
       $('.nav-user').hover(
         function(){
           $('.menu_tips').removeClass('arrow_up').addClass('arrow_down');
@@ -97,29 +93,31 @@
         function(e) {
           //console.log(e.target);
           
-          setTimeout("hide_menu()", 3000);
+          setTimeout("hide_menu()", 5000);
         }
-        );
-
-      
-
-      $('.menu_items').hover(
-        function(){          
-          is_hover = true;
-        },
-        function(e){
-            //e.stopPropagation();
-            is_hover = false;
-            $('.menu_tips').removeClass('arrow_down').addClass('arrow_up');
-            $('.menu_items').hide('slow');
+);
+$('.naver-login').mouseover(function(){
+        $('.menu_items').show();
+	$('.menu_tips').removeClass('arrow_down').addClass('arrow_up');
       });
-     
 
-    });
-    
-    $(function () {
-        $('[data-toggle="popover"]').popover();
+
+      $('.naver-login, .menu_items').mouseout(function(){
+        $('.menu_items').hide();
+        
+        $('.menu_tips').removeClass('arrow_up').addClass('arrow_down');
+      });
+
+      $('.autocomplete,.nav-search').mouseleave(function(){
+        $('.autocomplete').empty();
+      });
+
+        if ($('[data-toggle="popover"]')){
+            $('[data-toggle="popover"]').popover();
+        }
     })
+
+
 </script>
 </html>
 

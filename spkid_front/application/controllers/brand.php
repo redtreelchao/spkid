@@ -19,6 +19,11 @@ class Brand extends CI_Controller {
         $data = $this->brand_model->get_flag_category($this->continent);
         $data['fid'] = $fid;
         $data['index'] = 2;
+
+        // 这里获取动态的seo
+        $this->load->library('lib_seo');
+        $seo = $this->lib_seo->get_seo_by_pagetag('pc_brands_index', array());
+        $data = array_merge($data, $seo);
         $this->load->view('product/brands', $data);
     }
 

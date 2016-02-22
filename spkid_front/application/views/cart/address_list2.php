@@ -20,8 +20,9 @@
 <?php endif; ?>
 </li>
 <?php endforeach; ?>
-<li onclick="load_address_form(0)">
+<li ><a <?php if(count($address_list) >= 20) { echo 'href="#limit-box" data-toggle="modal" data-container="body"';}else{ echo 'onclick="load_address_form(0)"';}?> >
 <div class="inner xinzeng">
    <i>+</i>新增收货地址
 </div>
+</a>
 </li>

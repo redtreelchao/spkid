@@ -19,6 +19,10 @@ class Video extends CI_Controller
         $data['focus_image'] = $this->lib_ad->get_focus_image(VIDEO_FOCUS_IMAGE_TAG, 2);
 
         $data['index'] = 4;
+        // 这里获取动态的seo
+        $this->load->library('lib_seo');
+        $seo = $this->lib_seo->get_seo_by_pagetag('pc_video_index', array());
+        $data = array_merge($data, $seo);        
         $this->load->view('video/index', $data);
     }
     public function upload(){
@@ -32,30 +36,34 @@ class Video extends CI_Controller
         $data['post_content'] = $this->input->post('content');
         $data['post_author'] = 5;
         $base_path = VIDEO_COVER_PATH;
-	
-	// 上传到的路径
-	$upload_path = $base_path . '/wp_img/'.date('Y/m');
-      
+
+        // 上传到的路径
+        $upload_path = $base_path . '/wp_img/'.date('Y/m');
+        if (!is_dir($upload_path))
+            mkdir($upload_path, 0777, true);
+
         $this->upload->initialize(array(
-                'upload_path' => $upload_path,
-                'allowed_types' => 'gif|jpg|png|jpeg',
-                'encrypt_name' => TRUE
-            ));
+            'upload_path' => $upload_path,
+            'allowed_types' => 'gif|jpg|png|jpeg',
+            'encrypt_name' => TRUE
+        ));
         $extra = array('intro' => $this->input->post('desc'));
-       
+
         if($this->upload->do_upload('cover')){
-                $file = $this->upload->data();
-                $extra['cover'] = img_url($file['file_name']);
-                $ext = substr(strrchr($file['file_name'], "."), 1);
-                if ('jpg' == $ext || 'jpeg' == $ext) {
-                    $extra['mime_type'] = 'image/jpeg';
-                } else {
-                    $extra['mime_type'] = 'image/'.$ext;
-                }
-        }
-        
-        $this->load->model('wordpress_model');
-        $res = $this->wordpress_model->insert_video($data, $extra);
+            $file = $this->upload->data();
+            $extra['cover'] = img_url($file['file_name']);
+            $ext = substr(strrchr($file['file_name'], "."), 1);
+            if ('jpg' == $ext || 'jpeg' == $ext) {
+                $extra['mime_type'] = 'image/jpeg';
+            } else {
+                $extra['mime_type'] = 'image/'.$ext;
+            }
+
+            $this->load->model('wordpress_model');
+            $res = $this->wordpress_model->insert_video($data, $extra);
+        } else {
+            $res = false;
+        }        
         echo json_encode(array('uploaded' => $res));
 
     }
@@ -68,7 +76,7 @@ class Video extends CI_Controller
         die('视频不存在!');
 
 
-// 处理视频,可以放大视频
+    // 处理视频,可以放大视频
 	$article_detail->post_content = $this->deal_video_content( $article_detail->post_content );
 
         //获取文章的点赞数量
@@ -111,24 +119,19 @@ class Video extends CI_Controller
         //$tags = parse_str($tags, $tagArr);
         //print_r($post_tag);
         $this->load->library('lib_seo');
-        $seo = $this->lib_seo->get_seo_by_pagetag('article_detail', array(
-                                'post_title' => $article_detail->post_title                         
+        $seo = $this->lib_seo->get_seo_by_pagetag('pc_video_detail', array(
+                                'video_name' => $article_detail->post_title                         
                                 ));
-
-        //改变video的容器的宽高，以适应pc的分辨率
-        //$this->load->helper('html');
-        //$html = str_get_html($article_detail->post_content);
-        //var_export($html);exit();
-        //$o = $html->find('iframe.video_iframe', 0);
 
         //获取热门视频
         $this->load->model('wordpress_model');
         $hotvideos = $this->wordpress_model->get_hot_videos();
 
-        //var_export($hotvideos);exit();
-
         $this->load->vars(
             array(
+                'title'     => $seo['title'],           
+                'description' => $seo['description'],
+                'keywords'  => $seo['keywords'],
                 'article' => $article_detail,
                 'tag' => $post_tag, 
                 'category' => $category,
@@ -140,7 +143,7 @@ class Video extends CI_Controller
                 'collect_data' => get_collect_data(),
                 'praise_data' => get_praise_data(),
                 'article_praise_num' => $article_praise_num->praise_num,
-                'user_id' => $this->session->userdata('user_id'),
+                //'user_name' => $this->session->userdata('user_name'),
                 'hotvideos' => $hotvideos
                 )
             );
@@ -149,7 +152,7 @@ class Video extends CI_Controller
 // 处理视频内容
 	private function deal_video_content( $c ){
 		$search = array( '/369/', '/276.75/');
-		$replace= array( '680', '475' );
+		$replace= array( '882', '488' );
 		$c = preg_replace( $search, $replace, $c );
 		// 只保留iframe
 		$search = '/<iframe.*iframe>/';

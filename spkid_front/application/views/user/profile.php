@@ -65,24 +65,27 @@
     
     select {
         border: solid 1px #c7c8cc;      
-        appearance:none;
-        -moz-appearance:none;
-        -webkit-appearance:none;
+       
         padding-right: 14px;
         background: url("<?php echo static_style_url('pc/images/arrows.png');?>") no-repeat scroll right center transparent;
-        font-size: 12px;
-        width: 250px;
+        font-size: 16px;
+        width: 268px;
         outline: medium none;
         height: 26px;
-        line-height: 26px;
+        line-height: 26px; padding:1px 8px;
         box-shadow: 2px 3px 3px #e7e7e7 inset;
-        margin-left: -10px;
-        width: 273px;
+        
+        
         height: 30px;
+        font-size: 16px;
+        vertical-align: middle;
+
     }
     select option p {
         padding:4px 4px;
     }
+    select option:nth-child(even) { background-color:#f5f5f5;}
+
     select::-ms-expand { display: none; }
     .save_info {
         display:inline-block;
@@ -94,6 +97,14 @@
         margin-left: 97px;
         text-align:center;
     }
+	
+	option {
+    font-weight: normal;
+    display: block;
+    padding: 0px 0px 0px;
+    white-space: pre;
+    min-height: 1.2em;
+}
 
     ul.choose-picture li img.selected {
         border:1px solid rgba(255, 0, 0, 0.5);
@@ -108,7 +119,7 @@
 </style>
     <div class="personal-center-right">
                    
-    <h1 class="order-details-bt">个人设置</h1>
+    <h1 class="order-details-bt">个人信息</h1>
          <div class="personal-rr">
               <ul class="personal-bt clearfix">
               <li data-value="0" class="current">基本资料</li>
@@ -121,18 +132,7 @@
                       <li><label>昵　　称：</label><input name="user_name" type="text" class="mod-cus-input -mod-cus-red" value="<?php echo $user->user_name?>" ><!-- <em class="personal-empt">不能为空</em> --></li>
                       <li><label>姓　　名：</label><input name="real_name" type="text" class="mod-cus-input" value="<?php echo $user->real_name?>" ></li>
                       <li><label>职　　务：</label><input name="company_position" type="text" class="mod-cus-input" value="<?php echo $user->company_position?>" ></li>
-                      <li>
-                        <label>单位性质：</label>                    
-                        <select name="company_type">
-                          <?php foreach ($values as $key => $value): ?>
-                        
-                          <option value="<?php echo $value;?>">
-                            <p><?php echo $company_type[$key];?></p>
-                          </option>
-                          <?php endforeach;?>
-                        </select>
-
-                      </li>
+                      <li><label>单位性质：</label><select name="company_type"><?php foreach ($values as $key => $value): ?><option value="<?php echo $value;?>"><p><?php echo $company_type[$key];?></p></option><?php endforeach;?></select></li>
                       <li><label>单位名称：</label><input name="company_name" type="text" class="mod-cus-input" value="<?php echo $user->company_name?>"></li>
                       <a class="save_info">保存</a>
                     </form>
@@ -322,12 +322,25 @@
         }
     });
 
+    function update_advar_preview(id, img_src, resolution) {
+      var c=document.getElementById(id);
+      var ctx=c.getContext("2d");
+      ctx.clearRect(0, 0, resolution, resolution);
+      var img=new Image();
+      img.onload = function(){
+        ctx.drawImage(img, 0, 0, resolution, resolution);
+      };
+      img.src = img_src;
+    }
+
     $('.choose-picture li img').click(function(){
         advar_type = 2;
         $('.choose-picture li img.selected').removeClass('selected');
         $(this).addClass('selected');
-
-        $('.big-head img, .big-head2 img, .big-head3 img').attr('src', $(this).attr('src'));
+        update_advar_preview('res1', $(this).attr('src'), 100);
+        update_advar_preview('res2', $(this).attr('src'), 50);
+        update_advar_preview('res3', $(this).attr('src'), 30);       
+        
     });
 
     $('.pass-portrait-savebtn').click(function(){

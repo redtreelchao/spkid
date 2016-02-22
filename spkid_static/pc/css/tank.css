@@ -41,13 +41,13 @@ input:focus{ outline:none }
 .Logincom span{ padding-left:5px;}
 .forget-mm{ float:right; text-align:right; color:#0078b9; font-size:14px;}
 .forget-mm a{ color:#0078b9;}
-.btn-default { width: 100%; background: #17a1e5; color: #fff; font-size: 18px; text-align: center; vertical-align: middle; border: 1px solid transparent; border-radius: 4px; -moz-box-sizing: border-box; box-sizing: border-box; height:40px;}
+.btn-default { width: 100%; background: #17a1e5; color: #fff; font-size: 18px; text-align: center; vertical-align: middle; border: 1px solid transparent; border-radius: 4px; -moz-box-sizing: border-box; box-sizing: border-box; height:40px;line-height: 40px}
 .disabled{ background-color:#909090 !important;cursor:default !important;}
 .btn {display: inline-block; margin-bottom: 0; font-weight: 400; border: none; outline: 0; -ms-touch-action: manipulation; touch-action: manipulation; cursor: pointer;}
 .fr{ float:right; font-size:14px; margin-top:5px;}
 .fr a{ padding-left:10px; color:#0078b9;}
 .horizontal{ border-bottom:solid 1px #c7c8cc; text-align:center; height:35px; margin-top:20px;}
-.horizontal span{ display:inline-block; margin-top:21px; padding:0 10px; background-color:#ededef; color:#333; position: absolute;}
+.horizontal span{ display:inline-block; margin-top:21px; padding:0 10px; background-color:#ededef; color:#333;}
 .other, .other1 { width:100%; text-align:center; margin-top:20px;}
 .other a{ background:url(../images/ico2.png) no-repeat; height:30px; width:35px;  display:inline-block;}
 .other .qq{ background-position:0 0;}

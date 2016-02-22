@@ -110,7 +110,7 @@ $alipay_bank_list = array(
     //'BEA'   => array('pay_code'=>'BEA','pay_name'=>'东亚银行','pay_logo'=>'img/shop_process/bank/BEA.jpg')
 );
 // 订单来源
-define('SOURCE_ID_WEB', 1);
+define('SOURCE_ID_WEB', 3);
 
 // 运费
 define('SHIPPING_FEE_DEFAULT', 10);
@@ -151,6 +151,8 @@ define('CACHE_TIME_PROVIDER_SHIPPING_FEE_CONFIG', 3600); //供应商运费配置
 define('CACHE_TIME_INDEX_PRODUCT',3600);//首页商品缓存时间
 define('CACHE_TIME_BRAND_M_CATEGORYES',86400);// 品牌M获取分类
 define('CACHE_TIME_BRAND_LIST_BY_CATEGORY',86400);// 品牌列表
+define('CACHE_TIME_PC_INDEX_PRODUCT_INFO',86400);// PC首页产品信息
+define('CACHE_TIME_PC_SEO',86400);// PC首页SEO信息
 
 // 购物车商品保存时间
 define('CART_SAVE_TIME', 'PT1200S');
@@ -213,7 +215,7 @@ define('M_INDEX_PAGE_MAX',3);//手机端首页最多加载几页
 
 //seo
 define('SITE_NAME', '悦牙网');
-define('SITE_NAME_MOBILE', '悦牙网 www.yueyawang.com');
+define('SITE_NAME_MOBILE', '悦牙网');
 define('PAGE_KEYWORDS' , SITE_NAME.'，keywords content.');
 define('PAGE_DESCRIPTION' , SITE_NAME.'description content！');
 define('PAGE_TITLE_SITE_NAME' , SITE_NAME.'_site_name_here');

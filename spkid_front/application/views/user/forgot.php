@@ -12,8 +12,8 @@
 <body>
 <div id="wrap-login">
      <div class="login-box">
-              <div class="logo"><a href="#"><img src="<?php echo static_style_url('mobile/img/yy-logo.png')?>" width="200" alt="logo" /></a></div>
           <div class="login-main">
+              <div class="logo"><a href="#"><img src="<?php echo static_style_url('mobile/img/yy-logo.png')?>" width="200" alt="logo" /></a></div>
                <div class="find-step01"></div>
                <div class="form-wrapper clearfix">
                       <form method="post" action="#" name="forgotForm">
@@ -43,10 +43,13 @@
 </div>
 <script>
 //disabled="disabled" 
+
 $('input[name=authcode]').on('input propertychange', function(){
-    if (0 < $('input[name=mobile]').val().length && 0 < $('input[name=authcode]').val().length){
-        $('button.disabled').removeClass('disabled').removeAttr('disabled');        
+    //if($('.fsyzm').is(':hidden')){
+    if(4 == $(this).val().length){
+        $(this).trigger('blur');
     }
+    //}
 })
 $('.captcha').click(function(e){
     e.preventDefault();
@@ -60,6 +63,11 @@ $('input[name=authcode]').on('blur', function(){
         if (!res){
             //show mobile code
             self.val('').off('blur');
+            self.off('input propertychange');
+           //self.on('blur', function(){
+                if(0 < $('input[name=mobile]').val().length)
+                    $('button.disabled').removeClass('disabled').removeAttr('disabled');
+            //});
             p.prev().text('');
             $('.captcha').removeClass('captcha').hide();
             $('.fsyzm').css('display', 'inline-block');
@@ -80,7 +88,7 @@ btn.click(function(e){
         url:'/user/reg_auth',
             async:false,
             dataType:'json',
-            data:{mobile:$('input[name=mobile]').val(), is_register:false},
+            data:{mobile:$('input[name=mobile]').val(), is_register:0},
             success:function(data){
                 if(data.mobile_check_err){
                     $('input[name=mobile]').parent().prev().text(data.mobile_check_err);
@@ -109,7 +117,6 @@ btn.click(function(e){
 $('form').on('submit', function(e){
     e.preventDefault();
     $.ajax({url:'/user/new_password', data:$(this).serialize(), method:'POST', dataType:'json', success:function(data){
-        console.log(data.error);
         if (false !== data.error){
             $('input[name="'+data.name+'"]').parent().prev().html(data.error);
         } else {

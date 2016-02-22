@@ -321,8 +321,14 @@ define("home:widget/banner/banner.js", function(e, n) {
                 }).mouseleave(function() {
                     return e.main(), !1
                 }), $(i.dirRight).length > 0 && ($(i.dirRight).click(function() {
+                    if(t.find('li').length <= 1) {
+                        return;
+                    }
                     return t.is(":animated") && t.stop(!0, !0), clearTimeout(e.timer), e.setIntervalFunc(), !1
                 }), $(i.dirLeft).click(function() {
+                    if(t.find('li').length <= 1) {
+                        return;
+                    }
                     t.is(":animated") && t.stop(!0, !0), clearTimeout(e.timer);
                     var r = n.find(i.lis), a = r.length, s = n.find(i.icoWrapper).find(i.curIcoClass).index(), o = r.eq(s), d = r.eq((s + a - 1) % a);
                     return e.run(d, o), clearTimeout(e.timer), e.timer = setTimeout(function() {

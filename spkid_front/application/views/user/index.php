@@ -26,21 +26,21 @@
 	                      	<span class="count-icon count-icon1"></span>
 	                      	<p class="rr-center">
 	                        	<a class="rr-center-dd">待支付的订单：<em><?php echo $wait_pay;?></em></a>
-	                        	<a href="#" class="rr-center-see">查看待支付的订单 ></a>
+	                        	<a href="/user/order_list" class="rr-center-see">查看待支付的订单 ></a>
 	                      	</p>
 	                    </li>	                    
 	                    <li>
 	                     	<span class="count-icon count-icon2"></span>
 	                      	<p class="rr-center">
 	                        	<a class="rr-center-dd">待发货的订单：<em><?php echo $await_goods;?></em></a>
-	                        	<a href="#" class="rr-center-see">查看待发货的订单 ></a>
+	                        	<a href="/user/order_list" class="rr-center-see">查看待发货的订单 ></a>
 	                      	</p>
 	                    </li>	                    
 	                    <li>
 	                      	<span class="count-icon count-icon3"></span>
 	                      	<p class="rr-center">
 	                        	<a class="rr-center-dd">待评价的商品：<em><?php echo $evaluate_product;?></em></a>
-	                        	<a href="#" class="rr-center-see">查看待评价的商品 ></a>
+	                        	<a href="/user/my_liuyan" class="rr-center-see">查看待评价的商品 ></a>
 	                      	</p>
 	                    </li>	                    
 	                    <li>

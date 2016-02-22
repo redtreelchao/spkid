@@ -3,7 +3,11 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta http-equiv=Content-Type content="text/html;charset=utf-8">
-<title>悦牙网首页</title>
+
+<title><?php echo isset($title) ? $title : '悦牙网'?></title>
+<meta name="Keywords" content="<?php echo isset($keywords) ? $keywords : '';?>">
+<meta name="Description" content="<?php echo isset($description) ? $description : '';?>">
+
 <link href="<?php echo static_style_url('pc/css/common.css?v=version')?>" rel="stylesheet" type="text/css">
 <link href="<?php echo static_style_url('pc/css/main.css?v=version')?>" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="<?php echo static_style_url('pc/js/common.js?v=version')?>"></script>
@@ -40,7 +44,7 @@
 <div id="back-to-top"><a href="#top"><span></span></a></div>  
 <div class="nav-wrap">
      <div class="nav clearfix">
-          <a href="javascript:void(0)" class="logo">
+          <a href="/" class="logo">
             <img src="<?php echo static_style_url('pc/images/logo.png?v=version')?>">
           </a>
           <div class="nav-right">
@@ -56,13 +60,20 @@
               </div>
               <div class="nav-lb">
                   <div class="naver-login">
-                  <?php if($this->input->cookie("v_user_id")){ ?>
-                    <a href="#" class="nav-user"><?php echo $this->input->cookie("v_user_name");?></a> 
+                  <?php if($this->session->userdata('user_id')){ ?>
+                            <img src="<?php echo static_style_url('mobile/touxiang/'.$this->session->userdata('advar'))?>" height="28">
+                    <a href="#" class="nav-user"><?php echo $this->session->userdata('user_name')?><span class="menu_tips"></span></a> 
+        <ul class="menu_items" style="display:none">
+        <li><a href="/user/index.html">个人中心</a></li>
+        <li><a href="/account/privilege.html">我的优惠</a></li>
+        <li><a href="/collect/index.html">我的关注</a></li>
+        <li><a href="/user/my_response.html">我的回复(<span id="response_num"></span>)</a></li>
+        <li><a href="/user/logout.html">退出</a></li></ul>
 	                <?php }else{ ?>
 	                    <a href="/user/login" class="nav-user">登录</a>
 	                <?php } ?>
                   </div>
-                  <a href="#" class="nav-order">我的订单</a>
+                  <a href="/user/order_list" class="nav-order">我的订单</a>
                   <a href="/cart" class="nav-cart">购物车</a>
               </div>
           </div>

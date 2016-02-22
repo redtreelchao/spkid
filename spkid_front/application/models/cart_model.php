@@ -413,7 +413,11 @@ WHERE fc.rec_id = ".$rec_id;
     //免邮商品
  	public function campaign_product($product_id_data,$campaign_type){
  		$this->_db->where('campaign_type',$campaign_type);
+                $this->_db->where('is_use',1);
+                $this->_db->where('start_date <=',date('Y-m-d H:i:s'));
+                $this->_db->where('end_date >=',date('Y-m-d H:i:s'));
  		$this->_db->where_in('product_id', $product_id_data);
+                
  		$query = $this->_db->get('front_campaign');
     	return $query->result();
  	}

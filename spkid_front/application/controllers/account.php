@@ -12,11 +12,19 @@ class Account extends CI_Controller {
         $this->load->model('account_model');
         $this->load->model('user_model');
         $this->load->model('voucher_model');
+        $this->load->library('user_obj');
     }
 
     // PC 个人中心  我的优惠
     public function privilege()
-    {
+    {   
+        if ($this->user_obj->is_login())
+        {
+                $user_id = $this->session->userdata('user_id');
+        } else
+        {
+                goto_login('user/privilege');
+        }
         $data = array();
         $user_id = $this->session->userdata('user_id');
         $data['voucher_unused'] = $this->account_model->user_voucher_unused($user_id);    //可用的现金券
@@ -45,6 +53,13 @@ class Account extends CI_Controller {
     // PC 个人中心  我的积分
     public function integral()
     {
+        if ($this->user_obj->is_login())
+        {
+                $user_id = $this->session->userdata('user_id');
+        } else
+        {
+                goto_login('user/integral');
+        }
         $data = array();
         $page = 'recently';   //最近三个月
         $data['before'] = 1;

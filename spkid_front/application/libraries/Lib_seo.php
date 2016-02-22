@@ -26,7 +26,7 @@ class Lib_seo {
 		$is_preview = isset($_GET['is_preview']) && $_GET['is_preview']== 1 ?TRUE:FALSE; 
 		if ($is_preview) {
 			$seo = $this->CI->seo_model->get_page_seo($pagetag);
-			$this->CI->cache->save($cache_key, $seo);
+			$this->CI->cache->save($cache_key, $seo, CACHE_TIME_PC_SEO);
 			$this->format_seo($seo, $parms);
 			return $seo;
 		}
@@ -34,7 +34,7 @@ class Lib_seo {
 		$seo = $this->CI->cache->get($cache_key);
 		if($seo == FALSE) {			
 			$seo = $this->CI->seo_model->get_page_seo($pagetag);
-			$this->CI->cache->save($cache_key, $seo);
+			$this->CI->cache->save($cache_key, $seo, CACHE_TIME_PC_SEO);
 		}
 		$this->format_seo($seo, $parms);
 		return $seo;

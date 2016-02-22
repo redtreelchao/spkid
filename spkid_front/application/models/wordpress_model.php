@@ -46,7 +46,7 @@ limit 5";
         return false;
         $sql = "SELECT post_id, post_author, post_title, `post_content`, post_date, `display_name`, GROUP_CONCAT(`taxonomy`,'=',`name`,'=',term_id SEPARATOR '&') tags, cover FROM (SELECT p.ID post_id,p.post_author,p.post_title,p.`post_content`,p.post_date,u.`display_name`,tx.`taxonomy`,t.`name`,t.term_id,pm.`meta_value` cover FROM wp_posts p LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID` LEFT JOIN wp_users u ON u.ID=p.`post_author` LEFT JOIN wp_term_taxonomy tx USING(term_taxonomy_id) LEFT JOIN wp_terms t ON tr.`term_taxonomy_id`=t.`term_id` LEFT JOIN wp_postmeta pm ON p.`ID`=pm.`post_id` AND pm.`meta_key`='cover' WHERE p.`ID`=$id AND p.post_type='post' AND
     p.post_status='publish' ORDER BY tx.`parent`) p";
-        //LEFT JOIN wp_usermeta um ON u.`ID`=um.`user_id`
+        //echo $sql;
 
         $detail=$this->db_wp->query($sql)->first_row();
         
@@ -505,11 +505,7 @@ return $content;
 
             //文章与视频的 封面图片
             foreach ($detail as $key => $det_val) {
-                $sql = 'SELECT ID, guid FROM wp_posts WHERE ID = '.$det_val->cover;
-                $query = $this->db_wp->query($sql);
-                $arc_img = $query->row();
-                $detail[$key]->arc_img = $arc_img->guid;
-
+                $detail[$key]->cover = $this->get_cover($det_val->cover);
                 //判断 是否(文章与视频)
                 if(deep_in_array($det_val->ID,$video)){
                     $detail[$key]->video = 1;  // 视频

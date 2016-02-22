@@ -379,7 +379,7 @@ class User_obj {
     public function register($param = array())
     {
         $this->CI->load->model('user_model');
-        $my_user_redis = new user_redis();
+        //$my_user_redis = new user_redis();
         $user_input = array();
         $now = date('Y-m-d H:i:s');
 
@@ -394,7 +394,7 @@ class User_obj {
         $user_input['last_date'] = $now;
         $user_input['visit_count'] = 1;
         $user_input['create_date'] = $now;
-        $user_input['user_id'] = $my_user_redis->get_user_id();
+        //$user_input['user_id'] = $my_user_redis->get_user_id();
 	
 		$this->CI->db->trans_begin();//transaction start....
 		$user_id = $this->CI->user_model->insert($user_input);
@@ -415,6 +415,7 @@ class User_obj {
             $this->CI->session->set_userdata('email_validated', 0);
             $this->CI->session->set_userdata('mobile_checked', 1);
             $this->CI->session->set_userdata('discount_percent', 1);
+            $this->CI->session->set_userdata('advar', 'default.png');
 
 			if ($field == 'email')
 			{

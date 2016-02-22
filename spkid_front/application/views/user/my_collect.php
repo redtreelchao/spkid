@@ -2,7 +2,7 @@
 <script src="<?= static_style_url('pc/js/comm_tool.js?v=version')?>"></script>
 
                <div class="personal-center-right">
-                    <h1 class="page-title">我的收藏</h1>
+                    <h1 class="page-title">我的关注</h1>
                     <ul class="my_collect_bar">
                          <li><a href="javascript:void(0)" class="active">商品(<?= $product_num;?>)</a></li>
                          <li><a href="javascript:void(0)">课程(<?= $course_num;?>)</a></li>
@@ -57,9 +57,9 @@
                               <ul class="i_list">
                               <?php foreach($videos as $v):?>
                                    <li>
-                                        <a href="/video-<?=$v->ID?>">
+                                        <a href="/video/detail/<?=$v->ID?>">
                                              <div>
-                                                  <img src="<?php echo $v->guid?>" alt="">
+                                                  <img src="<?php echo $v->cover?>" alt="">
                                                   <p class="i_title"><?= cutstr($v->post_title, 0, 13)?></p>
                                                   <p class="i_author">作者：<?=$v->display_name?></p>                                                  
 

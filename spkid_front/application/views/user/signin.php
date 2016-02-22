@@ -43,8 +43,12 @@
 </div>
 </body>
 <script>
+$('input[type!="checkbox"]').focus(function(){
+    $(this).parent().prev().text('');
+})
 $('#checkbox').change(function(){
     if ($(this).is(':checked')){
+        $('.error').last().text('');
         if (0 < $('input[name=mobile]').val().length && 0 < $('input[name=authcode]').val().length && 0 < $('input[name=password]').val().length && 0 < $('input[name=password1]').val().length){
         $('button.disabled').removeClass('disabled').removeAttr('disabled');        
         }
@@ -118,6 +122,8 @@ $('form[name="registerForm"]').on('submit', function(e){
         if ('' != data.error){
             //console.log(data.error);
             $('input[name='+data.name+']').parent().prev().html(data.error);
+        } else {
+            location.href = '/user/reg_success';
         }
     }
     });

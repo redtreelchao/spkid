@@ -8,12 +8,18 @@ include_once (APPPATH . "views/common/header.php");
 <link href="<?php echo static_style_url('pc/css/bootstrap.css?v=version')?>" rel="stylesheet" type="text/css" media="all">
 <script src="<?php echo static_style_url('pc/js/bootstrap.min.js?v=version')?>" type="text/javascript"></script>
 
-<style>.product-primary-image {
+<style>
+
+.product-part {
+	min-height:1024px;
+}
+	
+.product-primary-image {
 	vertical-align: top;
 }
 
 .product-title {
-	font-size: 1.5em;
+	font-size: 20px;
 }
 
 .product-info .product-price {
@@ -21,7 +27,7 @@ include_once (APPPATH . "views/common/header.php");
 }
 
 .product-btn-baoming span {
-	color: white;
+	color: white; font-family:Verdana;
 }
 
 .product-btn-baoming span.course_baoming {
@@ -30,7 +36,7 @@ include_once (APPPATH . "views/common/header.php");
 }
 
 .product-info .product-btn {
-	background: red;
+	background: #f75555;
 }
 
 .product-info .product-btn.outofdate_course {
@@ -60,15 +66,14 @@ include_once (APPPATH . "views/common/header.php");
 					</div>
 				</div>
 				<div class="product-info fl-left">
-					<div class="product-title product-row"><?php echo isset($title) ? $title : ''?></div>
+					<div class="product-title product-row"><?php echo isset($ititle) ? $ititle : ''?></div>
 
 					
 
 					<div class="product-price-box product-row clearfix">
-						
-						<span>
-
-						时间：<img src="<?php echo static_style_url('pc/images/course_date.png?v=version')?>" alt="">
+						时间：
+						<span style="border:1px solid rgb(23, 161, 229);padding: 2px 30px 6px 3px;">
+						<img src="<?php echo static_style_url('pc/images/course_date.png?v=version')?>" alt="">
 						<?php echo date("Y.m.d", strtotime($p -> package_name)); ?>
 									<?php if (isset($product_desc_additional['desc_waterproof'])) echo '-' . date("Y.m.d", strtotime($product_desc_additional['desc_waterproof']))?></span>						
 						
@@ -102,7 +107,7 @@ include_once (APPPATH . "views/common/header.php");
 						<div class="product-group">
 							<div style="float:left;width:50%">
 								<?php if(!$is_outofdate && !$is_exceed_num):?>							
-									<button class="product-btn product-btn-baoming" type="button" style="width:170px">
+									<button class="product-btn product-btn-baoming" type="button" style="width:200px">
 										<span class="course_price">&#65509;<?php echo $p->product_price?></span>
 										<span class="course_baoming">我要报名</span>
 									</button>
@@ -114,11 +119,11 @@ include_once (APPPATH . "views/common/header.php");
 								<?php endif;?>							
 							</div>
 								
-							<span class="product-icon-bar" style="position:relative;">
+							<span class="product-icon-bar" style="position:relative; top:10px;">
 								<span class="product-icon-box clearfix">
-									<span class="product-icon like-icon" id="add_to_collect"></span>
+									<span class="product-icon like-icon <?php echo $is_collected ? 'active' : ''?>" id="add_to_collect"></span>
 								</span>
-								<span style="position: relative;top: -12px;left:-13px;">关注课程</span>
+								<span style="position: relative;top: -12px;left:-13px; color:#909090;">关注课程</span>
 							</span>
 							<br style="clear:both">
 						</div>
@@ -155,9 +160,13 @@ include_once (APPPATH . "views/common/header.php");
 			
 			<div class="product-part product-comment grey-bg" style="display: none;">
 				<div class="product-part-box">
-					
+					<div class="product-comment-selector">
+						<a class="area_selector  discus_area active" href="javascript:void(0);" data-type="comment">讨论区 (<i class="comment-count">0</i>)</a>/<a class="area_selector pingjia_area" href="javascript:void(0);" data-type="goodscomment">购买评价 (<i class="goodscomment-count">0</i>)</a>
+					</div>
+
 					<div class="product-line"></div>
 					<div class="product-comment grey-bg">
+					<div class="area-1">
 						<form class="ct-form" name="ct-form" data-hostid="3179" data-committype="" data-hosttype="2">
 							<div class="clearfix liuyan-content">
 								<textarea name="liuyan" aria-required="true" placeholder="同学，你怎么看?"></textarea>
@@ -169,6 +178,12 @@ include_once (APPPATH . "views/common/header.php");
 						<ul class="ct-list" id="ct-list-full">
 
 						</ul>
+					</div>
+					<div style="display:none" class="area-2">
+						<ul class="ct-list" id="ct-list-full-comment">
+						</ul>	
+					</div>
+
 					</div>
 					
 				</div>
@@ -211,13 +226,11 @@ include_once (APPPATH . "views/common/header.php");
 <!-- 留言结束 -->
 
 <!--相关课程及分享开始-->
-<div class="related_courses" style="border-left:1px solid rgb(240, 240, 240)">
-	<div class="course_share" style="background:rgb(240, 240, 240);padding-bottom:1em">
-		<div class="">
-			<div style="position: relative;background:gray">
-				<span style="float: left;padding-top: 1em;font-weight:bold">
-					分享课程到：	
-				</span>
+<div class="related_courses fixed" style="border-left:1px solid rgb(240, 240, 240)">
+	<div class="course_share" style=" background-color:#f6f6f6; height:100px;">
+		<div style="border-bottom:solid 1px #f1f1f1; padding:7px 0 10px 0;">
+			<div class="clearfix">
+				<span style="float: left; padding-top: 1em; padding-left:10px; font-size:14px;">分享课程到：</span>
 				<span style="float: right;">
 					<div class="bdsharebuttonbox bdshare-button-style0-32" data-tag="share_1" data-bd-bind="1452912860952">
 
@@ -230,16 +243,14 @@ include_once (APPPATH . "views/common/header.php");
 
 			</div>
 		</div>
-		<br style="clear:both">
-		<div style="color:gray;font-size:0.8em;text-indent:2em;margin-top:1em;margin-bottom:1em">
-			课程联系人联系方式：待定
-		</div>
+		
+		<div style=" color:#909090; font-size:12px;  padding:10px 0 0 20px;">课程联系人联系方式：待定</div>
 	</div>
 	
-	<div>
-		<p style="font-weight:bold;margin-top:1em;text-indent:2em">悦牙网课代表</p>
-		<p style="color:gray;font-size:0.8em;text-indent:2em">联系方式只对报名学生可见</p>
-		<p style="color:gray;font-size:0.8em;text-indent:2em">报名前对课程有疑问请点击
+	<div style="padding-left:20px;">
+		<p style="margin-top:28px; font-size:14px; color:#333;">悦牙网课代表</p>
+		<p style="color:#909090; font-size:12px;">联系方式只对报名学生可见</p>
+		<p style="color:#909090; font-size:12px;">报名前对课程有疑问请点击
 			<a href="javascript:void(0)" onclick="$('#keqianwenda').click();">课前问答</a>
 		</p>
 	</div>
@@ -252,7 +263,7 @@ include_once (APPPATH . "views/common/header.php");
 		.courses_rec ul li {
 			height:8em;
 			width:250px;
-			margin-top:0.2em;
+			margin-top:0.8em;
 			margin-left:3px;
 		}
 		.course_info_block div {
@@ -261,19 +272,19 @@ include_once (APPPATH . "views/common/header.php");
 		
 	</style>
 	<div class="courses_rec">
-		<p style="font-weight:bold;text-indent:2em;margin-top:2em">相关课程推荐</p>
+		<p style=" margin-top:2em; font-size:14px; color:#333; padding-left:20px;">相关课程推荐</p>
 		<ul>
 			<?php foreach ($related_courses as $key => $value):?>
 				
 				<li>
 					<a href="/product-<?php echo $value->product_id?>" style="text-decoration:none">
-						<img style="width:40%;float:left;height:8em" src="<?php echo img_url($value->img_url)?>" alt="<?=$value->product_name?>">
+						<img style="float:left;" src="<?php echo img_url($value->img_url)?>" alt="<?=$value->product_name?>" width="100" height="100">
 						<span class="course_info_block" style="float:right;margin-right:1em;width:50%">
 							<div style="color:black;font-size:0.8em"><?php echo $value->product_name?></div>
-							<div style="font-size:0.8em;color:gray">开课：<?php echo $value->package_name?></div>
-							<div style="font-size:0.8em;color:gray">讲师：<?php echo $value->subhead?></div>
-							<div style="font-size:0.8em;color:gray">报名：<?php echo $value-> ps_num ?>人</div>
-							<div style="font-size:0.8em;color:gray;color:red">&#65509;963</div>
+							<div style="font-size:0.8em;color:#909090">开课：<?php echo $value->package_name?></div>
+							<div style="font-size:0.8em;color:#909090">讲师：<?php echo $value->subhead?></div>
+							<div style="font-size:0.8em;color:#909090">报名：<?php echo $value-> ps_num ?>人</div>
+							<div style="font-size:0.8em; color:#f75555; font-family:Verdana;">&#65509;963</div>
 						</span>
 					</a>
 				</li>
@@ -330,7 +341,7 @@ include_once (APPPATH . "views/common/header.php");
 
 <script>
 	$(function(){
-
+		$(".navbar li:first a").click();
 		$('#add_to_collect').click(function(){
 			var is_log_in = parseInt(user_id);
 			if (!is_log_in) {
@@ -399,7 +410,27 @@ with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createEle
 		<script type="text/javascript" src="<?php echo static_style_url('pc/js/pdetail.js?v=version')?>"></script>
 		
 		
-		<script type="text/javascript">var tag_id = product_id = '<?php echo $p -> product_id ? $p -> product_id : 0; ?>';
+		<script type="text/javascript">
+		function relayout() {
+			var left = $('#keqianwenda').offset().left + 300;
+			var top = $('.navbar-wrapper').offset().top;
+			$('.related_courses').css({
+				position:'absolute',
+				left: left + 'px',
+				top:top + 'px',
+				zIndex:999,
+				width:250 + 'px'
+			});
+		}
+		
+		relayout();
+
+		$(window).resize(function(){
+			console.log('window resize');
+			relayout();
+		});
+
+		var tag_id = product_id = '<?php echo $p -> product_id ? $p -> product_id : 0; ?>';
 		var tag_type = 3; //代表课程
 		var comment_type = 1; //代表咨询
 		var tag_id = '<?php echo $p -> product_id; ?>';
@@ -407,21 +438,32 @@ with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createEle
 
 $(function() {
 	
-get_liuyan(1, tag_id, 1, $('#ct-list-full'));
+get_liuyan(3, tag_id, 1, $('#ct-list-full'));
+get_liuyan(3, tag_id, 2, $('#ct-list-full'));
 
 gototop = function() {
-	var t = $(".navbar-placeholder"),
-		a = $(".navbar-wrapper"),
-		e = t.offset();
-	$(window).scroll(function() {
-		var t = $(document).scrollTop();
-		e.top > t && a.hasClass("fixed") ? a.removeClass("fixed") : e.top < t && !a.hasClass("fixed") && a.addClass("fixed")
-	}), $(".navbar li a").click(function() {
-		var t = $(this),
-			a = t.data("tag");
-		return t.hasClass("disabled") ? !1 : ($(".navbar li a").removeClass("active"), t.addClass("active"))
-	})
-}
+        var t = $(".navbar-placeholder"), a = $(".navbar-wrapper"), e = t.offset(), b = $(".related_courses");
+        function fix_related_courses() {
+        	$(".related_courses").css({
+        		position:'fixed',
+        		top:0,
+        	})
+        }
+
+        function unfix_related_courses() {
+        	$(".navbar-wrapper").removeClass("fixed")
+        	relayout();
+        }
+
+        $(window).scroll(function() {
+            var t = $(document).scrollTop();
+            e.top > t && a.hasClass("fixed") ? unfix_related_courses() : e.top < t && !a.hasClass("fixed") && a.addClass("fixed") && fix_related_courses()
+        }), $(".navbar li a").click(function() {
+            var t = $(this), a = t.data("tag");
+            return t.hasClass("disabled") ? !1 : ($(".navbar li a").removeClass("active"), t.addClass("active")
+            )
+        })
+    }
 
 //tab 注册
 $('div.product-wrapper > div.navbar-wrapper > ul > li').click(function() {
@@ -627,22 +669,19 @@ $(function() {
 
 	});
 
-	function relayout() {
-		var left = $('.product-part .product-part-box').offset().left + $('.product-part .product-part-box').width();
-		var top = $('.navbar-wrapper').offset().top + $('.navbar-wrapper').height();
-		$('.related_courses').css({
-			position:'absolute',
-			left: left + 'px',
-			top:top + 'px',
-			zIndex:999,
-			width:250 + 'px'
-		});
-	}
-	
-	relayout();
-
-	$(window).resize(function(){
-		relayout();
+	//讨论区和评价区功能
+	$('.area_selector').click(function(){
+		$('.area_selector').removeClass('active');
+		if($(this).hasClass('discus_area')) {
+			$('.area-2').hide();
+			$('.area-1').show();
+			$(this).addClass('active');
+		} 
+		if($(this).hasClass('pingjia_area')) {
+			$('.area-2').show();
+			$('.area-1').hide();
+			$(this).addClass('active');
+		} 
 	});
 
 	

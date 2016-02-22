@@ -1198,7 +1198,7 @@ class Cart extends CI_Controller {
             $checkout['shipping']['address_id'] = $address_id;
         }
         $html = $this->load->view('cart/address_list2', array(
-            'shipping' => $checkout['shipping'],
+            'default_address' => (object)$checkout['shipping'],
             'address_list' => $this->user_model->address_list($this->user_id),
                 ), TRUE);
         print json_encode(array('err' => 0, 'msg' => '', 'html' => $html));

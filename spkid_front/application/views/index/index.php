@@ -91,7 +91,7 @@
             <?php foreach($pc_hot_sale_course['first']['items'] as $k => $v):?>   
 
               <li class="<?php $class = array('home-rank-ft', 'home-rank-second', 'home-rank-third');echo $class[$k];?>">
-                 <a href="/pdetail-<?php echo $v[0]->product_id;?>" target="_blank">
+                 <a href="/product-<?php echo $v[0]->product_id;?>" target="_blank">
                     <div class="home-rank-img-wp"><img src="<?php echo img_url($v[0]->img_url)?>"></div>
                     <div class="home-rank-pro-title"><?php echo $v[0]->product_name;?></div>
                     <div class="home-nr"><?php echo $v[0]->ad_code;?></div>
@@ -296,7 +296,7 @@
 <div class="cooperation">
      <ul class="cooperation-list">
          <?php echo $brand_list[0]->ad_code?>
-         <li class="cooperation-text"><a href="/about_us/team_work"><div>+</div>申请合作</a></li>
+         
     </ul>
 </div>
 <!--cooperation-end-->

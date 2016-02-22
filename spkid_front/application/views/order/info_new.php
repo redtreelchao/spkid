@@ -8,17 +8,31 @@
             <div class="order-details-head">
                   <div class="order-details-zt">
                       <span class="order-no">订单编号：<?php print $order->order_sn ?></span>
-                      <span class="state"><?php print order_status($order); ?> <?php print pay_status($order); ?></span>
+                      <span class="state"><?php print order_status($order); ?></span>
                   </div>
             </div>
             <div class="order-chart">
-                 <div class="usual-flow step order-step1 order-step2 order-step3"></div>
+                <?php $step = ' order-step1';
+		$payment_time = '';
+                $step_html = '<li>'.$order->create_date.'</li>';
+                if($order->order_status != 4) {
+                    if (!empty($order_payment[count($order_payment)-1]->payment_date) && $order->unpay_price <= 0){
+                        $step .= ' order-step2';
+			$step_html .= '<li>'.$order_payment[count($order_payment)-1]->payment_date.'</li>';
+                    }
+                    if (!empty($order->qc_date) && $order->qc_date != '0000-00-00 00:00:00'){
+                        $step .= ' order-step3';
+                        $step_html .= '<li>'.$order->qc_date.'</li>';
+                    }
+                    if (!empty($order->is_ok_date) && $order->is_ok_date != '0000-00-00 00:00:00'){
+                        $step .= ' order-step4';
+                        $step_html .= '<li>'.$order->is_ok_date.'</li>';
+                    }
+                }
+                ?>
+                 <div class="usual-flow step<?=$step?>"></div>
                  <ul class="usual-flow-time clearfix">
-                 <li>2016-01-22 13:36:41</li>
-                 <li>2016-01-22 13:36:41</li>
-                 <li>2016-01-22 13:36:41</li>
-                 <li>2016-01-22 13:36:41</li>
-                 <li>2016-01-22 13:36:41</li>
+                 <?=$step_html?>
                  </ul>
             </div>
         </div>
@@ -95,7 +109,7 @@
                                            </tr>
                                          <?php endforeach ?>
                                    </tfoot>
-                                 </table>;
+                                 </table>
                          </div>
 
                          <div class="statement clearfix">

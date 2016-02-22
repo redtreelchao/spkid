@@ -15,12 +15,12 @@
 <script>
   //页面加载完成执行
   $(function(){
-    //给这个personal-center-left样式下的li 的a标签 绑定点击事件
-    $('.personal-center-left li a').bind("click",function(){
-      //移除personal-center-left样式下所有//
-      $('.personal-center-left li a').removeClass('active');
-      $(this).addClass('active');
-    });
+    $('.personal-center-left li a').each(function(){
+      if($(this).text() == $('.order-details-bt,.page-title').text()){
+        $('.personal-center-left li a').removeClass('active');
+        $(this).addClass('active');
+      }
+    })
   });
 </script>
 </head>
@@ -39,9 +39,22 @@
                     </div>
                   </div>
                 <div class="nav-lb">
-                    <div class="naver-login"></div>
-                    <a href="#" class="nav-order">我的订单</a>
-                    <a href="#" class="nav-cart">购物车</a>
+                  <div class="naver-login">
+                  <?php if($this->session->userdata('user_id')){ ?>
+                            <img src="<?php echo static_style_url('mobile/touxiang/'.$this->session->userdata('advar'))?>" height="28">
+                    <a href="#" class="nav-user"><?php echo $this->session->userdata('user_name')?><span class="menu_tips"></span></a> 
+        <ul class="menu_items" style="display:none">
+        <li><a href="/user/index.html">个人中心</a></li>
+        <li><a href="/account/privilege.html">我的优惠</a></li>
+        <li><a href="/collect/index.html">我的关注</a></li>
+        <li><a href="/user/my_response.html">我的回复(<span id="response_num"></span>)</a></li>
+        <li><a href="/user/logout.html">退出</a></li></ul>
+	                <?php }else{ ?>
+	                    <a href="/user/login" class="nav-user">登录</a>
+	                <?php } ?>
+                  </div>
+                  <a href="/user/order_list" class="nav-order">我的订单</a>
+                  <a href="/cart" class="nav-cart">购物车</a>
                 </div>
             </div>
         </div>
@@ -52,18 +65,18 @@
      <div class="home-wrapper">
           <div class="personal-center clearfix">
                <ul class="personal-center-left clearfix">
-               <li><a href="/user/order_list" class="active">我的订单</a></li>
+               <li><a href="/user/order_list">我的订单</a></li>
                <li><a href="/account/privilege.html">我的优惠</a></li>
                <li><a href="/account/integral.html">我的积分</a></li>
                <li><a href="/collect/index.html">我的关注</a></li>
                <li class="split"></li>
                <li><a href="/user/index.html">个人中心</a></li>
-               <li><a href="#">我的评价</a></li>
-               <li><a href="#">我的讨论</a></li>
-               <li><a href="#">回复提醒</a></li>
+               <li><a href="/user/my_liuyan">我的评价</a></li>
+               <li><a href="/user/my_discussions">我的讨论</a></li>
+               <li><a href="/user/my_response">回复提醒</a></li>
                <li class="split"></li>
                <li><a href="/user/profile.html">个人信息</a></li>
                <li><a href="/user/address.html">收货地址</a></li>
-               <li><a href="#">安全设置</a></li>
+               <!-- <li><a href="#">安全设置</a></li> -->
                </ul>  
 

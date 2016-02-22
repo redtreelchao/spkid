@@ -229,7 +229,7 @@ function get_front_types($genre_id=1){
         $page_size = M_LIST_PAGE_SIZE;
         $page = ($page < 1) ? 1 : intval($page);
         $start = ($page-1)*$page_size;       
-        $sql = "SELECT p.product_name,p.market_price,p.shop_price,si.size_name,pg.`img_url`,p.price_show FROM ty_product_info AS p LEFT JOIN ty_product_sub AS ps USING(product_id) LEFT JOIN ty_product_size si USING(size_id) LEFT JOIN ty_product_gallery AS pg ON ps.`product_id`=pg.`product_id` AND ps.`color_id`=pg.`color_id` LEFT JOIN ty_product_brand pb USING(brand_id) WHERE pb.`brand_id`=$brand_id AND pg.image_type='default' AND p.`is_audit`=1 AND  ps.is_on_sale = 1 AND (ps.consign_num>0 OR ps.consign_num=-2 OR ps.gl_num>ps.wait_num) GROUP BY p.`product_id` LIMIT $start, $page_size";
+        $sql = "SELECT p.product_id,p.product_name,p.market_price,p.shop_price,si.size_name,pg.`img_url`,p.price_show FROM ty_product_info AS p LEFT JOIN ty_product_sub AS ps USING(product_id) LEFT JOIN ty_product_size si USING(size_id) LEFT JOIN ty_product_gallery AS pg ON ps.`product_id`=pg.`product_id` AND ps.`color_id`=pg.`color_id` LEFT JOIN ty_product_brand pb USING(brand_id) WHERE pb.`brand_id`=$brand_id AND pg.image_type='default' AND p.`is_audit`=1 AND  ps.is_on_sale = 1 AND (ps.consign_num>0 OR ps.consign_num=-2 OR ps.gl_num>ps.wait_num) GROUP BY p.`product_id` LIMIT $start, $page_size";
         $result = $this->db->query($sql)->result();
         if (1 == $page){
             $sql = 'SELECT brand_id,brand_name,brand_logo,brand_banner,brand_info,brand_story from ty_product_brand WHERE brand_id='.$brand_id;
@@ -286,9 +286,9 @@ function get_front_types($genre_id=1){
 				LEFT JOIN " . $this->adoEx->dbprefix('product_provider') . " AS pp ON p.provider_id = pp.provider_id ";
 	
 	if($is_preview){
-	    $where = "WHERE 1 ";
+	    $where = "WHERE p.genre_id = '".PRODUCT_TOOTH_TYPE."'";
 	}else{
-	   $where = "WHERE p.price_show = 0 AND p.shop_price > 0 AND sub.is_on_sale=1 AND b.is_use = 1 AND pp.is_use = 1 "; 
+	   $where = "WHERE p.genre_id = '".PRODUCT_TOOTH_TYPE."' AND p.price_show = 0 AND p.shop_price > 0 AND sub.is_on_sale=1 AND b.is_use = 1 AND pp.is_use = 1 "; 
 	}
 	if (!empty($filter['type_id']) )//category_id
 	    $where.=" AND (pt.type_id = '{$filter['type_id']}' OR pt.parent_id = '{$filter['type_id']}' OR pt.parent_id2 = '{$filter['type_id']}')";

@@ -18,7 +18,7 @@
 	      
 	      <div class="ct"><?php print $l->comment_content ?></div>
 	      
-	      <!-- <div class="tb"><a href="#" at_comment_id="<?php echo $l->comment_id;?>">回复</a></div> -->
+	      <div class="tb"><a href="#" at_comment_id="<?php echo $l->comment_id;?>">回复</a></div>
 	      
 	    </div>
 	  </li>

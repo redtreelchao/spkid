@@ -582,7 +582,7 @@ class User_model extends CI_Model
                 LEFT JOIN ty_product_info pi ON pi.product_id = l.tag_id
                 LEFT JOIN ty_product_brand pb ON pi.brand_id = pb.brand_id
                 LEFT JOIN ty_user_account_log usl ON usl.change_code = 'point_comment' AND usl.link_id = l.comment_id
-                WHERE l.tag_type=1 AND l.is_del=0 AND l.user_id='".$user_id."' AND l.tag_id ".db_create_in($product_ids);
+                WHERE l.tag_type=1 AND l.comment_type=2 AND l.is_del=0 AND l.user_id='".$user_id."' AND l.tag_id ".db_create_in($product_ids);
         $query = $this->_db->query($sql);
 		$rows = $query->result();
 		$product_list2 = array();
@@ -601,7 +601,128 @@ class User_model extends CI_Model
         $product_list = array_merge($product_list,$product_list2);
         return $arr = array('list' => $product_list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
     }
+    
+    public function dianping_list2($filter,$user_id)
+    {
+       switch ($filter['data_type']):
+           case 1://待评价商品
+               $sql = "SELECT COUNT(DISTINCT og.product_id) AS ct FROM ". $this->_db->dbprefix('order_product') . " as og LEFT JOIN " .
+                        $this->_db->dbprefix('order_info')." AS o ON og.order_id = o.order_id "
+                   . "LEFT JOIN ".$this->_db->dbprefix('product_liuyan')." AS l "
+                   . "ON o.user_id = l.user_id AND og.product_id = l.tag_id AND l.tag_type=1 AND l.comment_type=2 AND l.is_del=0 "
+                   . "WHERE o.genre_id = '".PRODUCT_TOOTH_TYPE."' AND o.shipping_status=1 AND l.comment_id IS NULL AND o.user_id= '".$user_id."' ";
+               
+                $sql2 = "SELECT g.product_id,g.product_name, o.create_date AS order_create_date, MIN(o.shipping_date) AS order_shipping_date,gg.img_url, pb.brand_name, if(g.is_promote, g.promote_price, g.shop_price) as sale_price, og.product_num, g.genre_id " .
+        		" FROM ".$this->_db->dbprefix('order_product')." AS og " .
+        		" LEFT JOIN ".$this->_db->dbprefix('order_info')." AS o ON og.order_id=o.order_id" .
+        		" LEFT JOIN ".$this->_db->dbprefix('product_info')." AS g ON g.product_id=og.product_id".
+        		" LEFT JOIN ".$this->_db->dbprefix('product_gallery')." AS gg ON gg.product_id = og.product_id AND gg.color_id = og.color_id AND gg.image_type='default'" .
+                        " LEFT JOIN ty_product_brand pb ON g.brand_id = pb.brand_id".
+                        " LEFT JOIN ".$this->_db->dbprefix('product_liuyan')." AS l ". 
+                        "ON o.user_id = l.user_id AND og.product_id = l.tag_id AND l.tag_type=1 AND l.comment_type=2 AND l.is_del=0 ". 
+                        "WHERE o.genre_id = '".PRODUCT_TOOTH_TYPE."' AND o.shipping_status=1 AND l.comment_id IS NULL AND o.user_id= '".$user_id."'";
+               
+               break;
+           case 2://待评价课程
+               $sql = "SELECT COUNT(DISTINCT og.product_id) AS ct FROM ". $this->_db->dbprefix('order_product') . " as og LEFT JOIN " .
+                        $this->_db->dbprefix('order_info')." AS o ON og.order_id = o.order_id "
+                   . "LEFT JOIN ".$this->_db->dbprefix('product_liuyan')." AS l "
+                   . "ON o.user_id = l.user_id AND og.product_id = l.tag_id AND l.tag_type=1 AND l.comment_type=2 AND l.is_del=0 "
+                   . "WHERE o.genre_id = '".PRODUCT_COURSE_TYPE."' AND o.shipping_status=1 AND l.comment_id IS NULL AND o.user_id= '".$user_id."' ";
+               
+                $sql2 = "SELECT g.product_id,g.product_name, o.create_date AS order_create_date, MIN(o.shipping_date) AS order_shipping_date,gg.img_url, pb.brand_name, if(g.is_promote, g.promote_price, g.shop_price) as sale_price, og.product_num, g.genre_id " .
+        		" FROM ".$this->_db->dbprefix('order_product')." AS og " .
+        		" LEFT JOIN ".$this->_db->dbprefix('order_info')." AS o ON og.order_id=o.order_id" .
+        		" LEFT JOIN ".$this->_db->dbprefix('product_info')." AS g ON g.product_id=og.product_id".
+        		" LEFT JOIN ".$this->_db->dbprefix('product_gallery')." AS gg ON gg.product_id = og.product_id AND gg.color_id = og.color_id AND gg.image_type='default'" .
+                        " LEFT JOIN ty_product_brand pb ON g.brand_id = pb.brand_id".
+                        " LEFT JOIN ".$this->_db->dbprefix('product_liuyan')." AS l ". 
+                        "ON o.user_id = l.user_id AND og.product_id = l.tag_id AND l.tag_type=1 AND l.comment_type=2 AND l.is_del=0 ". 
+                        "WHERE o.genre_id = '".PRODUCT_COURSE_TYPE."' AND o.shipping_status=1 AND l.comment_id IS NULL AND o.user_id= '".$user_id."'";
 
+               break;
+           case 3://最近三个月已评价
+               $sql = "SELECT COUNT(DISTINCT og.product_id) AS ct FROM ". $this->_db->dbprefix('order_product') . " as og INNER JOIN " .
+                        $this->_db->dbprefix('order_info')." AS o ON og.order_id = o.order_id "
+                   . "INNER JOIN ".$this->_db->dbprefix('product_liuyan')." AS l "
+                   . "ON o.user_id = l.user_id AND og.product_id = l.tag_id AND l.tag_type=1 AND l.comment_type=2 AND l.is_del=0 "
+                   . "WHERE l.comment_date >= '".date("Y-m-d H:i:s", strtotime("-3 month"))."' AND o.shipping_status=1 AND o.user_id= '".$user_id."' ";
+               
+                $sql2 = "SELECT g.product_id,g.product_name, o.create_date AS order_create_date, MIN(o.shipping_date) AS order_shipping_date, gg.img_url, pb.brand_name, if(g.is_promote, g.promote_price, g.shop_price) as sale_price, og.product_num, l.comment_content, g.genre_id " .
+        		" FROM ".$this->_db->dbprefix('order_product')." AS og " .
+        		" INNER JOIN ".$this->_db->dbprefix('order_info')." AS o ON og.order_id=o.order_id" .
+        		" INNER JOIN ".$this->_db->dbprefix('product_info')." AS g ON g.product_id=og.product_id".
+        		" INNER JOIN ".$this->_db->dbprefix('product_gallery')." AS gg ON gg.product_id = og.product_id AND gg.color_id = og.color_id AND gg.image_type='default'" .
+                        " INNER JOIN ty_product_brand pb ON g.brand_id = pb.brand_id".
+                        " INNER JOIN ".$this->_db->dbprefix('product_liuyan')." AS l ". 
+                        "ON o.user_id = l.user_id AND og.product_id = l.tag_id AND l.tag_type=1 AND l.comment_type=2 AND l.is_del=0 ". 
+                        "WHERE l.comment_date >= '".date("Y-m-d H:i:s", strtotime("-3 month"))."' AND o.shipping_status=1 AND o.user_id= '".$user_id."'";
+               
+               break;          
+       endswitch;
+        
+        //$sql = "SELECT COUNT(DISTINCT og.product_id) AS ct FROM ". $this->_db->dbprefix('order_product') . " as og, " .
+        //                $this->_db->dbprefix('order_info')." AS o WHERE og.order_id = o.order_id AND o.shipping_status=1 AND o.user_id= '".$user_id."' ";
+        $query = $this->_db->query($sql);
+        $row = $query->row();
+        $query->free_result();
+        $filter['record_count'] = (int) $row->ct;
+        $filter = page_and_size($filter);
+        if ($filter['record_count'] <= 0)
+        {
+                return array('list' => array(), 'filter' => $filter);
+        }
+
+        /*$sql = "SELECT g.product_id,g.product_name, MIN(o.shipping_date) AS order_shipping_date,gg.img_48_48 AS img_30_40,gg.img_170_170 AS img_130_173, gg.img_url, pb.brand_name, if(g.is_promote, g.promote_price, g.shop_price) as sale_price, og.product_num " .
+        		" FROM ".$this->_db->dbprefix('order_product')." AS og " .
+        		" LEFT JOIN ".$this->_db->dbprefix('order_info')." AS o ON og.order_id=o.order_id" .
+        		" LEFT JOIN ".$this->_db->dbprefix('product_info')." AS g ON g.product_id=og.product_id".
+        		" LEFT JOIN ".$this->_db->dbprefix('product_gallery')." AS gg ON gg.product_id = og.product_id AND gg.color_id = og.color_id AND gg.image_type='default'" .
+                "LEFT JOIN ty_product_brand pb ON g.brand_id = pb.brand_id ".
+                "WHERE  o.shipping_status=1 AND o.user_id= '".$user_id."' GROUP BY g.product_id ORDER BY order_shipping_date DESC LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",".$filter['page_size']." ";
+        */
+        $sql2 .= " GROUP BY g.product_id ORDER BY order_shipping_date DESC LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",".$filter['page_size']."";
+        $query = $this->_db->query($sql2);       
+	$rows = $query->result();
+        $product_list = array();
+        $product_ids = array();
+
+        foreach($rows as $row)
+        {
+            $row->url = ($row->genre_id == PRODUCT_COURSE_TYPE) ? '/product-'.$row->product_id.'.html' : '/pdetail-'.$row->product_id.'.html';
+            $row->tiny_url = img_url($row->img_url.".85x85.jpg");
+            //$row->small_url = img_url($row->img_url.".140x140.jpg");
+            //$row->teeny_url = img_url($row->img_30_40);
+			//$row->small_url = img_url($row->img_130_173);
+            $product_list[$row->product_id] = $row;
+            $product_ids[] = $row->product_id;
+        }
+        //附加点评数据 AND l.comment_type=2 
+        /*$sql = "SELECT l.*,s.size_name, if(pi.is_promote, pi.promote_price, pi.shop_price) as sale_price, usl.pay_points, pb.brand_name "
+                . "FROM ".$this->_db->dbprefix('product_liuyan')." AS l
+                LEFT JOIN ".$this->_db->dbprefix('product_size')." AS s ON l.size_id = s.size_id
+                LEFT JOIN ty_product_info pi ON pi.product_id = l.tag_id
+                LEFT JOIN ty_product_brand pb ON pi.brand_id = pb.brand_id
+                LEFT JOIN ty_user_account_log usl ON usl.change_code = 'point_comment' AND usl.link_id = l.comment_id
+                WHERE l.tag_type=1 AND l.comment_type=2 AND l.is_del=0 AND l.user_id='".$user_id."' AND l.tag_id ".db_create_in($product_ids);
+        $query = $this->_db->query($sql);
+        $rows = $query->result();
+        $product_list2 = array();
+        foreach($rows as $row)
+        {
+            $row->product_id = $product_list[$row->tag_id]->product_id;
+            $row->product_name = $product_list[$row->tag_id]->product_name;
+            $row->order_shipping_date = $product_list[$row->tag_id]->order_shipping_date;
+            $row->tiny_url = $product_list[$row->tag_id]->tiny_url;
+            $row->small_url = $product_list[$row->tag_id]->small_url;
+            $row->url = $product_list[$row->tag_id]->url;
+            if (isset($product_list[$row->tag_id]))
+                unset($product_list[$row->tag_id]);
+            $product_list2[$row->tag_id] = $row;
+        }
+        $product_list = array_merge($product_list,$product_list2);*/
+        return $arr = array('list' => $product_list, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+    }
 
     public function collection_list($filter,$user_id)
     {
@@ -1073,4 +1194,14 @@ SQL;
             $result = $this->db->query($sql)->row();
             return !empty($result) ? $result->user_id : 0;
         }
+
+        //PC端 个人中心待评价数量
+		public function get_user_pingjia($user_id){
+			$sql = "SELECT * FROM ty_order_product AS og 
+					LEFT JOIN ty_order_info AS o ON og.order_id = o.order_id 
+					LEFT JOIN ty_product_liuyan AS l ON o.user_id = l.user_id AND og.product_id = l.tag_id AND l.tag_type = 1 AND l.comment_type = 2 AND l.is_del = 0 
+					WHERE   o.shipping_status = 1 AND l.comment_id IS NULL AND o.user_id = ".$user_id;
+			$query = $this->_db->query($sql);
+	        return $query->result();
+		}
 }                

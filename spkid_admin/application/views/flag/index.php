@@ -36,6 +36,7 @@
 				<tr class="row">
 					<th width="50px">编号</th>
 					<th>产地名称</th>
+					<th>所属大洲</th>
 					<th>产地图片</th>
 					<th>排序号</th>
 					<th>启用</th>
@@ -45,6 +46,7 @@
 				<tr class="row">
 					<td><?php print $row->flag_id; ?></td>
 					<td><?php print $row->flag_name; ?></td>
+					<td><?php print $row->continent; ?></td>
 					<td>
                         <img src="<?php print PUBLIC_DATA_IMAGES . $row->flag_url?>" />
 					</td>

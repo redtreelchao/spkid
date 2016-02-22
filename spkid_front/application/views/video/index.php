@@ -108,7 +108,7 @@
 <script src="<?php echo static_style_url('pc/js/rolling.js')?>" type="text/javascript"></script>
 <div class="video-fenlei">
      <div class="category-labels clearfix">
-     <p>分类标签:<?php foreach($categorys as $name):?><a href="#"><?php echo $name?></a><?php endforeach?></p>
+     <p>分类标签:<?php foreach($categorys as $index => $name): ++$index?><a href="#cat<?php echo $index?>"><?php echo $name?></a><?php endforeach?></p>
           <span class="fbsp"><a href="/video/upload">发布视频</a></span>
     </div>
 </div>
@@ -116,7 +116,7 @@
 <div class="video-fication">
      <div class="video-list">
          
-          <ul class="video-lb1 clearfix">
+          <ul id="cat1" class="video-lb1 clearfix">
                 <li>
                 <div class="video-gongyong yazhou"><a href="#"><?php echo $categorys[0]?></a></div>
               </li>
@@ -149,7 +149,7 @@
         <div class="video-more" onclick="openShutManager(this,'video-liebiao-1',false,'隐藏更多','查看更多')"><a class="video-btn f-icon0 f-icon1" href="javascript:;">查看更多</a></div>
 <?php endif;?>           
           
-       <ul class="video-lb1 clearfix">
+       <ul id="cat2" class="video-lb1 clearfix">
             <li><div class="video-gongyong zhongzhi"><a href="#"><?php echo $categorys[1]?></a></div></li>
 <?php foreach(array_slice($video2, 0, 9) as $v):?>
              <li>
@@ -180,7 +180,7 @@
       <div class="video-more" onclick="openShutManager(this,'video-liebiao-2',false,'隐藏更多','查看更多')"><a class="video-btn f-icon0 f-icon1" href="javascript:;">查看更多</a></div> 
 <?php endif;?>      
       
-      <ul class="video-lb1 clearfix">
+      <ul id="cat3" class="video-lb1 clearfix">
             <li><div class="video-gongyong zhengji"><a href="#"><?php echo $categorys[2]?></a></div></li>
 <?php foreach(array_slice($video3, 0, 9) as $v):?>
              <li>
@@ -211,7 +211,7 @@
       <div class="video-more" onclick="openShutManager(this,'video-liebiao-3',false,'隐藏更多','查看更多')"><a class="video-btn f-icon0 f-icon1" href="javascript:;">查看更多</a></div> 
 <?php endif;?>      
       
-      <ul class="video-lb1 clearfix">
+      <ul id="cat4" class="video-lb1 clearfix">
             <li><div class="video-gongyong qiatan"><a href="#"><?php echo $categorys[3]?></a></div></li>
 <?php foreach(array_slice($video4, 0, 9) as $v):?>
              <li>
@@ -241,7 +241,7 @@
          </div>
       <div class="video-more" onclick="openShutManager(this,'video-liebiao-4',false,'隐藏更多','查看更多')"><a class="video-btn f-icon0 f-icon1" href="javascript:;">查看更多</a></div> 
 <?php endif;?>      
-      <ul class="video-lb1 clearfix">
+      <ul id="cat5" class="video-lb1 clearfix">
             <li><div class="video-gongyong qiatan2"><a href="#"><?php echo $categorys[4]?></a></div></li>
 <?php foreach(array_slice($video5, 0, 9) as $v):?>
              <li>

@@ -36,7 +36,7 @@ function format_product(&$p)
 
 function format_sub(&$sub)
 {
-	$sub->sale_num = $sub->consign_num==-2?-2:(max($sub->consign_num,0)+max($sub->gl_num-$sub->wait_num,0));
+	$sub->sale_num = $sub->consign_num==-2?-2: ($sub->consign_num > 0) ? (max($sub->consign_num,0)+max($sub->gl_num-$sub->wait_num,0)) : 0;
 }
 
 function unpack_package_config($config)

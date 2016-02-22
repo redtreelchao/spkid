@@ -26,7 +26,7 @@
                
               <div class="nav-lb">
                    <div class="nav-users">
-                        <a class="nav-user-icon" href="#"><img src="<?php echo static_style_url('pc/images/touxiang.jpg')?>"></a>
+                        <a class="nav-user-icon" href="/user/index.html"><img src="<?php echo static_style_url('pc/images/touxiang.jpg')?>"></a>
                         <span class="nav-username"><?=$user->user_name?></span>
                    </div>
             </div>

@@ -1,24 +1,110 @@
-<?php if ($full_page): ?>
-<?php include APPPATH . "views/common/header.php"; ?>
-<link rel="stylesheet" href="<?php print static_style_url('css/ucenter.css'); ?>" type="text/css" />
-<script type="text/javascript">
+<?php if($full_page): ?>
+<?php include APPPATH . 'views/common/user_header.php'?>
+               
+<div class="personal-center-right">
+                    <h1 class="page-title">我的评价</h1>
+                    <ul class="order-status order-status2 clearfix">
+                    <li><a href="#" class="active" data-type="1">待评价商品</a></li>
+                    <li><a href="#" data-type="2">待评价课程</a></li>
+                    <li><a href="#" data-type="3">最近三个月已评价</a></li>
+                    </ul>
+                    
+                    <div class="my-evaluation-tit clearfix">
+                         <div class="fl-left">商品信息</div>
+                         <div class="fl-right">评价状态</div>
+                    </div>
+                    
+                    <ul class="my-evaluation-lsit clearfix" id="listdiv">
+                    <?php endif; ?>
+                    <?php foreach ($liuyan_list as $liuyan): ?>
+                    <li>
+                    <div class="my-evalution-nr clearfix">
+                         <div class="fl-left pingjia-left">
+                              <a href="<?php print $liuyan->url ?>" class="evalution-xx">
+                                 <img src="<?php print $liuyan->tiny_url ?>">
+                                 <div class="pingjia-bt"><?php echo $liuyan->product_name ?><p>购买时间：<?php echo $liuyan->order_create_date; ?></p></div>
+                              </a>
+                        </div>
+                        <div class="fl-right pingjia-right">
+                            <?php if(empty($liuyan->comment_content)): ?>
+                             <a href="#" class="click-pingjia" onclick="load_dianping_panel('<?php echo $liuyan->product_id ?>')">点击评价</a>                            
+                             <p>评价审核通过后您将有机会获得悦牙网积分（最多不超过<?=$user->comment_point?>个）</p>
+                             <?php else: ?>
+                             <span title="<?=$liuyan->comment_content?>"><?php echo mask_str($liuyan->comment_content, 40, 0); ?></span>
+                             <?php endif; ?>
+                        </div>
+                   </div>
+                   </li>
+                   <?php endforeach?>
+                   <?php if($full_page): ?>
+                    </ul>
+              </div>
+        </div>    
+    </div>
+</div>
 
-$(function () {
-    //确定浮层的位置
-    $('.liuyanList .btn_g_78').click(function () {
-        var t = $(this).offset().top+35;
-        var l = $(this).offset().left-235;
-        $('.myAdeMsgBox').css({'left':l,'top':t});
-    });
-});
-
+<!-- 弹层开始 -->
+<div id="forgot-box" class="modal v-pov " tabindex="-1" role="dialog" aria-hidden="true">
+    <input type="hidden" id="product_id" value="">
+      <div class="modal-dialog eva-pop">
+        <div class="modal-content">
+          <div class="modal-header v-close">
+              <button type="button" class="close triangle-topright" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+              <ul class="pingjia-pop clearfix">
+              <!--
+              <li>
+              <label><i>*</i>评价：</label>
+              <div class="pingjia-start">
+                   <a class="s_star1"></a>
+                   <a class="s_star2"></a>
+                   <a class="s_star3"></a>
+                   <a class="s_star4"></a>
+                   <a class="s_star5"></a>
+              </div>             
+              </li>
+              -->
+              <li class=" clearfix">
+               <label><i>*</i>心得：</label>
+               <textarea class="goods-comment-content active" name="fl_text" id="J_commentContent">商品是否给力？快分享您的购买心得吧~</textarea>
+              </li>
+              </ul>
+              
+          </div>
+          <div class="modal-body v-button pingjia-button">
+              <button onclick="post_dianping();" class="btn btn-lg btn-red" type="submit">发布评价</button>
+              
+          </div>
+        </div>
+      </div>
+</div>
+<!-- 弹层结束 -->
+<script>
+var order_status = '<?php echo $filter["data_type"] ?>';
 var order_page_count = '<?php echo $filter["page_count"] ?>';
 var order_page = '<?php echo $filter["page"] ?>';
+$('.order-status li a').bind("click",function(){
+    //移除dingdan-status样式下所有a标签currt样式
+    $('.order-status li a').removeClass('active');
+    //当前点击a标签添加currt样式
+    $(this).addClass('active');
+    order_status = $(this).attr('data-type');
+    filter_result(order_status, 1);
+});
 
+$('#forgot-box textarea').focus(function () {
+    if ($(this).val()=='商品是否给力？快分享您的购买心得吧~') {
+        $(this).val('');
+    };
+});
+
+$('#forgot-box textarea').blur(function () {
+    if ($(this).val()=='') {
+        $(this).val('商品是否给力？快分享您的购买心得吧~');
+    };
+});
+        
 function filter_result(status,page)
 {
-    page_count = order_page_count;
-
     if (page == 0)
     {
         page = order_page;
@@ -27,25 +113,45 @@ function filter_result(status,page)
     {
         page = 1;
     }
-    if(page > page_count)
+    if(page > order_page_count)
     {
-        page = page_count;
+        page = order_page_count;
+        return false;
     }
+    order_page = page;
+    order_status = status;
 
     $.ajax({
-        url:'/user/liuyan',
-        data:{is_ajax:true,page:page,rnd:new Date().getTime()},
-        dataType:'json',
-        type:'POST',
-        success:function(result){
-            if(result.error==0){
-                $('#listdiv').html(result.content);
-            }
-        }
-    });
+            url:'/user/my_liuyan',
+            data:{is_ajax:true,data_type:status,page:page,rnd:new Date().getTime()},
+            dataType:'json',
+            type:'POST',
+            success:function(result){
+                    if(result.error==0){
+                        if (order_page == 1){
+                            order_page_count = result.page_count;
+                            $('#listdiv').html(result.content);
+                        } else {
+                            $('#listdiv').append(result.content);
+                        }
 
-    return false;
+                        //order_status = result.order_status;
+                        //if (result.content.length <= 0) order_page--;
+                    }
+            }
+    });
 }
+//滚动加载
+var range = 300;
+$(document).bind("scroll", function(){
+    var srollPos = $(window).scrollTop();
+    var totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+    if(($(document).height()-range) <= totalheight) {
+        order_page++;
+        //alert(order_page);
+        filter_result(order_status, order_page);//调用
+    }
+});
 
 function load_dianping_panel(product_id)
 {
@@ -59,29 +165,39 @@ function load_dianping_panel(product_id)
                 alert(result.msg);
                 return false;
             }
-            var mask='<div id="mask"></div>',
-                h=$(document).height(),
-                w=$(document).width();
-            $('#float_panel_dianpin').html(result.content);
-            $('#float_panel_dianpin').show();
-            $('body').append(mask);
-            $('#mask').css({'height':h,'width':w,'opacity':'0.01'});
-            $('#mask').click(function () {
-                $('#float_panel_dianpin').html('').hide();
-                $(this).remove();
-            });
-            $('#float_panel_dianpin a').click(function () {
-                post_dianping();
-            });
+            $("#product_id").val(product_id);
+            $('#forgot-box').modal('show');
         }
     });
+}
+//以中文字算长度
+function cnlength(str){return Math.ceil(str.replace(/[^\x00-\xff]/g, "**").length/2)}
+//点评检查
+function check_dianping_word_length()
+{
+    var content=$.trim($('textarea[name=fl_text]').val());
+    content = content.replace(/商品是否给力？快分享您的购买心得吧~/g, '');
+    var content_length=cnlength(content);
+
+    if(content_length == 0 || content == ''){
+        alert('评论内容不能为空');
+        return false;
+    }else if(content_length< 5){
+        alert('评论内容至少为5个汉字');
+        return false;
+    }else if(content_length>200){
+        alert('评论内容最多只能为200个汉字');
+        return false;
+    }
+        
+    return true;
 }
 
 function post_dianping()
 {
-    var parent=$('#float_panel_dianpin');
+    var parent=$('#forgot-box');
     var fl_text=$.trim($('textarea[name=fl_text]',parent).val());
-    var product_id = $.trim($('input[type=hidden][name=product_id]',parent).val());
+    var product_id = $.trim($('#product_id',parent).val());
  
     if (!check_dianping_word_length()) {
         return false;
@@ -102,105 +218,6 @@ function post_dianping()
         }
     });
 }
-
-
-//点评检查
-function check_dianping_word_length()
-{
-    var content=$.trim($(':input[name=fl_text]').val());
-    content = content.replace(/字数限制5-200个汉字/g, '');
-    var content_length=cnlength(content);
-    $('#float_panel_dianpin .errorInfo').hide();
-    if(content_length == 0 || content == ''){
-        $('#float_panel_dianpin .errorInfo').html("评论内容不能为空").show();
-        return false;
-    }else if(content_length< 5){
-        $('#float_panel_dianpin .errorInfo').html("评论内容至少为5个汉字").show();
-        return false;
-    }else if(content_length>200){
-        $('#float_panel_dianpin .errorInfo').html("评论内容最多只能为200个汉字").show();
-        return false;
-    }
-        
-    return true;
-}
-
 </script>
-<div id="content">
-    <div class="now_pos">
-        <a href="/">首 页</a>
-        >
-        <a href="/user">会员中心</a>
-        >
-        <a class="now">咨询与点评</a>
-        <!-- come soon
-        <a class="notice" href="/">全场满200减20!</a>
-        -->
-    </div>
-    <div class="ucenter_left">
-        <?php include APPPATH . "views/user/left.php"; ?>
-    </div>
-    <div class="ucenter_main">
-        <div class="switch_block" id="listdiv">
-            <div class="switch_block_title">
-                <ul>
-                    <li class="sel">我的点评</li>
-                    <li onclick="location.href='/user/leaveword'">我的咨询</li>
-                </ul>
-            </div>
-        <?php endif; ?>
-        <div class="switch_block_content liuyanList">
-            <table width="738" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                    <th width="20%">图片</th>
-                    <th width="20%">品牌</th>
-                    <th width="20%">名称</th>
-                    <th width="16%">单价</th>
-                    <th width="24%">操作</th>
-                </tr>
-                <?php
-                if (!empty($liuyan_list)):
-                    foreach ($liuyan_list as $liuyan):
-                        ?>
-                        <tr>
-                            <td>
-                                <a href="<?php echo $liuyan->url ?>" target="_blank">
-                                    <img src="<?php echo $liuyan->teeny_url ?>" width="73" height="73">
-                                </a>
-                            </td>
-                            <td><?php echo $liuyan->brand_name ?></td>
-                            <td><?php echo $liuyan->product_name ?></td>
-                            <td class="red"><?= $liuyan->sale_price ?>元</td>
-                            <td>
-                                <?php if (isset($liuyan->comment_date)): ?>
-                                    <?php if ($liuyan->is_audit == 1): ?>获得<?= number_format($liuyan->pay_points, 0) ?>积分!<br>
-                                        <font class="c99">评论时间：<?php echo isset($liuyan->comment_date) ? $liuyan->comment_date : '' ?><font>
-                                    <?php else: ?>审核中...<?php endif; ?>
-                                <?php else: ?><input id="loadbutton" type="button" onclick="load_dianping_panel('<?php echo $liuyan->product_id ?>')" class="btn_g_78 font14b" value="点评"><?php endif; ?>
-
-                            </td>
-                        </tr>
-                        <?php
-                    endforeach;
-                endif;
-                ?>
-                        <?php if (isset($liuyan->comment_date)): ?>
-                            <tr>
-                                <td colspan="5" class="bottomPage">
-                                    <div class="switch_block_page ablack">
-                                        <?php include(APPPATH . 'views/user/page.php') ?>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endif; ?>
-            </table>
-        </div>
-        <?php if ($full_page): ?>
-
-        </div>
-
-    </div>
-</div>
-<div id="float_panel_dianpin" class="myAdeMsgBox"></div>
-<?php include APPPATH . 'views/common/footer.php'; ?>
+<?php include_once(APPPATH . "views/common/footer.php");?>
 <?php endif; ?>

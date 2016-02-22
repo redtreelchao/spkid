@@ -11,7 +11,7 @@
 <img src="<?php echo img_url($brand->brand_logo)?>">
                    <p><?php echo $brand->brand_info?></p>
               </div>
-              <div class="exhibits-pic"><img src="<?php echo img_url($brand->brand_banner)?>"></div>
+              <div class="exhibits-pic"><?php if ('' != $brand->brand_banner):?><img src="<?php echo img_url($brand->brand_banner)?>"><?php endif;?></div>
           </div>
     </div>
     
@@ -25,7 +25,7 @@
                    <ul class="all-goods-lb clearfix">
 <?php foreach($product_list as $product):?>
                          <li>
-                         <a href="#">
+                         <a href="/pdetail-<?php echo $product->product_id?>.html">
                          <div class="all-goods-img"><img src="<?php echo img_url($product->img_url)?>"></div>
                          <p class="all-goods-mc"><?php echo $product->product_name?></p>
                          <div class="all-goods-js"><?php echo $product->size_name?></div>

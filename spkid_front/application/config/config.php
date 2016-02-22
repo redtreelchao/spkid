@@ -361,7 +361,6 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 //====================danger config begin=================================
-define('FRONT_HOST', 'http://pc.test.com');
 $config['IMG_HOSTS']=array('http://img.test.com');
 
 // memcache设置
