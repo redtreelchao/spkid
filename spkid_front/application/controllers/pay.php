@@ -94,7 +94,7 @@ class Pay extends CI_Controller
 			// 订单状态预检测
 			foreach ($order_list as $order) {
 			    // 订单状态不对，不添加支付记录
-			    if ($order->order_status != 0 || $order->pay_status != 0 || $order->pay_id != $pay_track->pay_id || $order->bank_code != $pay_track->bank_code) {
+			    if ($order->order_status != 0 || $order->pay_status != 0) {
 			        append_write_file($log_name, '订单状态不对，不添加支付记录');
 			        continue;
 			    }
@@ -119,7 +119,7 @@ class Pay extends CI_Controller
 			        break;
 			    }
 			    // 订单状态不对，不添加支付记录
-			    if ($order->order_status != 0 || $order->pay_status != 0 || $order->pay_id != $pay_track->pay_id || $order->bank_code != $pay_track->bank_code) {
+			    if ($order->order_status != 0 || $order->pay_status != 0) {
 			        continue;
 			    }
     

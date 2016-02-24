@@ -164,7 +164,7 @@
 									</div>
 									<div class="article-yuegao">
 									  	<div class="yuegao-title"><img src="<?php echo static_url('mobile/img/yuegao.gif?v=version');?>" alt=""></div>
-                                      	<div class="yuegao-nr">成为悦牙网文章专栏作家,投稿可联系<br/>Neil<span>QQ：2091419591</span></div>
+                                      	<div class="yuegao-nr">成为悦牙网文章专栏作家,投稿可联系<br/>Sunny<span>QQ：3273941713</span></div>
 									</div>
 									<div class="v-article-product clearfix">
 										<div class="rr-tracey"><a href="/index" class="article-arrow  tarticle-arrow2 external">热卖牙科产品</a></div>

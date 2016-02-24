@@ -12,6 +12,7 @@
 <div class="video-banner">
 
 <div class="mainslideData" id="j-mainslide-data">
+
 <?php foreach($focus_image as $item):?>
 	    <p>
 		<!--图片链接--><span><?php echo $item['href']?></span>
@@ -39,7 +40,6 @@
 					    <ul class="tabsul clear f-f0">
 					    <li class="j-tab tab f-fl tabpos">热门排行</li>
 						<li class="j-tab tab f-fl">最新课程</li>
-						<li class="j-tab tab f-fl">翻译进度</li>
 						</ul>
 						<div class="tabline f-pa j-tabline"></div>
 					</div>
@@ -71,7 +71,7 @@
 <?php foreach($hot['month'] as $index => $h):?>
                                          <li>
                                          <a class="item" target="_blank" href="/video/detail/<?php echo $h['ID']?>">
-<span class="num"><?php echo $h['views']?></span><i class="icon icon2"><?php echo 1+$index?></i><span class="txt f-ib f-thide"><?php echo $h['post_title']?></span>
+<span class="num"><?php echo $h['views']?></span><i class="icon<?php if(3>$index) echo ' icon2';?>"><?php echo 1+$index?></i><span class="txt f-ib f-thide"><?php echo $h['post_title']?></span>
                                          </a>
                                          </li>
 <?php endforeach;?>

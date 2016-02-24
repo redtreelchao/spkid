@@ -251,9 +251,11 @@ define('APPLY_RETURN_REASON', '$return_reason_arr=array(5=>"商品质量有问�
                     3=>"配送错误",4=>"其他");');
 define('POST_FORMAT_VIDEO', 223);
 // 使用js/css的发行版本
-define('JSCSS_DIST_VERSION', '151125.1' );
+define('JSCSS_DIST_VERSION', '151127.1' );
 // 是否注册送积分
 define ('USE_REGIST_POINT', true);
+// 是否完善个人资料送积分
+define ('USE_DATA_POINT', true);
 // sphinx server ip
 define ('SPHINX_SERVER_IP', '127.0.0.1');
 

@@ -37,6 +37,13 @@ class Brand extends CI_Controller {
         } else {
             $page = 1;
             $data = $this->rush_model->brand_product_list($bid, $page);
+
+            $data['title'] = isset($data['brand']) ? $data['brand']->brand_name . '-悦牙网' : '悦牙网品牌';
+
+            $data['keywords'] = isset($data['brand']) ? $data['brand']->brand_info . '-悦牙网' : '悦牙网品牌';
+
+            $data['description'] = isset($data['brand']) ? strip_tags($data['brand']->brand_story) . '-悦牙网' : '悦牙网品牌';
+
             $this->load->view('product/brand',$data);
         }
     }

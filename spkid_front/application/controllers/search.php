@@ -17,9 +17,13 @@ class Search extends CI_Controller
 
 	public function index(){
 		$data = array();
-
+		
 		//分词搜索
 		$kw=trim($this->input->get('kw',true));
+		if (!$kw) {
+			$kw = $this->uri->segment(3);
+		}
+		
 		$this->load->library('sphinxclient');
         $this->sphinxclient->SetServer(SPHINX_SERVER_IP,9312);
         //$this->sphinxclient->SetMatchMode(SPH_MATCH_ANY);

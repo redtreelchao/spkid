@@ -139,4 +139,15 @@ class Userrank extends CI_Controller
         sys_msg('操作成功',2,array(array('href'=>'/userrank/index','text'=>'返回列表页')));
     }
 
+    public function editable() {
+        if( !auth('rank_edit'))  die(json_encode(Array('success'=>false,'msg'=>'操作失败，无操作权限！')));
+        $pk = $this->input->post( 'pk' );
+        $name = $this->input->post( 'name' );
+        $value = $this->input->post( 'value' );
+        $data[$name] = $value;
+        $result = $this->userrank_model->update( $data, $pk );
+        die(json_encode(Array('success'=>true,'msg'=>'操作成功！', 'value'=>443)));
+       
+    } 
+
 }

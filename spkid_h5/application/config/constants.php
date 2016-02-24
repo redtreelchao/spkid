@@ -210,7 +210,7 @@ define('M_COURSE_PAGE_MAX',20);//手机端课程最多加载几页
 
 //seo
 define('SITE_NAME', '悦牙网');
-define('SITE_NAME_MOBILE', '手机悦牙网 yueyawang.com');
+define('SITE_NAME_MOBILE', '悦牙网商城');
 define('PAGE_KEYWORDS' , SITE_NAME.'，keywords content.');
 define('PAGE_DESCRIPTION' , SITE_NAME.'description content！');
 define('PAGE_TITLE_SITE_NAME' , SITE_NAME.'_site_name_here');

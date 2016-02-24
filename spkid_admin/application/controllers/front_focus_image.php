@@ -56,7 +56,6 @@ class Front_focus_image extends CI_Controller
         //var_export($base_path);exit();
         if(!file_exists($base_path)) mkdir($base_path, 0700, true);
         if(!file_exists($base_path.'/'.$sub_dir)) mkdir($base_path.'/'.$sub_dir, 0700, true);
-
         $this->upload->initialize(array(
                 'upload_path' => $base_path.'/'.$sub_dir,
                 'allowed_types' => 'gif|jpg|png|jpeg',

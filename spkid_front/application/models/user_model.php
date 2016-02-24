@@ -53,7 +53,6 @@ class User_model extends CI_Model
 	}
 
 	public function user_data($user_id)
-
     {
     	$sql = "SELECT user_id, user_name, password, email,user_type,discount_percent,mobile,mobile_checked,email_validated" .
     			" FROM " . $this->_db->dbprefix('user_info') . " WHERE user_id='".$user_id."' LIMIT 1";

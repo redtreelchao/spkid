@@ -14,6 +14,15 @@
 </script>
 
 <style>
+
+a.bds_more {
+	background: none !important;
+}
+
+.play-biaoti{ background-color:#000;}
+.play-cotent{ width: 1000px;margin: 0 auto; }
+
+h1, .h1, h2, .h2, h3, .h3 { margin-bottom:0; margin-top:0;}
 	.product-wrapper {
 		margin-top: -10px;
 	}
@@ -48,9 +57,6 @@
 		margin-left:1em;
 	}
 
-	.hot-video img {
-		width: 40%;
-	}
 
 	.video-wrapper {
 		border: 1px solid #E0DCDC;
@@ -84,27 +90,36 @@
 
 </style>
 <div class="play-biaoti">
-     <div class="play-con">
+    <div class="play-cotent"><?php echo $article->post_content?></div>
+     
+     
+</div>
+<div class="play-con">
           <div class="play-title"><?php echo $article->post_title?></div>
           <div class="play-xx clearfix">
-               <div style="background: #242424;min-height:200px"><?php echo $article->post_content?></div>
                <span class="play-mc"><?php echo $article->display_name;?></span>
                <span class="play-mc"><?php echo $article->post_date?>上传</span>
                <div class="video-tubiao video-tubiao2 clearfix"><span class="video-liul"><?php echo get_page_view('article',$article->post_id);?></span><span class="video-jt"><?php echo count($article->comments);?></span></div>
-               <div class="play-ico clearfix"><a href="#" class="play-heart" onclick="add_to_collect(<?php echo $article->post_id;?>,4,this);"></a><em><span class="bdsharebuttonbox" data-bd-bind=""><a href="#" class="bds_more" data-cmd="more"></a></span></em></div>
+               <div class="play-ico clearfix"><a href="#" class="play-heart" onclick="add_to_collect(<?php echo $article->post_id;?>,4,this);"></a>
+               <!-- <em>
+               <span class="bdsharebuttonbox" data-bd-bind=""><a href="#" class="bds_more" data-cmd="more"></a></span>
+               </em> -->
+
+               <div class="video-detail share-icon">
+               	<div class="bdsharebuttonbox"><a href="javascript:void(0)" class="bds_more" data-cmd="more"><i></i>分享</a></div>
+               </div>
+               </div>
           </div>
           
      </div>
-     
-</div>
 <div class="wrap-mian wrap-min2">
      <div class="play-con play-question">
           <div class="int-evaluation">
                <form data-hosttype="2" data-committype="" data-hostid="3179" name="ct-form" class="ct-form" method="POST " action="/api/comment/add">
                      <div class="clearfix"><textarea placeholder="您怎么看？" aria-required="true" name="comment" style="height:90px;"></textarea></div>
-                     <div class="ct-submit" style="display: block;">
+                     <div class="ct-submit" style="display: none;">
                           <span class="ct-count">还能输入<em>150</em>字</span>
-                          <button class="btn btn-liuyan btn-blue" type="submit" style="display:none">提交</button>
+                          <button class="btn btn-liuyan btn-blue" type="submit">提交</button>
                     </div>
                </form>
                <ul id="ct-list-full" class="ct-list">
@@ -118,14 +133,14 @@
 <?php endif;?></div>
                        <div class="cont">
                             <div class="ut"><span class="uname text-overflow "><?php echo ($comment['comment_author']=="") ? '匿名' : $comment['comment_author'];?></span><span class="date"><?php echo $comment['comment_date'];?></span></div>
-<!--
+<?php if ('' != $comment['parent_content']):?>
                             <div class="quote">
-                                <div class="uname"><span>@ifkfkhjkh</span></div>
-                               <div class="qct"></div>
+                                <div class="uname"><span>@<?php echo ($comment['parent_author']=="") ? '匿名' : $comment['parent_author']?></span></div>
+                               <div class="qct"><?php echo $comment['parent_content']?></div>
                             </div>
--->
+<?php endif;?>
                            <div class="ct"><?php echo $comment['comment_content']?></div>
-                           <div class="tb"><a data-pid="600806" href="#">回复</a></div>
+                           <div class="tb"><a at_comment_id="<?php echo $comment['comment_ID']?>" href="#">回复</a></div>
                       </div>
                  </li>
 <?php endforeach?>
@@ -160,12 +175,19 @@
 
 <script>
 	var post_id = '<?php echo $article->post_id?>';
-	$(function(){	
+$(function(){
+    $('.ct-form').find("textarea").css('height', '42px');    
+    //$('.ct-submit').hide();
 		
-
-		$('.ct-form').find("textarea").focus(function() {
-            $('.ct-submit>.btn').show();
-        });
+    $('.ct-form').find("textarea").focus(function() {
+                        "" === $(this).val() && ($(this).stop().animate({height: "90px"}), $(this).parent().next().show())
+                    });
+		        $('.ct-form').find("textarea").blur(function() {
+		            var t = $(this);
+		            setTimeout(function() {
+		                "" === t.val() && (t.stop().animate({height: "42px"}), t.parent().next().hide())
+		            }, 300)
+		        });
 $('.ct-form textarea').on('input propertychange', function(){
     var count = 150-$(this).val().length;
     if (0 == count){
@@ -202,7 +224,7 @@ $('.ct-form textarea').on('input propertychange', function(){
 		    };
             $.ajax({
             url:'/article/comment',
-                data:{is_ajax:true,post_id:post_id,content:content},
+                data:{is_ajax:true,post_id:post_id,content:content,comment_parent:at_comment_id},
                 //dataType:'json',
                 type:'POST',
                 success:function(result){
@@ -321,27 +343,6 @@ $('.ct-form textarea').on('input propertychange', function(){
 	with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=86835285.js?cdnversion=' + ~(-new Date() / 36e5)];
 </script>
 
-<script>
-	$(function(){
-		function relayout() {
-			var left = $('.video-comment').offset().left + $('.video-comment').width();
-			var top2 = $('.video-comment').offset().top;
-			$('.hot-video').css({
-				position:'absolute',
-				left: left + 'px',
-				top:top2 + 'px',
-				zIndex:999999,
-				width:250 + 'px',
-				marginLeft:'1em'
-			});
-		}
-		
-		relayout();
 
-		$(window).resize(function(){
-			relayout();
-		});
-	});	
-</script>
 
 <?php include_once(APPPATH . "views/common/footer.php");?>

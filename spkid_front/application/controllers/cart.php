@@ -935,6 +935,9 @@ class Cart extends CI_Controller {
         if(empty($arr_order)){
             sys_msg('订单不存在', 1);
         }
+        if ($pay_price <= 0){
+            sys_msg('订单已付过款，不能重复付款', 1);
+        }
         $pay_track = $this->order_model->create_pay_track($arr_order_id, PAY_ID_WXPAY, '', $pay_price, $this->user_id);
         if(empty($pay_track)){
             sys_msg('系统繁忙，请重试',1);

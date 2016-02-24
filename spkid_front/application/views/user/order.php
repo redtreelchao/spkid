@@ -89,9 +89,12 @@
                             <?php if ($order->can_pay): ?>
                             <div class="order-cancel-<?=$order->order_id?>"><button class="btn lijifukuai" onclick="window.location.href='/cart/success/<?php print $order->order_id ?>';">立即付款</button></div>
                             <?php endif; ?>
-                            <?php if(!$order->invalid && $order->is_ok): ?>
+                            <?php 
+			    if(!$order->invalid && $order->is_ok && empty($order->comment_id)): ?>
+			    <!--
                             <button class="btn lijifukuai" style="background-color: #cccccc; color: #000000;" onclick="window.location.href='/user/my_liuyan';">去评价</button>
-                            <?php endif; ?>
+                            -->
+			    <?php endif; ?>
                             <div><a href="/order/info/<?=$order->order_id?>">详情</a></div>
                             <?php if ( (empty($order->lock_admin) && $order->lock_admin == 0) && $order->order_status == 0 ): ?>
                             <div class="order_cancel order-cancel-<?=$order->order_id?>" style="cursor: pointer;" data-id="<?=$order->order_id?>">取消订单</div>

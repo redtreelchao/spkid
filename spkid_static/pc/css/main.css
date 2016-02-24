@@ -280,8 +280,8 @@ text-align: center; width: 29px; }
 .associated-title a{ color:#909090;}
 .associated-title li{ width:100px; display:inline-block; position:relative; top:2px; text-align:center;  cursor:pointer;}
 .associated-pic{ padding-top:30px;}
-.associated-pic img{ width:132px; height:132px;}
-.associated-pic li{ width:140px; display:inline-block;}
+.associated-pic img{ width:140px; height:140px;}
+.associated-pic li{ width:140px; float:left; margin-right: 10px; display:inline;}
 .associated-sprice{ font-size:18px; color:#f75555; font-family:Verdana;}
 .associated-mc{ font-size:12px; color:#666;  height:30px; overflow: hidden;white-space: nowrap; text-overflow: ellipsis;}
 
@@ -601,15 +601,18 @@ width: 100px; border:none;}
 .course-name{ display:inline-block; width:170px; padding-left:40px;}
 .course-teacher{ display:inline-block;}
 .course-time,.course-address{ display:inline-block; padding-left:60px;}
-.course-set{ display:inline-block; width:100px; padding-left:45px;}
+.course-set{ display:inline-block; width:100px; padding-left:85px;}
 .course-contact { border-left:solid 1px #c7c8cc; border-right:solid 1px #c7c8cc;}
 .course-contact li{   border-bottom: 1px solid #c7c8cc;  font-size:12px; overflow: hidden; padding: 22px 0 25px;}
 .course-title{ display:inline-block; color:#333; margin-left:10px; width:160px; vertical-align:top;}
-.course-jiangshi{ display:inline-block; text-align: right; width: 85px; color:#666; line-height:18px;}
-.course-shijian{ display:inline-block; color:#666; width:80px; font-family:Verdana; text-align:center; vertical-align:top;}
-.course-baoming{ display:inline-block; color:#333; width:80px; vertical-align:top; padding-left:36px;}
-.course-contact .counter{ display:inline-block; vertical-align:top; padding-left:20px;}
-.course-sprice{ display:inline-block; text-align:right; width:133px; color:#f75555; font-size:14px; font-family:Verdana; vertical-align:top;}
+.course-title a{ color:#333;}
+.course-jiangshi{ display:inline-block; padding-left:44px; width:38px; color:#666; line-height:18px;}
+.course-shijian{ display:inline-block; color:#666; width:110px; font-family:Verdana; text-align:center; vertical-align:top;}
+.course-baoming{ display:inline-block; color:#333; width:80px; vertical-align:top; padding-left:26px;}
+.course-contact .counter{ display:inline-block; vertical-align:top; padding-left:11px; padding-right:30px;}
+.course-sprice{ display:inline-block; text-align:right; width:100px; color:#f75555; font-size:14px; font-family:Verdana; vertical-align:top;}
+
+.course-danjia{ padding-left:30px;}
 
 .course-contact .num { border-top:solid 1px #c7c8cc; border-bottom:solid 1px #c7c8cc; border-left:none; border-right:none; height: 26px; line-height: 100%; overflow: hidden;  padding: 1px 0; 
 text-align: center; width: 29px; }
@@ -811,7 +814,7 @@ text-align: center; width: 29px; }
 .left, .f-fl { float:left;}
 .right, .f-fr { float:right;}
 .rel, .f-pr { position: relative;}
-.abs, .f-pa { position: absolute;}
+.abs, .f-pa { position: absolute;color: #fff;}
 .f-ib { display: inline-block; *display:inline; zoom: 1;}
 .g-container, .g-doc { width: 960px; margin: 0 auto;}
 .m-slidebox { z-index: 500; height: 425px; background: #282828; box-shadow: 0 0 5px #aaa;}
@@ -901,7 +904,7 @@ text-align: center; width: 29px; }
 .play-title span{ font-size:12px; color:#666; padding-left:10px;}
 
 .play-xx{ padding-top:10px;}
-.play-mc{ vertical-align:top; font-size:16px; color:#666; display:inline-block; padding:20px 0 0 15px;}
+.play-mc{ vertical-align:top; font-size:16px; color:#666; display:inline-block; padding:20px 0 0 0;}
 .video-tubiao2{ display:inline-block; padding-top:22px; padding-left:15px; font-size:12px; color:#909090; font-family:Verdana, Geneva, sans-serif;}
 .play-ico{ display:inline-block; vertical-align:top; margin-top:10px; margin-left:15px; }
 .play-ico a{background:url(../images/play-ico.png) no-repeat; background-repeat: no-repeat; display: block; float: left; height: 30px; margin: 0 20px 0 0; width: 30px; }

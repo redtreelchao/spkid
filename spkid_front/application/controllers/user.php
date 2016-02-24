@@ -94,6 +94,9 @@ class User extends CI_Controller
         $user_id = $this->user_id;
 		$this->session->set_userdata('advar', $advar);
         $this->user_model->update(array('user_advar' => $advar), $user_id);
+        $this->load->helper('cookie');
+        delete_cookie('v_advar');
+        $this->input->set_cookie("v_advar", $advar, time()+(60*60*2));
     }
 
     public function customers_center() {
@@ -395,12 +398,12 @@ class User extends CI_Controller
         if ($this->input->get_post('is_ajax'))
         {
             $data['content'] = $this->load->view('user/order',array(
-                                                                                            'user' =>$user_info,
-                                                                                            'order_list' => $order_list['list'],
-                                                                                            'filter' => $order_list['filter'],
-                                                                                            'full_page'=>FALSE,
-                                                                                            'order_status'=>$status,
-                                                                                    ), TRUE);
+                'user' =>$user_info,
+                'order_list' => $order_list['list'],
+                'filter' => $order_list['filter'],
+                'full_page'=>FALSE,
+                'order_status'=>$status), TRUE);
+
             $data['error'] = 0;
             $data['page_count'] = $order_list['filter']['page_count'];
             $data['page'] = $order_list['filter']['page'];
@@ -438,9 +441,9 @@ class User extends CI_Controller
         unset($info['company_types']);
         $res = $this->user_model->update($info, $user_id);
         //完善个人资料赠送的积分
-        if (USE_REGIST_POINT && !$this->user_model->point_type_exists($user_id, 'regist_point'))
+        if (USE_DATA_POINT && !$this->user_model->point_type_exists($user_id, 'point_detail'))
         {
-            $point_amount = $this->user_obj->get_user_rank_point($user_id,'regist_point');
+            $point_amount = $this->user_obj->get_user_rank_point($user_id,'profile_point');
             if( $point_amount >0 ){// 0为暂时取消
                 $this->user_model->log_account_change($user_id, 0, $point_amount, $point_amount, '完善个人资料赠送的积分', 'point_detail');
             }
@@ -1555,12 +1558,10 @@ class User extends CI_Controller
         //echo $this->session->userdata('user_id');
 
         if (empty($err_msg)) {
-            /*$v_user_name = $this->session->userdata('user_name');
+            $v_user_name = $this->session->userdata('user_name');
             $user_id = $this->session->userdata('user_id');
-            $this->input->set_cookie("v_user_id",$user_id,time()+(60*60*2));  
-            $this->input->set_cookie("v_user_name",$v_user_name,time()+(60*60*2)); 
-            $this->input->set_cookie("v_advar", $this->session->userdata('advar'));*/
-            //echo $user_id, $this->input->cookie("advar");
+            
+            
             $this->user_obj->update_user_info();
             if (!$back_url = $this->session->userdata('back_url')) {
                 $back_url = $this->session->userdata('referer_url');
@@ -1669,6 +1670,7 @@ class User extends CI_Controller
         $this->session->sess_destroy();
         delete_cookie('v_user_id');
         delete_cookie('v_user_name');
+        delete_cookie('v_advar');
         //退出时购物车数量清0
         redirect("/index");
         /* 
@@ -3330,7 +3332,10 @@ class User extends CI_Controller
     	}
     	
 		$this->session->set_userdata('advar', $advar);
-        $res = $this->user_model->update(array('user_advar' => $advar), $user_id);    	
+        $res = $this->user_model->update(array('user_advar' => $advar), $user_id);    
+        $this->load->helper('cookie');
+        delete_cookie('v_advar');
+        $this->input->set_cookie("v_advar", $advar, time()+(60*60*2));
     	echo json_encode(array('uploaded' => $res,
     							'msg' => $this->upload->display_errors()));
     }

@@ -958,8 +958,8 @@ a.btn-disabled:visited {
 }
 
 .ct-list .ct-form textarea {
-	margin-left: 80px;
-	width: 590px
+	margin-left: 70px;
+	width: 683px
 }
 
 .ct-submit .btn-primary {
@@ -3631,7 +3631,7 @@ a.btn-disabled:visited {
 	border: 1px solid #c7c8cc; padding:0 10px; height:30px; line-height:30px; text-align:center;
 	color: #333;
 	font-size: 12px;
-	cursor: pointer;
+	cursor: pointer; margin:5px;
 	display: inline-block
 }
 
@@ -3639,10 +3639,9 @@ a.btn-disabled:visited {
 .product-info .product-unit.active.disabled,
 .product-info .product-unit:hover,
 .product-info .product-unit.disabled:hover {
-	border: 2px solid #333; height:30px;
-	margin-right: 8px;
+	border: 1px solid #333; height:30px;
 	color: #333;
-	font-size: 14px
+	font-size: 12px;
 }
 
 .product-info .product-unit.disabled {
@@ -3660,7 +3659,7 @@ a.btn-disabled:visited {
 	height: 45px; line-height:45px;
 	border: 1px solid #f75555;
 	border-radius: 3px;
-	font-size: 18px;
+	font-size: 20px;
 	text-align: center;
 	padding: 0;
 	background-color: #FFF;

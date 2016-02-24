@@ -353,7 +353,7 @@ class Order_model extends CI_Model
 		$where = 'o.order_sn = ?';
 		$param = array($order_sn);
 	    }
-    	$sql = "SELECT o.*, p.pay_code,p.pay_name,p.pay_logo,p.is_online, s.shipping_code,s.shipping_name,s.shipping_desc,pr.region_name as province_name,
+    	$sql = "SELECT o.*, p.pay_code,p.pay_name,p.pay_logo,p.is_online,s.shipping_code,s.shipping_name,s.shipping_desc,pr.region_name as province_name,
     		cr.region_name as city_name,dr.region_name as district_name
                 FROM ".$this->_db->dbprefix('order_info')." AS o
                 LEFT JOIN ".$this->_db->dbprefix('payment_info')." AS p ON o.pay_id = p.pay_id

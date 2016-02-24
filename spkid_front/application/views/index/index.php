@@ -102,39 +102,7 @@
         </ul>
     </div>
  </li>
-<!--
- <li>
-  <div class="home-rank-title  home-rank-comment"></div>
-       <div class="home-rank-overflow">
-             <ul class="home-rank-devlist clearfix">
-                 <li class="home-rank-ft">
-                    <a href="#" target="_blank">
-                       <div class="home-rank-img-wp"><img src="images/dentist4.jpg"></div>
-                       <div class="home-rank-pro-title">深圳牙医论坛讨论大会</div>
-                       <div class="home-nr">开班日期：2016/1/6</div>
-                       <div class="home-rank-price">悦牙优享:<span>￥499</span><em>￥3000/套</em></div></a>
-                    </a>
-                </li>
-               <li class="home-rank-second">
-                   <a href="#" target="_blank">
-                      <div class="home-rank-img-wp"><img src="images/dentist5.jpg"></div>
-                       <div class="home-rank-pro-title">深圳牙医论坛讨论大会</div>
-                       <div class="home-nr">开班日期：2016/1/6</div>
-                       <div class="home-rank-price">悦牙优享:<span>￥499</span><em>￥3000/套</em></div></a>
-                  </a>
-             </li>
-             <li class="home-rank-third">
-                 <a href="#" target="_blank">
-                    <div class="home-rank-img-wp"><img src="images/dentist`jpg"></div>
-                    <div class="home-rank-pro-title">深圳牙医论坛讨论大会</div>
-                    <div class="home-nr">开班日期：2016/1/6</div>
-                    <div class="home-rank-price">悦牙优享:<span>￥499</span><em>￥3000/套</em></div></a>
-                </a>
-            </li>
-           </ul>
-      </div>
-  </li>
--->
+
 </ul>
 
 <ul class="home-rank-icon">
@@ -308,7 +276,6 @@
 
 	
 
-</script>
 <script type="text/javascript">
 
 

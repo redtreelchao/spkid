@@ -2,7 +2,7 @@
 	
 
 	<li class="clearfix">
-	    <div class="avatar"><img src="<?php echo static_style_url('mobile/touxiang/'.$l->user_advar.'?v=version')?>" class="" title="<?php print $l->user_name?$l->user_name:$l->admin_user_name; ?>"></div>
+	    <div class="avatar"><img src="<?php echo static_style_url('mobile/touxiang/'.($l->user_advar ? $l->user_advar : 'default.png').'?v=version')?>" class="" title="<?php print $l->user_name?$l->user_name:$l->admin_user_name; ?>"></div>
 	    <div class="cont">
 	      <div class="ut">
 	        <span class="uname text-overflow "><?php print $l->user_name?$l->user_name:'匿名'; ?></span><span class="date"><?php print $l->comment_date ?></span>

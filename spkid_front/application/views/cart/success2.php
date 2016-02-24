@@ -135,7 +135,7 @@
         
         $.ajax({
                 type:"GET",
-                url:"http://pc.yueyawang.com/pay/wxpay_check/"+v_track_sn,		
+                url:"<?=FRONT_HOST?>/pay/wxpay_check/"+v_track_sn,		
 
                 cache:false,
                 timeout: 100000,

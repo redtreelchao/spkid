@@ -27,7 +27,7 @@ include_once (APPPATH . "views/common/header.php");
 }
 
 .product-btn-baoming span {
-	color: white; font-family:Verdana;
+	color: white; font-family:Verdana; font-size:18px;
 }
 
 .product-btn-baoming span.course_baoming {

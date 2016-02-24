@@ -245,7 +245,7 @@ $config['mcrypt_key'] = 'hello';
 | 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
 |
 */
-$config['sess_cookie_name']		= 'front_session';
+$config['sess_cookie_name']		= 'pc_front_session';
 $config['sess_expiration']		= 172800;
 $config['sess_expire_on_close']	= TRUE;
 $config['sess_encrypt_cookie']	= TRUE;

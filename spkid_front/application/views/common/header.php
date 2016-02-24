@@ -60,18 +60,7 @@
               </div>
               <div class="nav-lb">
                   <div class="naver-login">
-                  <?php if($this->session->userdata('user_id')){ ?>
-                            <img src="<?php echo static_style_url('mobile/touxiang/'.$this->session->userdata('advar'))?>" height="28">
-                    <a href="#" class="nav-user"><?php echo $this->session->userdata('user_name')?><span class="menu_tips"></span></a> 
-        <ul class="menu_items" style="display:none">
-        <li><a href="/user/index.html">个人中心</a></li>
-        <li><a href="/account/privilege.html">我的优惠</a></li>
-        <li><a href="/collect/index.html">我的关注</a></li>
-        <li><a href="/user/my_response.html">我的回复(<span id="response_num"></span>)</a></li>
-        <li><a href="/user/logout.html">退出</a></li></ul>
-	                <?php }else{ ?>
-	                    <a href="/user/login" class="nav-user">登录</a>
-	                <?php } ?>
+                  
                   </div>
                   <a href="/user/order_list" class="nav-order">我的订单</a>
                   <a href="/cart" class="nav-cart">购物车</a>

@@ -349,19 +349,11 @@
         var advar = $('.choose-picture li img.selected').attr('src');
         advar_ = advar.split('/').pop();
         $.post('/user/save_advar', {advar:advar_}, function(data){
-          alert('更新成功');
+          alert('更新成功');        
         });
         return;  
       } else if(advar_type == 1) {
-        /*var data = new FormData($('#uploadForm')[0]);
         
-        $.ajax({url:'/user/profile_upload', data:data, cache:false, method:'POST', dataType:'json', contentType:false, processData: false, success:function(data){
-            if (data.uploaded){
-                console.log(data);
-                alert('更新成功');
-            }
-        }
-        });*/
         var fileServer = '/user/profile_upload';
         var imgData = $("#res1")[0].toDataURL("png");
         imgData = imgData.replace(/^data:image\/(png|jpg);base64,/, "");

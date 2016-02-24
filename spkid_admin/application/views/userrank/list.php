@@ -1,5 +1,6 @@
 <?php include(APPPATH.'views/common/header.php'); ?>
 <script type="text/javascript" src="public/js/utils.js"></script>
+    <script type="text/javascript" src="public/js/listtable.js"></script>
 <div class="main">
 		<div class="main_title"><span class="l">会员管理 >> 等级列表</span> <span class="r"><a href="userrank/add" class="add">新增</a></span></div>
         <div class="blank5"></div>
@@ -28,10 +29,19 @@
 					<td><?php echo $row->rank_name;?></td>
 					<td><?php echo $row->min_points;?></td>
 					<td><?php echo $row->max_points;?></td>
-					<td><?php echo $row->regist_point;?></td>
+					<td>
+						<span data-pk="<?php print $row->rank_id; ?>" data-name="regist_point" class="editable" data-title="注册积分" data-value="<?php print $row->regist_point; ?>">
+							<?php echo $row->regist_point;?>
+						</span>
+
+					</td>
 					<td><?php echo $row->buying_point_rate;?></td>
 					<td><?php echo $row->comment_point;?></td>
-					<td><?php echo $row->profile_point;?></td>
+					<td>
+						<span data-pk="<?php print $row->rank_id; ?>" data-name="profile_point" class="editable" data-title="完善积分" data-value="<?php print $row->profile_point; ?>">
+							<?php echo $row->profile_point;?>
+						</span>
+					</td>
 					<td><?php echo $row->invite_point;?></td>
 					<td><?php echo $row->friendby_point;?></td>
 					<td><?php echo $row->create_date;?></td>
@@ -53,4 +63,19 @@
     <div class="blank5"></div>
 </div>
 	</div>
+	<script>
+// jquery editable 
+function _editable(){
+
+
+$('.editable').editable({ url: '/userrank/editable', emptytext:'',
+        success: function(response, newValue) {
+            if(!response.success) return response.msg;
+            if( response.value != newValue ) return '操作失败';
+        }
+    });
+}
+listTable.func = _editable; // 分页加载后调用的函数名
+_editable();
+</script>
 <?php include_once(APPPATH.'views/common/footer.php'); ?>

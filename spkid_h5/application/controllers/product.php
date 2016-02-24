@@ -922,7 +922,7 @@ class Product extends CI_Controller
 		$ad = $this->lib_ad->get_ad_by_position_tag('search_result_top', 'search_result_top', 1);	
 		
 		$this->load->view('mobile/product/searchResult',array(
-			'title' => '搜索结果 '.$kw,
+			'title' => '搜索结果 '.$kw. '-' . SITE_NAME_MOBILE,
 			'kw' => $kw,
 			'param' => $param,
 			'product_list' => $data['list'],

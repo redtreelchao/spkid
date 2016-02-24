@@ -60,15 +60,29 @@ limit 5";
         $detail->post_date = current(explode(' ', $detail->post_date));
         //unset($detail->meta_value);
         //评论
-        $sql = 'SELECT comment_author,comment_content,comment_date,yyw_user_id FROM wp_comments WHERE comment_post_ID='.$id.' AND comment_approved = 1';
+        $sql = "SELECT a.comment_ID,a.comment_author,a.`comment_content`,b.comment_content parent_content,a.comment_date,a.yyw_user_id,b.yyw_user_id parent_id FROM wp_comments a LEFT JOIN wp_comments b ON b.`comment_ID`=a.`comment_parent` WHERE a.comment_post_ID=$id AND a.comment_approved = 1";
         $comments = $this->db_wp->query($sql)->result_array();
         $ids = array();
         foreach($comments as $comment){
             $user_id = $comment['yyw_user_id'];
+            $parent_id = $comment['parent_id'];
             if ($user_id){
-                //$ids[$user_id] = $index;
                 array_push($ids, $user_id);
             }
+            if ($parent_id){
+                array_push($ids, $parent_id);
+            }
+            /*$response = explode('&', $comment['response']);
+            $response1 = array();
+            foreach($response as $r){
+                $r = explode(',', $r);
+                $user_id = $r[0];
+                if ($user_id){
+                    array_push($ids, $user_id);
+                }
+                $response1[] = array('user_id' => $user_id, 'content' => $r[1]);
+            }
+            $comment['response'] = $response1;*/
         }
         if (!empty($ids)){
             $user_ids = implode(',', $ids);
@@ -87,6 +101,12 @@ limit 5";
                 $comment['comment_author'] = $ids[$user_id][1];
             }
             unset($comment['yyw_user_id']);
+            $parent_id = $comment['parent_id'];
+            if ($parent_id){
+                $comment['parent_author'] = $ids[$parent_id][1];
+            }
+            unset($comment['parent_id']);
+           
         }
         $detail->comments = $comments;
 
@@ -266,15 +286,12 @@ limit 5";
         }
         return $article_list;
     }
-    public function comment_article($post_id, $content, $user_id){
-        $ip = $_SERVER["REMOTE_ADDR"];
-        $date = date('Y-m-d H:i');
-        if ($user_id)
-            $sql = "INSERT INTO wp_comments (comment_post_ID,comment_author_IP,comment_date,comment_date_gmt,comment_content,comment_approved, yyw_user_id) VALUES($post_id, '$ip', '$date', '$date', '$content', 1, $user_id)";
-        else
-            $sql = "INSERT INTO wp_comments (comment_post_ID,comment_author_IP,comment_date,comment_date_gmt,comment_content,comment_approved) VALUES($post_id, '$ip', '$date', '$date', '$content', 1)";
+    public function comment_article($data){
+        $data['comment_author_IP'] = $_SERVER["REMOTE_ADDR"];
+        $data['comment_date'] = date('Y-m-d H:i');
+        
 
-        $this->db_wp->query($sql);
+        $this->db_wp->insert('comments', $data);
         return $this->db_wp->insert_id();
 
     }

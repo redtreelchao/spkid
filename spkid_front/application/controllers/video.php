@@ -14,9 +14,9 @@ class Video extends CI_Controller
         $data['video5'] = $this->wordpress_model->fetch_videos(132);
         $data['hot'] = $this->wordpress_model->hot2new_videos('hot');
         $data['new'] = $this->wordpress_model->hot2new_videos('new');
-        $data['categorys'] = array('口内牙周', '口外种植', '口腔正畸', '管理洽谈', '美学复位');
+        $data['categorys'] = array('口内牙周', '口外种植', '口腔正畸', '管理洽谈', '美学修复');
         $this->load->library('lib_ad');
-        $data['focus_image'] = $this->lib_ad->get_focus_image(VIDEO_FOCUS_IMAGE_TAG, 2);
+        $data['focus_image'] = $this->lib_ad->get_focus_image(VIDEO_FOCUS_IMAGE_TAG, 3);
 
         $data['index'] = 4;
         // 这里获取动态的seo
@@ -82,38 +82,8 @@ class Video extends CI_Controller
         //获取文章的点赞数量
         $article_praise_num = $this->wordpress_model->article_praise_num($id);
 
-        //print_r($article_detail);
-        $tags = $article_detail->tags;
-        $tagArr = explode('&', $tags);
-        $arr = array();
-        foreach($tagArr as $tag){
-            $tag = explode('=', $tag);
-            list($name, $value, $cid) = $tag;
-            //echo $name, $cid, ' ';
-            /*if (!isset($$name)){
-                $$name = array($cid => $value);
-            } else*/
-                $arr[$name][$cid] = $value;
-        }
-        foreach($arr as $name => $value){
-            $$name = $value;
-        }
-        if (empty($post_tag)){
-            $post_tag = '';
-        } else{
-            $post_tag = implode('&nbsp;', $post_tag);
-        }
-        $views = $this->wordpress_model->get_article_views($id);
-        $prev = $this->wordpress_model->get_sibing_id($id, '<');
-        $next = $this->wordpress_model->get_sibing_id($id, '>');
         
-        if (isset($category)){
-            $cids = array_keys($category);
-            $relative_articles = $this->wordpress_model->get_relative_articles($cids, $id);
-        } else{
-            $relative_articles = false;
-        }
-        $category = implode('&nbsp;', $category);
+       
         //$sql = "SELECT term_id FROM wp_terms WHERE name = '$category'";
 
         //$tags = parse_str($tags, $tagArr);
@@ -133,16 +103,7 @@ class Video extends CI_Controller
                 'description' => $seo['description'],
                 'keywords'  => $seo['keywords'],
                 'article' => $article_detail,
-                'tag' => $post_tag, 
-                'category' => $category,
-                'views' => $views,
-                'prev' => $prev,
-                'next' => $next, 
-                'relative_articles' => $relative_articles,                
                 'title' => $seo['title'],
-                'collect_data' => get_collect_data(),
-                'praise_data' => get_praise_data(),
-                'article_praise_num' => $article_praise_num->praise_num,
                 //'user_name' => $this->session->userdata('user_name'),
                 'hotvideos' => $hotvideos
                 )

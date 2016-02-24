@@ -20,7 +20,7 @@ class Front_ad extends CI_Controller
 
     public function index ()
     {
-        auth(array('frontad_po_edit','frontad_po_view'));
+        auth(array('front_ad_po_edit','front_ad_po_view'));
         $this->load->helper('perms_helper');
         $this->load->vars('perms' , get_front_perm());
         
@@ -60,7 +60,7 @@ class Front_ad extends CI_Controller
     }
 
     public function p_edit($position_id){
-        auth(array('frontad_po_edit','front_ad_po_view'));
+        auth(array('front_ad_po_edit','front_ad_po_view'));
         $this->load->helper('perms_helper');
         $this->load->vars('perms' , get_front_perm());
         $position_id = intval($position_id);
@@ -81,7 +81,7 @@ class Front_ad extends CI_Controller
     
     public function proc_p_edit($position_id)
     {
-        auth('frontad_po_edit');
+        auth('front_ad_po_edit');
         $position_id = intval($position_id);
         $data['position_tag'] = trim($this->input->post('position_tag'));
         $data['position_name'] = trim($this->input->post('position_name'));
@@ -105,7 +105,7 @@ class Front_ad extends CI_Controller
     
     public function p_add()
     {
-        auth('frontad_po_edit');
+        auth('front_ad_po_edit');
         $this->load->model('brand_model');
         $all_brand = $this->brand_model->all_brand();
         $this->load->model('category_model');
@@ -117,7 +117,7 @@ class Front_ad extends CI_Controller
 
     public function proc_p_add()
     {
-        auth('frontad_po_edit');
+        auth('front_ad_po_edit');
         $data['position_tag'] = trim($this->input->post('position_tag'));
         $data['position_name'] = trim($this->input->post('position_name'));
         $data['page_name'] = trim($this->input->post('page_name'));
@@ -142,7 +142,7 @@ class Front_ad extends CI_Controller
 
     public function p_del($position_id)
     {
-        auth('frontad_po_edit');
+        auth('front_ad_po_edit');
         $position_id = intval($position_id);
         $test = $this->input->post('test');
         $check = $this->front_ad_posion_model->filter(array('position_id' => $position_id));
@@ -161,7 +161,7 @@ class Front_ad extends CI_Controller
     }
     
     public function ad_index(){
-        auth(array('frontad_edit','frontad_view'));
+        auth(array('front_ad_edit','front_ad_view'));
         $this->load->helper('perms_helper');
         $this->load->vars('perms' , get_front_perm());
         $filter = $this->uri->uri_to_assoc(4);
@@ -195,7 +195,7 @@ class Front_ad extends CI_Controller
     }
 
     public function operate_index($position_id){
-        auth(array('frontad_edit','frontad_view'));
+        auth(array('front_ad_edit','front_ad_view'));
         $this->load->helper('perms_helper');
         $this->load->vars('perms' , get_front_perm());
         $filter = $this->uri->uri_to_assoc(4);
@@ -227,7 +227,7 @@ class Front_ad extends CI_Controller
     }
     
     public function ad_add(){
-        auth(array('frontad_edit'));
+        auth(array('front_ad_edit'));
         $this->load->helper('perms_helper');
         $this->load->vars('perms' , get_front_perm());
         $position_id = intval($this->uri->segment(3, 0));
@@ -240,7 +240,7 @@ class Front_ad extends CI_Controller
     
     public function proc_ad_add()
     {
-        auth('frontad_edit');
+        auth('front_ad_edit');
         $type = intval($this->uri->segment(3, 0));
         $data['position_id'] = intval($this->input->post('position_id'));
         $data['ad_name'] = trim($this->input->post('ad_name'));
@@ -282,7 +282,7 @@ class Front_ad extends CI_Controller
     }
     
     public function ad_edit($ad_id){
-        auth(array('frontad_edit','front_ad_view'));
+        auth(array('front_ad_edit','front_ad_view'));
         $this->load->helper('perms_helper');
         $this->load->vars('perms' , get_front_perm());
         $ad_id = intval($ad_id);
@@ -302,7 +302,7 @@ class Front_ad extends CI_Controller
     
     public function proc_ad_edit($ad_id,$position_id)
     {
-        auth(array('frontad_edit'));
+        auth(array('front_ad_edit'));
         $type = intval($this->uri->segment(5, 0));
         $ad_id = intval($ad_id);
         $data['position_id'] = intval($this->input->post('position_id'));
@@ -339,7 +339,7 @@ class Front_ad extends CI_Controller
     
     public function ad_del($ad_id)
     {
-        auth(array('frontad_edit'));
+        auth(array('front_ad_edit'));
         $ad_id = intval($ad_id);
         $test = $this->input->post('test');
         $check = $this->front_ad_model->filter(array('ad_id' => $ad_id));

@@ -28,16 +28,16 @@
                 </div>
                 <p class="manyidu"><i>*</i>您对悦牙网的整体满意度如何？</p>
                 <div class="feedback-my">
-                    <p><input name="grade" type="radio" value="4" checked>非常满意</p>
-                    <p><input name="grade" type="radio" value="3">满意</p>
-                    <p><input name="grade" type="radio" value="2">一般</p>
-                    <p><input name="grade" type="radio" value="1">不满意</p>
-                    <p><input name="grade" type="radio" value="0">非常不满意</p>
+                    <p><input name="grade" type="radio" value="4" checked>  非常满意</p>
+                    <p><input name="grade" type="radio" value="3">  满意</p>
+                    <p><input name="grade" type="radio" value="2">  一般</p>
+                    <p><input name="grade" type="radio" value="1">  不满意</p>
+                    <p><input name="grade" type="radio" value="0">  非常不满意</p>
                 </div>
                 <p class="manyidu">请留下您的联系方式，以便我们及时回复您</p>
                 <ul class="feedback-lx">
-                    <li><label>姓名</label><input name="comment_name" type="text"></li>
-                    <li><label>手机号</label><input name="comment_tel" type="text"><span></span></li>
+                    <li><label>姓名:</label><input name="comment_name" type="text"></li>
+                    <li><label>手机号:</label><input name="comment_tel" type="text"><span></span></li>
                 </ul>
                 <div class="feedback-anniu"><button class="submit-button" type="submit">提交</button></div>
             </form>
