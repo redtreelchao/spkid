@@ -215,11 +215,8 @@ define('M_INDEX_PAGE_MAX',3);//手机端首页最多加载几页
 
 //seo
 define('SITE_NAME', '爱牙网');
-<<<<<<< HEAD
+
 define('SITE_NAME_MOBILE', '爱牙网 www.redtravel.cn');
-=======
-define('SITE_NAME_MOBILE', '爱牙网');
->>>>>>> 5b0560c1be9de0263dd90382a057448287cf879f
 define('PAGE_KEYWORDS' , SITE_NAME.'，keywords content.');
 define('PAGE_DESCRIPTION' , SITE_NAME.'description content！');
 define('PAGE_TITLE_SITE_NAME' , SITE_NAME.'_site_name_here');
