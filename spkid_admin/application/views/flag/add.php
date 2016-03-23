@@ -23,6 +23,10 @@
 				<td class="item_input"><?php print form_input(array('name'=> 'flag_name','class'=> 'textbox require'));?></td>
 			</tr>
 			<tr>
+				<td class="item_title">所属大洲:</td>
+				<td class="item_input"><?php print form_input(array('name'=> 'continent','class'=> 'textbox require'));?></td>
+			</tr>
+			<tr>
 				<td class="item_title">图片地址:</td>
 				<td class="item_input">
 					<?php print form_upload(array('name'=> 'flag_url','class'=> 'textbox'));?>
@@ -31,7 +35,7 @@
 			<tr>
 				<td class="item_title">排序号:</td>
 				<td class="item_input">
-					<?php print form_input(array('name' => 'sort_order','class' => 'textbox')); ?>
+					<?php print form_input(array('name' => 'sort_order','class' => 'textbox')); ?>数值大的在前
 				</td>
 			</tr>
 			<tr>

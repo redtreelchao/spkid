@@ -6,9 +6,11 @@
 <link href="<?php echo static_style_url('pc/css/bootstrap.css?v=version')?>" rel="stylesheet" type="text/css" media="all">
 <script src="<?php echo static_style_url('pc/js/bootstrap.min.js?v=version')?>" type="text/javascript"></script>
 
-<script>
-	
-</script>
+<style>
+	.product-part {
+		min-height:1024px;
+	}
+</style>
 
 		<script>
 			window.hostId = '3179';
@@ -49,7 +51,7 @@
 					</div>
 					<div class="product-icon-bar">
 						<div class="product-icon-box clearfix">
-							<div class="product-icon like-icon" onclick="add_to_collect (<?php echo $p ->product_id; ?>,0,this);"></div>
+							<div class="product-icon like-icon <?php echo $is_collected ? 'active' : ''?>" onclick="add_to_collect (<?php echo $p ->product_id; ?>,0,this);"></div>
 							<div class="product-icon share-icon">
 								<div class="bdsharebuttonbox bdshare-button-style0-32" data-bd-bind="1451022176310"><a href="javascript:void(0)" class="bds_more" data-cmd="more"><i></i>分享</a></div>
 							</div>
@@ -57,22 +59,23 @@
 					</div>
 				</div>
 				<div class="product-info fl-left">
-					<div class="product-title product-row"><?php echo isset($title) ? $title : ''?></div>
+					<div class="product-title product-row"><?php echo isset($ititle) ? $ititle : ''?></div>
 
 					<div class="product-summary product-row">
-						<?php echo $p->product_desc ? $p->product_desc: ''?>
+						<!-- <?php echo $p->product_desc ? $p->product_desc: ''?> -->
 						<p style="font-weight:bold;font-size:1.1em"><?php echo isset($product_additional[0]['register_no']) ? '注册证号：' . $product_additional[0]['register_no'] : ''?></p>
 					</div>
 
 					<div class="product-price-box product-row clearfix">
 						<label class="product-label ">价格</label>
 						<div class="product-group product-price">
-							<span class="original-price" style="display: none;"></span> &#65509;
-							<i class="current-price"><?php 
-								if ($p->price_show) {
+							<span class="original-price" style="display: none;"></span> 
+						<i class="current-price <?php echo (1 == $p->price_show ? "daiding" : "jiage")?>">
+						<!--询价-->
+								<?php if (1 == $p->price_show) {
 									echo "待定";
 								} else {
-									echo $p->product_price;
+									echo '&#65509;' . $p->product_price;
 									echo "<s style='color:gray;margin-left:1em;font-weight:normal;font-size:0.6em'>&#65509;" . ($p ->market_price ? $p -> market_price : "") . "</s>";		
 								}
 							?></i>
@@ -99,9 +102,7 @@
 							<div class="product-counter clearfix">
 								<div class="counter fl-left">
 									<div class="counter-wrapper clearfix">
-										<span class="minus cart-num fl-left btn-minus" name="down">-</span>
-										<input type="text" name="num" value="1" class="num fl-left buy_num">
-										<span class="plus cart-num fl-left btn-plus" name="up">+</span></div>
+										<span class="minus cart-num fl-left btn-minus" name="down">-</span><input type="text" name="num" value="1" class="num fl-left buy_num"><span class="plus cart-num fl-left btn-plus" name="up">+</span></div>
 									<span class="tips"></span>
 								</div>
 							</div>
@@ -110,16 +111,16 @@
 					<div class="product-btn-box product-row">
 						<div class="product-group">
 							<form id="">
-								<?php if(!$p->price_show):?>
+								<?php if(0 == $p->price_show):?>
 									<!-- <button class="product-btn product-btn-buy" type="button">立即购买</button> -->
 									<button class="product-btn product-btn-cart  product-btn-cart-s" type="button">加入购物车</button>
 									<button class="product-btn product-btn-hint" disabled type="button" style="display:none">暂无库存</button>
 								<?php else: ?>
-									<a style="display:inline-block;line-height: 40px;" href="https://eco-api.meiqia.com/dist/standalone.html?eid=6161&groupid=94440251aff54c211cc6b6c40fca92e3"
+									<a target="_blank" style="display:inline-block;line-height: 40px;" href="https://eco-api.meiqia.com/dist/standalone.html?eid=6161&groupid=94440251aff54c211cc6b6c40fca92e3"
 									 class="product-btn-2 product-btn-xunjia" type="button">
-									<span style="border-right: 1px solid white;padding-right: 6px;">询价</span>
+									<span style="border-right: 1px solid white; padding-right:10px;">询价</span>
 
-									<span>联系客服</span>
+									<span style="padding-left:10px;">联系客服</span>
 									</a>									
 								<?php endif;?>
 							</form>
@@ -159,22 +160,31 @@
 			
 			<div class="product-part product-comment grey-bg" style="display: none;">
 				<div class="product-part-box">
-					
+					<div class="product-comment-selector">
+						<a class="area_selector  discus_area active" href="javascript:void(0);" data-type="comment">讨论区 (<i class="comment-count">0</i>)</a>/<a class="area_selector pingjia_area" href="javascript:void(0);" data-type="goodscomment">购买评价 (<i class="goodscomment-count">0</i>)</a>
+					</div>
+
 					<div class="product-line"></div>
 					<div class="product-comment grey-bg">
-						<form class="ct-form" name="ct-form" data-hostid="3179" data-committype="" data-hosttype="2">
-							<div class="clearfix liuyan-content">
-								<textarea name="liuyan" aria-required="true" placeholder="同学，你怎么看?"></textarea>
-							</div>
-							<div class="ct-submit">
-								<a type="" class="btn btn-primary btn-liuyan">提交</a>
-							</div>
-						</form>
-						<ul class="ct-list" id="ct-list-full">
+						<div class="area-1">
+							<form class="ct-form" name="ct-form" data-hostid="3179" data-committype="" data-hosttype="2">
+								<div class="clearfix liuyan-content">
+									<textarea name="liuyan" aria-required="true" placeholder="同学，你怎么看?"></textarea>
+								</div>
+								<div class="ct-submit">
+									<a type="" class="btn btn-primary btn-liuyan">提交</a>
+								</div>
+							</form>
+							<ul class="ct-list" id="ct-list-full">					
+							</ul>
+						</div>
+						<div style="display:none" class="area-2">
+							<ul class="ct-list" id="ct-list-full-comment">
+							</ul>	
+						</div>
+						
 
-							
 
-						</ul>
 					</div>
 					
 				</div>
@@ -300,6 +310,7 @@
 				var tag_id = '<?php echo $p->product_id;?>';
 				
 				get_liuyan(1, tag_id, 1, $('#ct-list-full'));
+				get_liuyan(1, tag_id, 2, $('#ct-list-full-comment'));
 
 				gototop = function() {
 				        var t = $(".navbar-placeholder"), a = $(".navbar-wrapper"), e = t.offset();
@@ -329,7 +340,15 @@
 				var buy_size = $('.buy_size.active').text();
 				function check_buy_num(type) {
 					var buy_num = parseInt(num_input.val());
-				        var v_max = $("#cur_sub_num").val();
+				    var v_max = $("#cur_sub_num").val();
+				    var kucun = $("#cur_sub_num").val();
+				    if (kucun <=0 ){
+				    	$('.btn-plus').attr('disabled', true);
+				    	$('.btn-minus').attr('disabled', true);
+				    	$('.product-btn-hint').show().siblings().hide();
+				    	return false;
+				    };
+
 					switch(type) {
 						case '+':
 							++buy_num;
@@ -368,21 +387,30 @@
 					check_buy_num('-');
 				});
 
+				function reset_buy_num() {
+					var _this = $('.buy_size.active');
+					_this.addClass('active');
+			        $("#cur_sub_id").val(_this.attr("data-id"));
+			        $("#cur_sub_num").val(_this.attr("data-val"));	
+				    $('.buy_num').val(1);
+				    //处理没有库存的情况
+				    
+			    	var kucun = $("#cur_sub_num").val();
+			    	if (kucun <=0 ){
+			    		$('.btn-plus').attr('disabled', true);
+			    		$('.btn-minus').attr('disabled', true);
+			    		$('.product-btn-hint').show().siblings().hide();
+			    	};
+				   
+				};
+
+				reset_buy_num();
+
 				$(document).on('click', '.buy_size', function(e) {
 					var _this = $(this);
 					$(this).siblings().removeClass('active');
 					_this.addClass('active');
-			        $("#cur_sub_id").val(_this.attr("data-id"));
-			        $("#cur_sub_num").val(_this.attr("data-val"));	
-				    num_input.val(1);
-				    //处理没有库存的情况
-				    if ($('.product-btn-buy').length) {
-				    	var kucun = $("#cur_sub_num").val();
-				    	if (kucun <=0 ){
-
-				    		$('.product-btn-hint').show().siblings().hide();
-				    	};
-				    };
+			        reset_buy_num();
 				});
                                 
                 $(document).on('click', '.product-btn-cart', function(e) {
@@ -412,6 +440,11 @@
                     }
                     if(num < 1 || num > max_num) {
                         alert('请输入购买数量');
+                        return false;
+                    }
+
+                    if(num > max_num) {
+                        alert('库存不足');
                         return false;
                     }
 
@@ -607,23 +640,8 @@
 			var tagType = 1; //代表产品
 			var name = '<?php echo $user_name;?>';
 			var mobile = '<?php echo $mobile;?>';
-
+			$(".navbar li:first a").click();
 			$(function(){
-				$('.product-btn-xunjia, .product-btn-kefu').click(function(){
-					$('#give-message textarea[name="comment"]').val('');
-					$('#give-message input[name="mobile_num"]').val('');
-
-					$('#give-message').modal('show');
-					if($(this).hasClass('product-btn-xunjia')) {
-						comment_type = 4;
-					} else if($(this).hasClass('product-btn-kefu')) {
-						comment_type = 1;
-					} else {
-						comment_type = -1;
-					}
-					return;
-				});
-
 				$('a.btn-give-message').click(function(){
 					var content = $('#give-message textarea[name="comment"]').val();
 
@@ -716,6 +734,22 @@
 				})
 
 			});
+
+		//讨论区和评价区功能
+		$('.area_selector').click(function(){
+			$('.area_selector').removeClass('active');
+			if($(this).hasClass('discus_area')) {
+				$('.area-2').hide();
+				$('.area-1').show();
+				$(this).addClass('active');
+			} 
+			if($(this).hasClass('pingjia_area')) {
+				$('.area-2').show();
+				$('.area-1').hide();
+				$(this).addClass('active');
+			} 
+		});
+			
 		</script>
 
 		

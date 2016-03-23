@@ -28,10 +28,12 @@
 
 		<div class="blank5"></div>
 		<div class="search_row">
+<ul class="am-nav am-nav-pills">
             <?foreach($focus_type as $key=>$val):?>
-                <a href="front_focus_image/index/<?=$key?>"><?=$val?></a>
+     <li class="<?php if ($key==$cur_ft)echo 'am-active';?>">            <a href="front_focus_image/index/<?=$key?>"><?=$val?></a></li>
                 &nbsp;&nbsp;&nbsp;&nbsp;
             <?endforeach?>
+</ul>
 		</div>
 		<div class="blank5"></div>
 
@@ -64,11 +66,16 @@
 					<td>
                         <input type="text" name="focus_order[]" value="<?=$row->focus_order?>" style="width:50px;">
                     </td>
-                    <td><img src="<?php $row->focus_img?>" /></td>
+                    <td>
+                        <figure data-am-widget="figure" class="am am-figure am-figure-default "   data-am-figure="{  pureview: 'true' }">
+                            <i class="am-icon-file-image-o"></i>
+                            <img data-rel="<?=img_url($row->small_img)?>"/>
+                        </figure>
+                    </td>
 					<td>
                         <figure data-am-widget="figure" class="am am-figure am-figure-default "   data-am-figure="{  pureview: 'true' }">
                             <i class="am-icon-file-image-o"></i>
-                            <img data-rel="<?='public/data/images/'.$row->focus_img?>"/>
+                            <img data-rel="<?=img_url($row->focus_img)?>"/>
                         </figure>
                     </td>
 					<td>
@@ -113,7 +120,13 @@
                     <td>
                         <figure data-am-widget="figure" class="am am-figure am-figure-default "   data-am-figure="{  pureview: 'true' }">
                             <i class="am-icon-file-image-o"></i>
-                            <img data-rel="<?='public/data/images/'.$row->focus_img?>"/>
+                            <img data-rel="<?=img_url($row->small_img)?>"/>
+                        </figure>
+                    </td>
+					<td>
+                        <figure data-am-widget="figure" class="am am-figure am-figure-default "   data-am-figure="{  pureview: 'true' }">
+                            <i class="am-icon-file-image-o"></i>
+                            <img data-rel="<?=img_url($row->focus_img)?>"/>
                         </figure>
                     </td>
                     <td>

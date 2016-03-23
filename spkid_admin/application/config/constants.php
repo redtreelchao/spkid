@@ -341,8 +341,8 @@ define("KUAIDI100_URL", "http://www.kuaidi100.com/poll");
 define('SF_SHIPPING_ID', 2);   //顺丰ID
 define('SF_CHECKWORD', '24d5f7242a9644c5842832abacdb3bfd'); //顺丰的校验码
 define('SF_CUST_ID', '5720310679');     //寄件方客户卡号
-define('BBG_COMPANY', '悦牙网');    	//寄件方公司名称
-define('BBG_CONTACT', '悦牙网');      //寄件方联系人
+define('BBG_COMPANY', '爱牙网');    	//寄件方公司名称
+define('BBG_CONTACT', '爱牙网');      //寄件方联系人
 define('BBG_TEL', '4006 333 999');    //寄件方座机
 define('BBG_PROVINCE', '浙江省');     //寄件人所在省份
 define('BBG_CITY', '湖州市');         //寄件方所属城市

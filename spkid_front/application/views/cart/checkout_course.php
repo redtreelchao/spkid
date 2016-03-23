@@ -16,7 +16,7 @@
                          </ul> 
                          <ul class="course-contact clearfix">
                              <li>
-                             <div class="course-title"><?=$product->brand_name . ' ' . $product->product_name?></div>
+                             <div class="course-title"><a target="_blank" href="/product-<?php print $product->product_id; ?>.html"><?=$product->brand_name . ' ' . $product->product_name?></a></div>
                              <div class="course-jiangshi"><?=$product->subhead?></div>
                              <div class="course-shijian"><?php echo date("y.m.d", strtotime($product->package_name));?> <?php //if (isset($product_desc_additional['desc_waterproof'])) echo '-' . date("y.m.d", strtotime($product_desc_additional['desc_waterproof']))?>
                              </div>
@@ -50,7 +50,7 @@
           <!--
              <div class="send fill-cur">【成都】【预约报名】正畸课程实训落地实验课<p>讲师：赵廷旺<span>时间：2016/1/3</span></p><p>地点：成都</p></div>
           -->
-           <a href="#" class="submit-button fl-right" onclick="submit_cart();">提交按钮</a>
+           <a href="javascript:void(0);" class="submit-button fl-right" onclick="submit_cart();">确认提交</a>
       </div>
 </div>
 <!--cart-wrapper end-->

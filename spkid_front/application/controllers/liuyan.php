@@ -34,11 +34,10 @@ class Liuyan extends CI_Controller
 
 	public function liuyan_list()
 	{
-//		$this->load->library('memcache');
-		$comment_type=intval($this->input->post('comment_type'));
-		//该处处理当$comment_type == 2时就是取评价的时候，将所有商品相关的测评，评价都取出来
-		$com_type = ($comment_type == 2 ? 0 : $comment_type);
+		$comment_type=intval($this->input->post('comment_type'));		
+		//$com_type = ($comment_type == 2 ? 0 : $comment_type);
 
+		$com_type = $comment_type;
 		$tag_type=intval($this->input->post('tag_type'));
 		$tag_id=intval($this->input->post('tag_id'));
 		$page=intval($this->input->post('page'));
@@ -54,12 +53,14 @@ class Liuyan extends CI_Controller
 		$data = $this->liuyan_model->liuyan_list($param);
 		
 		switch ($comment_type) {
-			case 1:
-			case 2:
+			case 1:			
 			case 3:
 			case 4:			
+				$view = 'liuyan_list';
+				break;	
+			case 2:
 				$view = 'pingjia_list';
-				break;			
+				break;		
 			default:
 				$view = 'error';
 				break;
@@ -101,7 +102,7 @@ class Liuyan extends CI_Controller
 	    		sys_msg('咨询内容应包含汉字', 1);
 	    }
 	    
-	    if(mb_strlen($update['comment_content']) < 5 ){
+	    if(false && mb_strlen($update['comment_content']) < 5 ){
 		sys_msg('咨询内容至少为5个汉字', 1);
 	    }else if( mb_strlen($update['comment_content']) > 200 ) {
 		sys_msg('咨询内容至多为200个汉字', 1);
@@ -138,5 +139,28 @@ class Liuyan extends CI_Controller
 		    
 		    break;
 	    }
+    }
+
+    public function delete_liuyan() {
+    	$res = array('res' => 0, 'msg'=>'');
+    	
+    	if (!intval($this->user_id)) {
+    		$res['res'] = 1;
+    		$res['msg'] = '未登录';
+    		echo json_encode($res);exit();
+    	}
+    	$cid = trim($this->input->post('cid', true));
+    	
+    	$is_ok = $this->liuyan_model->delete($cid);
+
+    	if ($is_ok) {
+    		$res['res'] = 0;//成功删除
+    		$res['msg'] = '成功删除';
+    	} else {
+    		$res['res'] = 2;//数据库错误
+    		$res['msg'] = '数据库错误';
+    	}
+
+    	echo json_encode($res);exit();
     }
 }

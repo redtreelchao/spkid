@@ -72,7 +72,7 @@ function checkLogin(page,app,callback_str){
     success:function(res){
         if (!res.is_login){
 
-            var modal=app.yywLogin(false,'登录悦牙网',function(username, password){
+            var modal=app.yywLogin(false,'登录爱牙网',function(username, password){
 
                 $$.ajax({url:'/user/proc_login', method:'POST', dataType:'json', data:{username:username,password:password}, success:function(data){
                     if (1==data.error)

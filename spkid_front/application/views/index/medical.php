@@ -20,7 +20,7 @@
 <?php endforeach;?>
                </ul>
           </div>
-          
+ <!--         
           <div class="medical-information">
                <ul class="medical-xinxi clearfix">
                <div class="medical-tit">口腔执业考试动态</div>
@@ -52,7 +52,7 @@ foreach($article_list as $article):?>
                </ul>
           
           </div>
-     
+  -->   
      
           
           <div class="course-container kqjx">
@@ -114,7 +114,7 @@ foreach($article_list as $article):?>
 <script>
 $.ajax({
         url:'/index/course',
-            data:{page:1, expire:false, cid:<?php echo $pid?>},
+            data:{page:1, expire:0, cid:<?php echo $pid?>},
             dataType:'json',
             success:function(data){
                 if (data.course_list){
@@ -132,7 +132,7 @@ $(document).on("scroll", function(){
         //var expire = false;
         $.ajax({
         url:'/index/course',
-            data:{page:page, expire:false, cid:<?php echo $pid?>},
+            data:{page:page, expire:0, cid:<?php echo $pid?>},
             dataType:'json',
             success:function(data){
                 if (data.course_list){

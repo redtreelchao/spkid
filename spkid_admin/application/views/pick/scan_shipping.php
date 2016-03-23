@@ -6,7 +6,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="expires" content="Wed, 23 Aug 2006 12:40:27 UTC" />
     <base href="<?php print base_url(); ?>" target="_self" />
-    <title>悦牙网电子商务管理系统</title>
+    <title>爱牙网电子商务管理系统</title>
     <link rel="stylesheet" href="public/style/style.css" type="text/css" media="all" />
     <script type="text/javascript" src="public/js/jquery.js"></script>
     <script type="text/javascript">var base_url='<?php print base_url(); ?>';</script>

@@ -97,7 +97,7 @@
                                 <p style="text-align: left; font-size: 14px" class="dingdan_nr full_width"><i>非常感谢您在 http://www.yueyawang.com 购物，我们期待您的再次光临！</i></p>
                                 <div align="left" style="margin-top:20px;"><b>退货信息：</b><br>
                                 地址：上海市虹口区天宝路466弄9号建邦大厦1102&1103室<br>
-                                收件：悦牙网售后服务中心<br>
+                                收件：爱牙网售后服务中心<br>
                                 电话：021-65382798  4009905920
                                 </div>
 			</div>

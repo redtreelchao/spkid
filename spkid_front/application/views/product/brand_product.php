@@ -1,6 +1,6 @@
 <?php foreach($product_list as $product):?>
                          <li>
-                         <a href="#">
+                         <a href="/pdetail-<?php echo $product->product_id?>.html">
                          <div class="all-goods-img"><img src="<?php echo img_url($product->img_url)?>"></div>
                          <p class="all-goods-mc"><?php echo $product->product_name?></p>
                          <div class="all-goods-js"><?php echo $product->size_name?></div>

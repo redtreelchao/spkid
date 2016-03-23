@@ -18,37 +18,13 @@ class User extends CI_Controller
 	# 会员中心首页
 	public function index()
 	{
-		// $this->load->helper('order');
-                
-		// if(!$this->user_id) goto_login('user');
-		// $user_id=$this->user_id;
-		// $user_info = $this->user_obj->get_profile($user_id);
-		// $user_info->voucher_num = $this->user_model->user_voucher_num($user_id);	//现金券数
-  //       $user_info->order_num =$this->user_model->user_order_num($user_id);	//订单数量
-
-		// /** 会员等级*/
-        
-  //       /** 留言回复条数*/
-  //       $user_info->liuyan_return_num = $this->user_model->liuyan_num($user_id);
-
-  //       /** 是否完善个人信息*/
-
-  //       $user_info->arr_invite_rank_count = $this->user_model->user_point_log($user_id);
-
-  //       if (empty($user_info->arr_invite_rank_count))
-  //       {
-  //           $user_info->arr_invite_rank = $this->user_obj->get_user_rank_point($user_id);
-  //       }
-
-  //       // 验证送积分
-  //       $user_info->registerPoint = $this->user_obj->get_user_rank_point($user_id,'regist_point');
-
-        /** 订单
-        $this->load->model('order_model');
-        $order_list = $this->order_model->order_list(array('page_size'=>3),$user_id);
-        $order = $this->order_model->get_wait_pay_ing_order_num($user_id);
-        */
-
+        if ($this->user_obj->is_login())
+        {
+                $user_id = $this->session->userdata('user_id');
+        } else
+        {
+                goto_login('user/index');
+        }
         $data = array();
         $data['user_id']   = $this->session->userdata('user_id');
         $data['user_name'] = $this->session->userdata('user_name');
@@ -62,12 +38,14 @@ class User extends CI_Controller
         if($data['user_name'] != $mobile ) $security = 1;
         $data['security']  = $security;
 
+        $this->load->model('order_model');
+        $filter =array();
         //用户  待支付的订单
-        $data['wait_pay'] = 0;
+        $data['wait_pay'] = count($this->order_model->get_user_ordernum(6,$data['user_id']));
         //用户  待发货的订单
-        $data['await_goods'] = 0;
+        $data['await_goods'] = count($this->order_model->get_user_ordernum(7,$data['user_id']));
         //用户  待评价的商品
-        $data['evaluate_product'] = 0;
+        $data['evaluate_product'] = count($this->user_model->get_user_pingjia($data['user_id']));
         //用户  喜欢的商品
         $data['like_product'] = count($this->collect_model->collect_list($data['user_id']));    
 
@@ -116,6 +94,9 @@ class User extends CI_Controller
         $user_id = $this->user_id;
 		$this->session->set_userdata('advar', $advar);
         $this->user_model->update(array('user_advar' => $advar), $user_id);
+        $this->load->helper('cookie');
+        delete_cookie('v_advar');
+        $this->input->set_cookie("v_advar", $advar, time()+(60*60*2));
     }
 
     public function customers_center() {
@@ -417,12 +398,12 @@ class User extends CI_Controller
         if ($this->input->get_post('is_ajax'))
         {
             $data['content'] = $this->load->view('user/order',array(
-                                                                                            'user' =>$user_info,
-                                                                                            'order_list' => $order_list['list'],
-                                                                                            'filter' => $order_list['filter'],
-                                                                                            'full_page'=>FALSE,
-                                                                                            'order_status'=>$status,
-                                                                                    ), TRUE);
+                'user' =>$user_info,
+                'order_list' => $order_list['list'],
+                'filter' => $order_list['filter'],
+                'full_page'=>FALSE,
+                'order_status'=>$status), TRUE);
+
             $data['error'] = 0;
             $data['page_count'] = $order_list['filter']['page_count'];
             $data['page'] = $order_list['filter']['page'];
@@ -459,12 +440,12 @@ class User extends CI_Controller
         }
         unset($info['company_types']);
         $res = $this->user_model->update($info, $user_id);
-        //注册送积分
-        if (USE_REGIST_POINT && !$this->user_model->point_type_exists($user_id, 'regist_point'))
+        //完善个人资料赠送的积分
+        if (USE_DATA_POINT && !$this->user_model->point_type_exists($user_id, 'point_detail'))
         {
-            $point_amount = $this->user_obj->get_user_rank_point($user_id,'regist_point');
+            $point_amount = $this->user_obj->get_user_rank_point($user_id,'profile_point');
             if( $point_amount >0 ){// 0为暂时取消
-                $this->user_model->log_account_change($user_id, 0, $point_amount, $point_amount, '注册送积分', 'regist_point');
+                $this->user_model->log_account_change($user_id, 0, $point_amount, $point_amount, '完善个人资料赠送的积分', 'point_detail');
             }
         }
 			
@@ -741,41 +722,17 @@ class User extends CI_Controller
 		if ($this->user_obj->is_login())
 		{
 			$user_id = $this->session->userdata('user_id');
-		} else
-		{
+		}else{
 			redirect('/user/login');
 		}
-		$this->load->model('cart_model');
-		$user_info = $this->user_obj->get_profile($user_id);
 
 		/* 获得用户所有的收货人信息 */
 		$address_list = index_array($this->user_model->address_list($user_id),'address_id');
 
-        if (count($address_list) > 5)
-        {
-            /* 如果用户收货人信息的总数小于5 则增加一个新的收货人信息 */
-            $show_address_add = 0;
-        }
-        else {
-            $show_address_add = 1;
-        }
-        $checkout['shipping'] = array('address_id'=>0,'country'=>1,'province'=>0,'city'=>0,'district'=>0);
-        list($province_list,$city_list,$district_list) = $this->cart_model->cart_region($checkout['shipping']);
-
-        $address_id = $user_info->address_id;
-
-		$this->load->view('user/address',array(
-			'title' => '收货地址管理',
-			'user' =>$user_info,
-			'address_list' => $address_list,
-			'address_id' => $address_id,
-			'show_address_add' => $show_address_add,
-			'province_list' => $province_list,
-			'city_list' => $city_list,
-			'district_list' => $district_list,
-			'left_sel' =>12,
-			'full_page'=>TRUE
-		));
+        /* 获得城市信息 */
+        $this->load->model('region_model');
+        $province = $this->region_model->all_region(array('region_type'=>1, 'parent_id' => 1));
+		$this->load->view('user/address',array('address_list' => $address_list,'province' => $province));
 	}
 
 	public function address_edit()
@@ -1062,6 +1019,55 @@ class User extends CI_Controller
 			'full_page'=>TRUE
 		));
 	}
+        
+        public function my_liuyan()
+	{
+		if ($this->user_obj->is_login())
+		{
+			$user_id = $this->session->userdata('user_id');
+		} else
+		{
+			redirect('/user/login');
+		}
+		$user_info = $this->user_obj->get_profile($user_id);
+		$user_info->comment_point = $this->user_obj->get_user_rank_point($user_id,'comment_point');
+		$filter = array();
+		$page = trim($this->input->post('page'));
+                $data_type = intval($this->input->post('data_type'));
+                if (!$page) $page = 1;
+		if (!empty($page)) $filter['page'] = $page;
+                if (!$data_type) $data_type = 1;
+                if (!empty($data_type)) $filter['data_type'] = $data_type;
+
+		$filter = get_pager_param($filter);
+
+        $liuyan_list = $this->user_model->dianping_list2($filter,$user_id);
+
+		if ($this->input->post('is_ajax'))
+		{
+
+			$data['content'] = $this->load->view('user/liuyan',array(
+													'user' =>$user_info,
+													'liuyan_list' => $liuyan_list['list'],
+													'filter' => $liuyan_list['filter'],
+													'full_page'=>FALSE
+												), TRUE);
+			$data['error'] = 0;
+			$data['page_count'] = $liuyan_list['filter']['page_count'];
+			$data['page'] = $liuyan_list['filter']['page'];
+			echo json_encode($data);
+			return;
+		}
+
+		$this->load->view('user/liuyan',array(
+			'title' => '商品点评',
+			'user' =>$user_info,
+			'liuyan_list' => $liuyan_list['list'],
+			'filter' => $liuyan_list['filter'],
+			'left_sel' =>31,
+			'full_page'=>TRUE
+		));
+	}
 
 	public function load_dianping_panel()
 	{
@@ -1096,11 +1102,11 @@ class User extends CI_Controller
 
         $dianping_info = array();
         $user_name = $this->session->userdata('user_name');
-        $data['content'] = $this->load->view('user/product_dianping_panel',array(
+        /*$data['content'] = $this->load->view('user/product_dianping_panel',array(
 													'dianping_info' => $dianping_info,
 													'product_id' => $product_id,
                           'user_name' => $user_name
-												), TRUE);
+												), TRUE);*/
 		$data['error'] = 0;
 		echo json_encode($data);
 		return;
@@ -1136,10 +1142,10 @@ class User extends CI_Controller
 		}
 
 		$comment_content = trim($this->input->post('comment_content'));
-		$size_id = intval($this->input->post('size_id'));
-		$suitable = intval($this->input->post('suitable'));
-		$height = floatval($this->input->post('height'));
-		$weight = floatval($this->input->post('weight'));
+		//$size_id = intval($this->input->post('size_id'));
+		//$suitable = intval($this->input->post('suitable'));
+		//$height = floatval($this->input->post('height'));
+		//$weight = floatval($this->input->post('weight'));
 
 		if ( mb_strlen($comment_content)<5 )
 		{
@@ -1158,10 +1164,10 @@ class User extends CI_Controller
 		$liuyan['comment_content'] = $comment_content;
 		$liuyan['comment_date'] = date('Y-m-d H:i:s');
 		$liuyan['comment_ip'] = real_ip();
-		$liuyan['height'] = $height;
-		$liuyan['weight'] = $weight;
-		$liuyan['size_id'] = $size_id;
-		$liuyan['suitable'] = $suitable;
+		//$liuyan['height'] = $height;
+		//$liuyan['weight'] = $weight;
+		//$liuyan['size_id'] = $size_id;
+		//$liuyan['suitable'] = $suitable;
 		$comment_id = $this->user_model->insert_liuyan($liuyan);
 		if ($comment_id > 0)
 		{
@@ -1343,16 +1349,14 @@ class User extends CI_Controller
 		}
 		if(!$back_url=$this->session->userdata('back_url')){
 			$back_url=$this->input->server('HTTP_REFERER');
-			//if(strstr($back_url,'/user/login')===FALSE&&strstr($back_url,'/user/register')===FALSE)
-			//{
-				$this->session->set_userdata('referer_url',$back_url);
-			//}
+            if(strstr($back_url,'/user/forgot')===FALSE && strstr($back_url,'/user/register')===FALSE)
+            {
+                $this->session->set_userdata('referer_url',$back_url);
+            }
 		}
 
-		$user_id =  $this->session->userdata('user_id');
         $v_user_name =  $this->session->userdata('user_name');
-        $this->input->set_cookie("v_user_id",$user_id,time()+(60*60*2));  
-        $this->input->set_cookie("v_user_name",$v_user_name,time()+(60*60*2)); 
+        
         if (empty($back_url)) $back_url = 'index';
 	        $back_url = 'external:/'.$back_url;
 	        $this->load->vars(array('back_url' => $back_url));
@@ -1554,6 +1558,10 @@ class User extends CI_Controller
         //echo $this->session->userdata('user_id');
 
         if (empty($err_msg)) {
+            $v_user_name = $this->session->userdata('user_name');
+            $user_id = $this->session->userdata('user_id');
+            
+            
             $this->user_obj->update_user_info();
             if (!$back_url = $this->session->userdata('back_url')) {
                 $back_url = $this->session->userdata('referer_url');
@@ -1564,31 +1572,24 @@ class User extends CI_Controller
                 $back_url = site_url($back_url);
                 $this->session->unset_userdata('back_url');
             }
-            
-            $user_id =  $this->session->userdata('user_id');
-            /* v+ */
-            $v_user_name =  $this->session->userdata('user_name');
-            
-            $this->input->set_cookie("v_user_name",$v_user_name,time()+(60*60*2));  
-            /* v- */
+
 
             //登录 成功 将 该用户收藏的 商品 写入session
-			/*$collect_data  = $this->user_model->get_collect_info(array('user_id'=>$user_id));
-	    	if(isset($_SESSION['collect_'.$user_id])){
-				array_push($collect_data,$_SESSION['collect_'.$user_id]);
-			}
-			$this->session->set_userdata('collect_'.$user_id, $collect_data );
+            /*$collect_data  = $this->user_model->get_collect_info(array('user_id'=>$user_id));
+            if(isset($_SESSION['collect_'.$user_id])){
+                array_push($collect_data,$_SESSION['collect_'.$user_id]);
+            }
+            $this->session->set_userdata('collect_'.$user_id, $collect_data );
 
-			//登录 成功 将 该用户赞的 文章 写入session
-			$this->load->model('wordpress_model');
-	    	$praise_data = $this->wordpress_model->get_article_praise(array('user_id'=>$user_id,'type_source' => 'yyw_moblie'));
-	    	if(isset($_SESSION['praise_'.$user_id])){
-				array_push($praise_data,$_SESSION['praise_'.$user_id]);
-			}
-			$this->session->set_userdata('praise_'.$user_id, $praise_data);*/
+            //登录 成功 将 该用户赞的 文章 写入session
+            $this->load->model('wordpress_model');
+            $praise_data = $this->wordpress_model->get_article_praise(array('user_id'=>$user_id,'type_source' => 'yyw_moblie'));
+            if(isset($_SESSION['praise_'.$user_id])){
+                array_push($praise_data,$_SESSION['praise_'.$user_id]);
+            }
+            $this->session->set_userdata('praise_'.$user_id, $praise_data);*/
 
             die ( json_encode(array('error' => 0,'back_url'=>$back_url, 'user_name' => $this->session->userdata('user_name'), 'rank_name' => $this->session->userdata('rank_name'))) );
-            return ;
         } else {
             die ( json_encode(array('error' => 1, 'message' => $err_msg, 'name' => $name)) );
 
@@ -1628,8 +1629,8 @@ class User extends CI_Controller
         if (strtolower($auth_code) !=strtolower(trim($this->input->post('captcha')))) {
             $err_msg = "请输入正确的验证码！".$auth_code.'<>'.strtolower(trim($this->input->post('captcha')));
         }*/
-        //$param['user_name'] = trim($this->input->post('user_name'));
-        $param['mobile'] = $mobile = trim($this->input->post('mobile'));
+        //trim($this->input->post('user_name'));
+        $param['user_name'] = $param['mobile'] = $mobile = trim($this->input->post('mobile'));
         $param['password']  = $password = trim($this->input->post('password'));
         $mobile_code = $this->session->userdata("sending_mobile_code");
         //$param['email'] = trim($this->input->post('email'));
@@ -1654,7 +1655,6 @@ class User extends CI_Controller
             $name = 'password1';
         }
 
-
         if ($err_msg == '' && $this->user_obj->register($param) == FALSE)
         {
             $err_msg = "注册错误，请重试";
@@ -1670,6 +1670,7 @@ class User extends CI_Controller
         $this->session->sess_destroy();
         delete_cookie('v_user_id');
         delete_cookie('v_user_name');
+        delete_cookie('v_advar');
         //退出时购物车数量清0
         redirect("/index");
         /* 
@@ -2068,7 +2069,7 @@ class User extends CI_Controller
 			if (!preg_match('/^1[0-9]{10}$/', $mobile))
 				$err_msg = '手机号码不正确，请重新输入！';
 			elseif (!$this->user_obj->is_mobile_register($mobile)){
-				$err_msg = '您不是悦牙用户,请先注册!';
+				$err_msg = '您不是爱牙用户,请先注册!';
 			}
 		}
 
@@ -2119,13 +2120,18 @@ class User extends CI_Controller
             }
 
     }
+    public function reg_success(){
+        $mobile = $this->session->userdata('mobile');
+        $this->load->view('user/reg_success', array('mobile' => $mobile));
+    }
 
 	public function new_password()
 	{
         $step = $this->input->post('step');
         $mobile_code = $this->session->userdata("sending_mobile_code"); 
         if ('step2' == $step){
-            if (strtolower($mobile_code) !=strtolower(trim($this->input->post('authcode')))) {
+            $auth_code = strtolower(trim($this->input->post('authcode')));
+            if ('' == $auth_code || strtolower($mobile_code) != $auth_code) {
                 $err_msg = "手机验证码错误";
                 $name = 'authcode';
             } else {
@@ -3326,9 +3332,48 @@ class User extends CI_Controller
     	}
     	
 		$this->session->set_userdata('advar', $advar);
-        $res = $this->user_model->update(array('user_advar' => $advar), $user_id);    	
+        $res = $this->user_model->update(array('user_advar' => $advar), $user_id);    
+        $this->load->helper('cookie');
+        delete_cookie('v_advar');
+        $this->input->set_cookie("v_advar", $advar, time()+(60*60*2));
     	echo json_encode(array('uploaded' => $res,
     							'msg' => $this->upload->display_errors()));
     }
+
+    public function my_discussions() {
+    	//如果用户没有登录，就直接跳转
+    	if ($this->user_obj->is_login()) {
+    		$user_id = $this->session->userdata('user_id');
+    	} else {
+    		redirect('/user/login');
+    	}
+
+    	$data = array();
+		$this->load->model('liuyan_model');
+
+		$data['my_discussions'] = $this->liuyan_model->my_discussions(array('user_id'=>$user_id))['list'];		
+		
+		$this->load->view('user/my_discussions', $data);		
+    }
+
+    public function my_response() {
+        //如果用户没有登录，就直接跳转    	
+        if ($this->user_obj->is_login()) {
+            $user_id = $this->session->userdata('user_id');
+        } else {
+            redirect('/user/login');
+        }
+
+        $data = array();
+        $this->load->model('liuyan_model');
+
+        $response = $this->liuyan_model->my_discussions(array('user_id'=>$user_id, 'response'=>1));	
+        if ($this->input->is_ajax_request()) {
+            echo $response['filter']['record_count'];
+        } else {
+            $data['my_discussions'] = $response['list'];
+            $this->load->view('user/my_response', $data);		
+        }	
+    }    
 
 }

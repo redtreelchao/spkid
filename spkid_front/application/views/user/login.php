@@ -80,10 +80,9 @@ $('form[name="loginForm"]').on('submit', function(e){
             if (1 == data.error){
                 $('input[name='+data.name+']').parent().prev().text(data.message);
             }else if(0 == data.error) {
-                location.href = "/";
+                if( !data.back_url ) data.back_url ='/';
+                location.href = data.back_url;
             }
-		if( !data.back_url ) data.back_url ='/';
-		window.location=data.back_url;
         }
         })
     }

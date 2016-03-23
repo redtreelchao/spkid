@@ -27,7 +27,7 @@
     
         // Default Parameters
         app.params = {
-			prefixTitle:'悦牙网m.yueyawang.com ',
+			prefixTitle:'爱牙网m.yueyawang.com ',
             cache: true,
             cacheIgnore: [],
             cacheIgnoreGetParameters: false,

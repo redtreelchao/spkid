@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta http-equiv=Content-Type content="text/html;charset=utf-8">
-<title>悦牙网首页</title>
+<title>爱牙网首页</title>
 <link href="<?php echo static_style_url('pc/css/bootstrap.css?v=version')?>" rel="stylesheet" type="text/css" media="all">
 <link href="<?php echo static_style_url('pc/css/common.css?v=version')?>" rel="stylesheet" type="text/css">
 <link href="<?php echo static_style_url('pc/css/main.css?v=version')?>" rel="stylesheet" type="text/css">
@@ -26,7 +26,7 @@
                
               <div class="nav-lb">
                    <div class="nav-users">
-                        <a class="nav-user-icon" href="#"><img src="<?php echo static_style_url('pc/images/touxiang.jpg')?>"></a>
+                        <a class="nav-user-icon" href="/user/index.html"><img src="<?php echo static_style_url('mobile/touxiang/'.$user->user_advar)?>"></a>
                         <span class="nav-username"><?=$user->user_name?></span>
                    </div>
             </div>

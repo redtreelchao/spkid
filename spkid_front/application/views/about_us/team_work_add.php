@@ -4,7 +4,7 @@
     <div class="about-con">
         <p class="course-tit">首页>合作咨询</p>
         <ul class="about-list clearfix">
-            <li><a href="/about_us/about_us">关于悦牙网</a></li>
+            <li><a href="/about_us/about_us">关于爱牙网</a></li>
             <li><a href="/about_us/service">服务条款</a></li>
             <li><a href="/about_us/feedback">意见反馈</a></li>
             <li><a href="/about_us/sales_policy">售后政策</a></li>
@@ -13,7 +13,7 @@
         </ul>
         <div class="hezuohuoban clearfix">
             <div class="hezuoliucheng">
-                <div class="hzlc-tit wanshan-tit">完善以下信息即可与悦牙网合作：</div>
+                <div class="hzlc-tit wanshan-tit">完善以下信息即可与爱牙网合作：</div>
                 <div class="hz-properties">
                     <form method="post" action="#" name="team_Form">
                         <p class="hzsx">请选择合作属性：</p>
@@ -45,7 +45,7 @@
                     <p>合作流程</p>
                     <ul class="hzlc-teb">
                         <li>提交合作信息</li>
-                        <li>悦牙网致电合作方</li>
+                        <li>爱牙网致电合作方</li>
                         <li>确认合作</li>
                     </ul>
                 </div>
@@ -62,7 +62,7 @@
                 <h4 class="modal-title">提示</h4>
             </div>
             <div class="modal-body v-team-button">
-                <div><p>您的合作申请悦牙网已经收到，请耐心等待</p><p>客服将会与您联系</p></div>
+                <div><p>您的合作申请爱牙网已经收到，请耐心等待</p><p>客服将会与您联系</p></div>
                 <button class="btn btn-lg btn-blue" onclick="javascript:location.reload();" type="submit">确定</button>
             </div>
         </div>

@@ -50,7 +50,7 @@
                     <li>
                     <label class="text-label"><i>*</i><span class="addr-title">手机号码：</span></label>
                     <input type="text"  value="<?php print isset($shipping['mobile'])?$shipping['mobile']:''; ?>" class="text-filed" name="mobile">
-                    <br><span class="err_tip" id="mobile_err">不能为空</span>
+                    <br><span class="err_tip" id="mobile_err">不能为空或手机号不正确</span>
                     </li>
                     
                     <li>

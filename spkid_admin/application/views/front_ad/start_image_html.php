@@ -11,7 +11,7 @@
     <meta name="Keywords" content="<?php echo isset($keywords) ? $keywords : '';?>">
     <meta name="Description" content="<?php echo isset($description) ? $description : '';?>">
 	
-    <title><?php echo isset($title) ? $title : '悦牙网'?></title>
+    <title><?php echo isset($title) ? $title : '爱牙网'?></title>
     <link rel="stylesheet" href="<?php echo STATIC_HOST.'/mobile/css/framework7.material.css'?>">
     <link rel="stylesheet" href="<?php echo STATIC_HOST.'/mobile/css/main.css'?>">
 

@@ -245,7 +245,7 @@ $config['mcrypt_key'] = 'hello';
 | 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
 |
 */
-$config['sess_cookie_name']		= 'front_session';
+$config['sess_cookie_name']		= 'pc_front_session';
 $config['sess_expiration']		= 172800;
 $config['sess_expire_on_close']	= TRUE;
 $config['sess_encrypt_cookie']	= TRUE;
@@ -361,8 +361,12 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 //====================danger config begin=================================
+<<<<<<< HEAD
 define('FRONT_HOST', 'http://pc.redtravel.cn');
 $config['IMG_HOSTS']=array('http://img.redtravel.cn');
+=======
+$config['IMG_HOSTS']=array('http://img.test.com');
+>>>>>>> 5b0560c1be9de0263dd90382a057448287cf879f
 
 // memcache设置
 $config['memcache'] = array(

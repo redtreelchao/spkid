@@ -172,7 +172,7 @@ function filter_html_des($des){
     $html_reg = "/<\/?[^>]+>/i";
     $des = preg_replace( $html_reg, '', $des);
     $des = preg_replace("/&nbsp;|\r|\n|\s/i", '', $des);
-    $des = mask_str($des, 60, 0);
+    $des = mask_str($des, 40, 0);
     return $des;
 }
 

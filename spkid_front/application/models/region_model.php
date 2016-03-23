@@ -18,6 +18,7 @@ class Region_model extends CI_Model
 		return $query->row();
 	}
 
+	//PC
 	public function all_region ($filter)
 	{
 		$query = $this->_db->get_where('region_info',$filter);

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 <base href="<?php print base_url(); ?>" target="_self" />
-<title>悦牙网电子商务管理系统</title>
+<title>爱牙网电子商务管理系统</title>
 <script type="text/javascript">
 	//<![CDATA[
 	if(top.location != this.location){

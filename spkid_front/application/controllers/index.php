@@ -47,7 +47,14 @@ class Index extends CI_Controller
         } else {
             $courses = $this->product_model->get_course_list(1);
             $expire_courses = $this->product_model->get_course_list(1, true);
-            $this->load->view('index/course', array('courses' => $courses, 'expire_courses' => $expire_courses, 'index' => 3));
+            $data = array('courses' => $courses, 'expire_courses' => $expire_courses, 'index' => 3);
+
+            // 这里获取动态的seo
+            $this->load->library('lib_seo');
+            $seo = $this->lib_seo->get_seo_by_pagetag('pc_courses_index', array());
+            $data = array_merge($data, $seo);            
+
+            $this->load->view('index/course', $data);
         }
     }
     public function medical($cid = 113){
@@ -78,7 +85,7 @@ class Index extends CI_Controller
      * @param:导航id
      */
     public function index()
-    {
+    {        
         $data = array();
         $this->load->library('lib_ad');
         $this->config->load('global', true);
@@ -103,8 +110,8 @@ class Index extends CI_Controller
             if (empty($product_id)) {
                 continue;
             }
-
-            $p = $this->product_model->get_pc_index_product_info($product_id[1]);
+            $p = $this->_get_cache_product_info($product_id[1]);
+            //$p = $this->product_model->get_pc_index_product_info($product_id[1]);
             $p[0]->ad_code = $value->ad_code;
             $data['pc_hot_sale_product']['first']['items'][] = $p;
         }
@@ -121,7 +128,8 @@ class Index extends CI_Controller
                 continue;
             }
 
-            $p = $this->product_model->get_pc_index_product_info($product_id[1]);
+            //$p = $this->product_model->get_pc_index_product_info($product_id[1]);
+            $p = $this->_get_cache_product_info($product_id[1]);
             $p[0]->ad_code = $value->ad_code;
             $data['pc_hot_sale_product']['second']['items'][] = $p;
         }
@@ -140,7 +148,8 @@ class Index extends CI_Controller
                continue;
            }
 
-           $p = $this->product_model->get_pc_index_product_info($product_id[1]);
+           //$p = $this->product_model->get_pc_index_product_info($product_id[1]);
+           $p = $this->_get_cache_product_info($product_id[1]);
            $p[0]->ad_code = $value->ad_code;
            $data['pc_hot_sale_course']['first']['items'][] = $p;
        }
@@ -161,7 +170,8 @@ class Index extends CI_Controller
            if (isset($value->pic_url) && $value->pic_url) {
                $data['pc_remcommand_pro']['first']['col_pic_url'] = $value->pic_url;
            }
-           $p = $this->product_model->get_pc_index_product_info($product_id[1]);
+           //$p = $this->product_model->get_pc_index_product_info($product_id[1]);
+           $p = $this->_get_cache_product_info($product_id[1]);
            $p[0]->ad_code = $value->ad_code;
 
            $data['pc_remcommand_pro']['first']['items'][] = $p;
@@ -183,7 +193,8 @@ class Index extends CI_Controller
            if (isset($value->pic_url) && $value->pic_url) {
                $data['pc_remcommand_pro']['second']['col_pic_url'] = $value->pic_url;
            }
-           $p = $this->product_model->get_pc_index_product_info($product_id[1]);
+           //$p = $this->product_model->get_pc_index_product_info($product_id[1]);
+           $p = $this->_get_cache_product_info($product_id[1]);
            $p[0]->ad_code = $value->ad_code;
            $data['pc_remcommand_pro']['second']['items'][] = $p;
         }
@@ -204,7 +215,8 @@ class Index extends CI_Controller
                $data['pc_remcommand_course']['first']['col_pic_url'] = $value->pic_url;
            }
 
-           $p = $this->product_model->get_pc_index_product_info($product_id[1]);
+           //$p = $this->product_model->get_pc_index_product_info($product_id[1]);
+           $p = $this->_get_cache_product_info($product_id[1]);
            $p[0]->collect_num = $this->product_model->get_product_collect($product_id[1]);
            $p[0]->ad_code = $value->ad_code;
            $data['pc_remcommand_course']['first']['items'][] = $p;
@@ -223,7 +235,8 @@ class Index extends CI_Controller
                continue;
            }
 
-           $p = $this->product_model->get_pc_index_product_info($product_id[1]);  
+           //$p = $this->product_model->get_pc_index_product_info($product_id[1]);  
+           $p = $this->_get_cache_product_info($product_id[1]);
            $p[0]->ad_code = $value->ad_code;
            $data['pc_show_pro']['first']['items'][] = $p;
         }
@@ -240,10 +253,10 @@ class Index extends CI_Controller
        
         // 获取动态seo关键字
         $this->load->library('lib_seo');
-        $seo = $this->lib_seo->get_seo_by_pagetag('index');
+        $seo = $this->lib_seo->get_seo_by_pagetag('pc_index');
         $data = array_merge($data, $seo);      
         $data['index'] = 0;
-        //var_export($data);exit();
+        
         $this->load->view('index/index',$data);
         
         
@@ -493,5 +506,22 @@ class Index extends CI_Controller
         //var_export($data);exit;
         return $data;
     }  
+
+    function _get_cache_product_info($product_id) {
+        $cache_key = 'pc_index_product_info_' . $product_id;
+        $is_preview = intval(trim($this->input->get('is_preview')));
+
+        if ($is_preview == 1) {
+            $product_info = false;            
+        } else {
+            $product_info = $this->cache->get($cache_key);    
+        }    
+
+        if (!$product_info) {
+            $product_info = $this->product_model->get_pc_index_product_info($product_id);    
+            $this->cache->save($cache_key, $product_info, CACHE_TIME_PC_INDEX_PRODUCT_INFO);            
+        }
+        return $product_info;
+    }
       
 }

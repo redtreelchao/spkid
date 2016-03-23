@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <express size="300" width="556">
-	<siteName x="80" y="45">悦牙网</siteName>
+	<siteName x="80" y="45">爱牙网</siteName>
     <scity x="206" y="45">湖州</scity>
-    <company x="94" y="66">悦牙网电子商务</company>
+    <company x="94" y="66">爱牙网电子商务</company>
 	<companyPhone x="203" y="139">400-0966-021</companyPhone>
     <companyAddress x="50" y="108" width="300" wrapLength="18" indent="18">浙江省 湖州市 吴兴区七幸路999号 金泰科技4栋</companyAddress>	
     <orderSn x="187" y="-3" fontWeight="bold"/>
@@ -20,7 +20,7 @@
     <rcvTel x="473" y="145"/>
     <category x="96" y="180">牙科器材</category>
     <goodsnum x="96" y="200"/>
-    <sender x="100" y="246">悦牙网</sender>
+    <sender x="100" y="246">爱牙网</sender>
     <right x="334" y="197" fontWeight="bold">√</right>
     <balance x="548" y="180">√</balance>
     

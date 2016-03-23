@@ -83,10 +83,12 @@ class Article extends CI_Controller
         $is_ajax = $this->input->post('is_ajax');
         if (!$is_ajax)
             return false;
-        $post_id = $this->input->post('post_id');
-        $content = $this->input->post('content');
+        $data['comment_post_ID'] = $this->input->post('post_id');
+        $data['comment_content'] = $this->input->post('content');
+        $data['comment_parent'] = $this->input->post('comment_parent');
+        $data['yyw_user_id'] = $this->user_id;
         $this->load->model('wordpress_model');
-        $res = $this->wordpress_model->comment_article($post_id, $content, $this->user_id);
+        $res = $this->wordpress_model->comment_article($data);
         echo $res;
     }
 

@@ -16,6 +16,21 @@ function get_liuyan(tagType, tagId, comment_type, container) {
     success : function(data, status, xhr) {  
     	if (data.err == 0) {
     		container.html(data.html);
+            switch(comment_type) {
+                case 1: 
+                    if ($('.comment-count').length) {
+                        $('.comment-count').text(data.count);    
+                    };
+                    
+                break;
+                case 2:
+                    if ($('.goodscomment-count').length) {
+                        $('.goodscomment-count').text(data.count);    
+                    };
+                    
+                break;
+            }
+
     	} else {
     		alert('未知错误');
     	} 

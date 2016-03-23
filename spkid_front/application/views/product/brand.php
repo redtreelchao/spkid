@@ -5,13 +5,13 @@
 <!--course-bar start-->
 <div class="course-bar">
      <div class="all-exhibits">
-     <div class="exhibits-map">首页>全部展品><?php echo $brand->brand_name?></div>
+     <div class="exhibits-map"><a href="/">首页</a>&gt;<a href="/brand/lists">全部展品</a>&gt;<?php echo $brand->brand_name?></div>
           <div class="exhibits-int clearfix">
               <div class="exhibits-js">
 <img src="<?php echo img_url($brand->brand_logo)?>">
                    <p><?php echo $brand->brand_info?></p>
               </div>
-              <div class="exhibits-pic"><img src="<?php echo img_url($brand->brand_banner)?>"></div>
+              <div class="exhibits-pic"><?php if ('' != $brand->brand_banner):?><img src="<?php echo img_url($brand->brand_banner)?>"><?php endif;?></div>
           </div>
     </div>
     
@@ -23,20 +23,18 @@
              </ul>
              <div class="brand-list">
                    <ul class="all-goods-lb clearfix">
-<?php foreach($product_list as $product):?>
+<?php foreach($product_list as $product):
+if(1 == $product->price_show):?>
                          <li>
-                         <a href="#">
+                         <a href="/pdetail-<?php echo $product->product_id?>.html">
                          <div class="all-goods-img"><img src="<?php echo img_url($product->img_url)?>"></div>
                          <p class="all-goods-mc"><?php echo $product->product_name?></p>
                          <div class="all-goods-js"><?php echo $product->size_name?></div>
-<?php if($product->price_show):?>
-<div class="all-goods-price"><span>&yen;<?php echo $product->shop_price?></span><em>&yen;<?php echo $product->market_price?></em></div> 
-<?php else:?>
+
                          <div class="all-goods-price"><input name="" type="button" class="show-xunjia" value="询价"></div>
-<?php endif;?> 
                          </a>
                          </li>
-<?php endforeach?>                                                
+<?php endif;endforeach?>                                                
                      </ul>
              </div>
               

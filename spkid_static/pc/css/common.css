@@ -47,16 +47,33 @@ input,button,select,textarea{outline:none}/*去除chorme浏览器黄色蓝色输
 .logo img{ padding-top:5px;}
 .nav-right{ float:right; margin-top:20px;}
 .textbox{  display: inline-block; width:260px; height:35px; margin-right:20px; vertical-align: middle; position: relative; background-color: #fff; left: 0}
-.nav-search{ border:1px solid #909090; width:258px; height:33px}
+.nav-search{ border:1px solid #dfdfdf; width:258px; height:33px}
 .nav-search-input{ border:0;  margin-right: 39px; width: 250px; height:30px; line-height:30px; margin-left: 2px; padding-left:5px; color:#555; float:left;}
 .nav-search:hover { border:1px solid #999; }
 .search-ico{ background:url(../images/nav-ico.png) no-repeat; position: absolute; top:0; right:5px; display:block; width:25px; height:25px;cursor: pointer;}
 .nav-lb,.naver-login{ display:inline-block;}
 .naver-login{ padding-right:10px;}
-.nav-user{ background:url(../images/nav-ico.png) no-repeat -48px -5px ; height:35px; line-height:25px; display: inline-block; padding-left:28px; }
+.naver-login img{ vertical-align:middle;}
+.nav-user{height:35px; line-height:25px; display: inline-block;}
 .nav-lb a{ color:#333; text-decoration:none;}
 .nav-order{ border-left:solid 1px #b3b3b3; padding-left:15px; padding-right:15px; border-right:solid 1px #b3b3b3;}
 .nav-cart{ background:url(../images/nav-ico.png) no-repeat -232px -5px; height:35px; line-height:25px; display: inline-block; padding-left:28px;}
+
+@media screen and (max-width: 1180px) {
+.nav-search{
+    width: 170px;
+}
+.nav-search-input {
+    width: 156px;
+}
+}
+
+
+
+
+
+
+
 
 .nav-contentbox {
     left: 249px;
@@ -84,7 +101,7 @@ input,button,select,textarea{outline:none}/*去除chorme浏览器黄色蓝色输
 
 
 /*kun-autocomplete start*/
-.autocomplete { border:solid 1px #909090; border-top:none; max-height:300px; overflow-y:auto; position:absolute; z-index:999; background:#fff; top:33px; width:100%; left:-1px;}
+.autocomplete { -border:solid 1px #909090; border-top:none; max-height:300px; overflow-y:auto; position:absolute; z-index:999; background:#fff; top:33px; width:100%; left:-1px;}
 .autocomplete li { font-size:12px; color:#909090; padding-left:10px; height:30px; line-height:30px; cursor:pointer;}
 .autocomplete li:hover{ height:30px; line-height:30px; background-color:#f1f0f0;}
 
@@ -107,11 +124,11 @@ input,button,select,textarea{outline:none}/*去除chorme浏览器黄色蓝色输
 
 .nav-users{ padding:0 20px 0 0;}
 .nav-user-icon { height:18px; line-height:18px; position:relative; width:18px; top:5px;}
-.nav-user-icon img { border:0 none;  border-radius:50%; height:18px; width:18px;}
+.nav-user-icon img { border:0 none;  border-radius:50%; height:25px; width:25px;vertical-align: middle}
 .nav-username{ display:inline-block; vertical-align:bottom; padding-left:5px;}
 
 /*copyright start*/
-.copyright{ background-color:#c7c8cc; height:360px; width:100%; }
+.copyright{ background-color: #c7c8cc; bottom: 0; font-size: 12px; height: 360px; overflow: hidden; position: relative; width: 100%;z-index: 170;}
 .copyright-show{ margin:0 auto; height: 110px; max-width: 1000px; overflow: hidden; width: 100%; border-bottom:solid 1px #e1e2e6;}
 .copyright-lb{ margin: 0 auto; overflow: hidden;  width:975px !important;}
 .f-regular-list{ line-height: 134px; width: 1080px;}
@@ -215,7 +232,8 @@ input,button,select,textarea{outline:none}/*去除chorme浏览器黄色蓝色输
 .menu_items {
 	list-style:none;
 	padding:2px 0;	
-	margin-top:-10px;	
+	-margin-top:-10px;	
+	margin-left:15px;
 	width:120px;
 	position: absolute; z-index: 1000;
 }
@@ -228,7 +246,7 @@ input,button,select,textarea{outline:none}/*去除chorme浏览器黄色蓝色输
 }
 
 .menu_items li:hover{
-	background:rgba(255, 0, 0, 0.7);
+	background:#bebebe;
 	text-align:center;
 	margin-bottom:1px;
 	line-height: 2em;
@@ -239,13 +257,12 @@ input,button,select,textarea{outline:none}/*去除chorme浏览器黄色蓝色输
 
 .menu_items a {
 	text-decoration:none;
-	color:white;
+	color:white !important;
 	font-size:1em;
+	display: inline-block;
+	width:100%;
 }
 
-.dentist-chaochu > li > a > img {
-	max-height: 200px;
-}
 
 
 

@@ -59,9 +59,9 @@ $route['product-(.+)'] = 'product/course_info/$1.html';
 
 $route['tuan-(.+)'] = 'tuan/index/$1.html';
 $route['tuanDetail-(.+)'] = 'tuanDetail/info/$1.html';
-
+$route['search'] = 'search/index';
 //$route['brand-(.+)'] = 'product/brand/$1';
-$route['search'] = 'product/search';
+
 $route['searchResult'] = 'product/searchResult';
 //$route['pdetail-(\d+)'] = 'product/pdetail/$1.html';
 $route['prodetail-(\d+)'] = 'product/pdetail/$1.html';
@@ -78,5 +78,6 @@ $route['baby'] = '/index/index/24';
 $route['zhuanti/(:any)'] = 'zhuanti/index/$1';
 $route['temaiqu'] = '/product/temaiqu';
 $route['course_all'] = '/product/course_all';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

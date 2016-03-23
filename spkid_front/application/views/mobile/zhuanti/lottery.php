@@ -105,8 +105,8 @@ filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,fi
          <div class="draw-public">
               <div class="common">
                    <ul class="draw-list">
-                   <li><strong>参与人员</strong><span>11月16日15:00之前在悦牙网移动端注册，并完善个人信息的所有新老会员。</span></li>
-                   <li><strong>开奖时间</strong><span>11月16日下午16：00在悦牙网牙医朋友QQ 群（群号：463540166），全程直播抽奖，记得到时来围观哦。<span></li>
+                   <li><strong>参与人员</strong><span>11月16日15:00之前在爱牙网移动端注册，并完善个人信息的所有新老会员。</span></li>
+                   <li><strong>开奖时间</strong><span>11月16日下午16：00在爱牙网牙医朋友QQ 群（群号：463540166），全程直播抽奖，记得到时来围观哦。<span></li>
                    <li><strong>兑奖方式</strong><span>奖品在三个工作日内寄出。同等级奖项的奖品将随机寄送。<span></li>
                    </ul>
                    
@@ -139,10 +139,10 @@ filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,fi
                    <div class="hdgz"><a href="#" class="cjhd share-btn"></a></div>
                    
                    <ul class="code clearfix">
-                   <li><span>悦牙网服务</span><img src="<?php echo static_style_url('mobile/img/wechat-fwh.jpg')?>" width="100%" /></li>
+                   <li><span>爱牙网服务</span><img src="<?php echo static_style_url('mobile/img/wechat-fwh.jpg')?>" width="100%" /></li>
                    <li><span>萌妹子悦悦微信</span><img src="<?php echo static_style_url('mobile/img/mmz-yy.jpg')?>" width="100%" /></li>
                    <li><span>牙医QQ群</span><img src="<?php echo static_style_url('mobile/img/QQ-group.png')?>" width="100%" /></li>
-                   <li><span>微博悦牙网</span><img src="<?php echo static_style_url('mobile/img/weibo-ewm.png')?>" width="100%" /></li>
+                   <li><span>微博爱牙网</span><img src="<?php echo static_style_url('mobile/img/weibo-ewm.png')?>" width="100%" /></li>
                    </ul>
                    
                    
@@ -175,7 +175,7 @@ filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,fi
          <div class="draw-public">
               <div class="common">
                    <div class="fxyl"></div>
-                   <div class="jiang-lb"><strong>好东西要和朋友分享哦！朋友中奖，截图发到（萌妹子悦悦微信号yueyawang_V）</strong>悦牙网再送你<span>5000</span>积分，到你的个人中心账号！</div>
+                   <div class="jiang-lb"><strong>好东西要和朋友分享哦！朋友中奖，截图发到（萌妹子悦悦微信号yueyawang_V）</strong>爱牙网再送你<span>5000</span>积分，到你的个人中心账号！</div>
 <div class="share_modal hcenter">
 			<div class="jiathis_style_32x32">
 				<a class="jiathis_button_weixin"></a>
@@ -188,7 +188,7 @@ filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,fi
                    <div class="saosao"></div>
                    <p class = "zhoangjiang">中奖信息早知道，更多精彩等你来！</p>
                    <ul class="code2">
-                   <li><img src="<?php echo static_style_url('mobile/img/wechat-fwh.jpg')?>" width="100%" /><p>悦牙网服务号</p></li>
+                   <li><img src="<?php echo static_style_url('mobile/img/wechat-fwh.jpg')?>" width="100%" /><p>爱牙网服务号</p></li>
                    <li><img src="<?php echo static_style_url('mobile/img/mmz-yy.jpg')?>" width="100%" /><p>萌妹子 悦悦微信号</p></li>
                    </ul>
               </div>
@@ -206,7 +206,7 @@ filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,fi
 <div class="popover popover-gift">
 <div class="popover-angle"></div>
 <div class="popover-inner tck-public">
-     送个人中心专属空间，当天注册，当天拥有。世界很大，但我只想要一个属于我自己的温暖空间。送500积分，可以在悦牙网上消费使用，当天注册，当天送礼。
+     送个人中心专属空间，当天注册，当天拥有。世界很大，但我只想要一个属于我自己的温暖空间。送500积分，可以在爱牙网上消费使用，当天注册，当天送礼。
 </div>
 </div>
 <div class="popover popover-rule">
@@ -215,9 +215,9 @@ filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,fi
      <ul>
      <li>1、抽奖方式：电脑随机抽奖，允许从三等奖一直中到特等奖为止，如果这个月运气不错，赶紧注册啊。万一都中了呢? </li>
      <li>2、抽奖时间：11月16日，时间好特殊哟，是“要要一路发”的意思吗？” </li>
-     <li>3、抽奖直播①：11月16日下午16：00在悦牙网牙医朋友QQ 群（群号：463540166），全程直播抽奖，记得到时来围观哦。</li>
-     <li>4、抽奖直播②：11月16日下午16点在悦牙网新浪微博上直播（悦牙网微博号：悦牙网），如果加了关注，第一时间就可以通过新浪微博知道抽奖结果啦。 </li>
-     <li>5、抽奖结果通知：悦牙网微信服务号，悦牙网微博，萌妹子悦悦都会通知中奖用户。 </li>
+     <li>3、抽奖直播①：11月16日下午16：00在爱牙网牙医朋友QQ 群（群号：463540166），全程直播抽奖，记得到时来围观哦。</li>
+     <li>4、抽奖直播②：11月16日下午16点在爱牙网新浪微博上直播（爱牙网微博号：爱牙网），如果加了关注，第一时间就可以通过新浪微博知道抽奖结果啦。 </li>
+     <li>5、抽奖结果通知：爱牙网微信服务号，爱牙网微博，萌妹子悦悦都会通知中奖用户。 </li>
      <li>6、奖品将在抽奖后三个工作日内快递。</li>
      </ul>
 </div>
@@ -227,14 +227,14 @@ filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,fi
 <div class="popover-angle"></div>
 <div class="popover-inner tck-public">
  <p>好东西要和朋友分享哦！朋友中奖，你也有奖。</p> 
- <p>把本条信息或页面链接，发到你的朋友圈或者某个特定朋友，如果你朋友中奖了，无论任何等级的产品，凭你分享至微信朋友圈或朋友个人的截图私信发给我们的萌妹子（悦悦微信号：yueyawang_V），悦牙网再送你5000积分，到你的个人中心的账户！</p>
+ <p>把本条信息或页面链接，发到你的朋友圈或者某个特定朋友，如果你朋友中奖了，无论任何等级的产品，凭你分享至微信朋友圈或朋友个人的截图私信发给我们的萌妹子（悦悦微信号：yueyawang_V），爱牙网再送你5000积分，到你的个人中心的账户！</p>
 
 </div>
 </div>
 <div class="popover popover-face">
 <div class="popover-angle"></div>
 <div class="popover-inner tck-public">
-<p>1、官方中奖公告将于11月16日晚上8点，在手机悦牙网上，悦牙网微信公众号（悦牙网）上公布。赶紧关注悦牙网公众号哦，中奖消息早知道。 </p>
+<p>1、官方中奖公告将于11月16日晚上8点，在手机爱牙网上，爱牙网微信公众号（爱牙网）上公布。赶紧关注爱牙网公众号哦，中奖消息早知道。 </p>
 <p>2、中奖公告中会加每个中奖人的头像，姓名，手机号末四位，你一看就知道自己中奖。可以做分享到朋友圈财运好运转转！</p>
 </div>
 </div>

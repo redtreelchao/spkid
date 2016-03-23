@@ -10,6 +10,6 @@
     
 </head>
 <body>
-    <div class="footer">悦牙网电子商务管理系统</div>
+    <div class="footer">爱牙网电子商务管理系统</div>
 </body>
 </html>

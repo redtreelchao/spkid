@@ -14,6 +14,15 @@
 </script>
 
 <style>
+
+a.bds_more {
+	background: none !important;
+}
+
+.play-biaoti{ background-color:#000;}
+.play-cotent{ width: 1000px;margin: 0 auto; }
+
+h1, .h1, h2, .h2, h3, .h3 { margin-bottom:0; margin-top:0;}
 	.product-wrapper {
 		margin-top: -10px;
 	}
@@ -48,9 +57,6 @@
 		margin-left:1em;
 	}
 
-	.hot-video img {
-		width: 40%;
-	}
 
 	.video-wrapper {
 		border: 1px solid #E0DCDC;
@@ -79,108 +85,116 @@
 	}
 	.hot-video ul li {
 		margin-top:10px;
-	}
+    }
+
 
 </style>
+<div class="play-biaoti">
+    <div class="play-cotent"><?php echo $article->post_content?></div>
+     
+     
+</div>
+<div class="play-con">
+          <div class="play-title"><?php echo $article->post_title?></div>
+          <div class="play-xx clearfix">
+               <span class="play-mc"><?php echo $article->display_name;?></span>
+               <span class="play-mc"><?php echo $article->post_date?>上传</span>
+               <div class="video-tubiao video-tubiao2 clearfix"><span class="video-liul"><?php echo get_page_view('article',$article->post_id);?></span><span class="video-jt"><?php echo count($article->comments);?></span></div>
+               <div class="play-ico clearfix"><a href="#" class="play-heart" onclick="add_to_collect(<?php echo $article->post_id;?>,4,this);"></a>
+               <!-- <em>
+               <span class="bdsharebuttonbox" data-bd-bind=""><a href="#" class="bds_more" data-cmd="more"></a></span>
+               </em> -->
 
-<div class="product-wrapper">
-
-	<div class="video-wrapper">
-		<div class="video-play">
-			<div class="video-player">
-				<?php echo $article->post_content?>	
-			</div>		
-		</div>
-		<div class="video-info-wrapper">
-			<div class="video-info">
-				<h5><?php echo $article->post_title?></h5>
-				<div class="video-info-detail">
-					<span class="author_avator"></span>
-					<span><?php echo $article->display_name;?>(<?php echo $article->user_articles_num;?>)</span>
-
-					<span class="mgl1em"><?php echo $article->post_date?>发布</span>
-
-					<span class="mgl1em video-tubiao clearfix" style="display:inline-block"><span class="video-liul"><?php echo get_page_view('article',$article->post_id);?></span><span class="video-jt"><?php echo count($article->comments);?></span></span>
-
-					<span class="product-icon-bar mgl1em">
-						<span class="product-icon-box clearfix ">
-							<span class="product-icon like-icon" onclick="add_to_collect (<?php echo $article->post_id;?>,4,this);"></span>
-							<span class="product-icon share-icon">
-								<span class="bdsharebuttonbox bdshare-button-style0-32" data-bd-bind=""><a href="javascript:void(0)" class="bds_more" data-cmd="more"><i></i>分享</a></span>
-							</span>
-						</span>
-					</span> 
-					
-				</div>
-			</div>
-		</div>
-		
-	</div>
-	
-	<div class="product-content clearfix" style="min-height:900px">
-		<div class="product-part product-comment grey-bg">
-			<div class="product-part-box">
-				
-				<div class="product-line"></div>
-				<div class="product-comment grey-bg video-comment">
-					<form class="ct-form" name="ct-form" data-hostid="3179" data-committype="" data-hosttype="2">
-						<div class="clearfix liuyan-content">
-							<textarea name="liuyan" aria-required="true" placeholder="同学，你怎么看?"></textarea>
-						</div>
-						<div class="ct-submit">
-							<a type="" class="btn btn-primary btn-liuyan">提交</a>
-						</div>
-					</form>
-					<ul class="ct-list" id="ct-list-full">
-
-						
-
-					</ul>
-				</div>
-				<div class="hot-video">
-					<h5>热门视频</h5>
-					<ul>
-						<?php foreach ($hotvideos as $k => $v):?>
-							<li>
-								<a href="/video/detail/<?=$v->ID?>">
-									<img src="<?=$v->cover?>" alt="">
-									<span style="float:right;margin-right:1em;width:50%">
-									<div style="color:gray"><?php echo $v->post_title?></div>
-									<div style="margin-top:25px">							
-										<span class="mgl1em video-tubiao clearfix" style="display:inline-block"><span class="video-liul"><?php echo get_page_view('article',$v->ID);?></span><span class="video-jt"><?php echo $v->comment_count?></span></span>
-
-									</div>
-									</span>
-								</a>
-							</li>
-						<?php endforeach;?>
-						
-					</ul>
-
-				</div>
-			</div>
-		</div>
-	</div>
+               <div class="video-detail share-icon">
+               	<div class="bdsharebuttonbox"><a href="javascript:void(0)" class="bds_more" data-cmd="more"><i></i>分享</a></div>
+               </div>
+               </div>
+          </div>
+          
+     </div>
+<div class="wrap-mian wrap-min2">
+     <div class="play-con play-question">
+          <div class="int-evaluation">
+               <form data-hosttype="2" data-committype="" data-hostid="3179" name="ct-form" class="ct-form" method="POST " action="/api/comment/add">
+                     <div class="clearfix"><textarea placeholder="您怎么看？" aria-required="true" name="comment" style="height:90px;"></textarea></div>
+                     <div class="ct-submit" style="display: none;">
+                          <span class="ct-count">还能输入<em>150</em>字</span>
+                          <button class="btn btn-liuyan btn-blue" type="submit">提交</button>
+                    </div>
+               </form>
+               <ul id="ct-list-full" class="ct-list">
+                   <?php foreach ($article->comments as $comment):?> 
+                   <li class="clearfix">
+                       <div class="avatar">
+<?php if(isset($comment['user_advar'])):?>
+<img src="<?php echo static_url('mobile/touxiang/'.$comment['user_advar'])?>"/>
+<?php else:?>
+<img src="<?php echo static_url('mobile/touxiang/default.png')?>"/>
+<?php endif;?></div>
+                       <div class="cont">
+                            <div class="ut"><span class="uname text-overflow "><?php echo ($comment['comment_author']=="") ? '匿名' : $comment['comment_author'];?></span><span class="date"><?php echo $comment['comment_date'];?></span></div>
+<?php if ('' != $comment['parent_content']):?>
+                            <div class="quote">
+                                <div class="uname"><span>@<?php echo ($comment['parent_author']=="") ? '匿名' : $comment['parent_author']?></span></div>
+                               <div class="qct"><?php echo $comment['parent_content']?></div>
+                            </div>
+<?php endif;?>
+                           <div class="ct"><?php echo $comment['comment_content']?></div>
+                           <div class="tb"><a at_comment_id="<?php echo $comment['comment_ID']?>" href="#">回复</a></div>
+                      </div>
+                 </li>
+<?php endforeach?>
+             </ul>
+           
+           
+         </div>
+         
+       <div class="hot-video">
+              <div class="hot-title">热门视频</div>
+              <ul id="videoHotBox">
+<?php foreach ($hotvideos as $k => $v):?>                        
+            <li class="hot-video-list clearfix">
+                  <a href="/video/detail/<?=$v->ID?>" data-id="273" class="hot-video-play">
+                  <img src="<?php echo $v->cover?>">
+                  <div class="time">02:54</div>
+                  <div class="scan-linear-mask"></div>
+                  <div class="play-mask">
+                       <div class="play-btn"></div>
+                  </div>
+                 </a>
+                <div class="hot-video-info">
+                     <h3><?php echo $v->post_title?></h3>
+                     <div class="video-tubiao video-tubiao3 clearfix"><span class="video-liul"><?php echo get_page_view('article',$v->ID);?></span><span class="video-jt"><?php echo $v->comment_count?></span></div>
+               </div>
+            </li>
+<?php endforeach;?>
+           </ul>        
+      </div>
+     </div>
 </div>
 
 <script>
-	var tag_id = '<?php echo $article->post_id?>';
-	var user_id = '<?php echo $user_id;?>';			
-	$(function(){	
+	var post_id = '<?php echo $article->post_id?>';
+$(function(){
+    $('.ct-form').find("textarea").css('height', '42px');    
+    //$('.ct-submit').hide();
 		
-		get_liuyan(4, tag_id, 1, $('#ct-list-full'));
-
-		$('.ct-form').find("textarea").focus(function() {
-            "" === $(this).val() && ($(this).stop().animate({height: "90px"}), $(this).parent().next().show())
-        });
-        $('.ct-form').find("textarea").blur(function() {
-            var t = $(this);
-            setTimeout(function() {
-                "" === t.val() && (t.stop().animate({height: "42px"}), t.parent().next().hide())
-            }, 300)
-        });
-
-
+    $('.ct-form').find("textarea").focus(function() {
+                        "" === $(this).val() && ($(this).stop().animate({height: "90px"}), $(this).parent().next().show())
+                    });
+		        $('.ct-form').find("textarea").blur(function() {
+		            var t = $(this);
+		            setTimeout(function() {
+		                "" === t.val() && (t.stop().animate({height: "42px"}), t.parent().next().hide())
+		            }, 300)
+		        });
+$('.ct-form textarea').on('input propertychange', function(){
+    var count = 150-$(this).val().length;
+    if (0 == count){
+        $(this).attr('readonly', 'readonly');
+    }
+    $('.ct-count>em').html(count);
+})
 
         $(".ct-list").delegate(".tb a", "click", function(t) {
             t.preventDefault(), t.stopPropagation();
@@ -208,33 +222,17 @@
 		        alert('留言不能为空');
 		        return false;
 		    };
-		    
-		    $.ajax({
-		        url : '/liuyan/proc_zixun',
-		        type : 'POST',
-		        dataType : "json",
-		        data : {
-		            comment_type : 1,//代表咨询
-		            tag_type : 4,//代表视频
-		            tag_id : tag_id,
-		            comment_content : content,
-		            at_comment_id: at_comment_id
-		        },
-		        success : function(data, status, xhr) { 
-		            if (data.err == 0) {
-		            	//4表示是视频
-		            	//1表示是留言
-		            	get_liuyan(4, tag_id, 1, $('#ct-list-full'));
-		            };
-					alert(data.msg,( data.err == '0' )?'恭喜':'抱歉'); 
-					return false;
-		        },
-
-		        error : function(xhr, status) {
-		            //alert('数据请求错误');
-		            return false;
-		        }
-		    });
+            $.ajax({
+            url:'/article/comment',
+                data:{is_ajax:true,post_id:post_id,content:content,comment_parent:at_comment_id},
+                //dataType:'json',
+                type:'POST',
+                success:function(result){
+                    if(result){
+                        location.reload();
+                    }
+                }
+            })
 		    textarea.stop().animate({height: "42px"}), textarea.parent().next().hide();
 		    textarea.val('');
 		    e.preventDefault();
@@ -345,27 +343,6 @@
 	with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=86835285.js?cdnversion=' + ~(-new Date() / 36e5)];
 </script>
 
-<script>
-	$(function(){
-		function relayout() {
-			var left = $('.video-comment').offset().left + $('.video-comment').width();
-			var top2 = $('.video-comment').offset().top;
-			$('.hot-video').css({
-				position:'absolute',
-				left: left + 'px',
-				top:top2 + 'px',
-				zIndex:999999,
-				width:250 + 'px',
-				marginLeft:'1em'
-			});
-		}
-		
-		relayout();
 
-		$(window).resize(function(){
-			relayout();
-		});
-	});	
-</script>
 
 <?php include_once(APPPATH . "views/common/footer.php");?>

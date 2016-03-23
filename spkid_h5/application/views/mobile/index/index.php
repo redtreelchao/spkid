@@ -24,7 +24,7 @@
 	</div>
 </div>
 <div class="views">
-<!-- 悦牙商城-->
+<!-- 爱牙商城-->
 <div class="view view-main" data-page="<?=$active_tab?>">
 
     <div class="toolbar tabbar-labels tabbar">
@@ -41,7 +41,7 @@
 		<div data-page="index" class="page<?php if ($active_tab!='index') echo ' cached';?>">
                    <div class="navbar">
                          <div class="navbar-inner">
-                              <div class="left" style="padding-left:10px; font-size:14px;">悦牙商城</div>
+                              <div class="left" style="padding-left:10px; font-size:14px;">爱牙商城</div>
                               <div class="center"><a href="/product/search" class="index-box external"></a></div>
                               <div class="item-hide"><H1>国内专业牙科材料，齿科材料，口腔材料一战式展销平台</H1></div>
                               <div class="right">
@@ -180,7 +180,7 @@ foreach($index_good as $good):?>
                                                 <?php 
 $now = date('Y-m-d H:i:s');
     if($course['is_promote'] && $now >= $course['promote_start_date'] && $now <= $course['promote_end_date']):?>
-                                                <p class="l-sale1">通过悦牙报名 立减&nbsp;&yen;<?=$course['shop_price'] - $course['promote_price']?></p>
+                                                <p class="l-sale1">通过爱牙报名 立减&nbsp;&yen;<?=$course['shop_price'] - $course['promote_price']?></p>
                                                 <?php endif; ?>
                                             </div>
                                         </div>

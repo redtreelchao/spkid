@@ -296,18 +296,20 @@ class Pay extends CI_Controller
             }
             $payment_money = min($unpay_price, $total_price);
             $total_price -= $payment_money;
-
-            $this->order_model->insert_payment(array(
-                'order_id' => $order->order_id,
-                'pay_id' => PAY_ID_ALIPAY,
-                'is_return' => 0,
-                'payment_account' => trim($post['buyer_email']),
-                'payment_money' => $payment_money,
-                'trade_no' => trim($post['trade_no']),
-                'payment_date' => $this->time,
-                'payment_remark' => $type
-            ));
-            $this->order_model->update(array('paid_price' => round($order->paid_price + $unpay_price, 2)), $order->order_id);
+            if($type != 'return') {
+            	$this->order_model->insert_payment(array(
+            	    'order_id' => $order->order_id,
+            	    'pay_id' => PAY_ID_ALIPAY,
+            	    'is_return' => 0,
+            	    'payment_account' => trim($post['buyer_email']),
+            	    'payment_money' => $payment_money,
+            	    'trade_no' => trim($post['trade_no']),
+            	    'payment_date' => $this->time,
+            	    'payment_remark' => $type
+            	));
+            	$this->order_model->update(array('paid_price' => round($order->paid_price + $unpay_price, 2)), $order->order_id);	
+            }
+            
             
             $genre_id = $order->genre_id;
             $arr_order[$order->order_id] = $order;

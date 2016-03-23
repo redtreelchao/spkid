@@ -76,7 +76,7 @@
                           <div class="home-rank-img-wp"><img src="<?php echo img_url($v[0]->img_url)?>"></div>
                           <div class="home-rank-pro-title"><?php echo $v[0]->product_name;?></div>
                           <div class="home-nr"><?php echo $v[0]->ad_code;?></div>
-                          <div class="home-rank-price">悦牙优享:<span>￥<?php echo $v[0]->shop_price?></span><em><?php echo $v[0]->market_price?></em></div>
+                          <div class="home-rank-price">爱牙优享:<span>￥<?php echo $v[0]->shop_price?></span><em><?php echo $v[0]->market_price?></em></div>
                        </a>
                     </li>
                   <?php endforeach;?>
@@ -91,50 +91,18 @@
             <?php foreach($pc_hot_sale_course['first']['items'] as $k => $v):?>   
 
               <li class="<?php $class = array('home-rank-ft', 'home-rank-second', 'home-rank-third');echo $class[$k];?>">
-                 <a href="/pdetail-<?php echo $v[0]->product_id;?>" target="_blank">
+                 <a href="/product-<?php echo $v[0]->product_id;?>" target="_blank">
                     <div class="home-rank-img-wp"><img src="<?php echo img_url($v[0]->img_url)?>"></div>
                     <div class="home-rank-pro-title"><?php echo $v[0]->product_name;?></div>
                     <div class="home-nr"><?php echo $v[0]->ad_code;?></div>
-                    <div class="home-rank-price">悦牙优享:<span>￥<?php echo $v[0]->shop_price?></span><em><?php echo $v[0]->market_price?></em></div>
+                    <div class="home-rank-price">爱牙优享:<span>￥<?php echo $v[0]->shop_price?></span><em><?php echo $v[0]->market_price?></em></div>
                  </a>
               </li>
             <?php endforeach;?>
         </ul>
     </div>
  </li>
-<!--
- <li>
-  <div class="home-rank-title  home-rank-comment"></div>
-       <div class="home-rank-overflow">
-             <ul class="home-rank-devlist clearfix">
-                 <li class="home-rank-ft">
-                    <a href="#" target="_blank">
-                       <div class="home-rank-img-wp"><img src="images/dentist4.jpg"></div>
-                       <div class="home-rank-pro-title">深圳牙医论坛讨论大会</div>
-                       <div class="home-nr">开班日期：2016/1/6</div>
-                       <div class="home-rank-price">悦牙优享:<span>￥499</span><em>￥3000/套</em></div></a>
-                    </a>
-                </li>
-               <li class="home-rank-second">
-                   <a href="#" target="_blank">
-                      <div class="home-rank-img-wp"><img src="images/dentist5.jpg"></div>
-                       <div class="home-rank-pro-title">深圳牙医论坛讨论大会</div>
-                       <div class="home-nr">开班日期：2016/1/6</div>
-                       <div class="home-rank-price">悦牙优享:<span>￥499</span><em>￥3000/套</em></div></a>
-                  </a>
-             </li>
-             <li class="home-rank-third">
-                 <a href="#" target="_blank">
-                    <div class="home-rank-img-wp"><img src="images/dentist`jpg"></div>
-                    <div class="home-rank-pro-title">深圳牙医论坛讨论大会</div>
-                    <div class="home-nr">开班日期：2016/1/6</div>
-                    <div class="home-rank-price">悦牙优享:<span>￥499</span><em>￥3000/套</em></div></a>
-                </a>
-            </li>
-           </ul>
-      </div>
-  </li>
--->
+
 </ul>
 
 <ul class="home-rank-icon">
@@ -296,7 +264,7 @@
 <div class="cooperation">
      <ul class="cooperation-list">
          <?php echo $brand_list[0]->ad_code?>
-         <li class="cooperation-text"><a href="/about_us/team_work"><div>+</div>申请合作</a></li>
+         
     </ul>
 </div>
 <!--cooperation-end-->
@@ -308,7 +276,6 @@
 
 	
 
-</script>
 <script type="text/javascript">
 
 

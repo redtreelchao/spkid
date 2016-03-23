@@ -27,8 +27,12 @@
 				<td class="item_input">
                     <select name="focus_type">
                         <?foreach($focus_type as $key=>$val):?>
+<?php if ($key == $search_type):?>
+<option value="<?=$key?>" selected="selected"><?=$val?></option>
+<?php else:?>
                             <option value="<?=$key?>"><?=$val?></option>
-                        <?endforeach?>
+<?php endif;?>
+                        <?endforeach?>                        
                     </select>
                 </td>
 			</tr>

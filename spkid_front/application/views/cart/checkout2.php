@@ -1,5 +1,20 @@
 ﻿<?php include APPPATH."views/common/header2.php"; ?>
-
+<style>
+.cartlist .cartlb li {
+    display: inline-block;
+    margin-right: 0px;
+    width: 180px;
+    text-align: center;
+}
+.cartlist .cart-main .goods-price { text-align: center; color:#f75555; font-size:14px;}
+.cartlist .cart-main .goods-price2{ width:160px;}
+.cartlist .cart-main .counter { width:207px;text-align: center;}
+.cartlist .cart-main .goods-money { text-align: center; width:160px; color:#f75555;}
+.cartlist .cart-main .goods-info .goods-desc {
+    margin-left: 8px;
+    width: 112px;
+}
+</style>
 <!--choose-shipping start-->
 <div class="cart-wrapper">
     <div class="gwc-wrapper">
@@ -50,9 +65,10 @@
           <div class="home-wrapper none-bottom">
                 <div class="cartlist">
                          <ul class="cartlb clearfix">
-                             <li><span class="goods-name">商品信息</span></li>
-                             <li class="goods-price">单价</li>
-                             <li><span class="goods-num">数量</span><span class="goods-money">小计</span></li>
+                             <li>商品信息</li>
+                             <li>单价</li>
+                             <li>数量</li>
+			     <li>小计</li>
                          </ul> 
                          <ul class="cart-main clearfix">
                              <!--购物车有内容的时候开始-->
@@ -60,9 +76,9 @@
                              <?php foreach ($provider['product_list'] as $product): ?>
                              
                              <li class="goods-first bulky">
-                                 <div class="item-table">
-                                       <a class="goods-info goods-info2" target="_blank" href="#">
-                                       <div class="goods-img item-table"><img src="<?php print img_url($product->img_url); ?>.85x85.jpg"/></div>
+                                 <div class="item-table" style="width:180px;">
+                                       <a class="goods-info goods-info2" target="_blank" href="/pdetail-<?=$product->product_id?>.html">
+                                       <div class="goods-img item-table"><img src="<?php print img_url($product->img_url); ?>.85x85.jpg" style="margin-left: 5px;"/></div>
                                        <div class="goods-desc item-table">
                                             <p class="goods-name"><?php print $product->product_name; ?></p>
                                             <p class="goods-attr"><span><?php print $product->size_name; ?></span></p>
@@ -73,7 +89,7 @@
                                 <div class="goods-price item-table goods-price2"><span>￥<em class="bprice"><?php print fix_price($product->product_price); ?></em></span></div>
                                 
                                 <div class="counter item-table">
-                                    <div class="counter-wrapper fl-right shuliang">
+                                    <div class="counter-wrapper">
                                          <?php print $product->product_num; ?>
                                     </div>
 	                          </div>
@@ -108,7 +124,7 @@
 <!--promo-code start-->
 <div class="home-wrapper no-bottom" >     
      <div class="coupon-box">
-          <div class="use-coupons"><div class="promo-code" onclick="openShutManager(this,'coupon-box-code',false,'-','+')">+</div>悦牙网优惠<span class="coupon-box-title-tip"></span></div>        
+          <div class="use-coupons"><div class="promo-code" onclick="openShutManager(this,'coupon-box-code',false,'-','+')">+</div>爱牙网优惠<span class="coupon-box-title-tip"></span></div>        
           <div id="coupon-box-code" class="coupon-box-code" style="display: none;">
               <?php if(empty($voucher_list)): ?> 
               <div class="coupon-list-no-coupon">对不起，您没有可用优惠券</div>
@@ -185,7 +201,7 @@
 <!--send start-->
 <div class="home-wrapper clearfix">
      <div class="send">寄送至：<?=$default_address->province_name?>  <?=$default_address->city_name?>  <?=$default_address->district_name?><?=$default_address->address?><p>收货人：<?=$default_address->consignee?>  <?php echo (!empty($default_address->mobile))? $default_address->mobile : $default_address->tel;?></p></div>
-     <a href="#" class="submit-button fl-right" onclick="submit_cart();">提交按钮</a>
+     <a href="#" class="submit-button fl-right" onclick="submit_cart();">提交</a>
 </div>
 <!--send end-->
 
@@ -194,6 +210,22 @@
 
 </div>
 <!-- 地址添加弹层结束 -->
+
+<!--限制增加收货地址-->
+<div id="limit-box" class="modal v-pov" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header v-close">
+                <button type="button" class="close triangle-topright" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">收货地址已满，请修改或删除收货地址</h4>
+            </div>
+            <div class="modal-body v-button">
+                <button class="btn btn-lg btn-blue" type="submit" data-dismiss="modal">确定</button>             
+                <button class="btn cancel" type="submit" data-dismiss="modal">取消</button>              
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--发票弹出框-->
 <div id="invoice" class="modal v-pov" tabindex="-1" role="dialog" aria-hidden="true">
@@ -256,7 +288,7 @@
                            <div class="v-button hu-button">
                                   <button class="btn btn-lg btn-blue save_invoice" type="submit">保存</button>
                                   <button class="btn cancel" type="submit" data-dismiss="modal">取消</button>
-                                  <p class="wxts">温馨提示：发票金额不含悦牙网积分，优惠券，现金券部分</p>
+                                  <p class="wxts">温馨提示：发票金额不含爱牙网积分，优惠券，现金券部分</p>
                            </div>
                            
                            
@@ -278,7 +310,7 @@
                              <div class="v-button hu-button2">
                                   <button class="btn btn-lg btn-blue save_invoice" type="submit">保存</button>
                                   <button class="btn cancel" type="submit" data-dismiss="modal">取消</button>
-                                  <p class="wxts">温馨提示：发票金额不含悦牙网积分，优惠券，现金券部分</p>
+                                  <p class="wxts">温馨提示：发票金额不含爱牙网积分，优惠券，现金券部分</p>
                             </div>
                           
                         
@@ -298,6 +330,7 @@
 var v_cur_coupon = '<?php if(!empty($payment['voucher'])){$key = array_keys($payment['voucher']); echo $payment['voucher'][$key[0]]->voucher_sn;}?>';
 var v_rec_ids = '<?=$rec_ids?>';
 var v_shipping_id = '<?=$shipping['shipping_id']?>';
+var v_address_id = '0';
 //click是鼠标点击事件  removeClass是移除样式 addClass是添加样式
 $(document).on('click', '.invoice-fl .hover', function (e) {
     if (!$(this).hasClass('btn-hover')){        
@@ -416,7 +449,7 @@ $("#use_coupon").click(function(){
     }
 });
 
-$(document).on('click', '.btn-hover .coupon_del', function (e) {
+$(document).on('click', '.coupon_del', function (e) {
     var _this = $(this);
     var v_coupon_code = _this.attr('sid');
     remove_voucher(v_coupon_code, 2, _this);
@@ -677,13 +710,17 @@ function load_district() {
 }
 
 //选择物流公司
-$(document).on('click', '.express-xz span', function (e) {
+$(document).on('click', '.express-xz span.i-radio', function (e) {
     $('.express-xz span').removeClass('checked');
     $(this).addClass('checked');
     var id = $(this).attr('data-id');
     v_shipping_id = id;
-    //var address_id = $(".address_list .default").attr('id');
-    //v_address_id = parseInt(address_id.replace(/address/, ''));
+    var address_id = $(".address_list .default").attr('id');
+    if (address_id == undefined) {
+        alert('请选择地址');
+	return false;
+    }
+    v_address_id = parseInt(address_id.replace(/address/, ''));
     get_shipping_fee();
 });
 
@@ -725,6 +762,11 @@ function submit_cart() {
     // 检查支付方式
     var pay_id = default_pay_id;
     var address_id = $(".address_list .default").attr('id');
+    if (address_id == undefined){
+        alert('请选择地址！');
+	return false;
+    }
+
     address_id = parseInt(address_id.replace(/address/, ''));    
     if(!address_id){
         alert('请选择收货地址');

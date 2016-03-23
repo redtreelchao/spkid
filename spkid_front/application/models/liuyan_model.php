@@ -17,6 +17,11 @@ class Liuyan_model extends CI_Model
 		return $this->_db->insert_id();
 	}
 
+	public function delete($cid) {	
+		//该项为逻辑删除			
+		return $this->_db->update('product_liuyan', array('is_del'=>1), "comment_id = $cid");
+	}
+
 	public function newest_liuyan($filter)
 	{
 		$where='';
@@ -61,7 +66,7 @@ class Liuyan_model extends CI_Model
 				LEFT JOIN ".$this->_db->dbprefix('user_rank')." AS r ON u.rank_id=r.rank_id
 				LEFT JOIN ".$this->_db->dbprefix('product_size')." AS s ON s.size_id = l.size_id
 				";
-		$where = "WHERE  l.is_audit=1 AND l.is_del=0";
+		$where = "WHERE l.is_del=0";
 
 		if(!empty($filter['comment_type'])) $where.=" AND l.comment_type='{$filter['comment_type']}' ";
 		if(!empty($filter['tag_type'])) $where.=" AND l.tag_type='{$filter['tag_type']}' ";
@@ -101,5 +106,101 @@ class Liuyan_model extends CI_Model
        	}
        	//exit(json_encode($list));
        	return array('filter'=>$filter,'list'=>$list);
+	}
+
+	public function my_discussions($filter) {
+		/*连表查询
+			select a.comment_content, b.comment_content from ty_product_liuyan a
+			inner JOIN ty_product_liuyan b 
+			on a.comment_id = b.at_comment_id
+			where a.user_id = 18 
+		*/
+
+		$filter['page_size'] = 5;
+		$filter['record_count'] = 0;
+		$filter['page_count']=0;	
+		
+		$select = "SELECT l.user_name AS admin_user_name,l.comment_id,l.comment_title, l.at_comment_id,p.product_name,p.product_id,p.genre_id,
+				l.comment_content,l.reply_content,l.comment_date,l.reply_date,l.weight,
+				l.height,l.suitable,l.user_id,u.user_name,u.rank_id,u.user_advar, r.rank_name,s.size_name";
+		$from = "FROM ".$this->_db->dbprefix('product_liuyan')." AS l
+				LEFT JOIN ".$this->_db->dbprefix('user_info')." AS u ON u.user_id = l.user_id
+				LEFT JOIN ".$this->_db->dbprefix('user_rank')." AS r ON u.rank_id=r.rank_id
+				LEFT JOIN ".$this->_db->dbprefix('product_size')." AS s ON s.size_id = l.size_id
+				LEFT JOIN ".$this->_db->dbprefix('product_info')." AS p ON p.product_id=l.tag_id
+				";
+		$where = "WHERE  l.is_audit=1 AND l.is_del=0";
+
+		if(!empty($filter['comment_type'])) $where.=" AND l.comment_type='{$filter['comment_type']}' ";
+		if(!empty($filter['tag_type'])) $where.=" AND l.tag_type='{$filter['tag_type']}' ";
+		if(!empty($filter['tag_id'])) $where.=" AND l.tag_id='{$filter['tag_id']}' ";
+		
+		
+		if(!empty($filter['response']) && !empty($filter['user_id'])) {
+			$where2 = $where;
+			$where.=" AND l.at_comment_id in (select comment_id from ty_product_liuyan where user_id = '{$filter['user_id']}') ";
+		} else {
+			if(!empty($filter['user_id'])) $where.=" AND l.user_id='{$filter['user_id']}' ";	
+			$where2 = $where;
+		}
+			
+
+		$sort = " ORDER BY comment_id DESC ";
+		
+		$sql = "SELECT count(*) as ct {$from} {$where} {$sort}";
+		$query = $this->_db->query($sql);
+		$row =  $query->row();
+		if(!$row) return array('filter'=>$filter,'list'=>array());
+		$filter['record_count'] = $row->ct;
+		$filter['page_count']=ceil($filter['record_count']/$filter['page_size']);
+		$filter['page'] = max(min($filter['page'],$filter['page_count']-1),0);
+		$start=$filter['page']*$filter['page_size']; //开始条数
+       	//$sql = "{$select} {$from} {$where} {$sort} LIMIT {$start},{$filter['page_size']}";
+       	$sql = "{$select} {$from} {$where} {$sort}";
+       	$query = $this->_db->query($sql);
+       	
+       	$list = $query->result();
+       	$where2 = $where2 . ' and l.comment_id = ? ';
+       	$sql_find_at = "{$select} {$from} {$where2} {$sort}";
+       	
+       	foreach ($list as $k => &$v) {
+       		$v->product_name2 = cutstr($v->product_name, 0, 15);
+       		$v->comment_content2 = cutstr($v->comment_content, 0, 15);
+       		if ($v->genre_id == 2) {
+       			$v->link = 'product-' . $v->product_id;
+       		}
+       		if ($v->genre_id == 2) {
+       			$v->link = 'product-' . $v->product_id;
+       		}
+       		switch ($v->genre_id) {
+       			case 2:
+       				//课程
+       				$v->link = '/product-' . $v->product_id;
+       				break;
+       			case 1:
+       				$v->link = '/pdetail-' . $v->product_id;
+       				break;
+
+       			default:
+       				$v->link = '';
+       				break;
+       		}
+
+       		if ($v->at_comment_id) {
+       			$query = $this->_db->query($sql_find_at, array($v->at_comment_id));
+       			$comment = $query->result();
+       			if (count($comment)) {
+       				$v->at_comment = $comment[0];
+       			} else {
+       				$v->at_comment = false;
+       			}
+       			
+       		} else {
+       			$v->at_comment = false;
+       		}
+       	}
+       	
+       	return array('filter'=>$filter,'list'=>$list);
+
 	}
 }

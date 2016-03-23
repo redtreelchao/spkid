@@ -11,7 +11,7 @@
     <div class="about-con">
         <p class="course-tit">首页>意见反馈</p>
         <ul class="about-list clearfix">
-            <li><a href="/about_us/about_us">关于悦牙网</a></li>
+            <li><a href="/about_us/about_us">关于爱牙网</a></li>
             <li><a href="/about_us/service">服务条款</a></li>
             <li><a href="/about_us/feedback" class="about-currt">意见反馈</a></li>
             <li><a href="/about_us/sales_policy">售后政策</a></li>
@@ -26,18 +26,18 @@
                     <p class="feedback-wt">您好！为了给您提供更好的服务，欢迎您将使用过程中遇到的问题或宝贵建议，对您的支持和配合表示衷心的感谢！</p>
                     <p class="feedback-bk"><textarea name="comment_content" cols="" rows="" class="textfeedback"></textarea></p>
                 </div>
-                <p class="manyidu"><i>*</i>您对悦牙网的整体满意度如何？</p>
+                <p class="manyidu"><i>*</i>您对爱牙网的整体满意度如何？</p>
                 <div class="feedback-my">
-                    <p><input name="grade" type="radio" value="4" checked>非常满意</p>
-                    <p><input name="grade" type="radio" value="3">满意</p>
-                    <p><input name="grade" type="radio" value="2">一般</p>
-                    <p><input name="grade" type="radio" value="1">不满意</p>
-                    <p><input name="grade" type="radio" value="0">非常不满意</p>
+                    <p><input name="grade" type="radio" value="4" checked>  非常满意</p>
+                    <p><input name="grade" type="radio" value="3">  满意</p>
+                    <p><input name="grade" type="radio" value="2">  一般</p>
+                    <p><input name="grade" type="radio" value="1">  不满意</p>
+                    <p><input name="grade" type="radio" value="0">  非常不满意</p>
                 </div>
                 <p class="manyidu">请留下您的联系方式，以便我们及时回复您</p>
                 <ul class="feedback-lx">
-                    <li><label>姓名</label><input name="comment_name" type="text"></li>
-                    <li><label>手机号</label><input name="comment_tel" type="text"><span></span></li>
+                    <li><label>姓名:</label><input name="comment_name" type="text"></li>
+                    <li><label>手机号:</label><input name="comment_tel" type="text"><span></span></li>
                 </ul>
                 <div class="feedback-anniu"><button class="submit-button" type="submit">提交</button></div>
             </form>

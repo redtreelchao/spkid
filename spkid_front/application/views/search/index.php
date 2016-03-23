@@ -96,7 +96,7 @@
               <ul class=" clearfix">
               <?php foreach ($video as $vio_val) { ?>
               <li>
-              <a href="/article-<?php echo $vio_val->ID;?>">
+              <a href="/video/detail/<?php echo $vio_val->ID;?>">
               <div class="video-img"><img src="<?php echo $vio_val->img;?>"><span class="video-ico"></span></div>
               <span><?php echo $vio_val->post_title;?></span>
               </a>
@@ -108,5 +108,13 @@
 </div>
 <?php } ?>
 <!--related-products-start-->
+
+<script>
+  $(function(){
+    $('.hot-keyword').click(function(){
+      location.href = '/search/index?kw=' + $(this).text();
+    });
+  });
+</script>
 
 <?php include APPPATH . 'views/common/footer.php'?>

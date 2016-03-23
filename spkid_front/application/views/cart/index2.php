@@ -20,7 +20,7 @@
                              <li class="goods-first bulky c_rec<?=$product->rec_id?>">
                                  <div class="item-table">
                                        <span class="chooseone i-checkbox i checked" data-sid="<?php print $product->rec_id; ?>"></span>
-                                       <a class="goods-info" target="_blank" href="#">
+                                       <a class="goods-info" target="_blank" href="/pdetail-<?php print $product->product_id; ?>.html">
                                        <div class="goods-img item-table">
                                            <img src="<?php print img_url($product->img_url); ?>.85x85.jpg" alt="<?php print $product->brand_name . ' ' .$product->product_name; ?>" />
                                        </div>
@@ -67,8 +67,8 @@
                                     <a href="#" style="display: none;">清除失效商品</a>
                                 </div>
                                 <div class="fl-right">
-                                    <span class="fl-left">已选<i class="buy-count" id="product_sel_num">0</i>件商品</span>
-                                    <span class="fl-left"><em class="fl-left">总计金额（不含运费）：</em><i class="amounted" id="total_price">¥ 0.00</i></span>
+                                    <span class="fl-left">已选<i class="buy-count" id="product_sel_num"><?=$cart_summary['product_num']?></i>件商品</span>
+                                    <span class="fl-left"><em class="fl-left">总计金额（不含运费）：</em><i class="amounted" id="total_price">¥ <?=$cart_summary['product_price']?></i></span>
                                     <span type="submit" class="payment settle-accounts" id="cart_checkout">去结算</span>
                                 </div>  
                         </div>
@@ -274,6 +274,8 @@ function j_qtyEdit(rec_id) {
             if (result.err)
                 return false;
             $("#product_total_"+rec_id).html((result.cart.product_num*result.cart.product_price).toFixed(2));
+            $("#product_sel_num").html(result.cart_summary.product_num);
+            $("#total_price").html(result.cart_summary.product_price);
             update_cart_num();
         }
     });	

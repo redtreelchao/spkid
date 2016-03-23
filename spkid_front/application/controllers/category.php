@@ -177,6 +177,11 @@ class Category extends CI_Controller {
             echo json_encode(array('err' => 0, 'content' => $content));
         } else {
             $data['index'] = 1;
+            // 这里获取动态的seo
+            $this->load->library('lib_seo');
+            $seo = $this->lib_seo->get_seo_by_pagetag('pc_category_index', array());
+            $data = array_merge($data, $seo);
+            
             $this->load->view('category/category2', $data);
         }
     }

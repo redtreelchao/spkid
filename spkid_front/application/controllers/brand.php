@@ -19,6 +19,11 @@ class Brand extends CI_Controller {
         $data = $this->brand_model->get_flag_category($this->continent);
         $data['fid'] = $fid;
         $data['index'] = 2;
+
+        // 这里获取动态的seo
+        $this->load->library('lib_seo');
+        $seo = $this->lib_seo->get_seo_by_pagetag('pc_brands_index', array());
+        $data = array_merge($data, $seo);
         $this->load->view('product/brands', $data);
     }
 
@@ -32,6 +37,13 @@ class Brand extends CI_Controller {
         } else {
             $page = 1;
             $data = $this->rush_model->brand_product_list($bid, $page);
+
+            $data['title'] = isset($data['brand']) ? $data['brand']->brand_name . '-爱牙网' : '爱牙网品牌';
+
+            $data['keywords'] = isset($data['brand']) ? $data['brand']->brand_info . '-爱牙网' : '爱牙网品牌';
+
+            $data['description'] = isset($data['brand']) ? strip_tags($data['brand']->brand_story) . '-爱牙网' : '爱牙网品牌';
+
             $this->load->view('product/brand',$data);
         }
     }

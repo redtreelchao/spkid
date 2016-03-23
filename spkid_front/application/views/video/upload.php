@@ -39,7 +39,7 @@
           <div class="video-upload-box2">
                 <h3>上传视频</h3>
                 <span class="zhif-hu video-fbcg">发布成功!</span>
-                <div class="video-back">点击返回<a href="#">视频列表</a></div>
+                <div class="video-back">点击返回<a href="/video.html">视频列表</a></div>
           </div>
        
 </div>

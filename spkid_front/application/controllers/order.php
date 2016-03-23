@@ -15,7 +15,7 @@ class Order extends CI_Controller
 
 	public function index()
 	{
-		redirect('user/order');
+		redirect('user/order_list');
 	}
     public function course_info($order_id){
         $this->load->model('cart_model');
@@ -108,7 +108,7 @@ class Order extends CI_Controller
         $message_arr = array('pending' => '待支付', 'payed' => '待出库', 'shipped' => '已出库', 'completed' => '已完成', 'invalid' => '已取消');
         $msg = $message_arr[$status];
 		
-        //$order_payment = $this->order_model->order_payment($order_id);
+        $order_payment = $this->order_model->order_payment($order_id);
         if(!empty($order->bank_code)){
 		    $pay_logo = static_style_url($alipay_bank_list[$order->bank_code]['pay_logo']);
 		}else{
@@ -147,6 +147,7 @@ class Order extends CI_Controller
         $is_return_from_pay = $this->input->get('returnfpay') != FALSE;
 		$this->load->vars(array(
 			'order' => $order,
+                    'order_payment' => $order_payment,
             'status' => $status,
             'msg' => $msg, 
 			'product_list' => $order_product,
@@ -239,6 +240,9 @@ class Order extends CI_Controller
             $this->load->model('invalid_model');
             $this->load->model('user_model');
             $this->load->helper('order_helper');
+            $invalid_note = trim($this->input->get_post("invalid_note")); 
+            $invalid_note = "客户取消：" . urldecode($invalid_note);
+        
             $this->db->trans_begin();
             $order = $this->invalid_model->lock_order($order_id);
             if(!$order) {
@@ -339,7 +343,7 @@ class Order extends CI_Controller
                 'is_ok_date' => date('Y-m-d H:i:s'),
                 'lock_admin' => 0
                     ), $order_id);
-            $this->invalid_model->insert_action($order, '订单作废');
+            $this->invalid_model->insert_action($order, $invalid_note);
         }
         $this->db->trans_commit();
 

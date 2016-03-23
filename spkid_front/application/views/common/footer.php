@@ -16,7 +16,7 @@
           <div class="f-product-left">
                  <div class="copyright-tel"><img src="<?php echo static_style_url('pc/images/tel.png')?>"></div>
                  <div class="f-info-inner">
-                      <a target="_blank" href="/about_us/about_us">关于悦牙网</a>
+                      <a target="_blank" href="/about_us/about_us">关于爱牙网</a>
                       <a target="_blank" href="/about_us/service">服务条款</a>
                       <a target="_blank" href="/about_us/feedback">意见反馈</a>
                       <a target="_blank" href="/about_us/sales_policy">售后政策</a>
@@ -36,7 +36,7 @@
                          
                    </div>
               </div>
-              <div class="phone-wx"><p>手机悦牙网</p><img src="<?php echo static_style_url('pc/images/mobile_qrcode.jpg')?>"></div>
+              <div class="phone-wx"><p>手机爱牙网</p><img src="<?php echo static_style_url('pc/images/mobile_qrcode.jpg')?>"></div>
               
               
         </div>
@@ -48,8 +48,41 @@
 
 </div>    
 </body>
-
 <script>
+  $(function(){
+    var cookies = document.cookie ? document.cookie.split('; ') : [];
+    var v_user_name = '';
+    var user_advar = '<?php echo static_style_url("mobile/touxiang/")?>';
+
+    for (var i = cookies.length - 1; i >= 0; i--) {
+      var item = cookies[i].split('=');
+      if (item[0]=='v_user_name') {
+        v_user_name = decodeURIComponent(item[1]);
+      };
+      if (item[0]=='v_advar') {
+        user_advar = user_advar + decodeURIComponent(item[1]);
+      };
+    };
+
+    if (!v_user_name) {
+      $('.naver-login').html('<a href="/user/login" class="nav-user">登录</a>');
+    } else {
+      var str = '<img src="' + user_advar + '" height="28">';
+
+      str += '<a href="/user/index.html" class="nav-user">' + v_user_name + '<span class="menu_tips"></a>';
+      str += '<ul class="menu_items" style="display:none">';
+      str += '<li><a href="/user/index.html">个人中心</a></li>';
+      str += '<li><a href="/account/privilege.html">我的优惠</a></li>';
+      str += '<li><a href="/collect/index.html">我的关注</a></li>';
+      str += '<li><a href="/user/my_response.html">我的回复</a></li>';
+      str += '<li><a href="/user/logout.html">退出</a></li></ul>';
+
+      $('.naver-login').html(str);
+    }
+  });
+</script>
+<script>
+
     var is_hover = false;
     function hide_menu() {
       if (is_hover) {
@@ -59,34 +92,9 @@
         $('.menu_items').hide('slow');
       }
     }
-    //判断用户是否登录
+ 
     $(function(){
-      var cookies = document.cookie ? document.cookie.split('; ') : [];
-      var v_user_name = '';
-      for (var i = cookies.length - 1; i >= 0; i--) {
-        var item = cookies[i].split('=');
-        if (item[0]=='v_user_name') {
-          v_user_name = decodeURIComponent(item[1]);
-        };
-      };
-
-      if (!v_user_name) {
-        $('.naver-login').html('<a href="/user/login" class="nav-user">登录</a>');
-      } else {
-        var str = '<a href="#" class="nav-user">' + v_user_name + '<span class="menu_tips"></a>';
-        str += '<ul class="menu_items" style="display:none">';
-        str += '<li><a href="/user/index.html">个人中心</a></li>';
-        str += '<li><a href="/account/privilege.html">我的优惠</a></li>';
-        str += '<li><a href="/collect/index.html">我的关注</a></li>';
-        str += '<li><a href="">我的回复</a></li>';
-        str += '<li><a href="/user/logout">退出</a></li></ul>';
-
-        $('.naver-login').html(str);
-      }
-
-
-     
-
+      $('#response_num').load('/user/my_response');
       $('.menu_tips').addClass('arrow_up');
       $('.nav-user').hover(
         function(){
@@ -97,29 +105,35 @@
         function(e) {
           //console.log(e.target);
           
-          setTimeout("hide_menu()", 3000);
-        }
-        );
-
-      
-
-      $('.menu_items').hover(
-        function(){          
-          is_hover = true;
-        },
-        function(e){
-            //e.stopPropagation();
-            is_hover = false;
-            $('.menu_tips').removeClass('arrow_down').addClass('arrow_up');
-            $('.menu_items').hide('slow');
+          setTimeout("hide_menu()", 5000);
+        });
+      $('.naver-login').mouseover(function(){
+              $('.menu_items').show();
+      	$('.menu_tips').removeClass('arrow_down').addClass('arrow_up');
       });
-     
 
-    });
-    
-    $(function () {
-        $('[data-toggle="popover"]').popover();
+
+      $('.naver-login, .menu_items').mouseout(function(){
+        $('.menu_items').hide();
+        
+        $('.menu_tips').removeClass('arrow_up').addClass('arrow_down');
+      });
+
+      $('.autocomplete,.nav-search').mouseleave(function(){
+        $('.autocomplete').empty();
+      });
+
+        if ($('[data-toggle="popover"]')){
+            $('[data-toggle="popover"]').popover();
+        }
+
     })
+
+    
+          
+
+
 </script>
+<?php include_once(APPPATH . "views/common/tongji.php");?>
 </html>
 

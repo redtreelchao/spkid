@@ -70,6 +70,7 @@ class Flag extends CI_Controller
 		}
 		$update = array();
 		$update['flag_name'] = $this->input->post('flag_name');
+		$update['continent'] = $this->input->post('continent');
 		$update['sort_order'] = intval($this->input->post('sort_order'));
 		$update['is_use'] = $this->input->post('is_use') == 1 ? 1 : 0;
 		
@@ -114,6 +115,7 @@ class Flag extends CI_Controller
 
 		$update = array();
 		$update['flag_name'] = $this->input->post('flag_name');
+		$update['continent'] = $this->input->post('continent');
 		$update['sort_order'] = intval($this->input->post('sort_order'));
 		$update['is_use'] = $this->input->post('is_use') == 1 ? 1 : 0;
 		$update['create_date'] = date('Y-m-d H:i:s');

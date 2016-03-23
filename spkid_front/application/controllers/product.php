@@ -177,7 +177,7 @@ class Product extends CI_Controller
 
         //判断课程是否过期
         $is_outofdate = false;        
-        $tmp = json_decode($p->product_desc_additional, true);
+        $product_desc_additional = $tmp = json_decode($p->product_desc_additional, true);
         if (isset($tmp['desc_waterproof'])) {
         	$is_outofdate = strtotime($tmp['desc_waterproof']) < time() ? true : false;
         }
@@ -196,9 +196,19 @@ class Product extends CI_Controller
         	$is_exceed_num = $p->ps_num >= $sub_list[$color_id]['sub_list'][0]->consign_num ? true : false;
         } 
         
+        //判断是否用户已经收藏
+        $is_collected = false;
+        if ($this->user_id) {
+        	//判断收藏的商品是否已收藏
+        	$col=$this->product_model->filter_collect(array('product_id'=>$product_id,'product_type'=>3,'user_id'=>$this->user_id));	
+        	if (!empty($col)) {
+        		$is_collected = true;
+        	}
+        }  
+
 		$this->load->view($view_page,array(
-			//'title'		=> $seo['title'],
-			'title'		=> $p->product_name,
+			'title'		=> $seo['title'],	
+			'ititle'	=> $p->product_name,
 			'description' => $seo['description'],
 			'keywords'	=> $seo['keywords'],
                         'genre_info'    => $genre_info,
@@ -220,6 +230,8 @@ class Product extends CI_Controller
 			'is_outofdate' => $is_outofdate,
 			'related_courses' => $related_courses,
 			'is_exceed_num' => $is_exceed_num,
+			'is_collected' => $is_collected,
+			'product_desc_additional' => $product_desc_additional
                                 //,
 //			'css'		=> array('css/plist.css'),
 			//'gifts_list'	=> $this->rush_model->get_campaign(),
@@ -401,9 +413,19 @@ class Product extends CI_Controller
         $p->detail1 = adjust_path($p->detail1);
         $p->detail2 = adjust_path($p->detail2);
 
+        //判断是否用户已经收藏
+        $is_collected = false;
+        if ($this->user_id) {
+        	//判断收藏的商品是否已收藏
+        	$col=$this->product_model->filter_collect(array('product_id'=>$product_id,'product_type'=>3,'user_id'=>$this->user_id));	
+        	if (!empty($col)) {
+        		$is_collected = true;
+        	}
+        }  
 
 		$this->load->view('product/pdetail',array(
-			'title'		=> $p->product_name,
+			'title'		=> $seo['title'],
+			'ititle'		=> $p->product_name,
 			'description'	=> $seo['description'],
 			'keywords'	=> $seo['keywords'],
 			'user_name'	=> "{$this->session->userdata("user_name")}",
@@ -423,7 +445,8 @@ class Product extends CI_Controller
 			'link_product_list' => $link_product_list,
 			'product_additional' => $product_additional,
 			'user_name' => $user_name,
-			'mobile' => $mobile
+			'mobile' => $mobile,
+			'is_collected' => $is_collected
                                 //,
 //			'css'		=> array('css/plist.css'),
 			//'gifts_list'	=> $this->rush_model->get_campaign(),
@@ -1106,7 +1129,7 @@ class Product extends CI_Controller
 	}
 
 	private function listCalendar($day, $type){
-	  $this->load->helper('wdCalendar');
+	  $this->load->helper('wdcalendar');
 	  //$phpTime = js2PhpTime($day);
 	  $phpTime = strtotime($day);
 	  

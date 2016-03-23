@@ -30,7 +30,7 @@ function order_status($order)
                 }elseif (!$order->shipping_status) {
                     $status='待发货';
                 }else {
-                    $status='已发货';
+                    $status='<font style="color: #000000;">已完成</font>';
                 }
             }
             break;
