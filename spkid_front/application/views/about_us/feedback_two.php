@@ -15,7 +15,7 @@
             <div class="feedback-ganxie">
                 <span>您的反馈已记录，感谢您的支持！</span>
                 <p>页面将在<em id="mes">5</em>秒钟后自动跳转到</p>
-                <p>http://www.yueyawang.com</p>
+                <p>http://pc.redtravel.cn</p>
             </div>    
         </div>
     </div>

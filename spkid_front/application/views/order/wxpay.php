@@ -116,7 +116,7 @@
                         } else {
                                 reportCount++;
                                 if (reportCount > _requestTimeout) {
-                                        $('#return_msg').html('<center><i class="fa fa-times fa-2x" style="color:red"></i><strong>支付发生问题请查看<a href="www.yueyawang.com/center/order.html">订单支付清单</strong></center>');
+                                        $('#return_msg').html('<center><i class="fa fa-times fa-2x" style="color:red"></i><strong>支付发生问题请查看<a href="pc.redtravel.cn/center/order.html">订单支付清单</strong></center>');
                                         clearTimeout(_oResetTimeout);		
                                 } else {
                                         _oResetTimeout = setTimeout(_self, 30000);
