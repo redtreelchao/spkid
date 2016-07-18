@@ -352,7 +352,7 @@ function load_dianping_panel(product_id)
 		success:function(result){
 			if(result.error!=0){
 				if(result.need_login){
-					//lhgDG = new $.dialog({ id:'thepanel',maxBtn:false,title:'请登录/注册悦牙网',iconTitle:false,btnBar:false,width:800,height:444,cover:false,resize:false,bgcolor:'#333',drag:true,html:$('#login_alert')[0] });
+					//lhgDG = new $.dialog({ id:'thepanel',maxBtn:false,title:'请登录/注册血色烂漫',iconTitle:false,btnBar:false,width:800,height:444,cover:false,resize:false,bgcolor:'#333',drag:true,html:$('#login_alert')[0] });
 					//lhgDG.ShowDialog();
 					window.location='http://www.mammytree.com/user/login';
 					return false;

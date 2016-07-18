@@ -47,7 +47,7 @@
 	       <div class="hu-safety">
 	           <div class="juli-plick ">
 	                <h3 style="color:#fff; text-align:center; font-weight:normal;">安全提醒</h3>
-	                <p style="color:#224A63; padding-top:10px;">付款成功后，悦牙网不会以付款异常，系统升级为由联系您。<br/>请勿泄露银行卡号、手机验证码。<br/>否则会造成钱款损失，谨防电话诈骗！</p>
+	                <p style="color:#224A63; padding-top:10px;">付款成功后，血色烂漫不会以付款异常，系统升级为由联系您。<br/>请勿泄露银行卡号、手机验证码。<br/>否则会造成钱款损失，谨防电话诈骗！</p>
 	           </div>
             </div>
 	     

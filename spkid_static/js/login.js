@@ -342,7 +342,7 @@ function check_comp_info()
 	var re = new RegExp(regu);
 	var err_msg = '';
 
-	if($.trim(email) =='' || $.trim(email) == '此账号可直接登录悦牙网!')
+	if($.trim(email) =='' || $.trim(email) == '此账号可直接登录血色烂漫!')
 	{
 		err_msg = "请输入注册账号";
 		obj = $('input[type=text][name=r_email]');

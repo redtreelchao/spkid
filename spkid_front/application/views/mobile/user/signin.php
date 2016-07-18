@@ -32,7 +32,7 @@
 <div class="navbar">
                 <div class="navbar-inner">
 <div class="left sliding"><a href="#" class="link back history-back"><i class="icon icon-back"></i></a></div>
-                    <div class="center sliding">注册悦牙</div>
+                    <div class="center sliding">注册血色烂漫</div>
                 </div>
             </div>
         <div class="page-content">
@@ -352,7 +352,7 @@ $$('#login-page form.ajax-submit').on('submitted', function (e) {
 
 })
     function login(){
-        myApp.yywLogin(false,'登录悦牙网',function(username, password){
+        myApp.yywLogin(false,'登录血色烂漫',function(username, password){
 
             $$.ajax({url:'/user/proc_login', method:'POST', dataType:'json', data:{username:username,password:password}, success:function(data){
                 if (1==data.error)

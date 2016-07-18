@@ -266,7 +266,7 @@ $config['sess_time_to_update']	= 300;
 |
 */
 $config['cookie_prefix']	= "";
-$config['cookie_domain']	= ".yueyawang.com";
+$config['cookie_domain']	= ".redtravel.cn";
 $config['cookie_path']		= "/";
 $config['cookie_secure']	= FALSE;
 
@@ -361,11 +361,11 @@ $config['proxy_ips'] = '';
 /**
  * 前后台域名
  */
-define('IMG_HOST', 'http://img.yueyawang.com');
-define('FRONT_HOST', 'http://m.yueyawang.com');
-define('STATIC_HOST', 'http://static.yueyawang.com');
+define('IMG_HOST', 'http://img.redtravel.cn');
+define('FRONT_HOST', 'http://pc.redtravel.cn');
+define('STATIC_HOST', 'http://static.redtravel.cn');
 
-$config['memcache'] = array(array('hostname'=>'192.168.20.111','port'=>11211,'weight'=>1));
+$config['memcache'] = array(array('hostname'=>'127.0.0.1','port'=>11211,'weight'=>1));
 $config['memcache_prefix'] = '';
 //==================================danger config over======================
 /* End of file config.php */

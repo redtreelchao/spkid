@@ -185,18 +185,18 @@ define('FRONT_FOCUS_IMAGE_HTML_KEY','front_focus_image_html');
 define('TUAN_FRONT_FOCUS_IMAGE_HTML_KEY','tuan_front_focus_image_html');
 
 //前台url地址
-define('FRONT_URL','http://m.yueyawang.com');
-define("IMG_URL", 'http://img.yueyawang.com');
+define('FRONT_URL','http://pc.redtravel.cn');
+define("IMG_URL", 'http://img.redtravel.cn');
 define("PUBLIC_DATA_IMAGES", "public/data/images/");
 
 /*
  * 后台域名
  */
-define("ERP_HOST", "http://b.yueyawang.com");
+define("ERP_HOST", "http://b.redtravel.cn");
 
 //上传根目录
 define('UPLOAD_PATH_BATH', CREATE_IMAGE_PATH );
-define('STATIC_HOST_CONFIG','$static_host_arr=array("http://static.yueyawang.com","http://static.yueyawang.com");');
+define('STATIC_HOST_CONFIG','$static_host_arr=array("http://static.redtravel.cn","http://static.redtravel.cn");');
 /**
  * 限抢图片上传目录
  */
@@ -321,13 +321,15 @@ define('SHIPPING_HTML_PATH', CREATE_HTML_PATH.'shipping/');
 
 //系统Log 开关
 define('BY_SYSTEM_LOG', true);
+
+define('SITE_DOMAIN', 'redtravel.cn');
 /**
  * SSO
  */
 define("SSO_COOKIE_USERNAME", "_username"); //第三发货
 define("SSO_COOKIE_PASSWORD", "_password");
 define("SSO_COOKIE_EXPRIE", 60 * 60 * 24 * 14);
-define("SSO_COOKIE_DOMAIN", ".yueyawang.com");
+define("SSO_COOKIE_DOMAIN", ".redtravel.cn");
 
 /*
  * 快递100 
@@ -341,8 +343,8 @@ define("KUAIDI100_URL", "http://www.kuaidi100.com/poll");
 define('SF_SHIPPING_ID', 2);   //顺丰ID
 define('SF_CHECKWORD', '24d5f7242a9644c5842832abacdb3bfd'); //顺丰的校验码
 define('SF_CUST_ID', '5720310679');     //寄件方客户卡号
-define('BBG_COMPANY', '悦牙网');    	//寄件方公司名称
-define('BBG_CONTACT', '悦牙网');      //寄件方联系人
+define('BBG_COMPANY', '血色烂漫');    	//寄件方公司名称
+define('BBG_CONTACT', '血色烂漫');      //寄件方联系人
 define('BBG_TEL', '4006 333 999');    //寄件方座机
 define('BBG_PROVINCE', '浙江省');     //寄件人所在省份
 define('BBG_CITY', '湖州市');         //寄件方所属城市

@@ -214,9 +214,9 @@ define('M_LIST_PAGE_SIZE',12);//手机端每页显示多少商品
 define('M_INDEX_PAGE_MAX',3);//手机端首页最多加载几页
 
 //seo
-define('SITE_NAME', '爱牙网');
+define('SITE_NAME', '血色烂漫网');
 
-define('SITE_NAME_MOBILE', '爱牙网 www.redtravel.cn');
+define('SITE_NAME_MOBILE', '血色烂漫网 www.redtravel.cn');
 define('PAGE_KEYWORDS' , SITE_NAME.'，keywords content.');
 define('PAGE_DESCRIPTION' , SITE_NAME.'description content！');
 define('PAGE_TITLE_SITE_NAME' , SITE_NAME.'_site_name_here');

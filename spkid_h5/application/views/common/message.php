@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width" />
-<title>悦牙网</title>
+<title>血色烂漫</title>
 <meta name="keywords" content=""/> 
 <meta name="description" content=""/>
 <meta content="yes" name="apple-mobile-web-app-capable" />

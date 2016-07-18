@@ -210,7 +210,7 @@ define('M_INDEX_PAGE_MAX',3);//手机端首页最多加载几页
 define('M_COURSE_PAGE_MAX',20);//手机端课程最多加载几页
 
 //seo
-define('SITE_NAME', '爱牙网');
+define('SITE_NAME', '血色烂漫网');
 define('SITE_NAME_MOBILE', '手机站 redtravel.cn');
 define('PAGE_KEYWORDS' , SITE_NAME.'，keywords content.');
 define('PAGE_DESCRIPTION' , SITE_NAME.'description content！');

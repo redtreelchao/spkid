@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width" />
-<title>悦牙网付款</title>
+<title>血色烂漫付款</title>
 <meta name="keywords" content=""/>
 <meta name="description" content=""/>
 <meta content="yes" name="apple-mobile-web-app-capable" />
@@ -188,8 +188,8 @@
                <div class="explain-jl">
                     <h3>尊敬的<?php print $wechat_nickname;?>医生,你好!</h3>
                     <p class="yhgz">按照活动优惠规则，报名的最后一步是付款。目前该优惠商品，还剩余<?php print $product_num;?>件，以付款时间为报名先后的依据。</p>
-                    <p class="thank">谢谢你参加悦牙网发起的本次优惠活动。</p>
-                    <p class="ceo">悦牙网CEO 尹红平</p>
+                    <p class="thank">谢谢你参加血色烂漫发起的本次优惠活动。</p>
+                    <p class="ceo">血色烂漫CEO 尹红平</p>
                     <p class="ceo">上海欧思蔚奥医疗器械有限公司</p>
                </div>
           </div>
@@ -205,8 +205,8 @@
           <div class="security cation">
                <div class="cation-tit"><span class="public-tit cation-dw"></span></div>
                <div class="yueya-js">
-                   <p><span>悦牙网：</span>悦牙网起源于欧思蔚奥(OSWELL DENTAL) 的“阳澄湖计划”。该计划的核心理念是：打造中国优质牙科正畸产品的一站式出口销售平台，并注册成立悦牙网，通过电子商务的形式，同步开展国内业务。
-                   目前，悦牙网经过批准，获得了齿科医疗器械材料的B类电商牌照。上海欧思蔚奥医疗器材有限公司是悦牙网注册成立的载体。</p>
+                   <p><span>血色烂漫：</span>血色烂漫起源于欧思蔚奥(OSWELL DENTAL) 的“阳澄湖计划”。该计划的核心理念是：打造中国优质牙科正畸产品的一站式出口销售平台，并注册成立血色烂漫，通过电子商务的形式，同步开展国内业务。
+                   目前，血色烂漫经过批准，获得了齿科医疗器械材料的B类电商牌照。上海欧思蔚奥医疗器材有限公司是血色烂漫注册成立的载体。</p>
                    <div class="yueya-img">
                         <div class="mui-content-padded"><p><img src="<?php echo static_style_url('mobile/img/zhgengshu.jpg')?>" data-preview-src="" data-preview-group="1" /></p></div>
                    </div>

@@ -17,7 +17,7 @@
 	<div class="popover-inner">
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div class="center">悦牙商城</div>
+				<div class="center">血色烂漫商城</div>
 			</div>
 		</div>
 		<div class="content-block share_modal hcenter">
@@ -72,7 +72,7 @@
 					    <div class="left">
 					    	<a href="#" class="link back article-detail-back"><i class="icon icon-back"></i></a>
 					    </div>
-					    <div class="center">悦牙网文章视频频道</div>
+					    <div class="center">血色烂漫文章视频频道</div>
 
 	                </div>
 		       	</div>
@@ -176,7 +176,7 @@
 						</div>
 					    <!-- comment-lb end -->        
                 <div class="detail-wx"><img src="<?php echo static_url('mobile/img/wx.jpg')?>" width="100">
-                <p>扫一扫关注悦牙网, 约我更容易!</p></div>
+                <p>扫一扫关注血色烂漫, 约我更容易!</p></div>
 	     
 			       	</div>
 			  	</div>

@@ -4,7 +4,7 @@
         <div class="f-product-left">
             <div class="copyright-tel"><img src="<?php echo static_style_url('pc/images/tel.png')?>"></div>
             <div class="f-info-inner">
-                <a target="_blank" href="/about_us/about_us">关于悦牙网</a>
+                <a target="_blank" href="/about_us/about_us">关于血色烂漫</a>
                 <a target="_blank" href="/about_us/service">服务条款</a>
                 <a target="_blank" href="/about_us/feedback">意见反馈</a>
                 <a target="_blank" href="/about_us/sales_policy">售后政策</a>
@@ -39,7 +39,7 @@ $(function(){
     };
 
     if (!v_user_name) {
-      $('.nav-left').html('<span>您好，欢迎来悦牙网  (互联网交易许可证：沪B20140002) </span><a href="/user/login" class="yy-login">请登录</a><a href="/user/signin" class="yy-register">免费注册</a>');
+      $('.nav-left').html('<span>您好，欢迎来血色烂漫  (互联网交易许可证：沪B20140002) </span><a href="/user/login" class="yy-login">请登录</a><a href="/user/signin" class="yy-register">免费注册</a>');
       $('.nav-func').html('<a class="nav-gg nav-cart" href="/cart">购物车</a>');
     } else {
         var str = '<img src="' + user_advar + '" height="25">';
@@ -61,7 +61,7 @@ $(function(){
             }          
         });
         $('.nav-func').html(str);
-        $('.nav-left').html('<span>您好，欢迎来悦牙网  (互联网交易许可证：沪B20140002) </span>');
+        $('.nav-left').html('<span>您好，欢迎来血色烂漫  (互联网交易许可证：沪B20140002) </span>');
         $(".index-user").mouseover(function(){
             $(".center-drop-down").show();
             $(this).addClass("test");

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <express size="300" width="530">
-	<siteName x="30" y="62">悦牙网</siteName>
+	<siteName x="30" y="62">血色烂漫</siteName>
     
 	<companyPhone x="45" y="152">400-9905-920</companyPhone>
     <companyAddress x="30" y="86" width="300" wrapLength="19" indent="18" fontWeight="bold">上海市 浦东新区 周浦镇 建韵路618号3号楼305室</companyAddress>	
@@ -17,7 +17,7 @@
     <rcvTel x="473" y="140"/>
     <category x="10" y="225">牙科器材</category>
     <weight x="118" y="243"/>
-    <sender x="30" y="260">悦牙网</sender>
+    <sender x="30" y="260">血色烂漫</sender>
     <pdate x="5" y="274"/>
     
 </express>

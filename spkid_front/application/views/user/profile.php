@@ -160,7 +160,7 @@
                                           
                                     </form>
                                  </div>
-                                <p class="pass-portrain-commonp">方法二：选择悦牙网为您推荐的头像</p>
+                                <p class="pass-portrain-commonp">方法二：选择血色烂漫为您推荐的头像</p>
                                 <ul class="choose-picture clearfix">
                                    <li><img class="selected" src="<?php echo static_url('mobile/touxiang/img1.jpg')?>" ></li>
                                    <li><img src="<?php echo static_url('mobile/touxiang/img2.jpg')?>" ></li>

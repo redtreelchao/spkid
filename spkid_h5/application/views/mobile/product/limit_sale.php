@@ -43,7 +43,7 @@ var static_host='';
 	<div class="popover-inner">
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div class="center">悦牙商城</div>
+				<div class="center">血色烂漫商城</div>
 			</div>
 		</div>
 		<div class="content-block share_modal hcenter">
@@ -85,7 +85,7 @@ var static_host='';
 </div>
 <!-- ends 留言对话框 -->
     <div class="views" >
-    <!-- 悦牙商城-->
+    <!-- 血色烂漫商城-->
         <div class="view view-main" data-page="index">
             <div class="pages">
     		    <div data-page="index" class="page no-toolbar edu-fot">

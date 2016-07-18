@@ -46,7 +46,7 @@
 					<?php print form_button('op_unconfirm','反客审',($perms['unconfirm']?'':'disabled').' onclick="order_unconfirm()" class="am-btn am-btn-primary am-radius"'); ?>
 					<?php print form_button('op_shipping','发货',($perms['shipping']?'':'disabled').' class="am-btn am-btn-primary am-radius" id="btn_shipping"'); ?>
 					<?php print form_button('op_deny','拒收',($perms['deny']?'':'disabled').' onclick="order_deny()" class="am-btn am-btn-primary am-radius"'); ?>
-                                        <?php print form_button('op_paying','在线支付',($perms['paying']?'':'disabled').' onclick="window.open(\'http://www.yueyawang.com/order/pay/'.$order->order_id.'?aname='.$admin_name.'\');" class="am-btn am-btn-primary am-radius"'); ?>
+                                        <?php print form_button('op_paying','在线支付',($perms['paying']?'':'disabled').' onclick="window.open(\'http://pc.redtravel.cn/order/pay/'.$order->order_id.'?aname='.$admin_name.'\');" class="am-btn am-btn-primary am-radius"'); ?>
                                         <?php print form_button('op_pay','财审',($perms['pay']?'':'disabled').' onclick="order_pay()" class="am-btn am-btn-primary am-radius"'); ?>
                                         <?php print form_button('op_unpay','反财审',($perms['unpay']?'':'disabled').' onclick="order_unpay()" class="am-btn am-btn-primary am-radius"'); ?>
 					<?php print form_button('op_invalid','作废',($perms['invalid']?'':'disabled').' onclick="invalid()" class="am-btn am-btn-primary am-radius"'); ?>

@@ -1863,7 +1863,7 @@ return;
 				if (!preg_match('/^1[0-9]{10}$/', $mobile)) {
 					$err_msg = '手机号码不正确，请重新输入！';
 				} elseif (!$this->user_obj->is_mobile_register($mobile)) {
-					$err_msg = '您不是悦牙用户,请先注册!';
+					$err_msg = '您不是血色烂漫用户,请先注册!';
 				}
 			}
 

@@ -35,7 +35,7 @@
              </div>
              <div class="err-msg">会话过期，请刷新页面重试</div>
              <div class="order-details-rr click-login">
-                  <div class="sing-in-tit">点击登录，表示您同意<a href="javascript:void(0)">《悦牙网服务协议》</a></div>
+                  <div class="sing-in-tit">点击登录，表示您同意<a href="javascript:void(0)">《血色烂漫服务协议》</a></div>
                   <div class="sign-in-bt">
                        <a class="btn-login btn-disabled loginbtn" href="javascript:void(0);">登录</a>
                        <a href="javascript:void(0);" class="using-account switchLogin" onclick="switchLoginType();">会员直接登录</a>

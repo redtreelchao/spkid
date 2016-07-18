@@ -110,7 +110,7 @@
                 <a href="/pdetail-<?php echo $v[0]->product_id;?>" target="_blank">
 	                <div class="home-rank-img-wp"><img src="<?php echo img_url($v[0]->img_url);?>"></div>
 	                <div class="home-rank-pro-title"><?php echo $v[0]->product_name;?></div>
-	                <div class="home-rank-price">悦牙优享：<span>￥<?php echo $v[0]->shop_price;?></span><em><?php echo $v[0]->market_price;?></em></div>
+	                <div class="home-rank-price">血色烂漫优享：<span>￥<?php echo $v[0]->shop_price;?></span><em><?php echo $v[0]->market_price;?></em></div>
 	           	</a>
                 <?php endforeach;?>
           	</li>
@@ -120,7 +120,7 @@
                 <a href="/pdetail-<?php echo $v[0]->product_id;?>" target="_blank">
 	                <div class="home-rank-img-wp"><img src="<?php echo img_url($v[0]->img_url);?>"></div>
 	                <div class="home-rank-pro-title"><?php echo $v[0]->product_name;?></div>
-	                <div class="home-rank-price">悦牙优享：<span>￥<?php echo $v[0]->shop_price;?></span><em><?php echo $v[0]->market_price;?></em></div>
+	                <div class="home-rank-price">血色烂漫优享：<span>￥<?php echo $v[0]->shop_price;?></span><em><?php echo $v[0]->market_price;?></em></div>
 	           	</a>
                 <?php endforeach;?>
           	</li>
@@ -318,7 +318,7 @@
                 <a href="/product-<?php echo $v[0]->product_id;?>" target="_blank">
 	                <div class="home-rank-img-wp"><img src="<?php echo img_url($v[0]->img_url);?>"></div>
 	                <div class="home-rank-pro-title"><?php echo $v[0]->product_name;?></div>
-	               	<div class="home-rank-price">悦牙优享：<span>￥<?php echo $v[0]->shop_price;?></span><em><?php echo $v[0]->market_price?></em></div>
+	               	<div class="home-rank-price">血色烂漫优享：<span>￥<?php echo $v[0]->shop_price;?></span><em><?php echo $v[0]->market_price?></em></div>
 	           	</a> 
             <?php endforeach;?>                     
           	</li>
@@ -327,7 +327,7 @@
                 <a href="/product-<?php echo $v[0]->product_id;?>" target="_blank">
 	                <div class="home-rank-img-wp"><img src="<?php echo img_url($v[0]->img_url);?>"></div>
 	                <div class="home-rank-pro-title"><?php echo $v[0]->product_name;?></div>
-	               	<div class="home-rank-price">悦牙优享：<span>￥<?php echo $v[0]->shop_price;?></span><em><?php echo $v[0]->market_price?></em></div>
+	               	<div class="home-rank-price">血色烂漫优享：<span>￥<?php echo $v[0]->shop_price;?></span><em><?php echo $v[0]->market_price?></em></div>
 	           	</a> 
             <?php endforeach;?>        
           	</li>

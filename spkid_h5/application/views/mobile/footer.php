@@ -40,7 +40,7 @@
 		console.log('');
 		},
 		success: function (res) {
-		alert('十分感谢您对悦牙网的支持！！！');
+		alert('十分感谢您对血色烂漫的支持！！！');
 		},
 		cancel: function (res) {
         
@@ -59,7 +59,7 @@
 	        console.log('');
 	      },
 	      success: function (res) {
-	        alert('十分感谢您对悦牙网的支持！！！');
+	        alert('十分感谢您对血色烂漫的支持！！！');
 	      },
 	      cancel: function (res) {
         

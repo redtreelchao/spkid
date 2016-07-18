@@ -28,7 +28,7 @@
                       <li><label>确认密码</label><input type="password" required name="password1" class="register-Input" placeholder="请输入密码"></li>
                       </ul>
                        
-                     <div class="yuedu"><input type="checkbox" id="checkbox" class="regular-checkbox" /><label for="checkbox"></label><span>我已阅读并接受<a href="/about_us/service">悦牙网服务条款。</a></span></div>
+                     <div class="yuedu"><input type="checkbox" id="checkbox" class="regular-checkbox" /><label for="checkbox"></label><span>我已阅读并接受<a href="/about_us/service">血色烂漫服务条款。</a></span></div>
 
                      <div class="zhuchen">
                          <button class="btn btn-default disabled" disabled="disabled" type="submit">立即注册</button>
@@ -132,7 +132,7 @@ btn.click(function(e){
 $('form[name="registerForm"]').on('submit', function(e){
     e.preventDefault();
     if (!$('#checkbox').is(':checked')){
-        $('.zhuchen').next().text('您还未接受悦牙网服务条款');
+        $('.zhuchen').next().text('您还未接受血色烂漫服务条款');
         return false;
     }
     $.ajax({url:'/user/proc_register', data:$(this).serialize(), method:'POST', dataType:'json', success:function(data){

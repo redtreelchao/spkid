@@ -3,7 +3,7 @@
     <div class="about-con">
         <p class="course-tit">首页>加入我们</p>   
         <ul class="about-list clearfix">
-            <li><a href="/about_us/about_us">关于悦牙网</a></li>
+            <li><a href="/about_us/about_us">关于血色烂漫</a></li>
             <li><a href="/about_us/service">服务条款</a></li>
             <li><a href="/about_us/feedback">意见反馈</a></li>
             <li><a href="/about_us/sales_policy">售后政策</a></li>
