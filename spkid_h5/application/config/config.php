@@ -361,7 +361,6 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 //====================danger config begin=================================
-define('FRONT_HOST', 'http://h5.redtravel.cn');
 $config['IMG_HOSTS']=array('http://img.redtravel.cn');
 
 $config['memcache'] = array(array('hostname'=>'127.0.0.1','port'=>11211,'weight'=>1));

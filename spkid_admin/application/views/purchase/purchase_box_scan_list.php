@@ -116,7 +116,7 @@
 	    <div id="listDiv">
 		    <table id="dataTable" class="dataTable" cellpadding=0 cellspacing=0>
 			    <tr>
-				    <td colspan="10" class="topTd"> </td>
+				<td colspan="14" class="topTd"> </td>
 			    </tr>
 			    <tr class="row">
 			      <th>条码</th>
@@ -126,18 +126,23 @@
 			      <th>款号</th>
 			      <th>颜色</th>
 			      <th>规格</th>
+			      <th>生产批号</th>
+			      <th>有效期</th>
+                              <th>外观验收</th>
+                              <th>检查数量</th>
 			      <th>收货数量</th>
 			      <th>上架数量</th>
 			      <th width="120px;">操作</th>
 			    </tr>
 			    <?php foreach($box_list as $row): ?>
 			    <tr>
-				<td colspan="9">
+				<td colspan="13">
 				    箱号【<?=$row->box_code?>】
 				    收货总件数【<?=$row->product_number?>】
 				    上架总件数【<?=$row->product_shelve_num?>】
 				    收货人【<?=$row->scan_name?>】
 				    上架人【<?=$row->shelve_name?>】
+                                    到货日期【<?=$row->delivery_date?>】
 				</td>
 				<td rowspan="<?=count($row->box_sub_list)+1?>">
 				    <?php if(check_perm('cancel_purchase_box_scan')):?><input type="button" class="am-btn am-btn-primary" onclick="cancel_purchase_box_scan(<?=$row->box_id?>)" value="取消此箱收货" style="margin: 2px;"/><? endif;?>
@@ -153,6 +158,10 @@
 				<td><?=$sub->product_sn?></td>
 				<td><?=$sub->color_name?></td>
 				<td><?=$sub->size_name?></td>
+				<td><?=$sub->production_batch?></td>
+				<td><?php print ($sub->v_expire_date == '0000-00-00' || $sub->v_expire_date == '0000-00-00 00:00:00' || $sub->v_expire_date == '')?'无':$sub->v_expire_date; ?></td>
+                                <td><?=$sub->oqc?></td>
+                                <td><?=$sub->check_num?></td>
 				<td><span <?php if(check_perm('purchse_edit_p_num') && intval($sub->product_number) != intval($sub->over_num)): ?> box_id="<?=$row->box_id?>" box_sub_id="<?=$sub->box_sub_id?>" class='inputEdit'<?php endif;?>>
 				    <?=intval($sub->product_number)?>
 				    </span>
@@ -162,7 +171,7 @@
 			    <?php endforeach; ?>
 			    <?php endforeach; ?>
 			    <tr>
-				<td colspan="10" class="bottomTd"> </td>
+				<td colspan="14" class="bottomTd"> </td>
 			    </tr>
 		    </table>
 		    <div class="blank5"></div>

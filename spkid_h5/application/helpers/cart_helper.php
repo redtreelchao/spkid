@@ -1,6 +1,6 @@
 <?php
 
-function summary_cart($cart_list, $voucher_list = NULL, $balance = NULL, $region_shipping = NULL) {
+function summary_cart($cart_list, &$voucher_list = NULL, $balance = NULL, $region_shipping = NULL) {
     $CI = &get_instance();
     $result = array(
         'product_price' => 0, // 本店售价合计（无格式）
@@ -71,6 +71,21 @@ $discount = 1;
         $result['balance'] = min($balance, $result['product_price'] + $result['shipping_fee'] - $result['voucher']);
     $result['point'] = round($result['product_price'] - $result['voucher']);
     $result['unpay_price'] = $result['product_price'] + $result['shipping_fee'] - $result['voucher'] - $result['balance'];
+
+    /**
+     * v 2016.04.18 指定商品 购买立减活动
+     */
+    global $product_minus_activity;
+    if(!empty($product_minus_activity) && strtotime($product_minus_activity['end_time']) >= time()){
+        foreach ($product_list as $provider_id => &$provider){
+            foreach ($provider['product_list'] as $product){
+                if( $product->product_id == $product_minus_activity['product_id'] ){
+                    $provider['product_price'] = $provider['product_price'] - ($product_minus_activity['minus_price'] * $product->product_num); 
+                }
+            }
+        }
+    }
+
     $result['product_list'] = $product_list;
     $result['product_weight'] = $result['product_weight'] * 1.05;
     return $result;
@@ -129,6 +144,36 @@ function calc_voucher_payment_amount($voucher,$cart_list, $provider_id)
         if($provider_list && !in_array(strval($product->provider_id), $provider_list)) continue;
         $product_price += $product->product_price*$product->product_num;
     }
+
+    if($product_price < $voucher->min_order) return 0;
+    return min($product_price,$voucher->voucher_amount);	
+}
+
+/**
+ * 商品计算现鑫券的金额
+ * @param type $voucher
+ * @param type $cart_list
+ * @param type $provider_id
+ * @return int
+ */
+function calc_voucher_payment_amount_product($voucher,$product)
+{    
+    $product_price = 0;
+    $product_list = $voucher->product?explode(',',$voucher->product):array();
+    $brand_list = $voucher->brand?explode(',',$voucher->brand):array();
+    $category_list = $voucher->category?explode(',',$voucher->category):array();
+    $provider_list = $voucher->provider ? explode(',', $voucher->provider) : array();
+    //foreach ($cart_list as $product) {
+        //if($product->package_id) continue;
+        if($product->product_price!=$product->shop_price) return 0;
+        //if($provider_id > 0 && $product->provider_id!=$provider_id) continue;
+        if($product_list && !in_array(strval($product->product_id), $product_list)) return 0;
+        if($brand_list && !in_array(strval($product->brand_id), $brand_list)) return 0;
+        if($category_list && !in_array(strval($product->category_id), $category_list)) return 0;
+
+        if($provider_list && !in_array(strval($product->shop_id), $provider_list)) return 0;
+        $product_price += $product->product_price*$product->product_num;
+    //}
 
     if($product_price < $voucher->min_order) return 0;
     return min($product_price,$voucher->voucher_amount);	
@@ -212,19 +257,28 @@ function split_by_provider($product_list)
  * @param type $cart_list
  * @return array $voucher_payment
  */
-function voucher_gc($cart_list)
+function voucher_gc($cart_list, $key)
 {
     $CI = &get_instance();
     $checkout = $CI->session->userdata('checkout');
-    if(empty($checkout['payment']['voucher'])) return;
+    if(empty($checkout['payment']['voucher'][$key])) return;
     $need_save = false;
-    $voucher_payment = $checkout['payment']['voucher'];
-    $cart_summary = summary_cart($cart_list, $voucher_payment);
-    foreach ($voucher_payment as $provider_id => $voucher) {
-        if (!isset($cart_summary['product_list'][$provider_id]) || empty($cart_summary['product_list'][$provider_id]['voucher'])) {
-            unset($voucher_payment[$provider_id]);
+    $voucher_payment = $checkout['payment']['voucher'][$key];
+    if ($key == 'product'){
+        $cart_list->product_num = $cart_list->buy_num;
+        $payment_amount = calc_voucher_payment_amount_product($voucher_payment[$cart_list->product_id], $cart_list);
+        if (!$payment_amount) {
+            unset($voucher_payment[$cart_list->product_id]);
             $need_save = true;
-            continue;
+        }
+    } else {
+        $cart_summary = summary_cart($cart_list, $voucher_payment);
+        foreach ($voucher_payment as $provider_id => $voucher) {
+            if (!isset($cart_summary['product_list'][$provider_id]) || empty($cart_summary['product_list'][$provider_id]['voucher'])) {
+                unset($voucher_payment[$provider_id]);
+                $need_save = true;
+                continue;
+            }
         }
     }
     if($need_save){
@@ -243,7 +297,7 @@ function get_checkout()
     $checkout = $CI->session->userdata('checkout');
     if(empty($checkout)){
         $CI->load->model('cart_model');
-        $checkout = array('shipping' => array(), 'payment' => array('pay_id'=>0,'voucher' => array()));
+        $checkout = array('shipping' => array(), 'payment' => array());
         if($CI->user_id){
            $last_order = $CI->cart_model->last_order($CI->user_id); 
            if($last_order){

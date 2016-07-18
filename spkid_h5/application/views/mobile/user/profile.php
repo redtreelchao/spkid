@@ -45,9 +45,9 @@ option {
             <a href="#" id="submit-btn" class="link payment-hu">保存</a>
         </div>
 </div>
-                <div class="page-content public-bg no-top" >
+                <div class="page-content article-bg2 no-top" >
 				<form action="/user/edit" method="POST" class="ajax-submit ">
-                    <div class="list-block" style="margin-top:0;">
+                    <div class="list-block" style="margin-top:20px;">
                     <ul class="bjgrzl-hu">
                     <li>
 <div class="item-content">
@@ -143,7 +143,7 @@ $$('form.ajax-submit').on('submitted', function (e) {
     var data = e.detail.data;
     if (data.res){
         myApp.confirm2(data.msg,'保存成功', '首页', '查看积分' 
-            , function(){ location.href = data.share_url; }) 
+            , function(){ location.href = '/index-user#!//account/index'}) 
             , function(){location.href = '/index-user'} 
     }
     else

@@ -252,6 +252,8 @@ class Package extends CI_Controller
 		}
 
 		$sub_dir = ($package_id-$package_id%100)/100;
+		if(!file_exists($base_path)) mkdir($base_path, 0700, true);
+	        if(!file_exists($base_path.'/'.$sub_dir)) mkdir($base_path.'/'.$sub_dir, 0700, true);
 		$this->upload->initialize(array(
 				'upload_path'=> $base_path.$sub_dir,
 				'allowed_types' => 'jpg|gif|png',
@@ -560,7 +562,6 @@ class Package extends CI_Controller
 		$product_color = array();
 		$old_products = get_pair($this->package_model->all_product(array('package_id'=>$package_id)),'product_id','product_id');
 		$all_color = get_pair($this->color_model->all_color(),'color_id','color_name');
-
 		foreach(explode('|', $product) as $p){
 			$p = explode('-',$p);
 			if(count($p)!=2) continue;
@@ -581,7 +582,8 @@ class Package extends CI_Controller
 			$update['shop_price'] = $product->shop_price;
 			$update['cost_price'] = $product->cost_price;
 			$update['consign_price'] = $product->consign_price;
-			$update['consign_rate'] = $product->consign_rate;
+			//$update['consign_rate'] = $product->consign_rate;
+			$update['consign_rate'] = 0;
 			$this->package_model->insert_product($update);
 		}
 		$area_list = $this->package_model->all_area(array('package_id'=>$package->package_id));

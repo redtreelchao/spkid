@@ -12,11 +12,18 @@ class Account extends CI_Controller {
         $this->load->model('account_model');
         $this->load->model('user_model');
         $this->load->model('voucher_model');
+        $this->load->library('user_obj');
     }
 
     public function index() {
+        if ($this->user_obj->is_login())
+        {
+            $user_id = $this->session->userdata('user_id');
+        } else
+        {
+            redirect('/user/login');
+        }
         $user_id = $this->user_id;
-
         $data['user_info'] = $this->user_model->lock_user($user_id); //获取用户(积分和余额)信息
         $data['voucher_num']  = count($this->account_model->user_voucher_num($user_id)); //获取用户(现金券)信息  
 
@@ -24,6 +31,13 @@ class Account extends CI_Controller {
     }
 
     public function account_content() {
+        if ($this->user_obj->is_login())
+        {
+            $user_id = $this->session->userdata('user_id');
+        } else
+        {
+            redirect('/user/login');
+        }
         $type = $this->input->get('type');
         $user_id = $this->user_id;
 
@@ -47,6 +61,13 @@ class Account extends CI_Controller {
 
     //获取 积分兑换现金券 活动
     public function account_voucher() {
+        if ($this->user_obj->is_login())
+        {
+            $user_id = $this->session->userdata('user_id');
+        } else
+        {
+            redirect('/user/login');
+        }
         $user_id = $this->user_id;
         $data['voucher_campaign'] = $this->account_model->voucher_campaign();
         $this->load->view('mobile/user/account_voucher',$data);

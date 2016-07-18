@@ -79,10 +79,12 @@ class Order_return extends CI_Controller
         $data['order'] = $order;
         $data['return'] = $return;
 
-        $pay_arr = $this->return_model->get_pay_detail_arr($return_id,1);// 取得支付明细数组
-        $data['pay_arr'] = $pay_arr;
-		$data['suggestiontype_arr'] = $this->return_model->get_advice_type_arr(); //获取意见类型名称
-        $data['suggestion_list'] = $this->return_model->get_return_advice($return_id); // 获取意见列表 @author Tony
+            $pay_arr = $this->return_model->get_pay_detail_arr($return_id,1);// 取得支付明细数组
+            $data['pay_arr'] = $pay_arr;
+            $data['suggestiontype_arr'] = $this->return_model->get_advice_type_arr(); //获取意见类型名称
+            $data['suggestion_list'] = $this->return_model->get_return_advice($return_id); 
+            //$data['suggestion_list'] = $this->return_model->get_return_advice($order_id); 
+            // 获取意见列表 @author Tony
 
         /* 取得退货单商品 */
         $order_product = $return_product = array();
@@ -532,10 +534,10 @@ class Order_return extends CI_Controller
                             $return_product[$key]['return_location_id'] = MD_RETURN_DEPOT_LOCATION_ID;
                             $return_product[$key]['return_location_name'] = MD_RETURN_DEPOT_LOCATION_NAME;
                         } elseif ($coop->provider_cooperation == COOPERATION_TYPE_CONSIGN) { //代销(XXX:暂未使用)
-        //                    $return_product[$key]['return_depot_id'] = RETURN_DEPOT_ID;
-        //                    $return_product[$key]['return_depot_name'] = RETURN_DEPOT_NAME;
-        //                    $return_product[$key]['return_location_id'] = RETURN_DEPOT_LOCATION_ID;
-        //                    $return_product[$key]['return_location_name'] = RETURN_DEPOT_LOCATION_NAME;
+                            $return_product[$key]['return_depot_id'] = DT_RETURN_DEPOT_ID;
+                            $return_product[$key]['return_depot_name'] = DT_RETURN_DEPOT_NAME;
+                            $return_product[$key]['return_location_id'] = DT_RETURN_DEPOT_LOCATION_ID;
+                            $return_product[$key]['return_location_name'] = DT_RETURN_DEPOT_LOCATION_NAME;
                         } elseif ($coop->provider_cooperation == COOPERATION_TYPE_TMALL) { //天猫发货
                             $return_product[$key]['return_depot_id'] = DEPOT_ID_TMALL_RETURN;
                             $return_product[$key]['return_depot_name'] = DEPOT_NAME_TMALL_RETURN;
@@ -879,6 +881,7 @@ class Order_return extends CI_Controller
 			// normal products; $key=product_sub的rec_id
 			foreach ($trans_arr as $key=>$trans) {
 				$trans_location = array_merge($location_arr[$trans['location_id']],$trans);
+
 				empty($trans_location) && sys_msg('储位错误',1,$tmp_links);
 				$trans_location['rec_id'] = $key;
 				$trans_arr[$key] = $trans_location;
@@ -1785,6 +1788,7 @@ class Order_return extends CI_Controller
                     $trans['product_cess']=$availNum['product_cess'];
                     $trans['shop_price']=$availNum['shop_price'];
                     $trans['expire_date']=$availNum['expire_date'];
+                    $trans['production_batch']=$availNum['production_batch'];
 
                     $this->return_model->insert_transaction($trans);
                 }
@@ -1924,6 +1928,7 @@ class Order_return extends CI_Controller
                         $result[$batchNum]['consign_rate'] = $availNum['consign_rate'];
                         $result[$batchNum]['product_cess'] = $availNum['product_cess'];
                         $result[$batchNum]['expire_date'] = $availNum['expire_date'];
+                        $result[$batchNum]['production_batch'] = $availNum['production_batch'];
                         break;
                     }else{
                         $result[$batchNum]['product_num'] = $availNum['product_num'];
@@ -1933,6 +1938,7 @@ class Order_return extends CI_Controller
                         $result[$batchNum]['consign_rate'] = $availNum['consign_rate'];
                         $result[$batchNum]['product_cess'] = $availNum['product_cess'];
                         $result[$batchNum]['expire_date'] = $availNum['expire_date'];
+                        $result[$batchNum]['production_batch'] = $availNum['production_batch'];
                         //$result[$batchNum] = $availNum;
                         $num -= $availNum['product_num'];
                     }

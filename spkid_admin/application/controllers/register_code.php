@@ -22,8 +22,12 @@ class Register_code extends CI_Controller
 		$filter = $this->uri->uri_to_assoc(3);
 
 		$register_no = trim($this->input->post('register_no'));
+                $product_name = trim($this->input->post('product_name'));
+                $unit = trim($this->input->post('unit'));
 
 		if (!empty($register_no)) $filter['register_no'] = $register_no;
+                if (!empty($product_name)) $filter['product_name'] = $product_name;
+                if (!empty($unit)) $filter['unit'] = $unit;
 
 		$filter = get_pager_param($filter);
 		$data = $this->register_model->register_list($filter);
@@ -119,10 +123,10 @@ class Register_code extends CI_Controller
 			sys_msg('记录不存在!', 1);
 		}
 
-		$check_register = $this->register_model->filter(array('register_no'=>$update['register_no'], 'id !'=>$register_id));
-		if ($check_register) {
-			sys_msg('注册号重复', 1);
-		}
+		// $check_register = $this->register_model->filter(array('register_no'=>$update['register_no'], 'id !'=>$register_id));
+		// if ($check_register) {
+		// 	sys_msg('注册号重复', 1);
+		// }
 
 		$this->register_model->update($update, $register_id);
 		
@@ -174,6 +178,15 @@ class Register_code extends CI_Controller
 			$result_keys['property'] = '产品描述或主要组成成份';
 			$result_keys['scope'] = '预期用途';
 			$result_keys['standard'] = '型号/规格或包装规格';
+		}elseif (strpos($name, '国械注进') !==false) {
+			$tableId = 27;
+			$bcId = '118103063506935484150101953610';
+			$result_keys['product_name'] = '产品名称（中文）';
+			$result_keys['unit'] = '代理人名称';
+			$result_keys['valid_time'] = '有效期至';
+			$result_keys['property'] = '结构及组成';
+			$result_keys['scope'] = '适用范围';
+			$result_keys['standard'] = '型号、规格';
 		}else{
 			sys_msg('不支持查询此注册证号！', 0, array(array('text'=>'返回列表', 'href'=>'register_code/index')));
 		}
@@ -212,6 +225,17 @@ class Register_code extends CI_Controller
 		}
 		sys_msg('抓取成功！', 0, array(array('text'=>'返回列表', 'href'=>'register_code/index')));	
 	}
+
+	 public function editable() {
+        if( ! auth('register_code_edit'))  die(json_encode(Array('success'=>false,'msg'=>'操作失败，无操作权限！')));
+        $pk = $this->input->post( 'pk' );
+        $name = $this->input->post( 'name' );
+        $value = $this->input->post( 'value' );
+        $data[$name] = $value;
+        $result = $this->register_model->update( $data, $pk );
+        die(json_encode(Array('success'=>true,'msg'=>'操作成功！', 'value'=>443)));
+       
+    }  
 
 }
 ###

@@ -25,7 +25,7 @@
 		<div id="goodsDiv">
 			<table id="tb_product_out" class="dataTable" cellpadding=0 cellspacing=0>
 				<tr>
-					<td colspan="10" class="topTd"> </td>
+					<td colspan="12" class="topTd"> </td>
 				</tr>
 				<tr class="row head">
 					<th width="280px">商品款号|商品名称|供应商货号</th>
@@ -35,6 +35,8 @@
 					<th>条码</th>
 					<th>颜色</th>
 					<th>尺码</th>
+					<th>有效期</th>
+					<th>生产批号</th>
 					<th>仓库</th>
 					<th>储位</th>
 					<th>完成数</th>
@@ -49,6 +51,8 @@
 					<td><?php print $row->provider_barcode; ?></td>
 					<td><?php print $row->color_name.'['.$row->color_sn.']'; ?></td>
 					<td><?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
+					<td><?php print ($row->expire_date == '0000-00-00' || $row->expire_date == '0000-00-00 00:00:00' || $row->expire_date == '')?'无':$row->expire_date; ?></td>
+					<td><?php print $row->production_batch; ?></td>
 					<td><?php print $row->depot_name; ?></td>
 					<td><?php print $row->location_name; ?></td>
 					<td><?php print $row->product_finished_number; ?></td>
@@ -56,7 +60,7 @@
 				</tr>
 				<?php endforeach; ?>
 				<tr>
-					<td colspan="10" class="bottomTd"> </td>
+					<td colspan="12" class="bottomTd"> </td>
 				</tr>
 			</table>
 			<div class="blank5"></div>

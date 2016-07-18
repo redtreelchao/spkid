@@ -645,7 +645,7 @@
 </script>
 			<table id="dataTable" class="dataTable" cellpadding=0 cellspacing=0>
 				<tr>
-					<td colspan="9" class="topTd"> </td>
+					<td colspan="10" class="topTd"> </td>
 				</tr>
 				<tr class="row">
 					<th width="280px">商品款号|商品名称|供应商货号</th>
@@ -655,6 +655,7 @@
 					<th>状态</th>
 					<th>颜色|尺码</th>
 					<th>包装方式</th>
+                                        <th>重量</th>
 					<th>批次</th>
 					<th>最大入库数</th>
 					<th width="300px;">操作</th>
@@ -667,8 +668,11 @@
 					<td><?php print $row->shop_price; ?></td>
 					<td><?php print $row->status_name; ?></td>
 					<td><?php print $row->color_name.'['.$row->color_sn.']'; ?>| <?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
+                                        
                     <td data-pk="<?php print $row->product_id;?>" title ="点击可修改" data-name="pack_method" class="editable" data-type="textarea" data-value="<?php print $row->pack_method; ?>"><?php print $row->pack_method; ?> </td>
-					<td>
+                    <td data-pk="<?php print $row->product_id;?>" title ="点击可修改" data-name="product_weight" class="editable" data-type="textarea" data-value="<?php print $row->product_weight; ?>"><?php print $row->product_weight; ?> </td>
+					
+                    <td>
 						<?php print $row->batch_code; ?><?php if($row->is_reckoned==1): ?><br>(已结算)<?php endif; ?>
                                             <input type="hidden" name="batchid_<?php print $row->sub_id; ?>" id="batchid_<?php print $row->sub_id; ?>" value="<?php print $row->batch_id; ?>" />
 					</td>
@@ -685,7 +689,7 @@
 				</tr>
 				<?php endforeach; ?>
 				<tr>
-					<td colspan="9" class="bottomTd"> </td>
+					<td colspan="10" class="bottomTd"> </td>
 				</tr>
 			</table>
 			<div class="blank5"></div>

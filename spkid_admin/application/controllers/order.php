@@ -12,6 +12,19 @@ class Order extends CI_Controller
 		if (!$this->admin_id) redirect('index/login');
 		$this->time = date('Y-m-d H:i:s');
 		$this->load->model('order_model');
+		$this->load->model('order_source_model');
+		$this->load->model('shipping_model');
+		$this->load->model('payment_model');
+		$this->load->model('region_model');
+		$this->load->model('brand_model');
+		$this->load->model('category_model');
+		$this->load->model('provider_model');
+		$this->load->model('product_genre_model');
+		$this->load->model('color_model');
+		$this->load->model('size_model');
+		$this->load->model('user_model');
+
+		$this->load->helper('category');
 		$this->load->helper('order');
 	}
 
@@ -45,8 +58,8 @@ class Order extends CI_Controller
 		$filter['pay_end'] = trim($this->input->post('pay_end'));
 		$filter['shipping_start'] = trim($this->input->post('shipping_start'));
 		$filter['shipping_end'] = trim($this->input->post('shipping_end'));
-                $filter['odd'] = intval($this->input->post('odd'));
-                $filter['pick'] = intval($this->input->post('pick'));
+        $filter['odd'] = intval($this->input->post('odd'));
+        $filter['pick'] = intval($this->input->post('pick'));
 		$filter['consign'] = intval($this->input->post('consign'));
 		$filter['tel'] = trim($this->input->post('tel'));
 		$filter['mobile'] = trim($this->input->post('mobile'));
@@ -73,20 +86,13 @@ class Order extends CI_Controller
 			echo json_encode($data);
 			return;
 		}
-		$this->load->model('order_source_model');
-		$this->load->model('shipping_model');
-		$this->load->model('payment_model');
-		$this->load->model('region_model');
-		$this->load->model('brand_model');
-		$this->load->model('category_model');
-		$this->load->model('provider_model');
-		$this->load->helper('category');
+
 		$this->load->vars('source_list',$this->order_source_model->all_source());
 		$this->load->vars('shipping_list',$this->shipping_model->all_shipping());
 		$this->load->vars('pay_list',$this->payment_model->all_payment(array('is_discount'=>0)));
 		$this->load->vars('country_list',$this->region_model->all_region(array('parent_id'=>0)));
 		$this->load->vars('brand_list',$this->brand_model->all_brand());
-		$this->load->vars('category_list',category_flatten(category_tree($this->category_model->all_category())));
+		$this->load->vars('category_list',category_tree($this->category_model->all_category(array('genre_id' => 1))));
 		$this->load->vars('provider_list',$this->provider_model->all_provider());
 		$data['full_page'] = TRUE;
 		$this->load->view('order/index', $data);
@@ -97,6 +103,7 @@ class Order extends CI_Controller
 		auth('order_view');
 		$this->load->model('user_model');
 		$this->load->model('voucher_model');
+                $this->load->model('admin_model');
 		$this->load->model('order_advice_type_model');
 		$order_id = intval($order_id);
 		$order = $this->order_model->order_info($order_id);
@@ -159,11 +166,13 @@ class Order extends CI_Controller
 		$this->load->vars('order_advice', $this->order_model->order_advice($order_id));
 		$this->load->vars('all_advice_type', $this->order_advice_type_model->all(array('is_use'=>1)));
 		$this->load->vars('order_action', $this->order_model->order_action($order_id));
+                $this->load->vars('all_admin', $this->admin_model->all_admin(array('user_status' => 1)));
 		$this->load->vars('perms', $perms);
 		$this->load->vars('source_list',$source_list);
 		$this->load->vars('shipping_list',$shipping_list);
                 $this->load->vars('front_url',FRONT_URL);
                 $this->load->vars('course_type',PRODUCT_COURSE_TYPE);
+                $this->load->vars('admin_name',$this->session->userdata('admin_name'));
 		$this->load->view('order/info');
 	}
 
@@ -232,7 +241,6 @@ class Order extends CI_Controller
 	public function add()
 	{
 		auth('order_edit');
-		$this->load->model('order_source_model');
 		$this->load->vars('all_source', $this->order_source_model->all_source());
 		$this->load->view('order/add');
 	}
@@ -240,14 +248,15 @@ class Order extends CI_Controller
 	public function proc_add()
 	{
 		auth('order_edit');
-		$this->load->model('order_source_model');
-		$this->load->model('user_model');
 		$update['source_id'] = intval($this->input->post('source_id'));
 		$update['user_id'] = intval($this->input->post('user_id'));
+		$update['genre_id'] = intval($this->input->post('genre_id'));
 		$source = $this->order_source_model->filter(array('source_id'=>$update['source_id']));
 		if(!$source) sys_msg('请选择订单来源', 1);
 		$user = $this->user_model->filter(array('user_id'=>$update['user_id']));
-		if(!$user) sys_msg('请选择用户', 1);		
+		if(!$user) sys_msg('请选择用户', 1);
+		$genre = $this->product_genre_model->filter(array('id'=>$update['genre_id']));
+		if(!$genre) sys_msg('请选择订单类型', 1);				
 		$update['lock_admin'] = $this->admin_id;
 		$update['create_admin'] = $this->admin_id;
 		$update['create_date'] = $this->time;
@@ -271,11 +280,7 @@ class Order extends CI_Controller
 	public function product($order_id)
 	{
 		auth('order_edit');
-		$this->load->model('color_model');
-		$this->load->model('size_model');
-		$this->load->model('category_model');
-		$this->load->model('brand_model');
-		$this->load->helper('category');
+
 		$order_id = intval($order_id);
 		$act = isset($_GET['act'])?trim($_GET['act']):'';
 		$order = $this->order_model->filter(array('order_id'=>$order_id));
@@ -285,7 +290,7 @@ class Order extends CI_Controller
 		$order_product = split_package_product($this->order_model->order_product($order_id));
 		$this->load->vars('all_color_group', $this->color_model->all_group());
 		$this->load->vars('all_size', $this->size_model->all_size());
-		$this->load->vars('all_category', category_tree($this->category_model->all_category()));
+		$this->load->vars('all_category',category_tree($this->category_model->all_category(array('genre_id' => 1))));
 		$this->load->vars('all_brand', $this->brand_model->all_brand());
 		$this->load->vars('order', format_order($order));
 		$this->load->vars('order_product', $order_product['product']);
@@ -922,6 +927,8 @@ class Order extends CI_Controller
 				$trans['cost_price'] = $product->cost_price;
 				$trans['consign_rate'] = $product->consign_rate;
 				$trans['product_cess'] = $product->product_cess;
+				$trans['expire_date'] = $product->expire_date;
+				$trans['production_batch'] = $product->production_batch;
 				$trans_list[] = $trans;
 				if($depot->depot_type) $sub->gl_num += $product->product_number - $product->consign_num;
 			}

@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="theme-color" content="#2196f3">
-    <title>爱牙网</title>
+    <title>悦牙网</title>
     <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/framework7.material.css')?>">
     <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/yyw-app.css')?>">
     

@@ -113,6 +113,7 @@
                         }else{
                         	$("#dataTable_tbody").html('');
                                 $("#input_data").html('');
+                                var invoice_no = '';
                                 for(var i=0; i<data.length; i++)  
                         	{
                                     var tr="<tr class='row'>";
@@ -135,9 +136,18 @@
                                     tr+="</tr>";
                                     $("#dataTable_tbody").append(tr);
                                     $("#input_data").append(input);
+                                    invoice_no = data[i].invoice_no;
                         	}
-                            $("#invoice_no").val('');
-        					$("#invoice_no").focus();
+                                $("#invoice_no").removeAttr('readonly');
+                                if (invoice_no == ''){
+                                    $("#invoice_no").val('');
+                                    $("#invoice_no").focus();
+                                } else {
+                                    $("#invoice_no").val(invoice_no);
+                                    $("#invoice_no").attr('readonly', 'readonly');
+                                    $("#provider_barcode").val('');
+                                    $("#provider_barcode").focus();
+                                }                             
                         }
                     },"json");
                 return;

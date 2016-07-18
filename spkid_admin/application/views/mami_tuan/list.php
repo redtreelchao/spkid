@@ -95,7 +95,7 @@
 <?php endif; ?>
 			<table width="1172" cellpadding=0 cellspacing=0 class="dataTable" id="dataTable">
 				<tr>
-					<td colspan="10" class="topTd"> </td>
+					<td colspan="11" class="topTd"> </td>
 				</tr>
 				<tr class="row">
 				  <th width="50">编号</th>
@@ -106,6 +106,8 @@
 				  <th>结束日期</th>
 				  <th>市场价格</th>
 				  <th>团购价格</th>
+				  <th>团购单位</th>
+				  <th>剩余数量</th>
 				  <th>状态</th>
 				  <th>操作</th>
 				</tr>
@@ -119,14 +121,16 @@
 			    	<td align="center"><?php print $row->tuan_offline_time; ?></td>
 					<td align="center"><?php print $row->market_price; ?></td>
 					<td align="center"><?php print $row->tuan_price; ?></td>
+					<td align="center"><?php print $row->tuan_unit; ?></td>
+					<td align="center"><?php print $row->product_num; ?></td>
 					<td id="td_html_<?php print $row->tuan_id; ?>"><?php print $this->status_list[$row->status]; ?><?php if($row->tuan_offline_time<$this->time) { print ' 已过期'; } elseif($row->is_promote == 1 && $row->is_onsale == 1) {print ' 已上架';}?></td>
 					<td>
 						<!-- 编辑、查看 -->
 						<a class="edit" href="mami_tuan/edit/<?php print $row->tuan_id; ?>" title="编辑"></a>
 						<!-- 预览 -->
-						<a href="<?php print front_url("tuanDetail-{$row->tuan_id}.html?is_preview=1"); ?>" target="_blank" title="预览">预览</a>
+						<a href="" target="_blank" title="预览">预览</a>
 						
-						<?php if ($row->tuan_offline_time>=$this->time && $is_edit): ?>
+						<?php //if ($row->tuan_offline_time>=$this->time && $is_edit): ?>
 						<!-- 客审、反客审 -->
 						<?php if($row->status == 1 && $row->is_promote == 0){?>
 						<input type="button" id="unconfirm_<?php print $row->tuan_id; ?>" onclick="return post_confirm(<?php print $row->tuan_id; ?>,0);" value="反审核">
@@ -138,15 +142,15 @@
 						<?php if($row->status != 2 && $row->status != 3):?>
 						<input type="button" id="unsale_<?php print $row->tuan_id; ?>" onclick="post_sale(<?php print $row->tuan_id; ?>,0);" value="停止">
 						<?php endif;?>
-						<?php if($row->status == 1 && $row->is_promote == 0):?>
-						<input type="button" id="onsale_<?php print $row->tuan_id; ?>" onclick="post_sale(<?php print $row->tuan_id; ?>,1);" value="上架">
-						<?php endif;?>
-						<?php endif;?>
+						<?php //if($row->status == 1 && $row->is_promote == 0):?>
+						<!--<input type="button" id="onsale_<?php print $row->tuan_id; ?>" onclick="post_sale(<?php print $row->tuan_id; ?>,1);" value="上架"> -->
+						<?php //endif;?>  
+						<?php //endif;?>
 					</td>
 			    </tr>
 				<?php endforeach; ?>
 			    <tr>
-					<td colspan="10" class="bottomTd"> </td>
+					<td colspan="11" class="bottomTd"> </td>
 				</tr>
 			</table>
 			<div class="blank5"></div>

@@ -49,6 +49,9 @@
                                         <th>供应商名称</th>
 					<th>合作方式</th>
 					<th>公司名称</th>
+					<th>法人代表</th>
+					<th>销售员</th>
+					<th>销售员手机号</th>
 					<th>品牌</th>
 					<th>启用</th>
 					<th width="250px">操作</th>
@@ -57,9 +60,12 @@
 				<tr class="row">
 					<td><?php print $row->provider_id; ?></td>
 					<td><?php print $row->provider_code?></td>
-                                        <td><?php print $row->provider_name?></td>
-                                        <td><?php print $row->cooperation_name?></td>
+                    <td><?php print $row->provider_name?></td>
+                    <td><?php print $row->cooperation_name?></td>
 					<td><?php print $row->official_name?></td>
+					<td><?php print $row->legal_provider?></td>
+					<td><?php print $row->sales_name?></td>
+					<td><?php print $row->sales_mobile?></td>					
 					<td>
 					    <?php if(!empty($row->provider_brand_list))
 						    foreach ($row->provider_brand_list as $brand){
@@ -73,17 +79,7 @@
 						<?php print toggle_link('provider/toggle','is_use',$row->provider_id, $row->is_use);?>
 					</td>
 					<td>
-<!--
-
-						<a class="edit" href="provider/edit/<?php print $row->provider_id; ?>" title="编辑"></a>
-						<?php if ($perm_delete): ?>
-							<a class="del" href="javascript:void(0)" rel="provider/delete/<?php print $row->provider_id; ?>" title="删除" onclick="do_delete(this)"></a>
-						<?php endif ?>
-						<a href="provider/shipping/<?php print $row->provider_id; ?>" title="运费">运费</a>
-                        <a href="provider/scm_edit/<?php print $row->provider_id; ?>" title="直发设置">直发</a>
-                        <a href="provider/scm_index/<?php print $row->provider_id; ?>" title="分销商发货设置">分发</a>
--->
-<div class="am-btn-group">
+					<div class="am-btn-group">
 						<a style="padding-left:0px;padding-right:5px;" class="am-icon-edit am-btn am-btn-xs" href="provider/edit/<?php print $row->provider_id; ?>" title="编辑">编辑</a>
 						<?php if ($perm_delete): ?>
 							<a style="padding-left:0px;padding-right:5px;" class="am-icon-trash am-btn am-btn-xs" href="javascript:void(0)" rel="provider/delete/<?php print $row->provider_id; ?>" title="删除" onclick="do_delete(this)">删除</a>
@@ -94,7 +90,7 @@
                         <a style="padding-left:0px;padding-right:5px;" class="am-btn am-btn-xs am-btn-link am-icon-long-arrow-right" href="provider/scm_edit/<?php print $row->provider_id; ?>" title="直发设置">直发</a>
                         <a style="padding-left:0px;padding-right:5px;" class="am-btn am-btn-xs am-btn-link am-icon-th" href="provider/scm_index/<?php print $row->provider_id; ?>" title="分销商发货设置">分发</a>
 						<?php } ?>
-</div>
+					</div>
 					</td>
 				</tr>
 				<?php endforeach; ?>

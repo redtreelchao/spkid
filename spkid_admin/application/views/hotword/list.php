@@ -38,6 +38,7 @@
 			      <th width="270">热门关键字URL</th>
 			      <th width="141">排序</th>
 				  <th width="157">点击量</th>
+				  <th width="157">类别</th>
 				  <th width="163">创建日期</th>
 				  <th width="77">操作</th>
 				</tr>
@@ -48,12 +49,13 @@
 					<td><?php print $row->hotword_url; ?></td>
 					<td><?php print $row->sort_order; ?></td>
 					<td><?php print $row->click_count; ?></td>
+					<td><?php print ( $row->hotword_type == 1 ) ? "课程" : "商品"; ?></td>
 					<td><?php print $row->create_date; ?></td>
 					<td>
-                    <?php if($perms['hotword_edit'] == 1):?>
-                    <a href="hotword/edit/<?php print $row->hotword_id; ?>" title="编辑" class="edit"></a>
-                    <a class="del" href="javascript:void(0);" rel="hotword/delete/<?php print $row->hotword_id; ?>" title="删除" onclick="do_delete(this)"></a>
-					<?php endif;?>    
+	                    <?php if($perms['hotword_edit'] == 1):?>
+	                    <a href="hotword/edit/<?php print $row->hotword_id; ?>" title="编辑" class="edit"></a>
+	                    <a class="del" href="javascript:void(0);" rel="hotword/delete/<?php print $row->hotword_id; ?>" title="删除" onclick="do_delete(this)"></a>
+						<?php endif;?>    
                     </td>
 			    </tr>
 				<?php endforeach; ?>

@@ -1665,12 +1665,12 @@
             var left = offsetMe.left;
 
             var daystr = this.abbr;
-            var arrdays = daystr.split('/');
+            var arrdays = daystr.split('-');
             var day = new Date(arrdays[0], parseInt(arrdays[1] - 1), arrdays[2]);
             var cc = $("#cal-month-cc");
             var ccontent = $("#cal-month-cc-content table tbody");
             var ctitle = $("#cal-month-cc-title");
-            ctitle.html(dateFormat.call(day, i18n.xgcalendar.dateformat.Md3) + " " + __WDAY[day.getDay()]);
+            ctitle.html(dateFormat.call(day, i18n.xgcalendar.dateformat.fulldayvalue));
             ccontent.empty();
             //var c = tc()[2];
             var edata = $("#gridEvent").data("mvdata");

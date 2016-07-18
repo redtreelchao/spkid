@@ -662,7 +662,7 @@ class CI_AlipaySubmit {
                     "out_trade_no"  => $order->track_sn,
                     "subject"   => $order->track_sn,
                     "total_fee" => number_format($order->pay_price,2,'.',''),
-                    "show_url"  => $alipay_config['show_url'],
+                    //"show_url"  => $alipay_config['show_url'],
                     "body"  => $order->track_sn,
                     //"it_b_pay"  => $it_b_pay,
                     //"extern_token"  => $extern_token,

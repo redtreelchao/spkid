@@ -35,6 +35,15 @@
 			  <td class="item_title">点击量:</td>
 			  <td class="item_input"><input name="click_count"  class="textbox require" id="click_count" value="<?php echo $arr->click_count?>" /></td>
 		  </tr>
+		  <tr>
+			  <td class="item_title">类别:</td>
+			  <td class="item_input">
+			  	<select name="hotword_type" id="hotword_type">
+			  		<option value="0" <?php if($arr->hotword_type == 0 ) print "selected"; ?> >商品</option>
+			  		<option value="1" <?php if($arr->hotword_type == 1 ) print "selected"; ?> >课程</option>
+			  	</select>
+			  </td>
+		  </tr>
 			<tr>
 				<td class="item_title">排序号:</td>
 				<td class="item_input"><input name="sort_order" class="textbox require" id="sort_order" value="<?php echo $arr->sort_order?>" /></td>

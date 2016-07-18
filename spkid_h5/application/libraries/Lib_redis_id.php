@@ -8,7 +8,7 @@ class Lib_redis_id {
  
     public function __construct(){
         $this->r=new Redis();
-        $this->r->connect('192.168.20.204', 6379);
+        $this->r->connect('192.168.20.93', 6379);
     }
  
     function set_queue_id($ids){
@@ -29,15 +29,15 @@ class Lib_redis_id {
     
     /**
 
-    * åŠ é”
+    * ¼ÓËø
 
-    * @param  [type]  $name           é”çš„æ ‡è¯†å
+    * @param  [type]  $name           ËøµÄ±êÊ¶Ãû
 
-    * @param  integer $timeout        å¾ªç¯è·å–é”çš„ç­‰å¾…è¶…æ—¶æ—¶é—´ï¼Œåœ¨æ­¤æ—¶é—´å†…ä¼šä¸€ç›´å°è¯•è·å–é”ç›´åˆ°è¶…æ—¶ï¼Œä¸º0è¡¨ç¤ºå¤±è´¥åç›´æ¥è¿”å›ä¸ç­‰å¾…
+    * @param  integer $timeout        Ñ­»·»ñÈ¡ËøµÄµÈ´ı³¬Ê±Ê±¼ä£¬ÔÚ´ËÊ±¼äÄÚ»áÒ»Ö±³¢ÊÔ»ñÈ¡ËøÖ±µ½³¬Ê±£¬Îª0±íÊ¾Ê§°ÜºóÖ±½Ó·µ»Ø²»µÈ´ı
 
-    * @param  integer $expire         å½“å‰é”çš„æœ€å¤§ç”Ÿå­˜æ—¶é—´(ç§’)ï¼Œå¿…é¡»å¤§äº0ï¼Œå¦‚æœè¶…è¿‡ç”Ÿå­˜æ—¶é—´é”ä»æœªè¢«é‡Šæ”¾ï¼Œåˆ™ç³»ç»Ÿä¼šè‡ªåŠ¨å¼ºåˆ¶é‡Šæ”¾
+    * @param  integer $expire         µ±Ç°ËøµÄ×î´óÉú´æÊ±¼ä(Ãë)£¬±ØĞë´óÓÚ0£¬Èç¹û³¬¹ıÉú´æÊ±¼äËøÈÔÎ´±»ÊÍ·Å£¬ÔòÏµÍ³»á×Ô¶¯Ç¿ÖÆÊÍ·Å
 
-    * @param  integer $waitIntervalUs è·å–é”å¤±è´¥åæŒ‚èµ·å†è¯•çš„æ—¶é—´é—´éš”(å¾®ç§’)
+    * @param  integer $waitIntervalUs »ñÈ¡ËøÊ§°Üºó¹ÒÆğÔÙÊÔµÄÊ±¼ä¼ä¸ô(Î¢Ãë)
 
     * @return [type]                  [description]
 
@@ -45,41 +45,41 @@ class Lib_redis_id {
     public function lock($name, $timeout = 0, $expire = 15, $waitIntervalUs = 100000) {
         if ($name == null) return false;
         
-        //å–å¾—å½“å‰æ—¶é—´
+        //È¡µÃµ±Ç°Ê±¼ä
         $now = time();
         
-        //è·å–é”å¤±è´¥æ—¶çš„ç­‰å¾…è¶…æ—¶æ—¶åˆ»
+        //»ñÈ¡ËøÊ§°ÜÊ±µÄµÈ´ı³¬Ê±Ê±¿Ì
         $timeoutAt = $now + $timeout;
         
-        //é”çš„æœ€å¤§ç”Ÿå­˜æ—¶åˆ»
+        //ËøµÄ×î´óÉú´æÊ±¿Ì
         $expireAt = $now + $expire;
  
         $redisKey = "Lock:{$name}";
         while (true) {
             
-        //å°†rediskeyçš„æœ€å¤§ç”Ÿå­˜æ—¶åˆ»å­˜åˆ°redisé‡Œï¼Œè¿‡äº†è¿™ä¸ªæ—¶åˆ»è¯¥é”ä¼šè¢«è‡ªåŠ¨é‡Šæ”¾
+        //½«rediskeyµÄ×î´óÉú´æÊ±¿Ì´æµ½redisÀï£¬¹ıÁËÕâ¸öÊ±¿Ì¸ÃËø»á±»×Ô¶¯ÊÍ·Å
         $result = $this->r->setnx($redisKey, $expireAt);
  
         if ($result != false) {
 
-            //è®¾ç½®keyçš„å¤±æ•ˆæ—¶é—´
+            //ÉèÖÃkeyµÄÊ§Ğ§Ê±¼ä
             $this->r->expire($redisKey, $expireAt);
 
-            //å°†é”æ ‡å¿—æ”¾åˆ°lockedNamesæ•°ç»„é‡Œ
+            //½«Ëø±êÖ¾·Åµ½lockedNamesÊı×éÀï
             $this->lockedNames[$name] = $expireAt;
             return true;
         }
  
             
-        //ä»¥ç§’ä¸ºå•ä½ï¼Œè¿”å›ç»™å®škeyçš„å‰©ä½™ç”Ÿå­˜æ—¶é—´
+        //ÒÔÃëÎªµ¥Î»£¬·µ»Ø¸ø¶¨keyµÄÊ£ÓàÉú´æÊ±¼ä
         $ttl = $this->r->ttl($redisKey);
 
 
-        //ttlå°äº0 è¡¨ç¤ºkeyä¸Šæ²¡æœ‰è®¾ç½®ç”Ÿå­˜æ—¶é—´ï¼ˆkeyæ˜¯ä¸ä¼šä¸å­˜åœ¨çš„ï¼Œå› ä¸ºå‰é¢setnxä¼šè‡ªåŠ¨åˆ›å»ºï¼‰
+        //ttlĞ¡ÓÚ0 ±íÊ¾keyÉÏÃ»ÓĞÉèÖÃÉú´æÊ±¼ä£¨keyÊÇ²»»á²»´æÔÚµÄ£¬ÒòÎªÇ°Ãæsetnx»á×Ô¶¯´´½¨£©
 
-        //å¦‚æœå‡ºç°è¿™ç§çŠ¶å†µï¼Œé‚£å°±æ˜¯è¿›ç¨‹çš„æŸä¸ªå®ä¾‹setnxæˆåŠŸå crash å¯¼è‡´ç´§è·Ÿç€çš„expireæ²¡æœ‰è¢«è°ƒç”¨
+        //Èç¹û³öÏÖÕâÖÖ×´¿ö£¬ÄÇ¾ÍÊÇ½ø³ÌµÄÄ³¸öÊµÀısetnx³É¹¦ºó crash µ¼ÖÂ½ô¸ú×ÅµÄexpireÃ»ÓĞ±»µ÷ÓÃ
 
-        //è¿™æ—¶å¯ä»¥ç›´æ¥è®¾ç½®expireå¹¶æŠŠé”çº³ä¸ºå·±ç”¨
+        //ÕâÊ±¿ÉÒÔÖ±½ÓÉèÖÃexpire²¢°ÑËøÄÉÎª¼ºÓÃ
         if ($ttl < 0) {
             $this->r->set($redisKey, $expireAt);
             $this->lockedNames[$name] = $expireAt;
@@ -87,13 +87,13 @@ class Lib_redis_id {
         }
  
             
-        /*****å¾ªç¯è¯·æ±‚é”éƒ¨åˆ†*****/
+        /*****Ñ­»·ÇëÇóËø²¿·Ö*****/
 
-        //å¦‚æœæ²¡è®¾ç½®é”å¤±è´¥çš„ç­‰å¾…æ—¶é—´ æˆ–è€… å·²è¶…è¿‡æœ€å¤§ç­‰å¾…æ—¶é—´äº†ï¼Œé‚£å°±é€€å‡º
+        //Èç¹ûÃ»ÉèÖÃËøÊ§°ÜµÄµÈ´ıÊ±¼ä »òÕß ÒÑ³¬¹ı×î´óµÈ´ıÊ±¼äÁË£¬ÄÇ¾ÍÍË³ö
         if ($timeout <= 0 || $timeoutAt < microtime(true)) break;
  
             
-//éš” $waitIntervalUs åç»§ç»­ è¯·æ±‚
+//¸ô $waitIntervalUs ºó¼ÌĞø ÇëÇó
             usleep($waitIntervalUs);
  
         }
@@ -103,7 +103,7 @@ class Lib_redis_id {
     
     /**
 
-    * è§£é”
+    * ½âËø
 
     * @param  [type] $name [description]
 
@@ -111,12 +111,12 @@ class Lib_redis_id {
 
     */
     public function unlock($name) {     
-        //å…ˆåˆ¤æ–­æ˜¯å¦å­˜åœ¨æ­¤é”
+        //ÏÈÅĞ¶ÏÊÇ·ñ´æÔÚ´ËËø
         if ($this->isLocking($name)) {
-            //åˆ é™¤é”
+            //É¾³ıËø
             if ($this->r->del("Lock:$name")) {
 
-            //æ¸…æ‰lockedNamesé‡Œçš„é”æ ‡å¿—
+            //ÇåµôlockedNamesÀïµÄËø±êÖ¾
                 unset($this->lockedNames[$name]);
                 return true;
             }
@@ -126,7 +126,7 @@ class Lib_redis_id {
     
     /**
 
-    * åˆ¤æ–­å½“å‰æ˜¯å¦æ‹¥æœ‰æŒ‡å®šåå­—çš„æ‰€
+    * ÅĞ¶Ïµ±Ç°ÊÇ·ñÓµÓĞÖ¸¶¨Ãû×ÖµÄËù
 
     * @param  [type]  $name [description]
 
@@ -134,9 +134,9 @@ class Lib_redis_id {
 
     */
     public function isLocking($name) {       
-        //å…ˆçœ‹lonkedName[$name]æ˜¯å¦å­˜åœ¨è¯¥é”æ ‡å¿—å
+        //ÏÈ¿´lonkedName[$name]ÊÇ·ñ´æÔÚ¸ÃËø±êÖ¾Ãû
         if (isset($this->lockedNames[$name])) {
-            //ä»redisè¿”å›è¯¥é”çš„ç”Ÿå­˜æ—¶é—´
+            //´Óredis·µ»Ø¸ÃËøµÄÉú´æÊ±¼ä
             return (string)$this->lockedNames[$name] = (string)$this->r->get("Lock:$name");
         }
 
@@ -144,13 +144,13 @@ class Lib_redis_id {
     }
     /**
 
-    * é‡Šæ”¾å½“å‰æ‰€æœ‰è·å¾—çš„é”
+    * ÊÍ·Åµ±Ç°ËùÓĞ»ñµÃµÄËø
 
     * @return [type] [description]
 
     */
     public function unlockAll() {
-        //æ­¤æ ‡å¿—æ˜¯ç”¨æ¥æ ‡å¿—æ˜¯å¦é‡Šæ”¾æ‰€æœ‰é”æˆåŠŸ
+        //´Ë±êÖ¾ÊÇÓÃÀ´±êÖ¾ÊÇ·ñÊÍ·ÅËùÓĞËø³É¹¦
         $allSuccess = true;
         foreach ($this->lockedNames as $name => $expireAt) {
             if (false === $this->unlock($name)) {
@@ -162,13 +162,13 @@ class Lib_redis_id {
 
     /**
 
-    * å…¥é˜Ÿä¸€ä¸ª Task
+    * Èë¶ÓÒ»¸ö Task
 
-    * @param  [type]  $name          é˜Ÿåˆ—åç§°
+    * @param  [type]  $name          ¶ÓÁĞÃû³Æ
 
-    * @param  [type]  $id            ä»»åŠ¡idï¼ˆæˆ–è€…å…¶æ•°ç»„ï¼‰
+    * @param  [type]  $id            ÈÎÎñid£¨»òÕßÆäÊı×é£©
 
-    * @param  integer $timeout       å…¥é˜Ÿè¶…æ—¶æ—¶é—´(ç§’)
+    * @param  integer $timeout       Èë¶Ó³¬Ê±Ê±¼ä(Ãë)
 
     * @param  integer $afterInterval [description]
 
@@ -176,28 +176,28 @@ class Lib_redis_id {
 
     */
     public function enqueue($name, $id, $timeout = 10, $afterInterval = 0) {       
-        //åˆæ³•æ€§æ£€æµ‹
+        //ºÏ·¨ĞÔ¼ì²â
         if (empty($name) || empty($id) || $timeout <= 0) return false;
 
-        //åŠ é”
+        //¼ÓËø
         if (!$this->lock("Queue:{$name}", $timeout)) {
             Logger::get('queue')->error("enqueue faild becouse of lock failure: name = $name, id = $id");
             return false;
         }
 
 
-        //å…¥é˜Ÿæ—¶ä»¥å½“å‰æ—¶é—´æˆ³ä½œä¸º score
+        //Èë¶ÓÊ±ÒÔµ±Ç°Ê±¼ä´Á×÷Îª score
         $score = microtime(true) + $afterInterval;
 
-        //å…¥é˜Ÿ
+        //Èë¶Ó
         foreach ((array)$id as $item) {
-            //å…ˆåˆ¤æ–­ä¸‹æ˜¯å¦å·²ç»å­˜åœ¨è¯¥idäº†
+            //ÏÈÅĞ¶ÏÏÂÊÇ·ñÒÑ¾­´æÔÚ¸ÃidÁË
             if (false === $this->r->zscore("Queue:$name", $item)) {
                 $this->r->zadd("Queue:$name", $score, $item);
             }
         }
 
-        //è§£é”
+        //½âËø
         $this->unlock("Queue:$name");
 
         return true;
@@ -205,48 +205,48 @@ class Lib_redis_id {
     
     /**
 
-    * å‡ºé˜Ÿä¸€ä¸ªTaskï¼Œéœ€è¦æŒ‡å®š$id å’Œ $score
+    * ³ö¶ÓÒ»¸öTask£¬ĞèÒªÖ¸¶¨$id ºÍ $score
 
-    * å¦‚æœ$score ä¸é˜Ÿåˆ—ä¸­çš„åŒ¹é…åˆ™å‡ºé˜Ÿï¼Œå¦åˆ™è®¤ä¸ºè¯¥Taskå·²è¢«é‡æ–°å…¥é˜Ÿè¿‡ï¼Œå½“å‰æ“ä½œæŒ‰å¤±è´¥å¤„ç†
+    * Èç¹û$score Óë¶ÓÁĞÖĞµÄÆ¥ÅäÔò³ö¶Ó£¬·ñÔòÈÏÎª¸ÃTaskÒÑ±»ÖØĞÂÈë¶Ó¹ı£¬µ±Ç°²Ù×÷°´Ê§°Ü´¦Àí
 
     * 
 
-    * @param  [type]  $name    é˜Ÿåˆ—åç§° 
+    * @param  [type]  $name    ¶ÓÁĞÃû³Æ 
 
-    * @param  [type]  $id      ä»»åŠ¡æ ‡è¯†
+    * @param  [type]  $id      ÈÎÎñ±êÊ¶
 
-    * @param  [type]  $score   ä»»åŠ¡å¯¹åº”scoreï¼Œä»é˜Ÿåˆ—ä¸­è·å–ä»»åŠ¡æ—¶ä¼šè¿”å›ä¸€ä¸ªscoreï¼Œåªæœ‰$scoreå’Œé˜Ÿåˆ—ä¸­çš„å€¼åŒ¹é…æ—¶Taskæ‰ä¼šè¢«å‡ºé˜Ÿ
+    * @param  [type]  $score   ÈÎÎñ¶ÔÓ¦score£¬´Ó¶ÓÁĞÖĞ»ñÈ¡ÈÎÎñÊ±»á·µ»ØÒ»¸öscore£¬Ö»ÓĞ$scoreºÍ¶ÓÁĞÖĞµÄÖµÆ¥ÅäÊ±Task²Å»á±»³ö¶Ó
 
-    * @param  integer $timeout è¶…æ—¶æ—¶é—´(ç§’)
+    * @param  integer $timeout ³¬Ê±Ê±¼ä(Ãë)
 
-    * @return [type]           Taskæ˜¯å¦æˆåŠŸï¼Œè¿”å›falseå¯èƒ½æ˜¯redisæ“ä½œå¤±è´¥ï¼Œä¹Ÿæœ‰å¯èƒ½æ˜¯$scoreä¸é˜Ÿåˆ—ä¸­çš„å€¼ä¸åŒ¹é…ï¼ˆè¿™è¡¨ç¤ºè¯¥Taskè‡ªä»è·å–åˆ°æœ¬åœ°ä¹‹åè¢«å…¶ä»–çº¿ç¨‹å…¥é˜Ÿè¿‡ï¼‰
+    * @return [type]           TaskÊÇ·ñ³É¹¦£¬·µ»Øfalse¿ÉÄÜÊÇredis²Ù×÷Ê§°Ü£¬Ò²ÓĞ¿ÉÄÜÊÇ$scoreÓë¶ÓÁĞÖĞµÄÖµ²»Æ¥Åä£¨Õâ±íÊ¾¸ÃTask×Ô´Ó»ñÈ¡µ½±¾µØÖ®ºó±»ÆäËûÏß³ÌÈë¶Ó¹ı£©
 
     */
     public function dequeue($name, $id, $score, $timeout = 10) {       
-        //åˆæ³•æ€§æ£€æµ‹
+        //ºÏ·¨ĞÔ¼ì²â
         if (empty($name) || empty($id) || empty($score)) return false;
 
-        //åŠ é”
+        //¼ÓËø
         if (!$this->lock("Queue:$name", $timeout)) {
             Logger:get('queue')->error("dequeue faild becouse of lock lailure:name=$name, id = $id");
             return false;
         }
          
-        //å‡ºé˜Ÿ
-        //å…ˆå–å‡ºredisçš„score
+        //³ö¶Ó
+        //ÏÈÈ¡³öredisµÄscore
         $serverScore = $this->r->zscore("Queue:$name", $id);
         $result = false;
 
-        //å…ˆåˆ¤æ–­ä¼ è¿›æ¥çš„scoreå’Œredisçš„scoreæ˜¯å¦æ˜¯ä¸€æ ·
+        //ÏÈÅĞ¶Ï´«½øÀ´µÄscoreºÍredisµÄscoreÊÇ·ñÊÇÒ»Ñù
         if ($serverScore == $score) {
-            //åˆ æ‰è¯¥$id
+            //É¾µô¸Ã$id
             $result = (float)$this->r->zrem("Queue:$name", $id);
             if ($result == false) {
                 Logger::get('queue')->error("dequeue faild because of redis delete failure: name =$name, id = $id");
             }
         }
 
-        //è§£é”
+        //½âËø
         $this->unlock("Queue:$name");
 
         return $result;
@@ -254,39 +254,39 @@ class Lib_redis_id {
     
     /**
 
-    * è·å–é˜Ÿåˆ—é¡¶éƒ¨è‹¥å¹²ä¸ªTask å¹¶å°†å…¶å‡ºé˜Ÿ
+    * »ñÈ¡¶ÓÁĞ¶¥²¿Èô¸É¸öTask ²¢½«Æä³ö¶Ó
 
-    * @param  [type]  $name    é˜Ÿåˆ—åç§°
+    * @param  [type]  $name    ¶ÓÁĞÃû³Æ
 
-    * @param  integer $count   æ•°é‡
+    * @param  integer $count   ÊıÁ¿
 
-    * @param  integer $timeout è¶…æ—¶æ—¶é—´
+    * @param  integer $timeout ³¬Ê±Ê±¼ä
 
-    * @return [type]           è¿”å›æ•°ç»„[0=>['id'=> , 'score'=> ], 1=>['id'=> , 'score'=> ], 2=>['id'=> , 'score'=> ]]
+    * @return [type]           ·µ»ØÊı×é[0=>['id'=> , 'score'=> ], 1=>['id'=> , 'score'=> ], 2=>['id'=> , 'score'=> ]]
 
     */
     public function pop($name, $count = 1, $timeout = 10) {        
-        //åˆæ³•æ€§æ£€æµ‹
+        //ºÏ·¨ĞÔ¼ì²â
         if (empty($name) || $count <= 0) return [];
         
-        //åŠ é”
+        //¼ÓËø
         if (!$this->lock("Queue:$name")) {
             Logger::get('queue')->error("pop faild because of pop failure: name = $name, count = $count");
             return false;
         }
         
-        //å–å‡ºè‹¥å¹²çš„Task
+        //È¡³öÈô¸ÉµÄTask
         $result = [];
         $array = $this->r->zRangeByScore("Queue:$name", '-inf', '+inf', array('withscores', $count)); 
         
-    //å°†å…¶æ”¾åœ¨$resultæ•°ç»„é‡Œ å¹¶ åˆ é™¤æ‰rediså¯¹åº”çš„id
+    //½«Æä·ÅÔÚ$resultÊı×éÀï ²¢ É¾³ıµôredis¶ÔÓ¦µÄid
         foreach ($array as $id => $score) {
             $result[] = ['id'=>$id, 'score'=>$score];
             $this->r->zrem("Queue:$name", $id);
         }
  
         
-        //è§£é”
+        //½âËø
         $this->unlock("Queue:$name");
  
         return $count == 1 ? (empty($result) ? false : $result[0]) : $result;
@@ -294,30 +294,30 @@ class Lib_redis_id {
     
     /**
 
-    * è·å–é˜Ÿåˆ—é¡¶éƒ¨çš„è‹¥å¹²ä¸ªTask
+    * »ñÈ¡¶ÓÁĞ¶¥²¿µÄÈô¸É¸öTask
 
-    * @param  [type]  $name  é˜Ÿåˆ—åç§°
+    * @param  [type]  $name  ¶ÓÁĞÃû³Æ
 
-    * @param  integer $count æ•°é‡
+    * @param  integer $count ÊıÁ¿
 
-    * @return [type]         è¿”å›æ•°ç»„[0=>['id'=> , 'score'=> ], 1=>['id'=> , 'score'=> ], 2=>['id'=> , 'score'=> ]]
+    * @return [type]         ·µ»ØÊı×é[0=>['id'=> , 'score'=> ], 1=>['id'=> , 'score'=> ], 2=>['id'=> , 'score'=> ]]
 
     */
     public function top($name, $count = 1) {
         
-        //åˆæ³•æ€§æ£€æµ‹
+        //ºÏ·¨ĞÔ¼ì²â
         if (empty($name) || $count < 1)  return [];
         
-        //å–é”™è‹¥å¹²ä¸ªTask
+        //È¡´íÈô¸É¸öTask
         $result = [];
         $array = $this->r->zRangeByScore("Queue:$name", "-inf", "+inf", array("withscores", $count)); 
         
-        //å°†Taskå­˜æ”¾åœ¨æ•°ç»„é‡Œ
+        //½«Task´æ·ÅÔÚÊı×éÀï
         foreach ($array as $id => $score) {
             $result[] = ['id'=>$id, 'score'=>$score];
         }
         
-        //è¿”å›æ•°ç»„ 
+        //·µ»ØÊı×é 
         return $count == 1 ? (empty($result) ? false : $result[0]) : $result;       
     }
     

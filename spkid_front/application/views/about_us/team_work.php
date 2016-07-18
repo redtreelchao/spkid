@@ -3,7 +3,7 @@
     <div class="about-con">
         <p class="course-tit">首页>合作咨询</p>
         <ul class="about-list clearfix">
-          	<li><a href="/about_us/about_us">关于爱牙网</a></li>
+          	<li><a href="/about_us/about_us">关于悦牙网</a></li>
             <li><a href="/about_us/service">服务条款</a></li>
             <li><a href="/about_us/feedback">意见反馈</a></li>
             <li><a href="/about_us/sales_policy">售后政策</a></li>
@@ -16,7 +16,7 @@
                 <div class="hzlc-tit">合作流程</div>
                 <ul class="hezuoliucheng-lb clearfix">
                     <li><span>1</span>提交合作信息</li>
-                    <li><span>2</span>爱牙网致电合作方负责人</li>
+                    <li><span>2</span>悦牙网致电合作方负责人</li>
                     <li><span>3</span>确定合作</li>
                 </ul>
             </div>

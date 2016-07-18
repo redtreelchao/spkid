@@ -36,6 +36,8 @@
 						<td align="center" style="font-weight:bold">颜色编码</td>
 						<td align="center" style="font-weight:bold">规格编码</td>
 						<td align="center" style="font-weight:bold">数量</td>
+						<td align="center" style="font-weight:bold">生产批号</td>
+						<td align="center" style="font-weight:bold">有效期</td>
 					</tr>
 					<?php foreach($goods_list as $key=>$row): ?>
 					<tr style="line-height:10px">
@@ -47,6 +49,8 @@
 						<td align="center"><?php print $row->color_name.'['.$row->color_sn.']'; ?></td>
 						<td align="center"><?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
 						<td align="center"><span style="display:-moz-inline-box; display:inline-block;"><?php print $row->product_number; ?>&nbsp;</span></td>
+						<td align="center"><?php print $row->production_batch; ?></td>
+						<td align="center"><?php print ($row->expire_date == '0000-00-00' || $row->expire_date == '0000-00-00 00:00:00' || $row->expire_date == '')?'无':$row->expire_date; ?></td>
 					</tr>
 					<?php endforeach; ?>
 				</tbody>

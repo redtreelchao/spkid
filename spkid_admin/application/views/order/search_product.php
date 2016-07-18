@@ -1,4 +1,5 @@
 <?php if ($filter['goods_type']=='product'): ?>
+<input type="hidden" name="depot_id" value="<?=$filter['depot_id']?>"/>
 <table class="dataTable" cellpadding=0 cellspacing=0 rel="3" style="margin-top:0">
     <tr class="row">
         <th width="200px">名称</th>

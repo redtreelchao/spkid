@@ -12,7 +12,7 @@
 		<div id="goodsDiv">
 			<table class="dataTable" cellpadding=0 cellspacing=0>
 				<tr>
-					<td colspan="8" class="topTd"> </td>
+					<td colspan="13" class="topTd"> </td>
 				</tr>
 				<tr class="row">
 					<th width="280px">商品款号|商品名称|供应商货号</th>
@@ -22,9 +22,12 @@
 					<th>条码</th>
 					<th>颜色|尺码</th>
 					<th>包装方式</th>
+                                        <th>重量</th>
 					<th>批次</th>
 					<th>最大入库数</th>
 					<th>入库详细</th>
+					<th>有效期</th>
+					<th>生产批号</th>
 				</tr>
 				<?php foreach($goods_list as $row): ?>
 				<tr class="row">
@@ -35,6 +38,7 @@
 					<td><?php print $row->provider_barcode; ?></td>
 					<td><?php print $row->color_name.'['.$row->color_sn.']'; ?>| <?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
                     <td data-pk="<?php print $row->product_id;?>" title ="点击可修改" data-name="pack_method" class="editable" data-type="textarea" data-value="<?php print $row->pack_method; ?>"><?php print $row->pack_method; ?> </td>
+                    <td data-pk="<?php print $row->product_id;?>" title ="点击可修改" data-name="product_weight" class="editable" data-type="textarea" data-value="<?php print $row->product_weight; ?>"><?php print $row->product_weight; ?> </td>
 					<td><?php print $row->batch_code; ?></td>
 					<td><?php print $row->max_num; ?></td>
 					<td>
@@ -44,11 +48,12 @@
 					</p>
 					<?php endforeach; ?>
 					</td>
-
+					<td><?php print ($row->expire_date == '0000-00-00' || $row->expire_date == '0000-00-00 00:00:00' || $row->expire_date == '')?'无':$row->expire_date; ?></td>
+					<td><?php print $row->production_batch; ?></td>
 				</tr>
 				<?php endforeach; ?>
 				<tr>
-					<td colspan="8" class="bottomTd"> </td>
+					<td colspan="13" class="bottomTd"> </td>
 				</tr>
 			</table>
 			<div class="blank5"></div>

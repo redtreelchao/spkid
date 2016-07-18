@@ -7,7 +7,7 @@
             </div>
     </div>
     <!--navbar end-->  
-    <div class="page-content article-bg">
+    <div class="page-content article-bg2">
 	   	<div class="edu-fot">
             <div class="guanzhu-hu">
             	<!--buttons-row start-->

@@ -87,56 +87,55 @@
 		<div id="listDiv">
 <?php endif; if ($list) : ?>
             <table id="dataTable" class="dataTable" cellpadding=0 cellspacing=0>
-				<tr>
-					<td colspan="13" class="topTd"> </td>
-				</tr>
-				<tr class="row">
-					<th width="120px">订单号</th>
+                <tr>
+                    <td colspan="14" class="topTd"> </td>
+                </tr>
+                <tr class="row">
+                    <th width="120px">订单号</th>
                     <th>订单时间</th>
-					<th>运单号</th>
-					<th>发货状态</th>
-					<th>发货时间</th>
-					<th>快递公司</th>
-					<th>送货地址</th>
+                    <th>运单号</th>
+                    <th>发货状态</th>
+                    <th>发货时间</th>
+                    <th>快递公司</th>
+                    <th>送货地址</th>
                     <th>配送地址</th>
                     <th>收货人</th>
                     <th>包裹金额</th>
                     <th>付款方式</th>
                     <th>待收货款金额</th>
-                    <th>订单重量</th>
+                    <th>订单理论重量</th>
+                    <th>订单实际重量</th>
                     <?php if($perm_edit): ?>
                     <th>操作</th>
                     <?php endif; ?>
-
-                    
-
-				</tr>
-				<?php foreach($list as $row): ?>
-				<tr class="row">
+		</tr>
+                <?php foreach($list as $row): ?>
+                <tr class="row">
                     <td><a target="_blank" href="order/info/<?php print $row->order_id; ?>"><?php print $row->order_sn; ?></a></td>
-					<td><?php print $row->create_date; ?></td>
-					<td><?php print $row->invoice_no; ?></td>
-					<td><?php print ($row->shipping_status) ? '已发货' : '未发货'; ?></td>
-					<td><?php print $row->shipping_date; ?></td>
-					<td><?php print $row->shipping_name; ?></td>
-					<td><?php print $row->province." ".$row->city." ".$row->district; ?></td>
-					<td><?php print $row->address; ?></td>
-					<td><?php print $row->consignee; ?></td>
-					<td><?php print $row->order_amount; ?></td>
-					<td><?php print $row->pay_name; ?></td>
-					<td><?php print $row->paid_money; ?></td>
-                                        <td><?php print $row->order_weight_unreal; ?></td>
+                    <td><?php print $row->create_date; ?></td>
+                    <td><?php print $row->invoice_no; ?></td>
+                    <td><?php print ($row->shipping_status) ? '已发货' : '未发货'; ?></td>
+                    <td><?php print $row->shipping_date; ?></td>
+                    <td><?php print $row->shipping_name; ?></td>
+                    <td><?php print $row->province." ".$row->city." ".$row->district; ?></td>
+                    <td><?php print $row->address; ?></td>
+                    <td><?php print $row->consignee; ?></td>
+                    <td><?php print $row->order_amount; ?></td>
+                    <td><?php print $row->pay_name; ?></td>
+                    <td><?php print $row->paid_money; ?></td>
+                    <td><?php print $row->order_weight_unreal; ?></td>
+                    <td><?php print $row->recheck_weight_unreal; ?></td>
                     <?php if($perm_edit): ?>
-                        <td>
-                            <a class="edit" href="pick/scan_shipping_edit/<?php echo  $row->order_id; ?>" title="编辑快递信息"></a>
-                        </td>
+                    <td>
+                        <a class="edit" href="pick/scan_shipping_edit/<?php echo  $row->order_id; ?>" title="编辑快递信息"></a>
+                    </td>
                     <?php endif; ?>
-				</tr>
-				<?php endforeach; ?>
-				<tr>
-					<td colspan="13" class="bottomTd"> </td>
-				</tr>
-			</table>
+                </tr>
+                <?php endforeach; ?>
+                <tr>
+                    <td colspan="14" class="bottomTd"> </td>
+                </tr>
+            </table>
 			<div class="blank5"></div>
 			<div class="page">
 				<?php include(APPPATH.'views/common/page.php') ?>

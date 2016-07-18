@@ -19,7 +19,7 @@ class Order_recheck_model extends CI_Model
 	}
 	
 	public function get_order_product_info ($order_sn){
-		$sql = "SELECT pks.sub_id,oi.pick_sn,pks.product_id,pks.color_id,pks.size_id,ppi.product_sn,ppi.provider_productcode,brand.brand_name,pc.color_sn,pc.color_name,ps.size_name,ps.size_sn,ppi.product_name,pks.pick_num,pks.qc_num,pks.product_number,(pks.product_number-pks.qc_num) AS unqc_num,pu.provider_barcode ".
+		$sql = "SELECT pks.sub_id,oi.pick_sn, oi.invoice_no, pks.product_id,pks.color_id,pks.size_id,ppi.product_sn,ppi.provider_productcode,brand.brand_name,pc.color_sn,pc.color_name,ps.size_name,ps.size_sn,ppi.product_name,pks.pick_num,pks.qc_num,pks.product_number,(pks.product_number-pks.qc_num) AS unqc_num,pu.provider_barcode ".
 				"FROM ".$this->db_r->dbprefix('order_info')." AS oi ".
 				"LEFT JOIN ".$this->db_r->dbprefix('pick_sub')." AS pks ON oi.order_sn = pks.rel_no ".
 				"LEFT JOIN ".$this->db_r->dbprefix('product_info')." AS ppi ON pks.product_id = ppi.product_id ".

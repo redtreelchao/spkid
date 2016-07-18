@@ -197,15 +197,15 @@ class Product extends CI_Controller
         } 
         
         //判断是否用户已经收藏
-        $is_collected = false;
+        /*$is_collected = false;
         if ($this->user_id) {
         	//判断收藏的商品是否已收藏
         	$col=$this->product_model->filter_collect(array('product_id'=>$product_id,'product_type'=>3,'user_id'=>$this->user_id));	
         	if (!empty($col)) {
         		$is_collected = true;
         	}
-        }  
-
+        }*/ 
+        
 		$this->load->view($view_page,array(
 			'title'		=> $seo['title'],	
 			'ititle'	=> $p->product_name,
@@ -229,8 +229,7 @@ class Product extends CI_Controller
 			'user_id' => $this->session->userdata('user_id'),
 			'is_outofdate' => $is_outofdate,
 			'related_courses' => $related_courses,
-			'is_exceed_num' => $is_exceed_num,
-			'is_collected' => $is_collected,
+			'is_exceed_num' => $is_exceed_num,			
 			'product_desc_additional' => $product_desc_additional
                                 //,
 //			'css'		=> array('css/plist.css'),
@@ -1167,5 +1166,34 @@ class Product extends CI_Controller
 		$this->load->view('product/course_all', array('index' => 3));
 	}
 
+	public function is_product_collected() {
+		$is_collected = 0;
+
+		$product_id = $this->input->post('product_id');
+		$product_type = $this->input->post('product_type');
+
+		if(!$product_id || !$product_type) {
+			echo $is_collected;exit;
+		}
+
+        if ($this->user_id) {
+        	//判断收藏的商品是否已收藏
+        	$col=$this->product_model->filter_collect(array(
+        		'product_id'=>$product_id,
+        		'product_type'=>$product_type,
+        		'user_id'=>$this->user_id));	
+        	if (!empty($col)) {
+        		$is_collected = 1;
+        	}
+        } 
+
+       	if($this->input->is_ajax_request()) {
+       		echo $is_collected; 
+       	} else {
+       		return $collected;
+       	}
+
+
+	}
 }
 

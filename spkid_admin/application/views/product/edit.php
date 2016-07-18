@@ -4,48 +4,6 @@
 <script type="text/javascript" src="public/js/validator.js"></script>
 <script type="text/javascript" src="public/js/product.js"></script>
 <script type="text/javascript">
-	//该逻辑针对课程和产品详情的动态编辑
-	$(function(){
-		var genre_id = '<?php echo $row->genre_id;?>';		
-		if (genre_id == 1) {
-			$('.product_detail_edit').show();
-			$('.course_detail_edit').hide();				
-		};
-			
-		if (genre_id == 2) {
-			$('.product_detail_edit').hide();
-			$('.course_detail_edit').show();			
-		};
-
-		$('select[name="genre_id"]').change(function(){
-			var val = $('select[name="genre_id"]').val();
-			//产品详情
-			if (val == 1) {
-					
-				if ($('.product_detail_edit [name="detail11"]').length) {
-					$('.product_detail_edit [name="detail11"]').attr('name', 'detail1');
-					$('.product_detail_edit [name="detail22"]').attr('name', 'detail2');
-					$('.course_detail_edit [name="detail1"]').attr('name', 'detail11');
-					$('.course_detail_edit [name="detail2"]').attr('name', 'detail22');
-				};
-				$('.product_detail_edit').show();
-				$('.course_detail_edit').hide();
-			};
-			//课程详情
-			if (val == 2) {
-					
-				if ($('.course_detail_edit [name="detail11"]').length) {
-					$('.product_detail_edit [name="detail1"]').attr('name', 'detail11');
-					$('.product_detail_edit [name="detail2"]').attr('name', 'detail22');
-					$('.course_detail_edit [name="detail11"]').attr('name', 'detail1');
-					$('.course_detail_edit [name="detail22"]').attr('name', 'detail2');
-				};
-
-				$('.product_detail_edit').hide();
-				$('.course_detail_edit').show();
-			};
-		});
-	});
 	//<![CDATA[
 	$(function(){
 		$(':input[name=promote_start_date]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
@@ -68,27 +26,26 @@
         var i = Utils.request(location.href,'tab');
         if(!i) i = 0;
 		$(btns[i]).click();
-		//$('span.img_tip').cluetip({splitTitle: '|',showTitle:false});
 		<?php foreach($all_gallery_sub as $color_id=>$gallery_sub) print "ajax_form({$color_id});";?>
-
-<?php echo $genre_field_map_js;?>
 	});
 	function check_form(){
 		var validator = new Validator('mainForm');
-			validator.required('product_name', '请填写商品名称');
-			validator.selected('provider_id', '请选择供应商');
-			validator.selected('brand_id', '请选择品牌');
-			// validator.reg('product_sn',/^[0-9A-Za-z]{1,10}$/,'请填写由字母和数字组成最大10位的商品款号');
-			// validator.required('provider_productcode', '请填写供应商货号');
-			validator.required('unit_name', '请填写计量单位');
-			validator.isNonNegative('shop_price', '请填写本店售价', true);
-			validator.isPrice('market_price', '请填写市场价', true);
-			return validator.passed();
+		validator.required('product_name', '请填写商品名称');
+        validator.required('product_name_alias', '请填写后台品名');
+		validator.selected('provider_id', '请选择供应商');
+		validator.selected('brand_id', '请选择品牌');
+		validator.selected('register_id', '请填写注册证号');
+		validator.required('unit_name', '请填写计量单位');
+		validator.isNonNegative('shop_price', '请填写本店售价', true);
+		validator.isPrice('market_price', '请填写市场价', true);
+        validator.required('operator', '请填写运营专员');
+		return validator.passed();
 	}
 	listTable.filter.product_id = <?php print $row->product_id; ?>;
 	listTable.url = 'product_api/link_search';
 	function search(){
 		var container = $('form[name=search]');
+        listTable.filter['product_id2'] = $.trim($('input[type=text][name=product_id2]', container).val());
 		listTable.filter['product_sn'] = $.trim($('input[type=text][name=product_sn]', container).val());
 		listTable.filter['product_name'] = $.trim($('input[type=text][name=product_name]', container).val());
 		listTable.filter['provider_productcode'] = $.trim($('input[type=text][name=provider_productcode]', container).val());
@@ -104,31 +61,31 @@
 		    dataType: 'json',
 		    type: 'POST',
 		    success: function(result){
-			if(result.error == 0)
-			{
-			    var content = result.content;
-			    var div = $("div[class=conf_tab][rel=3]");
-			    div.html(content);
-			    div.append("<input type='am-btn am-btn-primary' style='text-align: center' class='am-btn am-btn-primary' value='确认' onclick='set_type()'/>");
-			    div.find("#type_link_title").hide();
-			}
+				if(result.error == 0)
+				{
+				    var content = result.content;
+				    var div = $("div[class=conf_tab][rel=3]");
+				    div.html(content);
+				    div.append("<input type='am-btn am-btn-primary' style='text-align: center' class='am-btn am-btn-primary' value='确认' onclick='set_type()'/>");
+				    div.find("#type_link_title").hide();
+				}
 		    }
-		 });
+		});
 	}
 	
 	function set_type(){
 	    var product_id = $("#product_id").val();
 	    var chk_value =[];    
 	    $('input[name="type_ids"]:checked').each(function(){
-	     chk_value.push($(this).val());    
+	     	chk_value.push($(this).val());    
 	    });
-	   $.ajax({
+	    $.ajax({
 		    url: 'product_type_link/set_type',
 		    data: {product_id : product_id ,type_ids : chk_value, rnd : new Date().getTime()},
 		    dataType: 'json',
 		    type: 'POST',
 		    success: function(){
-			window.location.reload();
+				window.location.reload();
 		    }
 	   });
 	}
@@ -139,20 +96,37 @@
 	<div class="blank5"></div>
 	<div class="button_row">
         <ul>
-         <li class="conf_btn" rel="1"><span>基础信息</span></li>
-         <li class="conf_btn" rel="2"><span>颜色规格</span></li>
-	 <li class="conf_btn" rel="3"><span>前台分类</span></li>
-         <li class="conf_btn" rel="4"><span>关联商品</span></li>
+	        <li class="conf_btn" rel="1"><span>基础信息</span></li>
+	        <li class="conf_btn" rel="2"><span>颜色规格</span></li>
+		 	<li class="conf_btn" rel="3"><span>前台分类</span></li>
+	        <li class="conf_btn" rel="4"><span>关联商品</span></li>
         </ul>
         <div class="clear"></div>
 	</div>
-
 	<div class="blank5"></div>
-
 	<?php print form_open_multipart('product/proc_edit',array('name'=>'mainForm','onsubmit'=>'return check_form()'), array('product_id'=>$row->product_id));?>
 		<table class="form conf_tab" cellpadding=0 cellspacing=0 rel="1">
 			<tr>
 				<td colspan=4 class="topTd"></td>
+			</tr>
+            <tr>
+				<td class="item_title">平台类型:</td>
+                <td class="item_input">
+                    <select name="source_id">
+                        <option value="0">请选择</option>
+                        <?php foreach($all_source as $source) print "<option value='{$source->source_id}' ".($row->source_id == $source->source_id ? 'selected' : '').">{$source->source_name}</option>"?>
+                    </select>
+                </td>
+                <td class="item_title">运营专员:</td>
+                <td class="item_input">
+                    <?php print form_dropdown('operator', array(''=>'请选择')+get_pair($all_admin,'realname','realname'),array($row->operator), 'data-am-selected="{searchBox: 1,maxHeight: 300}"');?>
+                </td>
+			</tr>
+            <tr>
+				<td class="item_title">后台品名:</td>
+                <td class="item_input" colspan="3">
+                    <?php print form_input(array('name'=> 'product_name_alias','class'=> 'textbox require', 'value'=>$row->product_name_alias,'style'=>'width:600px;'));?>
+                </td>
 			</tr>
 			<tr>
 				<td class="item_title" width="100px">商品名称</td>
@@ -181,9 +155,7 @@
 					<?php print form_dropdown('provider_id', array('0'=>'请选择')+get_pair($all_provider,'provider_id','provider_name'),array($row->provider_id),'data-am-selected="{searchBox: 1,maxHeight: 300}"');?>
 				</td>
 				<td class="item_title" id="provider_productcode_label">供应商货号:</td>
-				<td class="item_input"><?php print form_input('provider_productcode',$row->provider_productcode,"class='textbox' ");?>
-                <?php //print form_input('provider_productcode',$row->provider_productcode,"class='textbox' ".($row->is_audit?'disabled':''));?>
-                </td>
+				<td class="item_input"><?php print form_input('provider_productcode',$row->provider_productcode,"class='textbox' ");?></td>
 			</tr>
 			<tr>
 				<td class="item_title" id="brand_id_label">品牌:</td>
@@ -193,19 +165,8 @@
 				<td class="item_title" id="category_id_label">分类:</td>
 				<td class="item_input">
 					<?php print form_product_category('category_id', $all_category, $row->category_id, (" data-am-selected='{searchBox: 1,maxHeight: 300}'"));?>
-					<?php //print form_product_category('category_id', $all_category, $row->category_id, ($row->is_audit?'disabled':" data-am-selected='{searchBox: 1,maxHeight: 300}'"));?>
 				</td>
 			</tr>
-			<!-- <tr>
-				<td class="item_title">风格:</td>
-				<td class="item_input">
-					<?php print form_dropdown('style_id', get_pair($all_style,'style_id','style_name'),$row->style_id);?>
-				</td>
-				<td class="item_title">季节:</td>
-				<td class="item_input">
-					<?php print form_dropdown('season_id', get_pair($all_season,'season_id','season_name'),$row->season_id);?>
-				</td>
-			</tr> -->
 			<tr>
 				<td class="item_title" id="register_id_label">注册证号:</td>
 				<td class="item_input">
@@ -213,7 +174,7 @@
 				</td>
 				<td class="item_title" id="unit_name_label">计量单位:</td>
 				<td class="item_input">
-                                        <?php print form_input('unit_name',$row->unit_name,"class='textbox require' size='3' ");?>
+                    <?php print form_input('unit_name',$row->unit_name,"class='textbox require' size='3' ");?>
 				</td>
 			</tr>
 			<tr>
@@ -261,7 +222,6 @@
 					<?php print form_input(array('name'=>'market_price','class'=>'textbox require','value'=>$row->market_price));?>
 				</td>
 			</tr>
-			<?php //if($row->is_promote): ?>
 			<tr>
 				<td class="item_title">促销价:</td>
 				<td class="item_input" colspan=3>
@@ -273,7 +233,6 @@
 					<?php print form_input(array('name'=>'promote_end_date','class'=>'textbox require','value'=>$row->promote_end_date));?>
 				</td>
 			</tr>
-			<?php //endif;?>
 			<tr>
 				<td class="item_title">关键字:</td>
 				<td class="item_input">
@@ -292,10 +251,9 @@
                    <?php print form_input(array('name'=>'content_source','class'=>'textbox', 'value'=>$row->content_source))?>
                 </td>
 			</tr>
-
 			<tr>
 				<td class="item_title">销售数量:</td>
-                                <td class="item_input">
+                <td class="item_input">
 					<?php print form_input(array('name'=>'ps_num','class'=>'textbox','value'=>$row->ps_num))?>
                     实售:<?php echo $row->ps_real_num;?>
 				</td>
@@ -305,7 +263,6 @@
                    实访:<?php echo $row->pv_real_num;?>
                 </td>
 			</tr>
-
 			<tr>
 				<td class="item_title" colspan="4" style="text-align: center">商品附加详细信息</td>
 			</tr>
@@ -314,128 +271,44 @@
 				<td class="item_input">
 					<?php print form_input(array('name'=>'subhead','class'=>'textbox','value'=>$row->subhead))?>
 				</td>
-
 				<td class="item_title" id="package_name_label">包装名称:</td>
 				<td class="item_input">
 					<?php print form_input(array('name'=> 'package_name','class'=> 'textbox','value'=>$row->package_name));?>
 				</td>
 			</tr>
-                        <tr>
+            <tr>
 				<td class="item_title" id="pack_method_label">包装方式:</td>
-                                <td class="item_input" colspan="3">
+                <td class="item_input" colspan="3">
 					<?php print form_input(array('name'=>'pack_method','class'=>'textbox','value'=>$row->pack_method))?>
 				</td>
 			</tr>
 			<tr>
-				<td class="item_title" id="desc_material_label">可自定义:</td>
-				<td class="item_input">
-					<?php print form_input(array('name'=>'desc_material','class'=>'textbox','value'=>$row->desc_material))?>
-				</td>
-				<td class="item_title" id="desc_waterproof_label">可自定义:</td>
-				<td class="item_input"><?php print form_input(array('name'=> 'desc_waterproof','class'=> 'textbox','value'=>$row->desc_waterproof));?></td>
-			</tr>
-			
-			<tr>
-				<td class="item_title" id="desc_crowd_label">可自定义:</td>
-				<td class="item_input">
-					<?php print form_input(array('name'=>'desc_crowd','class'=>'textbox','value'=>$row->desc_crowd))?>
-				</td>
-				<td class="item_title" id="desc_expected_shipping_date_label">可自定义:</td>
-				<td class="item_input"><?php print form_input(array('name'=> 'desc_expected_shipping_date','class'=> 'textbox','value'=>$row->desc_expected_shipping_date));?></td>
-			</tr>
-			<tr>
-				<td class="item_title" id="desc_composition_label">可自定义:</td>
-				<td class="item_input">
-					<?php print form_input(array('name'=>'desc_composition','class'=>'textbox','value'=>$row->desc_composition))?>
-				</td>
-				<td class="item_title" id="desc_dimensions_label">可自定义:</td>
-				<td class="item_input"><?php print form_input(array('name'=> 'desc_dimensions','class'=> 'textbox','value'=>$row->desc_dimensions));?></td>
-			</tr>			
-                        <tr>
-				<td class="item_title" id="desc_use_explain_label">可自定义:</td>
-				<td class="item_input">
-					<?php print form_input(array('name'=>'desc_use_explain','class'=>'textbox','value'=>$row->desc_use_explain))?>
-				</td>
-				<td class="item_title" id="desc_function_exlain_label">可自定义:</td>
-				<td class="item_input"><?php print form_input(array('name'=> 'desc_function_explain','class'=> 'textbox','value'=>$row->desc_function_explain));?></td>
-			</tr>
-			<tr>
-				<td class="item_title" id="desc_notes_label">可自定义:</td>
-				<td class="item_input" colspan=3>
-					<?php print form_input(array('name'=>'desc_notes','class'=>'textbox','value'=>$row->desc_notes))?>
-				</td>
-			</tr>
-			<!-- <tr>
-				<td class="item_title">洗标:</td>
-				<td class="item_input" colspan=3>
-					<?php
-						foreach($all_carelabel as $carelabel){
-							print "<label>";
-							print form_checkbox('goods_carelabel[]', $carelabel->carelabel_id, in_array($carelabel->carelabel_id,$row->goods_carelabel));
-							print $carelabel->carelabel_name;
-							print "</label>";
-						}
-					?>
-				</td>
-				
-			</tr> -->
-			<tr>
 				<td class="item_title">商品描述:</td>
 				<td class="item_input" colspan=3>
 					<?php print $this->ckeditor->editor('product_desc',$row->product_desc) ?>
-				</td>
-				
+				</td>				
 			</tr>
-
-			<!-- 产品详情 -->	
-			
+			<!-- 产品详情 -->				
 			<tr class="product_detail_edit">
 				<td class="item_title">产品图文详情:</td>
 				<td class="item_input" colspan=3>
-					<?php print $this->ckeditor->editor("detail1" . ($row->genre_id == 1 ? '' : '1'),$row->detail1) ?>
+					<?php print $this->ckeditor->editor("detail1" ,$row->detail1) ?>
 				</td>
 			</tr>
 
 			<tr class="product_detail_edit">
 				<td class="item_title">产品测试视频:</td>
 				<td class="item_input" colspan=3>
-					<?php print $this->ckeditor->editor("detail2" . ($row->genre_id == 1 ? '' : '2'),$row->detail2) ?>
+					<?php print $this->ckeditor->editor("detail2",$row->detail2) ?>
 				</td>
 			</tr>
-			
-			<!-- ends 产品详情 -->	
-			<!-- 课程详情 -->
-			
-			<tr class="course_detail_edit">
-				<td class="item_title">培训详情:</td>
+			<tr>
+				<td class="item_title">商品细节展示:</td>
 				<td class="item_input" colspan=3>
-					<?php print $this->ckeditor->editor("detail1" . ($row->genre_id == 2 ? '' : '1'),$row->detail1) ?>
+					<?php print $this->ckeditor->editor('product_desc_detail',$row->product_desc_detail) ?>
 				</td>
 			</tr>
-
-			<tr class="course_detail_edit">
-				<td class="item_title">老师介绍:</td>
-				<td class="item_input" colspan=3>
-					<?php print $this->ckeditor->editor("detail2" . ($row->genre_id == 2 ? '' : '2'),$row->detail2) ?>
-				</td>
-			</tr>
-
-			<tr class="course_detail_edit">
-				<td class="item_title">交通路线:</td>
-				<td class="item_input" colspan=3>
-					<?php print $this->ckeditor->editor("detail3",$row->detail3) ?>
-				</td>
-			</tr>
-
-			<tr class="course_detail_edit">
-				<td class="item_title">学员评价:</td>
-				<td class="item_input" colspan=3>
-					<?php print $this->ckeditor->editor("detail4",$row->detail4) ?>
-				</td>
-			</tr>
-			
-			
-			<!-- ends 课程详情 -->	
+			<!-- ends 产品详情 -->
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input" colspan=3>
@@ -516,25 +389,21 @@
 				<td colspan=4 class="bottomTd"></td>
 			</tr>
 		</table> 
-		<div class="conf_tab" rel="3">
-		</div>
+		<div class="conf_tab" rel="3"></div>
 		<div class="conf_tab" rel="4">
 			<div id="link_list">
-			<?php include('link_list.php');?>
+				<?php include('link_list.php');?>
 			</div>
 			<div class="blank5"></div>
 			<div class="search_row">
 				<form name="search" action="javascript:search(); ">
-				商品款号：<input type="text" class="ts" name="product_sn" value="" style="width:100px;" />
-				商品名称：<input type="text" class="ts" name="product_name" value="" style="width:100px;" />
-				供应商货号：<input type="text" class="ts" name="provider_productcode" value="" style="width:100px;" />
-				<?php print form_dropdown('brand_id', get_pair($all_brand,'brand_id','brand_name',array(''=>'品牌')));?>
-				<!--
-					<?php print form_dropdown('style_id', get_pair($all_style,'style_id','style_name',array(''=>'风格')));?>
-					<?php print form_dropdown('season_id', get_pair($all_season,'season_id','season_name',array(''=>'季节')));?>
-					<select name="product_sex"><option value="">性别</option><option value="1">男款</option><option value="2">女款</option><option value="3">男女款</option></select> 
-				-->
-				<input type="submit" class="am-btn am-btn-secondary" value="搜索" />
+	                商品ID：<input type="text" class="ts" name="product_id2" value="" style="width:100px;" />
+					商品款号：<input type="text" class="ts" name="product_sn" value="" style="width:100px;" />
+					商品名称：<input type="text" class="ts" name="product_name" value="" style="width:100px;" />
+					供应商货号：<input type="text" class="ts" name="provider_productcode" value="" style="width:100px;" />
+					<?php print form_dropdown('brand_id', get_pair($all_brand,'brand_id','brand_name',array(''=>'品牌')));?>
+					
+					<input type="submit" class="am-btn am-btn-secondary" value="搜索" />
 				</form>
 			</div>
 			<div class="blank5"></div>
@@ -542,6 +411,5 @@
 			</div>
 			<div class="blank5"></div>
 		</div>
-		
 </div>
 <?php include(APPPATH.'views/common/footer.php');?>

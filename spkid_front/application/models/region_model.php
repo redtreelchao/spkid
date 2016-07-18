@@ -89,7 +89,7 @@ class Region_model extends CI_Model
     }
     //按新规则获取运费
     public function get_shipping_fee_province($shipping_id, $region_id){
-        $sql = "SELECT sa.`shipping_fee1`, sa.`shipping_fee2` FROM `ty_shipping_area` sa 
+        $sql = "SELECT sa.`shipping_fee1`, sa.`shipping_fee2`, first_weight FROM `ty_shipping_area` sa 
                 LEFT JOIN `ty_shipping_area_region` sar ON sa.`shipping_area_id` = sar.`shipping_area_id` 
                 WHERE sa.`shipping_id` = ".$shipping_id." AND sar.`region_id` = ".$region_id;
         return $this->_db->query($sql)->row();

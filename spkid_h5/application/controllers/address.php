@@ -11,15 +11,30 @@ class Address extends CI_Controller {
         $this->user_id = $this->session->userdata('user_id');
         $this->load->model('address_model');
         $this->load->model('region_model');
+        $this->load->library('user_obj');
     }
 
     public function index() {
+        if ($this->user_obj->is_login())
+        {
+            $user_id = $this->session->userdata('user_id');
+        } else
+        {
+            redirect('/user/login');
+        }
         $user_id = $this->user_id;
         $data['address'] = $this->address_model->address_list($user_id);    //收货地址列表
         $this->load->view('mobile/cart/address_list',$data);
     }
 
     public function address_add() {
+        if ($this->user_obj->is_login())
+        {
+            $user_id = $this->session->userdata('user_id');
+        } else
+        {
+            redirect('/user/login');
+        }
         $data['province'] = $this->region_model->all_region(array('region_type'=>1, 'parent_id' => 1));
         $this->load->view('mobile/cart/address_add',$data);
     }
@@ -111,6 +126,13 @@ class Address extends CI_Controller {
 
 
     public function address_editor($address_id) {
+        if ($this->user_obj->is_login())
+        {
+            $user_id = $this->session->userdata('user_id');
+        } else
+        {
+            redirect('/user/login');
+        }
 
         $data['address'] = $this->address_model->all_address(array('user_id'=>$this->user_id, 'address_id' => $address_id));
 
@@ -123,15 +145,20 @@ class Address extends CI_Controller {
     }
     
     public function address_delete() {
-        $formdata = json_decode($this->input->get('formdata'));
-
-        $address_id = $formdata->address_id;
-
+        $address_id = intval($this->input->get('address_id'));
         $delete_num= $this->address_model->delete_address($address_id);
-
         if(!empty($delete_num)){
             echo json_encode(array('mobile_check_err' => 2));
         }
+    }
+
+    // 收货地址 设置默认
+    public function address_default(){
+        $address_id = intval($this->input->get('address_id'));
+        $user_id = $this->user_id;
+        $this->address_model->update_address_used($address_id,$user_id);
+        $this->address_model->update(array('address_id'=>$address_id),$user_id);
+        echo json_encode(array('error' => 0, 'msg' => '设置成功'));
     }
 
 }

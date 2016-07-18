@@ -98,6 +98,7 @@ class Purchase_box extends CI_Controller
 	    $box_list = $this->purchase_box_model->filter_purchase_box_main(array("box_code"=>$box_code));
 	    if(!empty($box_list)){
 		$box_id = $box_list[0]->box_id;
+                $data['delivery_date']=$box_list[0]->delivery_date;
 		$data['details_list'] = $this->purchase_box_model->get_box_product($box_id);
 	    }
 	}
@@ -137,14 +138,22 @@ class Purchase_box extends CI_Controller
         }
         $product_list=$this->product_model->product_sub_for_scan(array('ps.provider_barcode'=>$provider_productcode,
                         'purchase_id'=>$purchase_id));
+
         if(count($product_list)>0){
 	    $product = $product_list[0];
-	    $product->box_number = 0;
+            $product->box_number = 0;
+	    $product->production_batch = '';
+            $product->check_num = 0;
+            $product->oqc = '';
 	    if($box_id >0){
 		$result = $this->purchase_box_model->filter_purchase_box_sub(array("box_id"=>$box_id,"provider_barcode"=>$provider_productcode));
 		if(count($result)>0){
 		    $item = $result[0];
-		    $product->box_number = $item ->product_number;
+                    $product->box_number = $item ->product_number;
+                    $product->production_batch = $item ->production_batch;
+                    $product->expire_date = $item ->expire_date;
+                    $product->check_num = $item ->check_num;
+                    $product->oqc = $item ->oqc;
 		}
 	    }
             $product->is_consign = $purchase->is_consign;
@@ -198,6 +207,7 @@ class Purchase_box extends CI_Controller
         auth('purchase_box_scanning');
         $purchase_code=$this->input->post('purchase_code');
         $box_code=$this->input->post('box_code');
+        $delivery_date=trim($this->input->post('delivery_date'));
         
         // 检查箱号和采购单号是否已关联
         $box_list=$this->purchase_box_model->filter_purchase_box_main(array('box_code'=>$box_code));
@@ -217,7 +227,11 @@ class Purchase_box extends CI_Controller
 	$color_id_array=$this->input->post('color_id_array');
 	$size_id_array=$this->input->post('size_id_array');
         $is_consign_array = $this->input->post('is_consign_array');
-	$number_array=$this->input->post('number_array');
+        $number_array=$this->input->post('number_array');
+        $v_batch_array=$this->input->post('v_batch_array');
+	$v_expire_array=$this->input->post('v_expire_array');
+        $v_oqc_array=$this->input->post('v_oqc_array');
+        $v_check_num_array=$this->input->post('v_check_num_array');
         $total_num=0;
 	if(count($provider_barcode_array) != count($product_id_array) 
 		|| count($product_id_array) != count($color_id_array)
@@ -231,30 +245,35 @@ class Purchase_box extends CI_Controller
         //组织箱子子表数据
         foreach($provider_barcode_array as $i=>$provider_barcode)
         {
-	  $product_id = $product_id_array[$i];
-	  $color_id = $color_id_array[$i];
-	  $size_id = $size_id_array[$i];
-	  $number = $number_array[$i];
+            $product_id = $product_id_array[$i];
+            $color_id = $color_id_array[$i];
+            $size_id = $size_id_array[$i];
+            $number = $number_array[$i];
+            $v_batch = $v_batch_array[$i];
+            $v_expire = $v_expire_array[$i];
+            $v_oqc = $v_oqc_array[$i];
+            $v_check_num = $v_check_num_array[$i];
           
-          $product_list=$this->product_model->product_sub_for_scan(array('ps.provider_barcode'=>$provider_barcode,
-                        'purchase_id'=>$purchase_id));
-          if(count($product_list)>0)
-          {
-              $product = $product_list[0];
-              $is_consign = $is_consign_array[$i];
-              //取消虚库销售类型，预期收货数量必须与实际收货数量一致的限制
-              /*if ($is_consign==1 && $product->p_number<$product->product_finished_number+$number)
-              {
-                  echo false;
-                  return;
-              }*/
-          }
+            $product_list=$this->product_model->product_sub_for_scan(array('ps.provider_barcode'=>$provider_barcode,
+                          'purchase_id'=>$purchase_id));
+            if(count($product_list)>0)
+            {
+                $product = $product_list[0];
+                $is_consign = $is_consign_array[$i];
+                //取消虚库销售类型，预期收货数量必须与实际收货数量一致的限制
+                /*if ($is_consign==1 && $product->p_number<$product->product_finished_number+$number)
+                {
+                    echo false;
+                    return;
+                }*/
+            }
 	  
            $scan_info_arr[]=array('provider_barcode'=>$provider_barcode
                                   ,'product_id'=>$product_id,'color_id'=>$color_id
                                   ,'size_id'=>$size_id,'product_number'=>$number
+                                  ,'production_batch'=>$v_batch,'expire_date'=>$v_expire
                                   ,'scan_id'=>$this->admin_id,'scan_starttime'=>date('Y-m-d H:i:s')
-                                  ,'scan_endtime'=>date('Y-m-d H:i:s')
+                                  ,'scan_endtime'=>date('Y-m-d H:i:s'), 'check_num' => $v_check_num, 'oqc' => $v_oqc
                                 );
            $total_num+=$number;
         }
@@ -263,7 +282,7 @@ class Purchase_box extends CI_Controller
 	    return;
 	}
         //组织箱子主表数据
-        $box_main=array('box_code'=>$box_code,'purchase_code'=>$purchase_code,
+        $box_main=array('box_code'=>$box_code,'purchase_code'=>$purchase_code,'delivery_date' => $delivery_date,
                         'product_number'=>$total_num,'product_shelve_num'=>0,
                         'scan_id'=>$this->admin_id,'scan_start_time'=>date('Y-m-d H:i:s'),
                         'scan_end_time'=>date('Y-m-d H:i:s'));

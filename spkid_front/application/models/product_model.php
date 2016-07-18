@@ -25,7 +25,7 @@ class Product_model extends CI_Model
 				LEFT JOIN ".$this->_db->dbprefix('product_flag')." AS f ON p.flag_id = f.flag_id
 				LEFT JOIN ".$this->_db->dbprefix('product_brand')." AS b ON p.brand_id = b.brand_id 
                                 LEFT JOIN ".$this->_db->dbprefix('product_provider')." AS pp ON p.provider_id = pp.provider_id 
-				WHERE p.product_id = ?";
+				WHERE p.product_id = ? AND p.source_id IN (0, '".SOURCE_ID_WEB."')";
 		$query = $this->db_r->query($sql,array(intval($product_id)));
 		return $query->row();
 	}
@@ -842,7 +842,12 @@ class Product_model extends CI_Model
 
     //PC 分词搜索的产品
     public function get_search_product($ids){
-    	$sql = "SELECT pif.`product_id`,pif.`product_name`,pif.`market_price`,pif.`shop_price`,pgy.`img_url`,pze.`size_name`,pif.`subhead`,pif.`package_name` FROM ".$this->_db->dbprefix('product_info')." AS pif LEFT JOIN ".$this->_db->dbprefix('product_sub')." AS psb ON psb.`product_id` = pif.`product_id`	LEFT JOIN ".$this->_db->dbprefix('product_size')." AS pze ON pze.`size_id` = psb.`size_id` LEFT JOIN ".$this->_db->dbprefix('product_gallery')." AS pgy ON pgy.`product_id` = pif.`product_id` WHERE pif.product_id in (".$ids.")  LIMIT 8 ";
+    	$sql = "SELECT pif.`product_id`,pif.`product_name`,pif.`market_price`,pif.`shop_price`,pgy.`img_url`,pze.`size_name`,pif.`subhead`,pif.`package_name` "
+                . "FROM ".$this->_db->dbprefix('product_info')." AS pif "
+                . "LEFT JOIN ".$this->_db->dbprefix('product_sub')." AS psb ON psb.`product_id` = pif.`product_id`	"
+                . "LEFT JOIN ".$this->_db->dbprefix('product_size')." AS pze ON pze.`size_id` = psb.`size_id` "
+                . "LEFT JOIN ".$this->_db->dbprefix('product_gallery')." AS pgy ON pgy.`product_id` = pif.`product_id` "
+                . "WHERE pif.product_id in (".$ids.") AND pif.source_id IN (0, '".SOURCE_ID_WEB."')  LIMIT 8 ";
     	$query=$this->_db->query($sql);		
     	$result=$query->result();
     	return $result;

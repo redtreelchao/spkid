@@ -241,11 +241,11 @@ class Rush_model extends CI_Model {
 				LEFT JOIN " . $this->adoEx->dbprefix('product_gallery') . " AS g ON g.product_id=sub.product_id AND g.color_id=sub.color_id AND g.image_type='default'
 				LEFT JOIN " . $this->adoEx->dbprefix('product_provider') . " AS pp ON p.provider_id = pp.provider_id ";
 */
-	  $select = "SELECT sub.product_id,sub.gl_num as sub_gl_num,sub.consign_num,sub.wait_num,
+	  $select = "SELECT ABS(UNIX_TIMESTAMP(p.`package_name`) - UNIX_TIMESTAMP(CURRENT_DATE)) new_time,IF( UNIX_TIMESTAMP(p.`package_name`) - UNIX_TIMESTAMP(CURRENT_DATE)>0,1,2 ) AS bbb, sub.product_id,sub.gl_num as sub_gl_num,sub.consign_num,sub.wait_num,
 				 if(SUM(GREATEST(sub.gl_num-sub.wait_num,0))+SUM(GREATEST(sub.consign_num,0)+IF(sub.consign_num=-2,1000,0))>0,1,0) AS gl_num,
-					p.product_name,p.product_sn,p.shop_price,p.market_price,p.ps_num,p.pv_num,p.is_hot,p.is_new,p.is_offcode,p.is_best as is_zhanpin,
+					p.product_name,p.product_sn,p.shop_price,p.market_price,p.ps_num,p.pv_num,p.pj_real_num, p.is_hot,p.is_new,p.is_offcode,p.is_best as is_zhanpin,
 					p.is_promote,p.promote_price,p.promote_start_date,p.promote_end_date,
-					p.is_new,p.is_hot,p.is_offcode,p.is_best,p.is_gifts,p.product_desc_additional,p.price_show,
+					p.is_new,p.is_hot,p.is_offcode,p.is_best,p.is_gifts,p.product_desc_additional,p.price_show,p.subhead, p.package_name,
 					b.brand_name,g.img_url,pp.display_name,pp.provider_id ";
 				   
 		$from = "FROM ty_product_sub AS sub
@@ -257,10 +257,13 @@ class Rush_model extends CI_Model {
 				LEFT JOIN " . $this->adoEx->dbprefix('product_provider') . " AS pp ON p.provider_id = pp.provider_id ";
 	
 	if($is_preview){
-	    $where = "WHERE 1 ";
+	    $where = "WHERE 1 AND p.source_id IN (0, '".SOURCE_ID_WEB."') ";
 	}else{
-	   $where = "WHERE sub.is_on_sale=1 AND b.is_use = 1 AND pp.is_use = 1 "; 
+	   $where = "WHERE sub.is_on_sale=1 AND b.is_use = 1 AND pp.is_use = 1 AND p.source_id IN (0, '".SOURCE_ID_WEB."') "; 
 	}
+        if (!empty($filter['genre_id'])){
+            $where .= " AND p.genre_id = ".$filter['genre_id'];
+        }
 	if (!empty($filter['type_id']) )//category_id
 	    $where.=" AND (pt.type_id = '{$filter['type_id']}' OR pt.parent_id = '{$filter['type_id']}' OR pt.parent_id2 = '{$filter['type_id']}')";
 	if (!empty($filter['brand_id']))
@@ -273,14 +276,14 @@ class Rush_model extends CI_Model {
 	    $kw_arrs = preg_split('[\s+]', $kw);
 	    array_walk($kw_arrs, create_function('&$val', '$val = trim($val);')); 
 	    foreach ($kw_arrs as $k_k => $k_v) {
-	    	$where .= " AND (p.product_name LIKE '%{$k_v}%' OR p.product_sn LIKE '%{$k_v}%' OR p.keywords LIKE '%{$k_v}%' OR b.brand_name LIKE '%{$k_v}%' OR pt.type_name LIKE '%{$k_v}%') ";
+	    	$where .= " AND (p.product_name LIKE '%{$k_v}%' OR p.product_sn LIKE '%{$k_v}%' OR p.subhead LIKE '%{$k_v}%' OR p.desc_crowd_val LIKE '%{$k_v}%' OR p.keywords LIKE '%{$k_v}%' OR b.brand_name LIKE '%{$k_v}%' OR pt.type_name LIKE '%{$k_v}%') ";
 	    }
 	    
 	    // $where.=" AND (p.product_name LIKE '%{$kw}%' OR p.product_sn LIKE '%{$kw}%' OR p.keywords LIKE '%{$kw}%' OR b.brand_name LIKE '%{$kw}%' OR pt.type_name LIKE '%{$kw}%') ";
 	}
     if (isset($filter['ids'])){
         $ids = $filter['ids'];
-        $where = " WHERE sub.product_id IN ($ids)";
+        $where .= " AND sub.product_id IN ($ids)";
     }
 	if (!empty($filter['age']) && is_array($filter['age']) && count($filter['age']) == 2) {
 	    $where.=" AND (p.min_month<='{$filter['age'][1]}' AND p.max_month>='{$filter['age'][0]}') ";
@@ -328,7 +331,9 @@ class Rush_model extends CI_Model {
 		case 9: //'renqi_desc'
 			$sort="ORDER BY p.pv_num DESC, p.sort_order DESC, p.product_id DESC";
 		break;
-
+                case 10:
+                    $sort = "ORDER BY FIELD(bbb,1,2) ASC, new_time ASC";
+                    break;
 
 		// ends added
 	    default://默认按优先级
@@ -353,7 +358,10 @@ class Rush_model extends CI_Model {
 	$list = array();
 	$goods_ids = array();
 	foreach ($list = $query->result() as $p){
-	    format_product($p);
+	    format_product($p);            
+            $price_arr = explode(".", $p->product_price);
+            $p->product_price1 = $price_arr[0];
+            $p->product_price2 = $price_arr[1];
 	    if (!in_array($p->product_id, $goods_ids)) $goods_ids[] = $p->product_id;
 	    $p->sale_finish = $p->gl_num == 0?"img_yishouwan":"";
 	}

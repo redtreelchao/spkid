@@ -40,6 +40,7 @@
 					    <ul class="tabsul clear f-f0">
 					    <li class="j-tab tab f-fl tabpos">热门排行</li>
 						<li class="j-tab tab f-fl">最新课程</li>
+						<li class="j-tab tab f-fl">翻译进度</li>
 						</ul>
 						<div class="tabline f-pa j-tabline"></div>
 					</div>

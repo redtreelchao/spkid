@@ -20,6 +20,10 @@ class Admin_model extends CI_Model
 			$this->db->where_in('admin_id', $filter['admin_id']);
 			unset($filter['admin_id']);
 		}
+                
+                if (isset($filter['user_status'])) {
+                    $this->db->where('user_status', intval($filter['user_status']));
+                }
 		
 		$query = $this->db->get_where('admin_info', $filter);
                 $arr = $query->result();

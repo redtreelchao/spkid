@@ -34,6 +34,8 @@
 						<th>条码</th>
 						<th>颜色</th>
 						<th>尺码</th>
+						<th>生产批号</th>
+                    	<th>有效期</th>
 						<th>出库数量</th>
 						<th>已扫描数量</th>
 						<th>本箱扫描数量</th>
@@ -52,10 +54,18 @@
 						    <td><?php echo $detail->provider_barcode?></td>
 						    <td><?php echo $detail->color_name?></td>
 						    <td><?php echo $detail->size_name?></td>
+						    <td>                    	
+                    	<input type="text" class="v-batch-<?php echo $detail->box_sub_id?>" value="<?php echo $detail->production_batch?>" style="width: 150px;text-align: center;"/>
+                    </td>
+                    <td>
+                    	<input type="text" class="v-expire-<?php echo $detail->box_sub_id?>" value="<?php echo $detail->expire_date?>" style="width: 100px;text-align: center;" onblur="v_check(this);"/>
+                    </td>
 						    <td><?php echo $detail->depot_num?></td>
 						    <td><?php echo $detail->finished_scan_number?></td>
 						    <td><?php echo $detail->product_number?></td>
-						    <td><input provider_barcode="<?php echo $detail->provider_barcode?>"
+						    <td><input type="text" class="v-add"
+						   		box_sub_id="<?php echo $detail->box_sub_id?>"
+						        provider_barcode="<?php echo $detail->provider_barcode?>"
 							    product_id="<?php echo $detail->product_id?>" 
 							    color_id="<?php echo $detail->color_id?>" 
 							    size_id="<?php echo $detail->size_id?>"
@@ -199,10 +209,13 @@
 				    tr+="<td>"+data.provider_barcode+"</td>";
                                     tr+="<td>"+data.color_name+"</td>";
                                     tr+="<td>"+data.size_name+"</td>";
+                                    tr+="<td><input class='v-batch-"+data.box_sub_id+"' value='"+data.production_batch+"' style='width: 150px;text-align: center;'/></td>";
+                    tr+="<td><input class='v-expire-"+data.box_sub_id+"' value='"+data.expire_date+"' style='width: 100px;text-align: center;' onblur='v_check(this);' /></td>";
                                     tr+="<td>"+data.product_number+"</td>";
 				    tr+="<td>"+data.finished_scan_number+"</td>";
 				    tr+="<td>"+data.box_finished_scan_number+"</td>";
-                                    tr+="<td><input "; 
+                                    tr+="<td><input type='text' value='1' class='v-add' ";
+                                    tr+=" box_sub_id = '"+data.box_sub_id+"'"; 
 				    tr+=" provider_barcode='"+data.provider_barcode+"'";
 				    tr+=" product_id='"+data.product_id+"'";
 				    tr+=" color_id='"+data.color_id+"'";
@@ -227,18 +240,25 @@
 		    var color_id_array=[];
 		    var size_id_array=[];
 		    var number_array=[];
-                    $('#dataTable input').each(function(){
+		    var v_batch_array=[];
+			    var v_expire_array=[];
+                    $('#dataTable .v-add').each(function(){
+                    	var box_sub_id = $(this).attr("box_sub_id");
 			    var provider_barcode = $(this).attr("provider_barcode");
 			    var product_id = $(this).attr("product_id");
 			    var color_id = $(this).attr("color_id");
 			    var size_id = $(this).attr("size_id");
 			    var number = $(this).val();
+			    var v_batch = $('.v-batch-'+box_sub_id).val();
+				    var v_expire = $('.v-expire-'+box_sub_id).val();
 			    
 			    provider_barcode_array.push(provider_barcode);
 			    product_id_array.push(product_id);
 			    color_id_array.push(color_id);
 			    size_id_array.push(size_id);
 			    number_array.push(number);
+			    v_batch_array.push(v_batch);
+						v_expire_array.push(v_expire);
                         });
                     if(provider_barcode_array.length <1){
                         alt_msg("请扫描商品");
@@ -252,6 +272,8 @@
 				color_id_array:color_id_array,
 				size_id_array:size_id_array,
 				number_array:number_array
+				v_batch_array:v_batch_array,
+					v_expire_array:v_expire_array
 			    },
                             function(data){
 				data = jQuery.parseJSON(data);
@@ -287,6 +309,14 @@
 	    sum += parseInt($(this).val());
 	  });
 	   $("#xiaoji").html(sum);
+	}
+	function v_check(obj){
+		var str = $(obj).val();
+		if(str != ''){
+			if(!str.match(/^20\d{2}-\d{2}-\d{2}/)) { 
+				alert('请输入正确的日期格式:2016-01-01或者为空');
+			}
+		}
 	}
     </script>
 <?php include_once(APPPATH.'views/common/footer.php'); ?>

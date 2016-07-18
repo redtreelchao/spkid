@@ -180,7 +180,7 @@ $config['directory_trigger']	= 'd'; // experimental not currently in use
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 4;
 
 /*
 |--------------------------------------------------------------------------
@@ -191,7 +191,7 @@ $config['log_threshold'] = 0;
 | application/logs/ folder. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '/alidata/log/admin/';
+$config['log_path'] = '/var/log/yyw/admin/';
 
 /*
 |--------------------------------------------------------------------------
@@ -266,7 +266,7 @@ $config['sess_time_to_update']	= 300;
 |
 */
 $config['cookie_prefix']	= "";
-$config['cookie_domain']	= "test.com";
+$config['cookie_domain']	= ".yueyawang.com";
 $config['cookie_path']		= "/";
 $config['cookie_secure']	= FALSE;
 
@@ -361,11 +361,11 @@ $config['proxy_ips'] = '';
 /**
  * 前后台域名
  */
-define('IMG_HOST', 'http://img.test.com');
-define('FRONT_HOST', 'http://f.test.com');
-define('STATIC_HOST', 'http://s.test.com');
+define('IMG_HOST', 'http://img.yueyawang.com');
+define('FRONT_HOST', 'http://m.yueyawang.com');
+define('STATIC_HOST', 'http://static.yueyawang.com');
 
-$config['memcache'] = array(array('hostname'=>'192.168.20.204','port'=>11211,'weight'=>1));
+$config['memcache'] = array(array('hostname'=>'192.168.20.111','port'=>11211,'weight'=>1));
 $config['memcache_prefix'] = '';
 //==================================danger config over======================
 /* End of file config.php */

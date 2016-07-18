@@ -669,7 +669,7 @@ class Depot_model extends CI_Model
 
 		$sql = "SELECT a.*,b.product_sn,c.provider_name,c.provider_code,b.provider_productcode,b.is_audit,b.is_onsale,b.is_stop,b.product_name as b_product_name," .
 				" b.shop_price,b.promote_price,b.unit_name, IF(pc.consign_price > 0, pc.consign_price, pc.cost_price) AS cost_price," .
-				" c.provider_code,d.brand_name,e.color_name,e.color_sn,f.size_name,f.size_sn,s.provider_barcode,SUM(ps.over_num) as finish_product_number" .
+				" c.provider_code,d.brand_name,e.color_name,e.color_sn,f.size_name,f.size_sn,s.provider_barcode,SUM(ps.over_num) as finish_product_number,ps.production_batch" .
 				" FROM ".$this->db_r->dbprefix('purchase_sub')." a" .
 				" LEFT JOIN ".$this->db_r->dbprefix('product_info')." b ON b.product_id = a.product_id" .
                                 " LEFT JOIN ".$this->db_r->dbprefix('purchase_main')." pm ON pm.purchase_id = a.purchase_id" .

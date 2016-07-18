@@ -163,8 +163,19 @@ class Order extends CI_Controller
 	{
              $order_ids = trim($order_ids);
              $arr_order_id = array_filter(array_map('intval',explode('-', $order_ids)));
+             $admin_name = $this->input->get('aname');
              $this->load->model('order_model');
+             $this->load->model('user_model');
              $this->load->helper('order');
+             if (empty($admin_name) && !$this->user_id) {
+                 sys_msg('参数错误',1);
+             }
+             
+             if (!empty($admin_name)) {
+                 $admin_id = $this->user_model->get_admin_id($admin_name);
+                 $this->cache->save('aname'.$order_ids,$admin_id,CART_SAVE_SECOND);
+             }
+             
              if ($payid>0) 
                  $this->order_model->update_where(array('pay_id' => $payid), 'order_id '.db_create_in($arr_order_id));
              
@@ -174,9 +185,10 @@ class Order extends CI_Controller
              $bank_code = NULL;
              $pay_price = 0;
              $arr_order_id = array();
+             $pay_title = '';
              foreach($order_list as $order)
              {
-                 if($order->user_id!=$this->user_id){
+                 if($this->user_id && $order->user_id!=$this->user_id){
                      continue;
                  }
                  if($order->order_price+$order->shipping_fee-$order->paid_price<=0){
@@ -197,8 +209,10 @@ class Order extends CI_Controller
                  if($bank_code===NULL){
                      $bank_code = $order->bank_code;
                  }
+                 $pay_title = empty($pay_title) ? $order->order_sn : ','.$order->order_sn;
                  $pay_price += round($order->order_price + $order->shipping_fee - $order->paid_price, 2);
                  $arr_order_id[] = intval($order->order_id);
+                 $arr_order[] = $order;
              }
              if($pay_price<=0)
              {
@@ -225,10 +239,30 @@ class Order extends CI_Controller
                     
                      break;
                 case 'wxpay':
-					$this->load->library('wxpay');
-					$jsApiParameters = $this->wxpay->getWxpayParameters($pay_track);
-					$data = $jsApiParameters;
-					$this->load->view('mobile/pay/wxpay', $data);
+					//$this->load->library('wxpay');
+					//$jsApiParameters = $this->wxpay->getWxpayParameters($pay_track);
+					//$data = $jsApiParameters;
+					//$this->load->view('mobile/pay/wxpay', $data);
+                        
+                        $wx_result = wxpay_qrcode(array('out_trade_no' => $pay_track->track_sn, 'money' => $pay_track->pay_price, 'pay_title' => $pay_title));
+                        $this->load->vars(array(
+                            'title' => '订单提交成功',
+                            //'user' => $user,
+                            'order_list' => $arr_order,
+                            //'order_price' => $order_price,
+                            //'order_amount' => $order_amount,
+                            //'voucher' => $voucher,
+                            //'shipping_fee' => $shipping_fee,
+                            //'product_num' => $product_num,
+                            //'pay_list' => $pay_list, 
+                            //'default_order' => $default_order, 
+                            //'page' => 'success', 
+                            //'weixin_pay_id' => PAY_ID_WXPAY, 
+                            //'alipay_pay_id' => PAY_ID_ALIPAY, 
+                            'pay_track' => $pay_track, 
+                            'wx_result' => $wx_result
+                        ));
+                        $this->load->view('order/wxpay');
                     break;
                  default:
                      sys_msg('您的订单不支持在线支付',1);

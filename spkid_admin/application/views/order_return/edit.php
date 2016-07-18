@@ -228,7 +228,7 @@
 			<div class="list-div">
 			<table class="dataTable" width="100%" cellpadding="0" cellspacing="0">
 			  <tr>
-                              <th colspan="11" scope="col">退货商品信息 <?php if ($is_consign_num>0): ?><span style="color: red">[ 虚退订单 ]</span><?php endif;?><?php if ($operable_list['edit_product']): ?><input type="hidden" value="1" name="priv_edit_product"><?php endif; ?><?php print isset($product_alert)?$product_alert:''; ?>
+                              <th colspan="13" scope="col">退货商品信息 <?php if ($is_consign_num>0): ?><span style="color: red">[ 虚退订单 ]</span><?php endif;?><?php if ($operable_list['edit_product']): ?><input type="hidden" value="1" name="priv_edit_product"><?php endif; ?><?php print isset($product_alert)?$product_alert:''; ?>
 			    </th>
 			    </tr>
 			  <tr>
@@ -242,6 +242,8 @@
 			    <td scope="col"><div align="center"><strong>可退数量</strong></div></td>
 			    <td scope="col"><div align="center"><strong>实退数量</strong></div></td>
 			    <td scope="col"><div align="center"><strong>颜色尺码</strong></div></td>
+			    <td scope="col"><div align="center"><strong>生产批号</strong></div></td>
+			    <td scope="col"><div align="center"><strong>有效期</strong></div></td>
 			    <td scope="col"><div align="center"><strong>小计</strong></div></td>
 			  </tr>
 			  <?php foreach ($return_product as $product): ?>
@@ -269,11 +271,13 @@
 			    <input type="text" <?php if ($is_consign_num>0): ?>readonly="readonly"<?php endif; ?> name="product_number[]" value="<?php print $product['return_product_num']; ?>" size="3" disabled/>
 			    </div></td>
 			    <td align="center"><?php print $product['color_name']; ?>--<?php print $product['size_name']; ?> </td>
+			    <td align="center"><?php print $product['production_batch']; ?></td>
+			    <td align="center"><?php print ($product['expire_date'] == '0000-00-00' || $product['expire_date'] == '0000-00-00 00:00:00' || $product['expire_date'] == '')?'无':$product['expire_date']; ?></td>
 			    <td><div align="center"><?php print isset($product['formated_subtotal'])?$product['formated_subtotal']:'0.00'; ?></div></td>
 			  </tr>
 			  <?php endforeach; ?>
 			  <tr>
-			      <td colspan="11" style="text-align:right;"><strong>合计：</strong><?php print $return['formated_return_price']; ?></td>
+			      <td colspan="13" style="text-align:right;"><strong>合计：</strong><?php print $return['formated_return_price']; ?></td>
 		      </tr>
 			</table>
 			</div>
@@ -332,11 +336,11 @@
 			    <td><div align="right"><strong>退货原因</strong></div></td>
 			    <td colspan="3" align="left">
 					<select name="return_reason" id="return_reason" <?php print $operable_list['edit_consignee']?'':'disabled'; ?>>
-	                <option value="次品-具体问题" <?php print ($return['return_reason'] == '次品-具体问题')?"selected":"" ?> >次品-具体问题</option>
-	                <option value="尺码不合" <?php print ($return['return_reason'] == '尺码不合')?"selected":"" ?> >尺码不合</option>
-	                <option value="发错货" <?php print ($return['return_reason'] == '发错货')?"selected":"" ?> >发错货</option>
-	                <option value="发错尺码" <?php print ($return['return_reason'] == '发错尺码')?"selected":"" ?> >发错尺码</option>
 	                <option value="顾客原因" <?php print ($return['return_reason'] == '顾客原因')?"selected":"" ?> >顾客原因</option>
+	                <option value="运营原因" <?php print ($return['return_reason'] == '运营原因')?"selected":"" ?> >运营原因</option>
+	                <option value="仓库原因" <?php print ($return['return_reason'] == '仓库原因')?"selected":"" ?> >仓库原因</option>
+	                <option value="快递原因" <?php print ($return['return_reason'] == '快递原因')?"selected":"" ?> >快递原因</option>
+	                <option value="其他原因" <?php print ($return['return_reason'] == '其他原因')?"selected":"" ?> >其他原因</option>
 	                </select>
 			    </td>
 			  </tr>

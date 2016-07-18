@@ -1,5 +1,7 @@
 <?php
-
+if(is_file($_SERVER['DOCUMENT_ROOT'].'/360safe/360webscan.php')){
+    require_once($_SERVER['DOCUMENT_ROOT'].'/360safe/360webscan.php');
+} 
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -18,8 +20,8 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	//define('ENVIRONMENT', 'development');
 	define('ENVIRONMENT', 'production');
+	//define('ENVIRONMENT', 'development');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

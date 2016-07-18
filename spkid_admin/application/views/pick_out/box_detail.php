@@ -31,7 +31,7 @@
 			    <div id="listDiv">
 				    <table id="dataTable" class="dataTable" cellpadding=0 cellspacing=0>
 					    <tr>
-						    <td colspan="9" class="topTd"> </td>
+						    <td colspan="11" class="topTd"> </td>
 					    </tr>
 					    <tr class="row">
 						<th>条码</th>
@@ -41,12 +41,14 @@
 						<th>商品款号</th>
 						<th>颜色【编码】</th>
 						<th>尺码【编码】</th>
+						<th>有效期</th>
+						<th>生产批号</th>
 						<th><?=$describe?>数量</th>
 						<th width="192px">操作</th>
 					    </tr>
 					    <?php foreach($content as $rows): ?>
 					    <tr>
-						<td colspan="8">
+						<td colspan="10">
 						    箱号：<?php print $rows->box_code; ?>
 						    &nbsp;&nbsp;总件数：<?php print $rows->scan_number; ?>
 						    &nbsp;&nbsp;扫描人：<?php print $rows->scan_name; ?>
@@ -68,12 +70,14 @@
 						<td><?php print $row->product_sn; ?></td>
 						<td><?php print $row->color_name; ?>【<?php print $row->color_id; ?>】</td>
 						<td><?php print $row->size_name; ?>【<?php print $row->size_id; ?>】</td>
+						<td><?php print ($row->expire_date == '0000-00-00' || $row->expire_date == '0000-00-00 00:00:00' || $row->expire_date == '')?'无':$row->expire_date; ?></td>
+						<td><?php print $row->production_batch;?></td>
 						<td><?php print $row->finished_scan_number; ?></td>
 					    </tr>
 					     <?php endforeach;endif;?>
 					    <?php endforeach;?>
 					    <tr>
-						<td colspan="9" class="bottomTd"> </td>
+						<td colspan="11" class="bottomTd"> </td>
 					    </tr>
 				    </table>
 			    <div class="blank5"></div>

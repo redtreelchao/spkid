@@ -60,6 +60,7 @@ class Mami_tuan extends CI_Controller
 			if(empty($product_info)) {
 				sys_msg('商品未审核或不存在',1,array(array('href'=>'mami_tuan/add','text'=>'重新载入')));
 			}
+			/*
 			//检测商品是否已添加到限抢
 			if($this->mami_tuan_model->check_product_rush($product_info->product_id)) {
 				sys_msg('商品已添加限抢活动中',1,array(array('href'=>'mami_tuan/add','text'=>'重新载入')));
@@ -73,6 +74,7 @@ class Mami_tuan extends CI_Controller
 			if($this->rush_model->sel_pro_df($pro_id_arr)) {
 				sys_msg('商品正在限抢或团购活动中',1,array(array('href'=>'mami_tuan/add','text'=>'重新载入')));
 			}
+			*/
 		}
 		$this->load->vars('product',$product_info);
         $this->load->view('mami_tuan/add');
@@ -86,23 +88,20 @@ class Mami_tuan extends CI_Controller
 		if(empty($data['product_id'])) sys_msg('商品加载失败',1);
 		$data['tuan_name'] = trim($this->input->post('tuan_name'));
 		$data['tuan_price'] = $this->input->post('tuan_price');
+		$data['tuan_unit'] = $this->input->post('tuan_unit');
+		$data['product_num'] = $this->input->post('product_num');
 		$data['buy_num'] = intval($this->input->post('buy_num'));
 		$data['tuan_sort'] = intval($this->input->post('tuan_sort'));
 		$data['tuan_desc'] = $this->input->post('tuan_desc');
 		$data['userdefine1'] = $this->input->post('userdefine1');
 		$data['userdefine2'] = $this->input->post('userdefine2');
-		//$data['userdefine3'] = $this->input->post('userdefine3');
-		$data['userdefine4'] = $this->input->post('userdefine4');
+		$data['userdefine3'] = $this->input->post('userdefine3');
+		// $data['userdefine4'] = $this->input->post('userdefine4');
 		$start_date = trim($this->input->post('start_date'));
 		$start_time = trim($this->input->post('start_time'));
 		$end_date = trim($this->input->post('end_date'));
 		$end_time = trim($this->input->post('end_time'));
-		if(!preg_match('/^\d{4}-\d{2}-\d{2}$/i', $start_date)
-			||!preg_match('/^\d{4}-\d{2}-\d{2}$/i', $end_date)
-			||($start_time && !preg_match('/^\d{2}:\d{2}:\d{2}$/i', $start_time))
-			||($end_time && !preg_match('/^\d{2}:\d{2}:\d{2}$/i', $end_time))
-		)
-		{
+		if(!preg_match('/^\d{4}-\d{2}-\d{2}$/i', $start_date) || !preg_match('/^\d{4}-\d{2}-\d{2}$/i', $end_date) || ($start_time && !preg_match('/^\d{2}:\d{2}:\d{2}$/i', $start_time)) ||($end_time && !preg_match('/^\d{2}:\d{2}:\d{2}$/i', $end_time))){
 			sys_msg('开始结束时间格式错误',1);
 		}
         $data['tuan_online_time'] = $start_date.' '.$start_time;
@@ -120,18 +119,22 @@ class Mami_tuan extends CI_Controller
         $this->load->library('form_validation');
         $this->form_validation->set_rules('tuan_name', 'tuan_name', 'trim|required');
 		$this->form_validation->set_rules('tuan_price', 'tuan_price', 'trim|required');
+		$this->form_validation->set_rules('tuan_unit', 'tuan_unit', 'trim|required');
+		$this->form_validation->set_rules('product_num', 'product_num', 'trim|required');
 		$this->form_validation->set_rules('start_date', 'start_date', 'trim|required');
         $this->form_validation->set_rules('start_time', 'start_time', 'trim|required');
 		$this->form_validation->set_rules('end_date', 'end_date', 'trim|required');
         $this->form_validation->set_rules('end_time', 'end_time', 'trim|required');
         if (!$this->form_validation->run()) {
-                sys_msg(validation_errors(), 1);
+            sys_msg(validation_errors(), 1);
         }
 		if (!isset($_FILES['img_315_207'])) sys_msg('请上传商品图',1);
-		if (!isset($_FILES['img_168_110'])) sys_msg('请上传商品详情图',1);
-		if (!isset($_FILES['img_500_450'])) sys_msg('请上传最近浏览图',1);
-		if(empty($data['tuan_desc'])) sys_msg('购买需知不能为空',1);
-		if(empty($data['userdefine4'])) sys_msg('商品详情右上角描述不能为空',1);
+		if (!isset($_FILES['img_500_450'])) sys_msg('请上传商品详情图',1);
+		// if (!isset($_FILES['img_500_450'])) sys_msg('请上传最近浏览图',1);
+		if(empty($data['tuan_desc'])) sys_msg('购买需知(等待付款)不能为空',1);
+		// if(empty($data['userdefine1'])) sys_msg('头部描述(文案)不能为空',1);
+		if(empty($data['userdefine2'])) sys_msg('中部描述(活动规则)不能为空',1);
+		if(empty($data['userdefine3'])) sys_msg('底部描述(兔子布克)不能为空',1);
 		$this->vali_length($data["tuan_name"], 96 , '团购名称');
 		
 		$this->load->model('product_model');
@@ -144,7 +147,6 @@ class Mami_tuan extends CI_Controller
         //上传图片
         $this->load->library('upload');
         $update = array();
-        //$base_path = APPPATH.'../public/upload/tuan/';
         $sub_dir = ($tuan_id-$tuan_id%100)/100;
         if(!file_exists(UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$sub_dir)) mkdir(UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$sub_dir);
         $this->upload->initialize(array(
@@ -152,19 +154,33 @@ class Mami_tuan extends CI_Controller
                 'allowed_types' => 'gif|jpg|png',
                 'encrypt_name' => TRUE
         ));
+
         if($this->upload->do_upload('img_315_207')){
 			$file = $this->upload->data();
 			$update['img_315_207'] = UPLOAD_TAG_TUAN.$sub_dir.'/'.$file['file_name'];
-			//$this->process_rush_logo(UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$sub_dir.'/'.$file['file_name']);
         }
-        if($this->upload->do_upload('img_168_110')){
-			$file = $this->upload->data();
-			$update['img_168_110'] =  UPLOAD_TAG_TUAN . $sub_dir.'/'.$file['file_name'];
+
+        $this->load->library('myupload'); 
+        $this->myupload->initialize(array(
+            'upload_path' => UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$sub_dir,
+            'allowed_types' => 'gif|jpg|png',
+            'encrypt_name' => TRUE
+        ));
+        if ($this->myupload->do_multi_upload('img_500_450')) {
+            $file1 = $this->myupload->get_multi_upload_data();
+            $file_name = array();
+            foreach ($file1['img_500_450'] as $key => $val) {
+                $file_name[] = UPLOAD_TAG_TUAN.$sub_dir.'/'.$val['file_name'];
+            }
+            $file_name_encode = json_encode($file_name);
+            $update['img_500_450'] =$file_name_encode;
         }
-		if($this->upload->do_upload('img_500_450')){
-			$file = $this->upload->data();
-			$update['img_500_450'] =  UPLOAD_TAG_TUAN . $sub_dir.'/'.$file['file_name'];
-        }
+
+   //      if($this->upload->do_upload('img_168_110')){
+			// $file = $this->upload->data();
+			// $update['img_168_110'] =  UPLOAD_TAG_TUAN . $sub_dir.'/'.$file['file_name'];
+   //      }
+		
         if ($update) {
                 $this->mami_tuan_model->update($update, $tuan_id);
         }
@@ -207,13 +223,15 @@ class Mami_tuan extends CI_Controller
         }
 		$data['tuan_name'] = trim($this->input->post('tuan_name'));
 		$data['tuan_price'] = $this->input->post('tuan_price');
+		$data['tuan_unit'] = $this->input->post('tuan_unit');
+		$data['product_num'] = $this->input->post('product_num');
 		$data['buy_num'] = intval($this->input->post('buy_num'));
 		$data['tuan_sort'] = intval($this->input->post('tuan_sort'));
 		$data['tuan_desc'] = $this->input->post('tuan_desc');
 		$data['userdefine1'] = $this->input->post('userdefine1');
 		$data['userdefine2'] = $this->input->post('userdefine2');
-		//$data['userdefine3'] = $this->input->post('userdefine3');
-		$data['userdefine4'] = $this->input->post('userdefine4');
+		$data['userdefine3'] = $this->input->post('userdefine3');
+		//$data['userdefine4'] = $this->input->post('userdefine4');
 		$start_date = trim($this->input->post('start_date'));
 		$start_time = trim($this->input->post('start_time'));
 		$end_date = trim($this->input->post('end_date'));
@@ -241,6 +259,8 @@ class Mami_tuan extends CI_Controller
         $this->load->library('form_validation');
         $this->form_validation->set_rules('tuan_name', 'tuan_name', 'trim|required');
 		$this->form_validation->set_rules('tuan_price', 'tuan_price', 'trim|required');
+	    $this->form_validation->set_rules('tuan_unit', 'tuan_unit', 'trim|required');
+		$this->form_validation->set_rules('product_num', 'product_num', 'trim|required');
 		$this->form_validation->set_rules('start_date', 'start_date', 'trim|required');
         $this->form_validation->set_rules('start_time', 'start_time', 'trim|required');
 		$this->form_validation->set_rules('end_date', 'end_date', 'trim|required');
@@ -248,8 +268,11 @@ class Mami_tuan extends CI_Controller
         if (!$this->form_validation->run()) {
                 sys_msg(validation_errors(), 1);
         }
-		if(empty($data['tuan_desc'])) sys_msg('购买需知不能为空',1);
-		if(empty($data['userdefine4'])) sys_msg('商品详情右上角描述不能为空',1);
+		if(empty($data['tuan_desc'])) sys_msg('购买需知(等待付款)不能为空',1);
+		// if(empty($data['userdefine1'])) sys_msg('头部描述(文案)不能为空',1);
+		if(empty($data['userdefine2'])) sys_msg('中部描述(活动规则)不能为空',1);
+		if(empty($data['userdefine3'])) sys_msg('底部描述(兔子布克)不能为空',1);
+		//if(empty($data['userdefine4'])) sys_msg('商品详情右上角描述不能为空',1);
 		$this->vali_length($data["tuan_name"], 96 , '团购名称');
 		
 		$this->load->model('product_model');
@@ -262,7 +285,6 @@ class Mami_tuan extends CI_Controller
         //上传图片
         $this->load->library('upload');
         $update = array();
-        //$base_path = APPPATH.'../public/upload/tuan/';
         $sub_dir = ($tuan_id-$tuan_id%100)/100;
         if(!file_exists(UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$sub_dir)) mkdir(UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$sub_dir);
         $this->upload->initialize(array(
@@ -275,16 +297,28 @@ class Mami_tuan extends CI_Controller
 			if($tuan->img_315_207) @unlink(UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$tuan->img_315_207);
 			$update['img_315_207'] = UPLOAD_TAG_TUAN.$sub_dir.'/'.$file['file_name'];
         }
-        if($this->upload->do_upload('img_168_110')){
-			$file = $this->upload->data();
-			if($tuan->img_168_110) @unlink(UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$tuan->img_168_110);
-			$update['img_168_110'] =  UPLOAD_TAG_TUAN . $sub_dir.'/'.$file['file_name'];
+
+		$this->load->library('myupload'); 
+		$this->myupload->initialize(array(
+            'upload_path' => UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$sub_dir,
+            'allowed_types' => 'gif|jpg|png',
+            'encrypt_name' => TRUE
+        ));
+        if ($this->myupload->do_multi_upload('img_500_450')) {
+            $file1 = $this->myupload->get_multi_upload_data();
+            $file_name = array();
+            foreach ($file1['img_500_450'] as $key => $val) {
+                $file_name[] = UPLOAD_TAG_TUAN.$sub_dir.'/'.$val['file_name'];
+            }
+            $file_name_encode = json_encode($file_name);
+            $update['img_500_450'] =$file_name_encode;
         }
-		if($this->upload->do_upload('img_500_450')){
-			$file = $this->upload->data();
-			if($tuan->img_500_450) @unlink(UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$tuan->img_500_450);
-			$update['img_500_450'] =  UPLOAD_TAG_TUAN . $sub_dir.'/'.$file['file_name'];
-        }
+
+   //      if($this->upload->do_upload('img_168_110')){
+			// $file = $this->upload->data();
+			// if($tuan->img_168_110) @unlink(UPLOAD_PATH_TUAN.UPLOAD_TAG_TUAN.$tuan->img_168_110);
+			// $update['img_168_110'] =  UPLOAD_TAG_TUAN . $sub_dir.'/'.$file['file_name'];
+   //      }
         if ($update) {
                 $this->mami_tuan_model->update($update, $tuan_id);
         }
@@ -305,10 +339,10 @@ class Mami_tuan extends CI_Controller
             echo json_encode(array('error' => 1,'msg' => '记录不存在！'));
             exit;
         }
-        if($tuan->tuan_offline_time < $this->time) {
-			echo json_encode(array('error' => 1,'msg' => '活动已过期，不能操作！'));
-            exit;
-		}
+  //       if($tuan->tuan_offline_time < $this->time) {
+		// 	echo json_encode(array('error' => 1,'msg' => '活动已过期，不能操作！'));
+  //           exit;
+		// }
         if($tuan->status == 2 && $tuan->status == 3){
             echo json_encode(array('error' => 1,'msg' => '团购已停止或已结束！'));
             exit;

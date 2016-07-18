@@ -58,7 +58,7 @@ class Order_model extends CI_Model
             return $result;
         }
     public function course_list($user_id){
-        $sql = 'SELECT o.*,op.shop_price,p.`product_name`,p.`brand_name`,p.`subhead`,p.`package_name`,p.`product_desc_additional`,p.`ps_num`,pg.img_url,pi.is_online FROM ty_order_info o LEFT JOIN ty_payment_info pi ON o.pay_id = pi.pay_id LEFT JOIN ty_order_product op ON o.`order_id`=op.`order_id` LEFT JOIN ty_product_info p ON p.product_id=op.`product_id` LEFT JOIN ty_product_gallery pg ON p.`product_id`=pg.`product_id` WHERE o.`user_id`='.$user_id.' AND o.genre_id = 2 ORDER BY order_id DESC LIMIT 30';
+        $sql = 'SELECT o.*,op.shop_price,p.product_id,p.`product_name`,p.`brand_name`,p.`subhead`,p.`package_name`,p.`product_desc_additional`,p.`ps_num`,pg.img_url,pi.is_online FROM ty_order_info o LEFT JOIN ty_payment_info pi ON o.pay_id = pi.pay_id LEFT JOIN ty_order_product op ON o.`order_id`=op.`order_id` LEFT JOIN ty_product_info p ON p.product_id=op.`product_id` LEFT JOIN ty_product_gallery pg ON p.`product_id`=pg.`product_id` WHERE o.`user_id`='.$user_id.' AND o.genre_id = 2 ORDER BY order_id DESC LIMIT 30';
         $rows = $this->db->query($sql)->result();
         /*foreach ($rows as &$row){
             $row->order_amount = $row->order_price + $row->shipping_fee - $row->paid_price;

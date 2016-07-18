@@ -265,7 +265,9 @@ public function get_export_inventory(){
   di.`depot_name`,
   li.`location_name`,
 pba.batch_code,
-  SUM(ti.product_number) AS num 
+  SUM(ti.product_number) AS num,
+  ti.production_batch,
+  ti.expire_date 
 FROM
   `ty_transaction_info` ti 
   LEFT JOIN ty_depot_info di 

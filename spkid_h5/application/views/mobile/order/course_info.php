@@ -22,7 +22,7 @@
    <?php } ?>
    
    
-    <div class="page-content public-bg no-top2">
+    <div class="page-content article-bg no-top2">
           <div class="page-content-inner no-top">
 	       <div class="content-block article-video no-top">
 	            <!-- order-details-pic start --> 

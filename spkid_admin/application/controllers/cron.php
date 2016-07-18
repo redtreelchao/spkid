@@ -914,7 +914,7 @@ class Cron extends CI_Controller
 	 */
 	function sf_order_filter() {
 		$this->load->model('package_sf_model');
-        $order_info = $this->package_sf_model->sf_order_list();
+        $order_info = $this->package_sf_model->sf_order_list(array(SF_SHIPPING_ID));
 		if(empty($order_info)) {
 			echo "没有需要派送的订单";
 			return false;
@@ -1668,6 +1668,7 @@ class Cron extends CI_Controller
             if (empty($order_list))
                 exit('order_cnt:0');
             $url = ERP_HOST . '/order_api/invalid';
+            $url = 'http://192.168.20.114/order_api/invalid';
             $params['auto_invalid'] = 1;
             $params['sys_user'] = 1;
             $header = array('X-Requested-With: XMLHttpRequest');
@@ -1675,9 +1676,87 @@ class Cron extends CI_Controller
                 $params['order_id']		= $order['order_id'];
                 $r = curl_post($url, $params, $header);
                 $r2 = json_decode($r, true);
+                print_r($r2);
             }           
         }
         
-        
+    /**
+     * 顺丰下单接口
+     */
+    function db_order_filter() {
+        $this->load->model('package_sf_model');
+        $order_info = $this->package_sf_model->sf_order_list(array(DB_SHIPPING_ID, DBDS_SHIPPING_ID));
+        if(empty($order_info)) {
+            echo "没有需要派送的订单";
+            return false;
+        }
 
+        foreach ($order_info as $order) {
+            $this->db->trans_begin();
+            $params = array();
+            $post_data = array();
+            $params['logisticCompanyID'] = 'DEPPON';
+            $params['logisticID'] = $order['order_sn'];
+            $params['orderSource'] = DB_CUST_CODE;
+            $params['serviceType'] = 3;
+            $params['customerCode'] = DB_CUST_ID;
+            $params['customerID'] = DB_CUST_CODE;
+            
+            $params['sender']['name'] = '上海欧思蔚奥医疗器材有限公司';
+            $params['sender']['phone'] = '400-9905-920';
+            $params['sender']['province'] = '上海市';
+            $params['sender']['city'] = '上海市';
+            $params['sender']['county'] = '浦东新区';
+            $params['sender']['address'] = '周浦镇 建韵路618号3幢楼305室';
+            
+            $params['receiver']['name'] = $order['consignee'];           
+            if (!empty($order['mobile'])) {
+                $params['receiver']['mobile'] = $order['mobile'];
+            } else {
+                $params['receiver']['phone'] = $order['tel'];
+            }
+            $params['receiver']['province'] = $order['province_name'];
+            $params['receiver']['city'] = $order['city_name'];
+            $params['receiver']['county'] = $order['district_name'];
+            $params['receiver']['address'] = $order['address'];
+            
+            $params['gmtCommit'] = $order['create_date'];
+            $params['cargoName'] = '医疗器械';
+            $params['payType'] = 2;
+            $params['transportType'] = 'PACKAGE';
+	    $params['insuranceValue'] = 300;
+            if ($order['goods_price'] >= 300) $params['insuranceValue'] = intval($order['goods_price']/300)*300;
+            if ($order['pay_id'] == PAY_ID_COD && $order['order_price'] > 0 && $order['shipping_id'] == DBDS_SHIPPING_ID){
+                $params['transportType'] = 'RCP';
+                $params['codValue'] = $order['order_price'];
+                $params['codType'] = 3;
+                $params['reciveLoanAccount'] = '98060154740008605';
+                $params['accountName'] = '上海欧思蔚奥医疗器材有限公司';
+            }
+            $params['vistReceive'] = 'Y';
+            $params['deliveryType'] = 3;
+            $params['backSignBill'] = 0;
+            
+            $post_data['timestamp'] = get_microsecond();
+            $post_data['companyCode'] = DB_CUST_CODE;
+            $post_data['params'] = json_encode($params);
+            $post_data['digest'] = base64_encode(md5($post_data['params'].DB_API_KEY.$post_data['timestamp']));
+            $url = 'http://dpapi.deppon.com/dop-interface-sync/dop-standard-ewborder/expressSyncNewSieveOrder.action?'.http_build_query($post_data);
+
+            $result = curl($url);
+            $rs_arr = json_decode($result, true);
+	    
+            $set = array();
+            $set['shipping_id'] = $order['shipping_id'];
+            $set['order_id'] = $order['order_id'];
+            $set['order_sn'] = $order['order_sn'];
+            $set['mailno'] = $rs_arr['mailNo'];
+            $set['dist_code'] = $rs_arr['sortingParam']['bigPen'];
+            $set['filter_status'] = $rs_arr['resultCode'];
+            $set['filter_remark'] = $rs_arr['reason'];
+            $this->package_sf_model->set_shipping_package($set);
+            $this->db->trans_commit();
+        }
+        echo "已完成";
+    }
 }

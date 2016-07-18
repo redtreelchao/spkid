@@ -41,7 +41,7 @@ class Product_api extends CI_Controller
 
 	public function add_sub()
 	{
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('color_model');
 		$this->load->model('size_model');
 		$this->load->model('product_model');
@@ -98,7 +98,7 @@ class Product_api extends CI_Controller
 
 	public function delete_sub()
 	{
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('product_model');
 		$this->load->model('depot_model');
 		$filter['product_id'] = intval($this->input->post('product_id'));
@@ -125,7 +125,7 @@ class Product_api extends CI_Controller
 
 	public function delete_color()
 	{
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('product_model');
 		$this->load->model('depot_model');
 		$this->config->load('product');
@@ -166,7 +166,7 @@ class Product_api extends CI_Controller
 	public function add_gallery()
 	{
 
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('product_model');
 		$this->load->model('color_model');
 		$this->load->library('upload');
@@ -262,7 +262,7 @@ class Product_api extends CI_Controller
 
 	public function delete_gallery()
 	{
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('product_model');
 		$this->config->load('product');
 		$product_fields = array_keys($this->config->item('product_fields'));
@@ -292,7 +292,7 @@ class Product_api extends CI_Controller
 
 	public function sort_sub()
 	{
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('product_model');
 		$product_id = intval($this->input->post('field'));
 		$color_id = intval($this->input->post('id'));
@@ -303,7 +303,7 @@ class Product_api extends CI_Controller
 
 	public function edit_gallery()
 	{
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('product_model');
 		$field = trim($this->input->post('field'));
 		$val = trim($this->input->post('val'));
@@ -333,7 +333,7 @@ class Product_api extends CI_Controller
 
 	public function link_search()
 	{
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('product_model');
 		$this->load->helper('product');
 		$filter = array();
@@ -342,6 +342,9 @@ class Product_api extends CI_Controller
 
 		$product_sn = trim($this->input->post('product_sn'));
 		if ($product_sn) $filter['product_sn'] = $product_sn;
+                
+                $product_id2 = intval($this->input->post('product_id2'));
+		if ($product_id2) $filter['product_id2'] = $product_id2;
 
 		$product_name = trim($this->input->post('product_name'));
 		if ($product_name) $filter['product_name'] = $product_name;
@@ -378,7 +381,7 @@ class Product_api extends CI_Controller
 	
 	public function add_link ()
 	{
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('product_model');
 		$this->load->helper('product');
 		$product_id = intval($this->input->post('product_id'));
@@ -411,7 +414,7 @@ class Product_api extends CI_Controller
 	
 	public function delete_link ()
 	{
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('product_model');
 		$link_id = intval($this->input->post('link_id'));
 		$this->product_model->delete_link($link_id);
@@ -420,7 +423,7 @@ class Product_api extends CI_Controller
 	
 	public function toggle_link ()
 	{
-		auth('pro_edit');
+		auth(array('pro_edit','course_edit'));
 		$this->load->model('product_model');
 		$result = proc_toggle('product_model','link_id',array('is_bothway'),'filter_link','update_link');
 		print json_encode($result);
@@ -428,7 +431,7 @@ class Product_api extends CI_Controller
 	
 	public function audit ($product_id)
 	{
-		auth('pro_audit');
+		auth(array('pro_audit','course_audit'));
 		$this->load->model('product_model');
 		$product_id = intval($product_id);
 		$product = $this->product_model->filter(array('product_id'=>$product_id));
@@ -459,7 +462,7 @@ class Product_api extends CI_Controller
 	public function batch_audit()
 	{
 		$this->load->model('product_model');
-		auth('pro_audit');
+		auth(array('pro_audit','course_audit'));
 		$product_ids = trim($this->input->post('product_ids'));
 		if(empty($product_ids)) sys_msg('请选择商品', 1);
 		$count = 0 ;
@@ -477,7 +480,7 @@ class Product_api extends CI_Controller
 		
 	}
 	public function get_cost_price(){
-		auth('cost_price_check');
+		auth(array('cost_price_check',''));
 		$product_id = trim($this->input->post('product_id'));
 		if(empty($product_id)) sys_msg('请选择商品', 1);
 		$this->load->model('product_model');
@@ -491,7 +494,7 @@ class Product_api extends CI_Controller
 	
 	public function audit_pic(){
 		$this->load->model('product_model');
-		auth('pro_audit_pic');
+		auth(array('pro_audit_pic','course_audit_pic'));
 		$product_id = trim($this->input->post('product_id'));
 		$color_id = trim($this->input->post('color_id'));
 		$is_pic = trim($this->input->post('is_pic'));

@@ -264,13 +264,14 @@ class pick_out_model extends CI_Model {
     public function quer_box_sub($filter) {
 	$this->db_r
 		->select("sub.product_id,sub.color_id,sub.size_id,SUM(sub.scan_number) AS finished_scan_number,br.brand_name,
-		     color_name, size_name,pi.product_sn,pi.product_name,pi.provider_productcode,ps.provider_barcode")
+		     color_name, size_name,pi.product_sn,pi.product_name,pi.provider_productcode,ps.provider_barcode,dos.expire_date,dos.production_batch")
 		->from("box_sub AS sub")
 		->join('product_info AS pi', 'sub.product_id=pi.product_id', 'left')
 		->join('product_color AS pc', 'pc.color_id = sub.color_id', 'left')
 		->join('product_size AS psize', 'psize.size_id = sub.size_id', 'left')
 		->join('product_sub AS ps', 'sub.product_id=ps.product_id and sub.color_id=ps.color_id and sub.size_id=ps.size_id', 'left')
 		->join('product_brand AS br', 'br.brand_id=pi.brand_id', 'left')
+		->join('depot_out_sub AS dos', 'dos.product_id=pi.product_id', 'left')
 		->where($filter)
 		->group_by('sub.product_id,sub.color_id,sub.size_id');
 	$query = $this->db_r->get();
@@ -527,9 +528,9 @@ class pick_out_model extends CI_Model {
 			return false;
 		}
 		$sql = "INSERT INTO ".$this->db->dbprefix('transaction_info')."(trans_type,trans_status,trans_sn,product_id,color_id,size_id,product_number," .
-				"depot_id,location_id,create_admin,create_date,update_admin,update_date,cancel_admin,cancel_date,trans_direction,sub_id,batch_id,shop_price,consign_price,cost_price,consign_rate,product_cess,expire_date) ".
+				"depot_id,location_id,create_admin,create_date,update_admin,update_date,cancel_admin,cancel_date,trans_direction,sub_id,batch_id,shop_price,consign_price,cost_price,consign_rate,product_cess,expire_date,production_batch) ".
 				" SELECT ".TRANS_TYPE_DIRECT_IN.",".TRANS_STAT_AWAIT_IN.",b.depot_in_code,a.product_id,a.color_id,size_id,'".$product_num."',".
-				"a.depot_id,a.location_id,'".$admin_id."','".date('Y-m-d H:i:s')."',0,'0000-00-00',0,'0000-00-00',1,a.depot_in_sub_id,a.batch_id,a.shop_price,pc.consign_price,pc.cost_price,pc.consign_rate,pc.product_cess,a.expire_date" .
+				"a.depot_id,a.location_id,'".$admin_id."','".date('Y-m-d H:i:s')."',0,'0000-00-00',0,'0000-00-00',1,a.depot_in_sub_id,a.batch_id,a.shop_price,pc.consign_price,pc.cost_price,pc.consign_rate,pc.product_cess,a.expire_date,a.production_batch" .
 				" FROM ".$this->db->dbprefix('depot_in_sub')." a" .
 				" LEFT JOIN ".$this->db->dbprefix('product_cost')." pc ON a.product_id = pc.product_id AND a.batch_id = pc.batch_id" .
 				" LEFT JOIN ".$this->db->dbprefix('depot_in_main')." b ON b.depot_in_id = a.depot_in_id WHERE a.depot_in_sub_id = '".$sub_id."' ";

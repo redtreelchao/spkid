@@ -1,9 +1,24 @@
-<?php include(APPPATH.'views/common/header.php'); ?>
-<div id="content" style="margin: 20px auto 50px auto; width:1000px; overflow: hidden">
-    <div style="float:left; width:300px;">
-        <img src="<?php print static_style_url('img/common/error_t.png'); ?>" width="300" />
-    </div>
-    <div style="float:left; margin-left:20px; width:600px;">
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width" />
+<title>悦牙网</title>
+<meta name="keywords" content=""/> 
+<meta name="description" content=""/>
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta name="format-detection" content="telephone=no" />
+<meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+<script type="text/javascript" src="<?php echo static_style_url('mobile/tuan/jquery-1.4.4.min.js?v=version')?>"></script>
+</head>
+<body>
+	
+
+<div id="content" style="margin: 20px auto 50px auto; width:100%; overflow: hidden">
+    
+    <div style="margin-left:20px;">
         <h1 style="font-size: 16px; margin-bottom: 20px;">
             <?php if ($msg_type == 0): ?>
 				信息
@@ -82,4 +97,5 @@
 		//-->
 	</script>
 	<?php endif; ?>
-<?php include(APPPATH.'views/common/footer.php'); ?>
+</body>
+</html>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/yyw-app.css')?>">
     <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/tank.css')?>">
 <div class="views">
-<!-- 爱牙商城-->
+<!-- 悦牙商城-->
     <div class="view view-main" data-page="index">
         <div class="pages">
 <?endif;?>

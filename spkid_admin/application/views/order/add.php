@@ -21,7 +21,11 @@
 			</tr>
 			<tr>
 				<td class="item_title" width="200">订单来源:</td>
-				<td class="item_input"><?php print form_dropdown('source_id', get_pair($all_source,'source_id','source_name'));?></td>
+				<td class="item_input"><?php print form_dropdown('source_id', get_pair($all_source,'source_id','source_name'), $order_source_tel_id);?></td>
+			</tr>
+			<tr>
+				<td class="item_title" width="200">订单类型:</td>
+				<td class="item_input">牙科产品 <input type="hidden" name="genre_id" value="1"></td>
 			</tr>
 			<tr>
 				<td class="item_title">按会员名或Email或手机搜索:</td>

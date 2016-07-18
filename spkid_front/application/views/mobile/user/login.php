@@ -6,8 +6,8 @@
 	 <div class="hu-logos"><img src="<?php echo static_style_url('mobile/img/yy-logo.png');?>"></div>
 	 
 	 <div class="logins-anniu">
-	      <a href="/user/signin/register-step1" class="button button-big external zhuchen-baise">注册爱牙</a>
-	      <a href="#" class="button button-big hu-denglu" onclick="checkLogin('<?=$back_url?>');">登陆爱牙</a>
+	      <a href="/user/signin/register-step1" class="button button-big external zhuchen-baise">注册悦牙</a>
+	      <a href="#" class="button button-big hu-denglu" onclick="checkLogin('<?=$back_url?>');">登陆悦牙</a>
 	 </div>
 	 
 	 <span class="hu-cyzh">常用账号登录:</span>

@@ -6,7 +6,7 @@
 		    <div class="navbar">
 			    <div class="navbar-inner">
 				  	<div class="left"><a href="#" class="link icon-only history-back"> <i class="icon back"></i></a></div>
-			        <div class="center">新增收货地址</div>
+			        <div class="center">新建地址</div>
 			    </div>
 		    </div>
 	        <!--navbar end-->
@@ -69,7 +69,7 @@
 						    </li>
 						    <li>
 						    	<div class="edit-list">
-									<div class="edit-user xxdz-hu">
+									<div class="edit-user xxdz-hu2">
 										<div class="item-input item-input-field-noheight">
 											<input type="text" name="address" placeholder="详细地址" value="">
 										</div>
@@ -78,7 +78,7 @@
 						   	</li>
 						   	<li>
 							   <div class="edit-list">
-									<div class="edit-user xxdz-hu Phone-number-hu">
+									<div class="edit-user xxdz-hu Phone-number-hu2">
 										<div class="item-input item-input-field-noheight">
 											<input type="text" name="mobile" placeholder="手机号码" value="">
 										</div>

@@ -25,6 +25,7 @@
 			<input type="hidden" name="rcvTel" value="<?php print trim($row->tel); ?>" />
 			<input type="hidden" name="bestTime" value="<?php print $row->best_time; ?>" />
 			<input type="hidden" name="goods_num" value="<?php print $row->goods_num; ?>" />
+			<input type="hidden" name="weight" value="<?php print $row->weight; ?>" />
 			<input type="hidden" name="city" value="<?php print $row->city; ?>" />
 		</td>
 		<td><?php print $row->shipping_name; ?></td>

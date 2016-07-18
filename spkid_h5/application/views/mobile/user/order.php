@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/yyw-app.css')?>">
     <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/tank.css')?>">
     <div class="views">
-    <!-- 爱牙商城-->
+    <!-- 悦牙商城-->
         <div class="view view-main" data-page="index">
             <div class="pages">
                 <div data-name="order-list" data-page="order-list" class="page no-toolbar">
@@ -12,7 +12,7 @@
                             <div class="center">我的订单</div>
                         </div>
                     </div>
-                    <div class="page-content public-bg">
+                    <div class="page-content article-bg2">
                         <div class="content-block article-video">
                             <div class="buttons-row">
                                 <a href="#type1" class="tab-link active button button-secondary">所有</a>
@@ -81,7 +81,7 @@
                                     </div>
                                     <div class="hu-wddds">
                                         <div class="hu-ddfk">
-                                            共<i><?php echo $order->product_num?></i>件商品<em>实付款:</em><span class="guanzhu-jiage">&yen;<?php echo number_format($order->total_fee - $order->paid_price,2,'.','')?></span>
+                                            共<i><?php echo $order->product_num?></i>件商品<em>实付款:</em><span class="guanzhu-jiage">&yen;<?php echo number_format($order->paid_price,2,'.','')?></span>
                                         </div>
                                         <footer class="dd-line">
                                             <?php if ($order->is_ok): ?><a href="" class="cancel-order btn btn-box">取消订单</a><?php endif?>

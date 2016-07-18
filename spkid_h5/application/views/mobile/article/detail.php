@@ -2,13 +2,8 @@
 <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/tank.css?v=version')?>">
 <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/animate.css?v=version')?>">
 
-<style>
 
-	.jiathis_style_32x32 .jtico {
-		background:none;
-	}
-</style>
-<!-- fenxiang start-->
+<!-- fenxiang start you can have-->
 <div class="popover popover-copyed">
     <div class="popover-angle"></div>
     <div class="popover-inner">复制成功!</div>
@@ -50,7 +45,7 @@
 	    <div class="order-details-rr" style="margin:20px auto">
 		 	 <p style="font-weight:bold;color:black;">您可以添加我们的微信公众号</p>
 		 	 <p style="font-weight:bold;color:black;">从那里分享</p>
-		 	 <p style="text-alig:center;font-weight:bold;color:black;font-size:1.5em">爱牙网</p>
+		 	 <p style="text-alig:center;font-weight:bold;color:black;font-size:1.5em">悦牙网</p>
 		 	 <p style="text-alig:center;">牙科行业的精品文章和专业资讯</p>
 		 	 <p style="text-alig:center;">m.yueyawang.com</p>
         </div>
@@ -74,7 +69,7 @@
 					    <div class="left">
 					    	<a href="#" class="link back article-detail-back"><i class="icon icon-back"></i></a>
 					    </div>
-					    <div class="center">爱牙网文章视频频道</div>
+					    <div class="center">悦牙网文章视频频道</div>
 
 	                </div>
 		       	</div>
@@ -164,7 +159,7 @@
 									</div>
 									<div class="article-yuegao">
 									  	<div class="yuegao-title"><img src="<?php echo static_url('mobile/img/yuegao.gif?v=version');?>" alt=""></div>
-                                      	<div class="yuegao-nr">成为爱牙网文章专栏作家,投稿可联系<br/>Sunny<span>QQ：3273941713</span></div>
+                                      	<div class="yuegao-nr">成为悦牙网文章专栏作家,投稿可联系<br/>Sunny<span>QQ：3273941713</span></div>
 									</div>
 									<div class="v-article-product clearfix">
 										<div class="rr-tracey"><a href="/index" class="article-arrow  tarticle-arrow2 external">热卖牙科产品</a></div>
@@ -173,14 +168,14 @@
 								</div>					
 							</div>
 							<div class="v-article-yyw">
-								<p class="v-article-nbsp">爱牙网-中国首家牙科电商与产品教育平台，致力于服务牙科人，为中国牙科行业创造价值！网站设三个频道：产品展销频道，课程培训频道，文章视频频道。最新商品，课程，技术与文章，登陆<a href="/index" class="external">yueyawang.com</a>，可一览无余。 </p>
-								<p>商品、课程打折促销，最新热门技术与文章，还可以通过爱牙网微信公众号第一时间获悉。</p>
+								<p class="v-article-nbsp">悦牙网-中国首家牙科电商与产品教育平台，致力于服务牙科人，为中国牙科行业创造价值！网站设三个频道：产品展销频道，课程培训频道，文章视频频道。最新商品，课程，技术与文章，登陆<a href="/index" class="external">yueyawang.com</a>，可一览无余。 </p>
+								<p>商品、课程打折促销，最新热门技术与文章，还可以通过悦牙网微信公众号第一时间获悉。</p>
 								<img src="<?php echo static_url('mobile/img/wx.jpg?v=version');?>" alt="">
 
 								<?php if (strpos($this->input->server('HTTP_USER_AGENT'), 'MicroMessenger')){?>
 									<p class="v-article-code">长按识别二维码,加关注</p>
 					       		<?php }else{ ?>
-									<p class="v-article-code">微信搜索公众号“爱牙网”,加关注</p>
+									<p class="v-article-code">微信搜索公众号“悦牙网”,加关注</p>
 					       		<?php }?>							
 							</div>
 						</div>
@@ -267,4 +262,10 @@
 
 </script>
 <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+
+	.jiathis_style_32x32 .jtico {
+		background:none;
+	}
+</style>
 <?php include APPPATH . "views/mobile/footer.php";?>

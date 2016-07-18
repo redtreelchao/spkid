@@ -1,10 +1,10 @@
 <?php include APPPATH."views/mobile/header.php"; ?>
 <div class="views">
 <div class="view view-main" data-page="cart-checkout">
-<div data-page="index" class="page public-bg no-toolbar page-on-center">
+<div data-page="index" class="page article-bg2 no-toolbar page-on-center">
     <div class="yywtoolbar">
         <div class="yywtoolbar-inner row no-gutter">
-            <div class="col-100 payment-hu"><a class="link" href="#" onclick="j_order_pay('<?php print implode('-', array_keys($order_list)); ?>');">付款</a></div>
+            <div class="col-100 payment-hu"><a class="link" href="#" onclick="isset_wechat();">付款</a></div>
         </div>
     </div>
     <!--navbar start-->
@@ -15,7 +15,7 @@
          </div>             
     </div>
    <!--navbar end-->		
-    <div class="page-content native-scroll no-top2">
+    <div class="page-content native-scroll no-top2" style="padding-bottom:50px;">
          <div class="page-content-inner no-top">
 	      <div class="content-block wrap no-top">
 	           
@@ -65,10 +65,10 @@
 		    <div class="zonggong-sp-hu" style="margin-top:10px;">待付金额：<span>￥<?=$order->order_price-$order->paid_price?></span></div>
 	     </div>	      
 	      
-	      <div class="not-paid">
+	      <div class="not-paid not-paid2">
 	         <div class="order-details-rr">
 		 <a href="#" class="item-link item-content open-picker" data-picker=".picker-pay">
-		      <div class="not-paid-wr clearfix">	           
+		      <div class="not-paid-wr not-paid-wr2 clearfix">	           
 	                     <div id="default_pay" data-id="<?=$pay_list[$order->pay_id]->pay_id?>">支付方式： <img src="<?php print img_url($pay_list[$order->pay_id]->pay_logo); ?>" /> 
                              <?=$pay_list[$order->pay_id]->pay_name?></div>	  
 		      </div>
@@ -77,7 +77,7 @@
 	        </div>
               </div>
 	   <?php endforeach; ?> 
-	   <div class="juli-plick">提示：因培训课程有名额限制，请尽快支付费用，确保报名成功。</div>
+	   <div class="juli-plick" style="color:#ccc;">提示：因培训课程有名额限制，请尽快支付费用，确保报名成功。</div>
 	      
 	      
 	      
@@ -130,6 +130,29 @@ function j_order_pay(p_order_ids){
     window.location.href="/order/pay/"+p_order_ids+"/"+pay_id;
 }
 
+function isset_wechat(){
+    var isset_wechat = '<?php echo isReqFromWechat();?>';
+    var pay_id = $$("#default_pay").attr('data-id');
+    if(isset_wechat){
+        if(pay_id == 4){
+          $$('.mask').show();
+          $$('.zftx').show();
+          return false;
+        }else{
+            return j_order_pay('<?php print implode('-', array_keys($order_list)); ?>');
+        }        
+    }else{
+        return j_order_pay('<?php print implode('-', array_keys($order_list)); ?>');
+    }
+}
+
+function check_wechat(){
+    $$('.mask').hide();
+    $$('.zftx').hide();
+    return j_order_pay('<?php print implode('-', array_keys($order_list)); ?>');
+}
+
+
 //选择支付方式
 $$(document).on('click', '.pay_list', function (e) {
     var _this = this;
@@ -142,5 +165,12 @@ $$(document).on('click', '.pay_list', function (e) {
     myApp.closeModal('.picker-modal.modal-in');
 });
 </script>
+
+<div class="mask"></div>
+<div class="zftx">
+    <div class="zftx-ico"><img src="<?php echo static_style_url('mobile/img/zf-jt.png')?>" /></div>
+    <div class="zftx-js"><img src="<?php echo static_style_url('mobile/img/zf-wz.png')?>" /></div>
+    <div class="zftx-but" onclick="check_wechat();"><a href="javascript:void(0);"><img src="<?php echo static_style_url('mobile/img/zf-but.png')?>" /></a></div>
+</div>
 </body>
 </html>

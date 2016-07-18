@@ -105,7 +105,7 @@
 				</div>
 
 				<div class="page-content">
-					<div class="content-block" style="padding-right:0; padding-left:5px;">
+					<div class="content-block" style="padding-right:0; padding-left:5px; padding-top:50px;">
 						<section class="product-type clearfix" id="m-category" style="height: 100%;">
 							<!-- Nav tabs -->
 							<ul class="nav nav-tabs nav-stacked tab-radius" role="tablist">

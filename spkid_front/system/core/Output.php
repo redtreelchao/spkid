@@ -106,6 +106,8 @@ class CI_Output {
 
 		$this->mime_types = $mimes;
 
+		#$this->set_header( 'Etag: ', $_SERVER['HOSTNAME'] );
+
 		log_message('debug', "Output Class Initialized");
 	}
 

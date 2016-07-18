@@ -151,20 +151,20 @@ limit 5";
         
         return $result_rows;
     }
-    public function hot2new_videos($type){
+    public function hot2new_videos($type,$limit = 10){
         if ('hot' == $type){
             $videos = array();
             // 周排行
             $date = date('Y-m-d 00:00', strtotime('-15 day'));
-            $sql = "SELECT p.ID,p.post_title,pm.meta_value views FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = " .Wordpress_model::FORMAT_VIDEO_TYPE . " LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' AND p.post_status='publish' AND pm.meta_key='views' AND p.post_date > '$date' GROUP BY p.ID ORDER BY views*1000000 DESC LIMIT 10";
+            $sql = "SELECT p.ID,p.post_title,pm.meta_value views FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = " .Wordpress_model::FORMAT_VIDEO_TYPE . " LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' AND p.post_status='publish' AND pm.meta_key='views' AND p.post_date > '$date' GROUP BY p.ID ORDER BY views*1000000 DESC LIMIT ".$limit;
             $videos['week'] = $this->db_wp->query($sql)->result_array();
             // 月排行
             $date = date('Y-m-d 00:00', strtotime('-60 day'));
-            $sql = "SELECT p.ID,p.post_title,pm.meta_value views FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = ". Wordpress_model::FORMAT_VIDEO_TYPE . " LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' AND p.post_status='publish' AND pm.meta_key='views' AND p.post_date > '$date' GROUP BY p.ID ORDER BY views*1000000 DESC LIMIT 10";
+            $sql = "SELECT p.ID,p.post_title,pm.meta_value views FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = ". Wordpress_model::FORMAT_VIDEO_TYPE . " LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' AND p.post_status='publish' AND pm.meta_key='views' AND p.post_date > '$date' GROUP BY p.ID ORDER BY views*1000000 DESC LIMIT ".$limit;
             $videos['month'] = $this->db_wp->query($sql)->result_array();
             
         } else {
-            $sql = "SELECT p.ID,p.post_title FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = ". Wordpress_model::FORMAT_VIDEO_TYPE . " WHERE p.post_type='post' AND p.post_status='publish' ORDER BY p.post_date DESC LIMIT 10";
+            $sql = "SELECT p.ID,p.post_title FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = ". Wordpress_model::FORMAT_VIDEO_TYPE . " WHERE p.post_type='post' AND p.post_status='publish' ORDER BY p.post_date DESC LIMIT ".$limit;
             $videos = $this->db_wp->query($sql)->result_array();
         }
 
@@ -205,6 +205,24 @@ limit 5";
         $sql = "SELECT p.ID,p.post_title,p.post_date,p.comment_count,u.display_name,GROUP_CONCAT(pm.meta_key, '=', pm.`meta_value` SEPARATOR '&') meta FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = ". Wordpress_model::FORMAT_VIDEO_TYPE . " LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID` LEFT JOIN wp_users u ON u.ID=p.`post_author`
 	LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' AND
     p.post_status='publish' AND tr.term_taxonomy_id = $cid AND pm.meta_key IN ('views','cover') GROUP BY p.ID ORDER BY p.post_date DESC";
+        //echo $sql;
+        $res = $this->db_wp->query($sql);
+        $articles = $res->result();
+        foreach( $articles as &$article ){
+            $meta = $article->meta;
+            unset($article->meta);
+            parse_str($meta, $article_meta);         
+            $cover = isset($article_meta['cover'])?$article_meta['cover']:null;
+            $article->cover = $this->get_cover($cover);
+            $article->views = $article_meta['views'];
+        }
+        return $articles;
+    }
+    public function fetch_videos_for_index_page($cid){
+        //".POST_FORMAT_VIDEO."
+        $sql = "SELECT p.ID,p.post_title,p.post_date,p.comment_count,u.display_name,GROUP_CONCAT(pm.meta_key, '=', pm.`meta_value` SEPARATOR '&') meta FROM wp_posts p INNER JOIN wp_term_relationships tr0 ON tr0.`object_id` = p.`ID` AND tr0.term_taxonomy_id = ". Wordpress_model::FORMAT_VIDEO_TYPE . " LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID` LEFT JOIN wp_users u ON u.ID=p.`post_author`
+    LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' AND
+    p.post_status='publish' AND tr.term_taxonomy_id = $cid AND pm.meta_key IN ('views','cover') GROUP BY p.ID ORDER BY p.post_date DESC limit 4";
         //echo $sql;
         $res = $this->db_wp->query($sql);
         $articles = $res->result();

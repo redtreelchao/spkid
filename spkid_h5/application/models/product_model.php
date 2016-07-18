@@ -25,7 +25,7 @@ class Product_model extends CI_Model
 				LEFT JOIN ".$this->_db->dbprefix('product_flag')." AS f ON p.flag_id = f.flag_id
 				LEFT JOIN ".$this->_db->dbprefix('product_brand')." AS b ON p.brand_id = b.brand_id 
                                 LEFT JOIN ".$this->_db->dbprefix('product_provider')." AS pp ON p.provider_id = pp.provider_id 
-				WHERE p.product_id = ?";
+				WHERE p.product_id = ? AND p.source_id IN (0, '".SOURCE_ID_WEB."')";
 		$query = $this->db_r->query($sql,array(intval($product_id)));
 		return $query->row();
 	}
@@ -603,6 +603,7 @@ class Product_model extends CI_Model
                AND (sub.consign_num=-2 OR sub.consign_num>0 OR sub.gl_num>sub.wait_num) 
                AND p.genre_id = ".$genre_id." GROUP BY p.product_id) a";
         $row = $this->db_r->query($sql)->row();
+	//echo $this->db_r->last_query($sql);
         if (empty($row)) {
             return $result;
         }
@@ -624,6 +625,7 @@ class Product_model extends CI_Model
                AND (sub.consign_num=-2 OR sub.consign_num>0 OR sub.gl_num>sub.wait_num) 
                AND p.genre_id = ".$genre_id." GROUP BY p.product_id ".$order_by." LIMIT ".$start.", ".$page_size;
         $query=$this->db_r->query($sql);
+	//echo $this->db_r->last_query($sql);
         $result=$query->result_array();
         /*foreach ($product as $row) {
             $result[$row['product_id']] = $row;
@@ -790,6 +792,19 @@ class Product_model extends CI_Model
 		    $this->cache->save('campaign_' . $product_id, $campaign, CACHE_TIME_CAMPAIGN);
 		}
 		return $campaign;
+	}
+
+	public function get_course_info() {
+		$sql = "select product_id, product_desc_additional from ty_product_info where genre_id = 2";
+		$result = $this->db_r->query($sql)->result_array();
+
+		
+		foreach($result as $k => $v) {
+			$tmp = json_decode($v['product_desc_additional'], true);
+			$update = array('desc_crowd_val' => $tmp['desc_crowd']);
+			
+			$this->db->update('product_info', $update, array('product_id'=>$v['product_id']));
+		}
 	}
 
 }

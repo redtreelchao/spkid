@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>爱牙网电子商务管理系统</title>
+	<title>悦牙网电子商务管理系统</title>
 
   <!-- Set render engine for 360 browser -->
   <meta name="renderer" content="webkit">
@@ -38,7 +38,7 @@
 <link type="text/css" href="public/js/jui-1.11.4/jquery-ui.css" rel="stylesheet" />
 <link type="text/css" href="public/js/jui-1.11.4/jquery-ui.theme.css" rel="stylesheet" />
 <!-- amazeui -->
-  <link rel="stylesheet" href="public/assets/css/amazeui.min.css?v=1.4">
+  <link rel="stylesheet" href="public/assets/css/amazeui.min.css?v=1.5">
   <link rel="stylesheet" href="public/assets/css/app.css">
 
 <script src="public/assets/js/jquery.min.js"></script>
@@ -147,6 +147,7 @@ function mouseOut(){
 
 </head>
 <body bgcolor="<?php print empty($print_bgcolor)?'#FAFEF0':$print_bgcolor; ?>">
+    <?php if(!isset($full_src)): ?>
     <div id="notice" style="width:98%; height:28px; margin:0 auto 10px auto;">
         <div class="notice" style="float:left; width:49%;cursor: pointer;" onclick="click_advice();" title="点击查看更多">
             <ul id="box_left" style="white-space: nowrap;">
@@ -167,3 +168,4 @@ function mouseOut(){
         <input type="hidden" name="order_status" id="order_status" value="-1"/>
         <input type="hidden" name="shipping_status" id="shipping_status" value="-1"/>
     </form>
+    <?php endif; ?>

@@ -67,12 +67,16 @@ class Provider extends CI_Controller
 	public function proc_add()
 	{
 		auth('provider_edit');
-                $this->load->library('upload');
-                $this->config->load('provider');
+        $this->load->library('upload');
+        $this->load->library('myupload');   
+        $this->config->load('provider');
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('provider_name', '名称', 'trim|required');
                 //$this->form_validation->set_rules('provider_code', '代码', 'trim|required');
                 $this->form_validation->set_rules('provider_cooperation', '合作方式', 'trim|required');
+                $this->form_validation->set_rules('legal_provider', '法人代表', 'trim|required');
+                $this->form_validation->set_rules('sales_name', '销售员', 'trim|required');
+                $this->form_validation->set_rules('sales_mobile', '销售员手机号', 'trim|required');
 		if (!$this->form_validation->run()) {
 			sys_msg(validation_errors(), 1);
 		}
@@ -84,7 +88,10 @@ class Provider extends CI_Controller
 		}
 		$update['provider_name'] = $this->input->post('provider_name');
         $update['provider_cooperation'] = $this->input->post('provider_cooperation');
-		$update['official_name'] = trim($this->input->post('official_name'));
+        $update['official_name'] = trim($this->input->post('official_name'));
+        $update['legal_provider'] = trim($this->input->post('legal_provider'));
+        $update['sales_name'] = trim($this->input->post('sales_name'));
+        $update['sales_mobile'] = trim($this->input->post('sales_mobile'));
 		$update['provider_bank'] = trim($this->input->post('provider_bank'));
 		$update['provider_account'] = trim($this->input->post('provider_account'));
 		$update['tax_no'] = trim($this->input->post('tax_no'));
@@ -108,7 +115,7 @@ class Provider extends CI_Controller
 			sys_msg('名称重复', 1);
 		}
                 
-                // 上传图片
+        // 上传图片
 		$this->upload->initialize(array(
 			'upload_path' => CREATE_IMAGE_PATH.'provider/',
 			'allowed_types' => 'gif|jpg|png',
@@ -122,14 +129,30 @@ class Provider extends CI_Controller
 			$file = $this->upload->data();
 			$this->provider_model->update(array('logo'=>'provider/'.$file['file_name']), $provider_id);
 		}
+        //资质图片
+        $this->myupload->initialize(array(
+            'upload_path' => CREATE_IMAGE_PATH.'provider/',
+            'allowed_types' => 'gif|jpg|png',
+            'encrypt_name' => TRUE
+        ));
+        for ($j = 1; $j <= 4; $j++) {
+            $aptitude_img = 'aptitude_img'.$j;
+            if ($this->myupload->do_multi_upload($aptitude_img)) {
+                $file1 = $this->myupload->get_multi_upload_data();
+                $file_name = array();
+                foreach ($file1[$aptitude_img] as $key => $val) {
+                    $file_name[] = 'provider/'.$val['file_name'];
+                }
+                $file_name_encode = json_encode($file_name);
+                $this->provider_model->update(array($aptitude_img =>$file_name_encode), $provider_id);
+            }
+        }
 		
 		if(!empty($parent_id)){
         	sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/scm_edit/'.$provider_id."/".$parent_id), array('text'=>'返回列表','href'=>'provider/scm_index/'.$parent_id)));
         }else{
         	sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/scm_edit/'.$provider_id), array('text'=>'返回列表','href'=>'provider/index')));        	
         }
-
-		// sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/edit/'.$provider_id), array('text'=>'返回列表','href'=>'provider/index')));
 	}
 
 	public function edit($provider_id,$parent_id='')
@@ -155,27 +178,35 @@ class Provider extends CI_Controller
 	public function proc_edit()
 	{
 		auth('provider_edit');
-                $this->load->library('upload');
+        $this->load->library('upload');
+        $this->load->library('myupload');	
 		$this->load->library('form_validation');
-                $this->form_validation->set_rules('provider_name', '名称', 'trim|required');
-                if (!$this->form_validation->run()) {
+        $this->form_validation->set_rules('provider_name', '名称', 'trim|required');
+        $this->form_validation->set_rules('legal_provider', '法人代表', 'trim|required');
+        $this->form_validation->set_rules('sales_name', '销售员', 'trim|required');
+        $this->form_validation->set_rules('sales_mobile', '销售员手机号', 'trim|required');
+        if (!$this->form_validation->run()) {
 			sys_msg(validation_errors(), 1);
 		}
 		$update = array();
 		$update['provider_name'] = $this->input->post('provider_name');
 		$update['official_name'] = trim($this->input->post('official_name'));
+        $update['legal_provider'] = trim($this->input->post('legal_provider'));
+        $update['sales_name'] = trim($this->input->post('sales_name'));
+        $update['sales_mobile'] = trim($this->input->post('sales_mobile'));
 		$update['provider_bank'] = trim($this->input->post('provider_bank'));
 		$update['provider_account'] = trim($this->input->post('provider_account'));
 		$update['tax_no'] = trim($this->input->post('tax_no'));
 		$update['is_use'] = intval($this->input->post('is_use'));
-                $update['display_name'] = trim($this->input->post('display_name'));
-                $update['return_address'] = trim($this->input->post('return_address'));
-                $update['return_postcode'] = trim($this->input->post('return_postcode'));
-                $update['return_consignee'] = trim($this->input->post('return_consignee'));
-                $update['return_mobile'] = trim($this->input->post('return_mobile'));
+        $update['display_name'] = trim($this->input->post('display_name'));
+        $update['return_address'] = trim($this->input->post('return_address'));
+        $update['return_postcode'] = trim($this->input->post('return_postcode'));
+        $update['return_consignee'] = trim($this->input->post('return_consignee'));
+        $update['return_mobile'] = trim($this->input->post('return_mobile'));
 
 		$provider_id = intval($this->input->post('provider_id'));
 		$provider = $this->provider_model->filter(array('provider_id'=>$provider_id));
+
 		if (!$provider) {
 			sys_msg('记录不存在!', 1);
 		}
@@ -185,11 +216,10 @@ class Provider extends CI_Controller
 			sys_msg('名称重复', 1);
 		}
 
-		$parent_id = trim($this->input->post('parent_id'));
-                
+		$parent_id = trim($this->input->post('parent_id'));               
 		$this->provider_model->update($update, $provider_id);
                 
-                // 上传图片
+        // 上传图片
 		$this->upload->initialize(array(
 			'upload_path' => CREATE_IMAGE_PATH.'provider/',
 			'allowed_types' => 'gif|jpg|png',
@@ -200,6 +230,33 @@ class Provider extends CI_Controller
 			if($provider->logo) @unlink(CREATE_IMAGE_PATH.$provider->logo);
 			$this->provider_model->update(array('logo'=>'provider/'.$file['file_name']), $provider_id);
 		}
+
+        //资质图片
+        $this->myupload->initialize(array(
+            'upload_path' => CREATE_IMAGE_PATH.'provider/',
+            'allowed_types' => 'gif|jpg|png',
+            'encrypt_name' => TRUE
+        ));
+        $provider = get_object_vars($provider);
+        for ($j = 1; $j <= 4; $j++) {
+            $aptitude_img = 'aptitude_img'.$j;
+            if ($this->myupload->do_multi_upload($aptitude_img)) {
+                $file1 = $this->myupload->get_multi_upload_data();
+                $file_name = array();
+                foreach ($file1[$aptitude_img] as $key => $val) {
+                    $file_name[] = 'provider/'.$val['file_name'];
+                }
+                $file_name_encode = json_encode($file_name);
+
+                if($provider[$aptitude_img]){
+                    $file_name_decode = json_decode($provider[$aptitude_img]);
+                    for ($i=0; $i < count($file_name_decode); $i++) { 
+                        @unlink(CREATE_IMAGE_PATH.$file_name_decode[$i]);
+                    }                
+                }
+                $this->provider_model->update(array($aptitude_img =>$file_name_encode), $provider_id);
+            }
+        }     
 
 		if(!empty($parent_id)){
         	sys_msg('操作成功', 0, array(array('text'=>'继续编辑','href'=>'provider/edit/'.$provider_id."/".$parent_id), array('text'=>'返回列表','href'=>'provider/scm_index/'.$parent_id)));

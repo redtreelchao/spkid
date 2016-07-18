@@ -7,8 +7,10 @@
 	<script type="text/javascript">
 		//<![CDATA[
 		var type='';
+                var blank_shipping = '<?=$blank_shipping?>';
 		function search(){
 			var sn=$.trim($('input[type=text][name=sn]').val());
+                        $("#bt_print").hide();
 			if(!sn){
 				alert('请输入单号');
 				return;
@@ -23,9 +25,23 @@
 					if(result.err) return;
 					$('#listDiv').html(result.html);
 					type=result.type;
+                                        if (blank_shipping.indexOf(result.shipping_id) != -1){
+                                            $("#bt_print").show();
+                                        }                                       
 				}
 			});			
 		}
+                
+                function blank_print(){
+                    var ids = '';
+                    $(':checkbox[name=sn]:checked').each(function(){
+                        var td = $(this).parent('td');
+                        var id = $(':hidden[name=id]',td).val();
+                        ids = (ids == '') ? id : ids+'|'+id;
+                    });
+
+                    window.location.href='/pick/blank_print/'+ids;
+                }
 		
 		function switch_check() {
 			if($(':checkbox[name=check_all]:checked').length){
@@ -55,50 +71,52 @@
 		} // End of print_sale
 		
 		function print_invoice() {
-			if(!$(':checkbox[name=sn]:checked').length){
-				alert('请选择要打印的订单或换货单');
-				return false;
-			}
-			var xml='';
-			$(':checkbox[name=sn]:checked').each(function(){
-				var td = $(this).parent('td');
-				var sn = $(this).val();
-				var code = $(':hidden[name=code]',td).val();//快递公司shipping_code
-				var codAmount = $(':hidden[name=codAmount]',td).val();
-				var cod = codAmount>0?1:0;
-				var rcvPerson = $(':hidden[name=rcvPerson]',td).val();
-				var rcvAddress = $(':hidden[name=rcvAddress]',td).val();
-				var rcvMobile = $(':hidden[name=rcvMobile]',td).val();
-				var rcvTel = $(':hidden[name=rcvTel]',td).val();
-				var bestTime = $(':hidden[name=bestTime]',td).val();
-				var goods_num = $(':hidden[name=goods_num]',td).val();
-                var pick_cell = $(':hidden[name=pick_cell]',td).val();
-                var city = $(':hidden[name=city]',td).val();
-                var codAmount2 = g2b(codAmount);
-				if (code == 'ems') {
-                    var custormPostNo = (cod == 1) ? '代收货款  上海治晨' : '非代收货款  上海治晨';
-				} else if (code == 'ems-sh' || code == 'ems-hz') {
-				    var custormPostNo = (cod == 1) ? '代收货款' : '非代收货款';
-				}
-                //xml+='<order><sn>'+sn+'</sn><code>'+code+'</code><cod>'+cod+'</cod><codAmount>'+codAmount+'</codAmount><rcvPerson>'+rcvPerson+'</rcvPerson><rcvAddress>'+rcvAddress+'</rcvAddress><rcvMobile>'+rcvMobile+'</rcvMobile><bestTime>'+bestTime+'</bestTime></order>'
-                if (xml == '') xml='<data express="public/express/'+code+'.xml">';
-                //if (xml == '') xml='<data configName="'+code+'">';
-                /* xml+='<order><orderSn>'+sn+'</orderSn><code>'+code+'</code><isCod>'+cod+'</isCod><codAmount>￥'+codAmount+'</codAmount><codAmount2>'+codAmount2+'</codAmount2><custormPostNo>'+custormPostNo+'</custormPostNo><rcvPerson>'+rcvPerson+'</rcvPerson><rcvAddress>'+rcvAddress+'</rcvAddress><rcvMobile>'+rcvMobile+'</rcvMobile><bestTime>'+bestTime+'</bestTime><goodsnum>'+goods_num+'</goodsnum><orderCell>'+pick_cell+'</orderCell><lcity>'+city+'</lcity><city2>'+city+'</city2></order>';*/
-                xml+='<order><orderSn>'+sn+'</orderSn><code>'+code+'</code><isCod>'+cod+'</isCod><codAmount>￥'+codAmount+'</codAmount><codAmount2>'+codAmount2+'</codAmount2><custormPostNo>'+custormPostNo+'</custormPostNo><rcvPerson>'+rcvPerson+'</rcvPerson><rcvAddress>'+rcvAddress+'</rcvAddress>';
-
-                if (code == 'yto') {
-                    if (rcvMobile != '') xml += '<rcvMobile>'+rcvMobile+'</rcvMobile>';
-                    if (rcvTel != '') xml += '<rcvTel>'+rcvTel+'</rcvTel>';
-                }else{
-                    if (rcvMobile != '') {
-                        xml += '<rcvMobile>'+rcvMobile+'</rcvMobile>';
-                    } else if (rcvTel != '') {
-                        xml += '<rcvMobile>'+rcvTel+'</rcvMobile>';
+                    if(!$(':checkbox[name=sn]:checked').length){
+                            alert('请选择要打印的订单或换货单');
+                            return false;
                     }
-                }
-                xml+='<bestTime>'+bestTime+'</bestTime><goodsnum>'+goods_num+'</goodsnum><orderCell>'+pick_cell+'</orderCell><lcity>'+city+'</lcity><city2>'+city+'</city2></order>';
+                    var xml='';
+                    var myDate = new Date();
+                    var v_curDate = (myDate.getMonth()+1)+'月'+myDate.getDate()+'日'+myDate.getHours()+'时';
 
-            });
+			$(':checkbox[name=sn]:checked').each(function(){
+					var td = $(this).parent('td');
+					var sn = $(this).val();
+					var code = $(':hidden[name=code]',td).val();//快递公司shipping_code
+					var codAmount = $(':hidden[name=codAmount]',td).val();
+					//var cod = codAmount>0?1:0;
+					var cod = 1;
+					var rcvPerson = $(':hidden[name=rcvPerson]',td).val();
+					var rcvAddress = $(':hidden[name=rcvAddress]',td).val();
+					var rcvMobile = $(':hidden[name=rcvMobile]',td).val();
+					var rcvTel = $(':hidden[name=rcvTel]',td).val();
+					var bestTime = $(':hidden[name=bestTime]',td).val();
+					var goods_num = $(':hidden[name=goods_num]',td).val();
+					var weight= $(':hidden[name=weight]',td).val();
+					var pick_cell = $(':hidden[name=pick_cell]',td).val();
+					var city = $(':hidden[name=city]',td).val();
+					var codAmount2 = g2b(codAmount);
+					if (code == 'ems') {
+					var custormPostNo = (cod == 1) ? '代收货款  上海治晨' : '非代收货款  上海治晨';
+					} else if (code == 'ems-sh' || code == 'ems-hz') {
+					var custormPostNo = (cod == 1) ? '代收货款' : '非代收货款';
+					}
+					if (xml == '') xml='<data express="public/express/'+code+'.xml">';
+					xml+='<order><orderSn>'+sn+'</orderSn><code>'+code+'</code><isCod>'+cod+'</isCod><codAmount>￥'+codAmount+'</codAmount><codAmount2>'+codAmount2+'</codAmount2><custormPostNo>'+custormPostNo+'</custormPostNo><rcvPerson>'+rcvPerson+'</rcvPerson><rcvAddress>'+rcvAddress+'</rcvAddress>';
+
+					if (code == 'yto') {
+						if (rcvMobile != '') xml += '<rcvMobile>'+rcvMobile+'</rcvMobile>';
+						if (rcvTel != '') xml += '<rcvTel>'+rcvTel+'</rcvTel>';
+					}else{
+						if (rcvMobile != '') {
+							xml += '<rcvMobile>'+rcvMobile+'</rcvMobile>';
+						} else if (rcvTel != '') {
+							xml += '<rcvMobile>'+rcvTel+'</rcvMobile>';
+						}
+					}
+					xml+='<bestTime>'+bestTime+'</bestTime><weight>'+weight+'</weight><goodsnum>'+goods_num+'</goodsnum><orderCell>'+pick_cell+'</orderCell><lcity>'+city+'</lcity><city2>'+city+'</city2><pdate>'+v_curDate+'</pdate></order>';
+
+			});
             xml+='</data>';
             flexApp.doPrint(xml);
             return true;
@@ -144,6 +162,7 @@
 		<div id="op">
 			<!--<input type="button" name="bt_print_sale" value="打印销售单" onclick="print_sale();" />-->
 			<input type="button" name="bt_print_invoice" value="控件加载中，请稍候..." onclick="print_invoice();" disabled />
+                        <input type="button" name="bt_print" id="bt_print" style="display: none;" value="打印白面单" onclick="blank_print();" />
 			<div id="flashContent" style="display:none;">运单打印控件</div>
 			<script type="text/javascript">
 				//swfobject.embedSWF("public/js/autoPrinter-1.1.10.swf", "flashContent","0", "0", "10.0.0","",{bridgeName:"expressBridge"});
@@ -154,13 +173,13 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-		var flexApp;
-		var initCallback = function() {			
-			flexApp = FABridge.expressBridge.root();
-			$(':input[name=bt_print_invoice]').val('打印运单').attr('disabled',false);
-		}
-		// register the callback to load reference to the Flex app
-        FABridge.addInitializationCallback( "expressBridge", initCallback );
+            var flexApp;
+            var initCallback = function() {			
+                    flexApp = FABridge.expressBridge.root();
+                    $(':input[name=bt_print_invoice]').val('打印运单').attr('disabled',false);
+            }
+            // register the callback to load reference to the Flex app
+            FABridge.addInitializationCallback( "expressBridge", initCallback );
         <?php 
          if ($pick_sn):
         ?>

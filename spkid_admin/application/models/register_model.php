@@ -39,6 +39,16 @@ class Register_model extends CI_Model
 			$where .= " AND r.register_no LIKE ? ";
 			$param[] = '%' . $filter['register_no'] . '%';
 		}
+                if (!empty($filter['product_name']))
+		{
+			$where .= " AND r.product_name LIKE ? ";
+			$param[] = '%' . $filter['product_name'] . '%';
+		}
+                if (!empty($filter['unit']))
+		{
+			$where .= " AND r.unit LIKE ? ";
+			$param[] = '%' . $filter['unit'] . '%';
+		}
 
 		$filter['register_id'] = empty($filter['register_id']) ? 'r.id' : trim($filter['register_id']);
 		$filter['sort_order'] = empty($filter['sort_order']) ? 'ASC' : trim($filter['sort_order']);

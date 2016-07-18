@@ -1,8 +1,28 @@
 <?php include APPPATH."views/mobile/header.php"; ?>
+<style>
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #fff;  
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #fff;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #fff;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #fff;
+}
+</style>
 
 <div class="views">
 <div class="view view-main" data-page="cart-checkout">
-<div data-page="index" class="page public-bg no-toolbar page-on-center">
+<div data-page="index" class="page article-bg2 no-toolbar page-on-center">
     <div class="yywtoolbar">
         <div class="yywtoolbar-inner row no-gutter">
             <div class="col-100  payment-hu"><a class="link" href="#" onclick="submit_cart();">确认报名</a></div>
@@ -17,7 +37,7 @@
     </div>
    <!--navbar end-->		
     
-   <div class="page-content native-scroll no-top2">
+   <div class="page-content native-scroll no-top2" style="padding-bottom:50px;">
         <div class="page-content-inner no-top">
              <div class="content-block wrap no-top">
 	    
@@ -35,7 +55,7 @@
 	     <!--registration-procedure end-->  
 	     
 	     <!-- registration-information-list start -->
-	        <ul class="two-col " style="margin-top:10px;">
+	        <ul class="two-col " style="margin-top:10px; color:#ccc;">
 		<?php $product_desc_additional = (!empty($product->product_desc_additional)) ? json_decode($product->product_desc_additional, true) : array();?>
 		<li>
 		<div class="row no-gutter hu-baomis">
@@ -84,19 +104,19 @@
 	    <!-- fill-registration-information start -->
 	        <div class="two-col">
 		    <div class="hu-bmxx-tit">填写报名信息</div>
-		      <ul class="receiving-address">
+		      <ul class="receiving-address2">
                       <li>
                         <div class="edit-list">
                             <span class="hus-ren"></span>
-			    <span class="downs hu-downs" data-id="<?php print $product->sub_id; ?>"></span>
+			    <span class="downs hu-downs" style="border-right:none;" data-id="<?php print $product->sub_id; ?>"></span>
                             <input type="text" onblur="j_change_num(this)" id="qty_<?php print $product->sub_id; ?>" min="1" max="<?=$product->sale_num?>" step="1" value="1" maxlength="5" class="hu-bm-sq">
-                            <span class="hu-chengtuan"><i class="up ups" data-id="<?php print $product->sub_id; ?>"></i><em>人&nbsp;&nbsp;&nbsp;10以上报团,请联系客服</em></span>
+                            <span class="hu-chengtuan"><i class="up ups" style="border-left:none;" data-id="<?php print $product->sub_id; ?>"></i><em>人&nbsp;&nbsp;&nbsp;10以上报团,请联系客服</em></span>
 			    
                         </div>
                     </li>
 		    <li>
                         <div class="edit-list">
-                            <div class="edit-user"><input type="text" id="consignee" placeholder="填写真实姓名"></div>
+                            <div class="edit-user2"><input type="text" id="consignee" placeholder="填写真实姓名"></div>
 			</div>
                     </li>
 		    
@@ -120,7 +140,7 @@
 		    
 		     <li>
                         <div class="edit-list">
-                            <div class="edit-user icon-dizhi">
+                            <div class="edit-user icon-dizhi2">
                                 <div class="item-input item-input-field-noheight item-input-field">
                                     <input type="text" id="address" placeholder="详细地址" value="" class="">
                                 </div>

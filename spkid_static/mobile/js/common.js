@@ -53,6 +53,200 @@ var mainView = myApp.addView('.view-main', {
     domCache: true,
 });
 
+
+var loginType = 0;//0为默认手机号+验证码登陆，1为用户名+密码
+function checkInput() {
+
+}
+
+var InterValObj; //timer变量，控制时间
+var count = 60; //间隔函数，1秒执行
+var curCount;//当前剩余秒数
+
+function sendMessage() {
+  　curCount = count;
+　　//设置button效果，开始计时
+    $('.yazhengma').attr("disabled", "true").addClass('inactive');
+    $('.yazhengma').text(curCount + "S");
+    InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次    
+}
+function resetSendYazhengma() {
+  window.clearInterval(InterValObj);//停止计时器
+  $('.yazhengma').removeAttr("disabled").removeClass('inactive');//启用按钮
+  $('.yazhengma').text("重新获取验证码");
+  //$('input[name="authcode"]').val('');
+}
+//timer处理函数
+function SetRemainTime() {
+    if (curCount == 0) {                
+        resetSendYazhengma();
+    }
+    else {
+        if (/\d{6}/.test($('input[name="authcode"]').val())) {
+          resetSendYazhengma();
+          var loginBtn = $('.login-box .modal-button:nth-child(2)') || $$('.sign-in .loginbtn');
+          loginBtn.removeAttr('disabled').removeClass('inactive');   
+          return;
+        };
+        curCount--;
+        $('.yazhengma').text(curCount + "S");
+    }
+}
+
+function checkMobileNum(mobile) {
+    var is_ok = false;
+    if (!mobile || !/^1\d{10}$/.test(mobile)) {
+      
+    } else {
+      is_ok = true;
+    }
+    return is_ok;
+}    
+
+function checkYazhengma(code) {
+  var is_ok = false;
+  if(code.length == 6 && !/^\d{4}$/.test(code)) {
+      is_ok = true;
+  } else {
+    is_ok = false;
+  }
+  return is_ok;
+}
+
+function sendYanzhengma() {
+  var mobile = $('.login-box input[name="username"]').val() || $('.sign-in input[name="username"]').val();
+  if (!checkMobileNum(mobile)) {
+        myApp.addNotification({
+            message: '请填写正确手机号码',
+            hold: 2500
+        });
+        return false;
+  };
+  sendMessage();
+  $.ajax({
+    method:'POST',
+    dataType:'json',
+    url:'/user/send_sms_code',
+    timeout:3000,
+    data:{
+      is_ajax:1,
+      mobile:mobile
+    },
+    success:function(data, status, xhr) {
+      console.log(data);
+      if (data.mobile_check_err == 0) {
+        //resetSendYazhengma();
+      } else {
+        myApp.addNotification({
+          message:data.msg_send_result,
+          hold:2500
+        });
+      }
+    },
+    error:function(xhr, status) {
+      console.log(status);
+    }
+  });
+
+}
+
+$$(document).on('ajaxStart', function (e) {
+    myApp.showIndicator();
+});
+$$(document).on('ajaxComplete', function () {
+    myApp.hideIndicator();
+});
+
+if (typeof(sessionStorage.is_logined) != "undefined" && sessionStorage.is_logined == "logined") {
+    if ($$('.index-dl.login').length) {
+      $$('.index-dl.login').remove();
+    };
+} 
+
+function login(){
+
+    myApp.yywLogin(false,'一键登录（免注册）',function(username, password){
+        if(loginType == 0) ga('send', 'event', 'login', 'click', 'onekey-register');
+        if(loginType == 1) ga('send', 'event', 'login', 'click', 'member');
+            
+        username = $('.login-box .text-input[name="username"]').val();
+        password = (loginType == 0 ? $('.login-box .text-input[name="authcode"]').val() : $('.login-box .text-input[name="password"]').val());
+
+        $$.ajax({
+            url:'/user/proc_loginAndRegister', 
+            method:'POST', 
+            dataType:'json', 
+            data:{
+              username:username,
+              password:password,
+              loginType:loginType
+            }, 
+
+            success:function(data){
+            if (1==data.error)
+              {
+                  myApp.addNotification({
+                      message: data.message,
+                      hold:2500
+                  });
+              } else {                        
+                  myApp.closeModal('.login-box');
+                  $$('.modal-overlay.modal-overlay-visible').remove();
+                  if ($$('.index-dl.login').length) {
+                    $$('.index-dl.login').remove();
+                  };
+                  sessionStorage.is_logined = 'logined';
+              }
+            },
+            error:function() {
+              myApp.addNotification({
+                message:'网络问题，深感抱歉',
+                hold:2500
+              });
+            }
+        })
+      }
+      ,function(username, password){
+        loginType = 1 - loginType;
+        //$('.yazhengma').attr("disabled", "true").addClass('inactive');
+        if (loginType == 1) {
+          $('.modal-button:nth-child(1)').text('一键登录');
+          $('.yazhengma-div').hide('slow');
+          $('.login-box input[name="username"]').attr('placeholder', '手机/用户名');
+          $('.mima-div').show('slow');
+        };
+
+        if (loginType == 0) {
+          $('.modal-button:nth-child(1)').text('会员直接登录');
+          $('.yazhengma-div').show('slow');
+          $('.login-box input[name="username"]').attr('placeholder', '手机号');
+          $('.mima-div').hide('slow');
+        };    
+
+      },'login-box');
+
+      var loginBtn = $('.login-box .modal-button:nth-child(2)').attr('disabled', "true").addClass('inactive');
+
+      $('.login-box input[name="authcode"]').on('input propertychange', function(){
+        username = $('.login-box input[name="username"]');
+        if (checkYazhengma($(this).val())) {
+          if (checkMobileNum(username.val())) {
+            loginBtn.attr('disabled', false).removeClass('inactive').addClass('active');
+          };
+        };
+      })
+
+      $('.login-box input[name="password"]').on('input propertychange', function(){
+        username = $('.login-box input[name="username"]');
+        password = $('.login-box input[name="password"]');
+        if (username.val() && password.val()) {
+          loginBtn.attr('disabled', false).removeClass('inactive').addClass('active');
+        };
+      })   
+
+} 
+
+
 /**
  * 如果page=false,则留在当前页面
  * // page like '#page_name' OR page like '/page.html'
@@ -71,37 +265,8 @@ function checkLogin(page,app,callback_str){
         dataType:'json',
     success:function(res){
         if (!res.is_login){
-
-            var modal=app.yywLogin(false,'登录爱牙网',function(username, password){
-
-                $$.ajax({url:'/user/proc_login', method:'POST', dataType:'json', data:{username:username,password:password}, success:function(data){
-                    if (1==data.error)
-                {
-						app.closeNotification(".notification-item");
-                    app.addNotification({
-						message: data.message
-						,hold: 2500
-                    });
-                } else {
-                	// page like '#page_name' OR inner page like '/page.html'
-                    // external page like 'external:/page.html'
-                	// page like :false
-                    if ( /external/.test(page) ){
-                        page = page.substr(9,page.length-1);
-                        location.href=page;
-                    }else if( page ){
-                        app.mainView.loadPage(page);
-                    }
-                    app.hidePreloader();
-                    if( typeof callback_str == 'string' )eval(callback_str);
-                }
-                }
-                })}
-                ,false,'login-box');
-
-            //if (self.signin)
-                //app.closeModal(modal);
-            //location.href = '/user/login?back_url='+back_url;
+            
+            login();
             is_login=false;
 
         }else{
@@ -584,4 +749,104 @@ function v_product_voucher (release_id) {
     });
 }
 
+//login page not login modal box
+var loginBtn = $('.sign-in .loginbtn').attr('disabled', "true").addClass('btn-disabled');
+
+$('.sign-in input[name="authcode"]').on('input propertychange', function(){
+  username = $('.sign-in input[name="username"]');
+  if (checkYazhengma($(this).val())) {
+    if (checkMobileNum(username.val())) {
+      loginBtn.attr('disabled', false).removeClass('btn-disabled').addClass('active');
+    };
+  };
+})
+
+$('.sign-in input[name="password"]').on('input propertychange', function(){
+  username = $('.sign-in input[name="username"]');
+  password = $('.sign-in input[name="password"]');
+  if (username.val() && password.val()) {
+    loginBtn.attr('disabled', false).removeClass('btn-disabled').addClass('active');
+  };
+}) 
+
+
+function switchLoginType() {
+    loginType = 1 - loginType;
+    //$('.yazhengma').attr("disabled", "true").addClass('inactive');
+    if (loginType == 1) {
+    $('.switchLogin').text('一键登录');
+    $('.yazhengma-div').hide('slow');
+    $('.sign-in input[name="username"]').attr('placeholder', '手机/用户名');
+    $('.password-div').show('slow');
+    };
+
+    if (loginType == 0) {
+    $('.switchLogin').text('会员直接登录');
+    $('.yazhengma-div').show('slow');
+    $('.sign-in input[name="username"]').attr('placeholder', '手机号');
+    $('.password-div').hide('slow');
+    };  
+}
+
+$('.sign-in .loginbtn').on('click', function(){
+    username = $('.sign-in input[name="username"]').val();
+    password = (loginType == 0 ? $('.sign-in input[name="authcode"]').val() : $('.sign-in input[name="password"]').val());
+
+    $$.ajax({
+        url:'/user/proc_loginAndRegister', 
+        method:'POST', 
+        dataType:'json', 
+        data:{
+          username:username,
+          password:password,
+          loginType:loginType
+        }, 
+
+        success:function(data){
+        if (1==data.error)
+          {
+              myApp.addNotification({
+                  message: data.message,
+                  hold:2500
+              });
+          } else {                        
+            sessionStorage.is_logined = 'logined';
+            if (document.referrer) {
+            location.href = document.referrer;
+            } else {
+            location.href = '/';
+            }             
+          }
+        },
+        error:function() {
+          myApp.addNotification({
+            message:'网络问题，深感抱歉',
+            hold:2500
+          });
+        }
+    })
+});
 // myApp.upscroller('回到顶部');
+
+function GetRequest() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        strs = str.split("&");
+        for(var i = 0; i < strs.length; i ++) {
+            theRequest[strs[i].split("=")[0]]=(strs[i].split("=")[1]);
+        }
+    }
+    return theRequest;
+}
+
+//微信
+function isWeiXin(){
+    var ua = window.navigator.userAgent.toLowerCase();
+    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+        return true;
+    }else{
+        return false;
+    }
+}

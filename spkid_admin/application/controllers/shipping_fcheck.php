@@ -298,29 +298,31 @@ class Shipping_fcheck extends CI_Controller
 	}
 	
 	public function finance_check($batch_id) {
-		auth('shipping_fcheck_finance_check');
-		$batch = $this->shipping_fcheck_model->filter(array('batch_id'=>$batch_id));
-		$this->db->query('BEGIN');
-		if($batch->batch_type==1 || $batch->batch_type==2){
-            //锁住关联订单
-            $this->shipping_fcheck_model->db_lock_shipping_data($batch_id);
-            $data_err = $invoice_nos = array();
-            $this->shipping_fcheck_model->check_batch($batch,$data_err,0,'finance_check');
-            if(!empty($data_err)){
-                foreach($data_err as $row) $invoice_nos[] = $row['invoice_no'];
-                $this->db->query("ROLLBACK");
-                sys_msg("以下运单号对应的订单待收金额不符，请检查：".implode(',',$invoice_nos),1,array(),false);
+            auth('shipping_fcheck_finance_check');
+            $batch = $this->shipping_fcheck_model->filter(array('batch_id'=>$batch_id));
+            $this->db->query('BEGIN');
+            if($batch->batch_type==1 || $batch->batch_type==2){
+                //锁住关联订单
+                $this->shipping_fcheck_model->db_lock_shipping_data($batch_id);
+                $data_err = $invoice_nos = array();
+                $this->shipping_fcheck_model->check_batch($batch,$data_err,0,'finance_check');
+                if(!empty($data_err)){
+                    foreach($data_err as $row) $invoice_nos[] = $row['invoice_no'];
+                    $this->db->query("ROLLBACK");
+                    sys_msg("以下运单号对应的订单待收金额不符，请检查：".implode(',',$invoice_nos),1,array(),false);
+                }
+                $this->shipping_fcheck_model->finance_order($batch, $this->admin_id);
+            } elseif ($batch->batch_type==3){
+                $this->shipping_fcheck_model->finance_order_shipping($batch);
             }
-            $this->shipping_fcheck_model->finance_order($batch, $this->admin_id);
-        }
-        $this->shipping_fcheck_model->unlock_order_change($batch, $this->admin_id);
+            $this->shipping_fcheck_model->unlock_order_change($batch, $this->admin_id);
         
-        $update = array('finance_check'=>1,'finance_check_admin'=>$this->admin_id,'finance_check_date'=>$this->time,'lock_admin'=>0,'lock_date'=>null);
-		$this->shipping_fcheck_model->update($update, $batch_id);
+            $update = array('finance_check'=>1,'finance_check_admin'=>$this->admin_id,'finance_check_date'=>$this->time,'lock_admin'=>0,'lock_date'=>null);
+            $this->shipping_fcheck_model->update($update, $batch_id);
 		
-		$this->db->query('COMMIT');
-        $links[] = array('text' => "返回查看对帐单详情", 'href' => 'shipping_fcheck/info/' . $batch_id);
-        sys_msg("操作成功！", 0, $links);
+            $this->db->query('COMMIT');
+            $links[] = array('text' => "返回查看对帐单详情", 'href' => 'shipping_fcheck/info/' . $batch_id);
+            sys_msg("操作成功！", 0, $links);
 	}
 	
 	public function deny_check($batch_id) {

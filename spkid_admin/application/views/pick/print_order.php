@@ -29,12 +29,19 @@
 				<table cellspacing="0" cellpadding="0" border="0">
 					<tbody>
 						<tr>
+							<td align="left" colspan="2">公司名称：上海欧思蔚奥医疗器材有限公司</td>
+						</tr>
+						<tr>
 							<td width="1%" colspan="2" align="left">订单序列号：<?php print $order->pick_cell;?></td>
 						</tr>
 						<tr>
 							<td align="left" colspan="2">送货方式：<?php print $order->shipping_name;?></td>
 							<!--<td align="right">销售单号：<?php //print $order->order_sn;?></td>-->
 						</tr>
+						<tr>
+							<td align="left" colspan="2">发货日期：<?php print $order->shipping_date;?></td>
+						</tr>
+						
 					</tbody>
 				</table>
 				
@@ -59,6 +66,9 @@
 								<p style="font-size: 12px">收货人</p>
 								<p><?php print $order->consignee.' '.$order->mobile.' '.$order->tel.' '.$order->zipcode;?> <br>
 								<?php print $order->province_name.' '.$order->city_name.' '.$order->district_name.' '.$order->address;?></p>
+	<?php if ( $pick_sn == 'PK2016011531620') :?>
+								<p style="font-size: 12px"><b>赠品4支牙刷将于下周(2016-01-18起)内全部发出.</b></p>
+<?php endif;?>
 							</td>           
 						</tr>
 						<tr height="20">
@@ -69,25 +79,25 @@
 					</tbody>
 					<tbody>
 						<tr>
-							<td width="15%" height="35" align="center">商品款号</td>
-							<td width="10%" align="center">品牌</td>
-							<td width="20%" align="center">商品名称</td>
-							<td width="10%" align="center">单位</td>
+							<td width="10%" height="35" align="center">商品款号</br>条码</td>
+							<td width="20%" align="center">生产单位</br>注册/备案号</td>
+							<td width="20%" align="center">品牌</br>商品名称</td>
+							<td width="10%" align="center">数量</br>单位</td>
 							<td width="10%" align="center">单价</td>
-                                                        <td width="10%" align="center">储位</td>
-							<td width="8%" align="center">数量</td>
-							<td width="10%" align="center">总金额</td>
+                            <td width="10%" align="center">金额</td>
+							<td width="10%" align="center">入库批号</br>储位</td>
+							<td width="10%" align="center">生产批号</br>有效期</td>
 						</tr>
 						<?php foreach($order->product_list as $product):?>
 						<tr>
-							<td width="15%" height="35" align="center"><?php print $product->sku; ?><br/><?php print $product->provider_barcode?></td>
-							<td width="10%" align="center"><?php print $product->brand_name; ?></td>
-							<td width="20%" align="center"><?php print $product->product_name.'<br> 【'.$product->color_name.'】【'.$product->size_name.'】'; ?></td>
-							<td width="10%" align="center"><?php print $product->unit_name; ?></td>
+							<td width="10%" height="35" align="center"><?php print $product->sku.'<br> '.$product->provider_barcode?></td>
+							<td width="20%" align="center"><?php print $product->unit.'<br> '. $product->register_no?></td>
+							<td width="20%" align="center"><?php print $product->brand_name.'<br> '. $product->product_name.'【'.$product->size_name.'】'; ?></td>
+							<td width="10%" align="center"><?php print $product->product_num .'<br> '. $product->unit_name; ?></td>
 							<td width="10%" align="center"><?php print $product->product_price; ?></td>
-                                                        <td width="10%" align="center"><?php print $product->location_name; ?></td>
-							<td width="8%" align="center"><?php print $product->product_num; ?></td>
-							<td width="10%" align="center"><?php print $product->total_price; ?></td>
+                            <td width="10%" align="center"><?php print $product->total_price; ?></td>
+							<td width="10%" align="center"><?php print $product->batch_code.'<br> '.$product->location_name; ?></td>
+							<td width="10%" align="center"><?php print $product->production_batch;?> <br> <?php print ($product->expire_date == '0000-00-00' || $product->expire_date == '0000-00-00 00:00:00' || $product->expire_date == '')?'无':$product->expire_date; ?></td>
 						</tr>
 						<?php endforeach;?>
 						</tbody>
@@ -95,11 +105,11 @@
 				<div align="right">合计：<?php print $order->product_num;?>件 ￥<?php print $order->order_price;?></div>
 				
                                 <p style="text-align: left; font-size: 14px" class="dingdan_nr full_width"><i>非常感谢您在 http://www.yueyawang.com 购物，我们期待您的再次光临！</i></p>
-                                <div align="left" style="margin-top:20px;"><b>退货信息：</b><br>
+                               <!--  <div align="left" style="margin-top:20px;"><b>退货信息：</b><br>
                                 地址：上海市虹口区天宝路466弄9号建邦大厦1102&1103室<br>
-                                收件：爱牙网售后服务中心<br>
+                                收件：悦牙网售后服务中心<br>
                                 电话：021-65382798  4009905920
-                                </div>
+                                </div> -->
 			</div>
 		<?php if($i<count($order_info)) print '<P style="page-break-after:always">&nbsp;</P>';  ?>
 		<?php endforeach;?>

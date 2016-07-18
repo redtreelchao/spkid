@@ -87,7 +87,7 @@ function attach_gallery(&$product_list)
 	return $product_list;
 }
 
-function attach_sub(&$product_list)
+function attach_sub(&$product_list, $depot_id=0)
 {
 	$product_list = index_array($product_list, 'product_id');
 	$product_ids = array();
@@ -104,7 +104,11 @@ function attach_sub(&$product_list)
 	}
 	$CI = &get_instance();
 	$CI->load->model('product_model');
-	$sub_list = $CI->product_model->all_sub(array(),$product_ids);
+        if ($depot_id > 0){
+            $sub_list = $CI->product_model->all_depot_sub($product_ids, $depot_id);
+        } else {
+            $sub_list = $CI->product_model->all_sub(array(),$product_ids);
+        }
 	foreach ($sub_list as $sub) {
 		$product = $product_list[$sub->product_id];
 
@@ -280,8 +284,4 @@ function create_product_with_product($product_id, $provider_id, $use_new_provide
         }
         $result["product_gallery_count"] = $CI->product_model->add_product_galleries($product_galleries);
         return $result;
-}
-
-function filter_product_desc($desc){
-    
 }

@@ -224,7 +224,7 @@ class Pick_model extends CI_Model
 				foreach($op_list as $op){
 					$sub=$this->product_model->lock_sub(array('sub_id'=>$op->sub_id));
 					$num=min($sub->gl_num,$op->consign_num);
-					$info=$this->order_model->assign_trans($row,$op,$num,$op->op_id, NULL);
+					$info=$this->order_model->assign_trans($row,$op,$num,$op->op_id, $op->product_price);
 					if($info['err']) {
 						$this->db->trans_rollback();
 						continue;
@@ -289,7 +289,7 @@ class Pick_model extends CI_Model
                 foreach ($order_ids as $order_id) {
 			$query = $this->db->get_where('order_info', array('order_id'=>$order_id), 1);
 			$orders = $query->row();
-			$sql = "SELECT product_id,color_id,size_id,depot_id,batch_id,location_id,product_number 
+			$sql = "SELECT *  
 					FROM ".$this->db->dbprefix('transaction_info')." 
 					WHERE trans_status != 5 AND trans_sn = '".$orders->order_sn."' ";
 			$query = $this->db->query($sql);
@@ -297,19 +297,19 @@ class Pick_model extends CI_Model
                         if (empty($product_list)) return false;
                         if ($hand_type == 1) {
                             //手动拣货类型（pick_num,pick_admin,pick_date）
-                            $sql1 = "INSERT INTO ".$this->db->dbprefix('pick_sub')." (pick_sn, product_id,color_id,size_id,depot_id,batch_id,location_id,product_number,rel_no,pick_cell,pick_num,pick_admin,pick_date) VALUES ";
+                            $sql1 = "INSERT INTO ".$this->db->dbprefix('pick_sub')." (pick_sn, product_id,color_id,size_id,depot_id,batch_id,location_id,product_number,rel_no,pick_cell,pick_num,pick_admin,pick_date, expire_date, production_batch) VALUES ";
                             foreach ($product_list as $product) {
                                      $sql1 .= "('".$pick_sn."','".$product->product_id."','".$product->color_id."','".$product->size_id."',".
                                                     "'".$product->depot_id."','".$product->batch_id."','".$product->location_id."','".abs($product->product_number)."',".
-                                                    "'".$orders->order_sn."','".$pick_cell."','".abs($product->product_number)."','".$admin_id."','".date('Y-m-d H:i:s')."'),";
+                                                    "'".$orders->order_sn."','".$pick_cell."','".abs($product->product_number)."','".$admin_id."','".date('Y-m-d H:i:s')."','".$product->expire_date."' ,'".$product->production_batch."'),";
                             }
                         }else{
                             //扫描拣货类型
-                            $sql1 = "INSERT INTO ".$this->db->dbprefix('pick_sub')." (pick_sn, product_id,color_id,size_id,depot_id,batch_id,location_id,product_number,rel_no,pick_cell) VALUES ";
+                            $sql1 = "INSERT INTO ".$this->db->dbprefix('pick_sub')." (pick_sn, product_id,color_id,size_id,depot_id,batch_id,location_id,product_number,rel_no,pick_cell, expire_date, production_batch) VALUES ";
                             foreach ($product_list as $product) {
                                      $sql1 .= "('".$pick_sn."','".$product->product_id."','".$product->color_id."','".$product->size_id."',".
                                                     "'".$product->depot_id."','".$product->batch_id."','".$product->location_id."','".abs($product->product_number)."',".
-                                                    "'".$orders->order_sn."','".$pick_cell."'),";
+                                                    "'".$orders->order_sn."','".$pick_cell."', '".$product->expire_date."' ,'".$product->production_batch."'),";
                             }
                         }
 			$sql1 = substr($sql1,0,-1);
@@ -359,7 +359,7 @@ class Pick_model extends CI_Model
 		foreach ($order_ids as $order_id) {
 			$query = $this->db->get_where('order_info', array('order_id'=>$order_id), 1);
 			$orders = $query->row();
-			$sql = "SELECT product_id,color_id,size_id,depot_id,batch_id,location_id,product_number,expire_date
+			$sql = "SELECT product_id,color_id,size_id,depot_id,batch_id,location_id,product_number,expire_date,production_batch
 					FROM ".$this->db->dbprefix('transaction_info')." 
 					WHERE trans_status != 5 AND trans_sn = '".$orders->order_sn."' ";
 			$query = $this->db->query($sql);
@@ -367,18 +367,18 @@ class Pick_model extends CI_Model
                         if (empty($product_list)) return false;
                          if ($hand_type == 1) {
                             //手动拣货类型（pick_num,pick_admin,pick_date）
-                            $sql1 = "INSERT INTO ".$this->db->dbprefix('pick_sub')." (pick_sn, product_id,color_id,size_id,depot_id,batch_id,location_id,product_number,rel_no,pick_cell,pick_num,pick_admin,pick_date,expire_date) VALUES ";
+                            $sql1 = "INSERT INTO ".$this->db->dbprefix('pick_sub')." (pick_sn, product_id,color_id,size_id,depot_id,batch_id,location_id,product_number,rel_no,pick_cell,pick_num,pick_admin,pick_date,expire_date,production_batch) VALUES ";
                             foreach ($product_list as $product) {
                                      $sql1 .= "('".$pick_sn."','".$product->product_id."','".$product->color_id."','".$product->size_id."',".
                                                     "'".$product->depot_id."','".$product->batch_id."','".$product->location_id."','".abs($product->product_number)."',".
-                                                    "'".$orders->order_sn."','".$pick_cell."','".abs($product->product_number)."','".$admin_id."','".date('Y-m-d H:i:s')."','".$product->expire_date."'),";
+                                                    "'".$orders->order_sn."','".$pick_cell."','".abs($product->product_number)."','".$admin_id."','".date('Y-m-d H:i:s')."','".$product->expire_date."','".$product->production_batch."'),";
                             }
                          } else {
-                            $sql1 = "INSERT INTO ".$this->db->dbprefix('pick_sub')." (pick_sn, product_id,color_id,size_id,depot_id,batch_id,location_id,product_number,rel_no,pick_cell,expire_date) VALUES ";
+                            $sql1 = "INSERT INTO ".$this->db->dbprefix('pick_sub')." (pick_sn, product_id,color_id,size_id,depot_id,batch_id,location_id,product_number,rel_no,pick_cell,expire_date,production_batch) VALUES ";
                             foreach ($product_list as $product) {
                                      $sql1 .= "('".$pick_sn."','".$product->product_id."','".$product->color_id."','".$product->size_id."',".
                                                     "'".$product->depot_id."','".$product->batch_id."','".$product->location_id."','".abs($product->product_number)."',".
-                                                    "'".$orders->order_sn."','".$pick_cell."','".$product->expire_date."'),";
+                                                    "'".$orders->order_sn."','".$pick_cell."','".$product->expire_date."','".$product->production_batch."'),";
                             }
                          }
 			$sql1 = substr($sql1,0,-1);
@@ -777,7 +777,7 @@ class Pick_model extends CI_Model
         $sql = "SELECT oi.order_id,oi.order_sn, oi.invoice_no, oi.shipping_date, si.shipping_name, oi.shipping_status, oi.create_date
                , p.region_name as province, c.region_name as city, a.region_name as district, 
                oi.address, oi.consignee, pi.pay_name, oi.order_price+oi.shipping_fee as order_amount, 
-               oi.order_price+oi.shipping_fee-oi.paid_price as paid_money, oi.order_weight_unreal ".$from.$where." 
+               oi.order_price+oi.shipping_fee-oi.paid_price as paid_money, oi.order_weight_unreal, round(oi.recheck_weight_unreal/1000, 2) as recheck_weight_unreal ".$from.$where." 
                ORDER BY ".$filter['sort_by']." ".$filter['sort_order']." 
                LIMIT ".($filter['page']-1)*$filter['page_size'].", ".$filter['page_size'] ;
         $query = $this->db_r->query($sql);
@@ -856,7 +856,7 @@ class Pick_model extends CI_Model
     	if (empty($order_ids) || count($order_ids) <= 0) return false;
     	$result = array();
     	$ids = implode(",",$order_ids);
-    	$sql = "SELECT oi.`order_id`,si.`shipping_name`,oi.`order_sn`,oi.`invoice_no`,oi.`invoice_title`,
+    	$sql = "SELECT oi.`order_id`,si.`shipping_name`,oi.`shipping_date`,oi.`order_sn`,oi.`invoice_no`,oi.`invoice_title`,
 				ui.`user_name`,ui.`email`,oi.`consignee`,oi.`tel`,oi.`mobile`,oi.`zipcode`,oi.`order_price`,oi.`product_num`,
 				ri1.`region_name` AS country_name,ri2.`region_name` AS province_name,ri3.`region_name` AS city_name,ri4.`region_name` AS district_name,oi.`address`,
 				oi.`paid_price`,(oi.`order_price`+oi.`shipping_fee`-oi.`paid_price`) AS unpay_price 
@@ -874,20 +874,23 @@ class Pick_model extends CI_Model
         	$query = $this->db_r->get_where('pick_sub', array('rel_no'=>$order->order_sn), 1);
 			$pick = $query->row();
 			$order->pick_cell = $pick->pick_cell;
-                $sql = "SELECT CONCAT(tpi.`product_sn`,' ',pc.`color_sn`,' ',pz.`size_sn`) AS sku,
+                $sql = "SELECT tpi.`product_sn` AS sku,
                         ps.`provider_barcode`,pb.`brand_name`,tpi.`product_name`,pc.`color_name`,
                         pz.`size_name`,tpi.`unit_name`,op.`product_price`,SUM(pks.`product_number`) as product_num,
-                        SUM(op.`product_price` * pks.`product_number`) AS total_price,li.`location_name` 
+                        SUM(op.`product_price` * pks.`product_number`) AS total_price,li.`location_name`,arc.`register_no`,arc.`unit`,bt.`batch_code`,pks.`expire_date`,pks.`production_batch`
                         FROM ".$this->db_r->dbprefix('pick_sub')." AS pks 
                         LEFT JOIN ".$this->db_r->dbprefix('product_info')." AS tpi ON pks.`product_id` = tpi.`product_id` 
                         LEFT JOIN ".$this->db_r->dbprefix('product_brand')." AS pb ON tpi.`brand_id` = pb.`brand_id` 
+                        LEFT JOIN ya_register_code AS arc ON arc.`id` = tpi.`register_code_id` 
                         LEFT JOIN ".$this->db_r->dbprefix('product_color')." AS pc ON pks.`color_id` = pc.`color_id` 
                         LEFT JOIN ".$this->db_r->dbprefix('product_size')." AS pz ON pks.`size_id` = pz.`size_id` 
                         LEFT JOIN ".$this->db_r->dbprefix('product_sub')." AS ps ON pks.`product_id` = ps.`product_id` AND pks.`color_id` = ps.`color_id` AND pks.`size_id` = ps.`size_id` 
                         LEFT JOIN ".$this->db_r->dbprefix('order_info')." AS oi ON pks.`rel_no` = oi.`order_sn` 
                         LEFT JOIN ".$this->db_r->dbprefix('order_product')." AS op ON oi.`order_id` = op.`order_id` AND pks.`product_id` = op.`product_id` AND pks.`color_id` = op.`color_id` AND pks.`size_id` = op.`size_id` 
                         LEFT JOIN ".$this->db_r->dbprefix('location_info')." AS li ON pks.`location_id` = li.`location_id` 
+                        LEFT JOIN ".$this->db_r->dbprefix('purchase_batch')." AS bt ON pks.`batch_id` = bt.`batch_id` 
                         WHERE pks.`rel_no` = '".$order->order_sn."' GROUP BY pks.product_id, pks.color_id, pks.size_id, pks.depot_id, pks.location_id;";
+
         	/*
                 $sql = "SELECT CONCAT(tpi.`product_sn`,' ',pc.`color_sn`,' ',pz.`size_sn`) AS sku,
 					ps.`provider_barcode`,pb.`brand_name`,tpi.`product_name`,pc.`color_name`,
@@ -911,14 +914,17 @@ class Pick_model extends CI_Model
         return $result;
     }
     
-    function get_orders_by_picksn($pick_sn) {
-    	if (empty($pick_sn)) return false;
+    function get_orders_by_picksn($filter) {
+    	//if (empty($pick_sn)) return false;
     	$result = array();
     	$sql = "SELECT  ps.`pick_sn`,oi.`order_sn`,oi.`order_id` 
-				FROM ".$this->db_r->dbprefix('pick_sub')." AS ps 
-				LEFT JOIN ".$this->db_r->dbprefix('order_info')." AS oi ON ps.`rel_no` = oi.`order_sn` 
-				WHERE ps.`pick_sn` = '".$pick_sn."' 
-				GROUP BY oi.`order_id` ";
+		FROM ".$this->db_r->dbprefix('pick_info')." AS p "
+                . "LEFT JOIN ".$this->db_r->dbprefix('pick_sub')." AS ps ON p.pick_sn = ps.pick_sn "
+                . "LEFT JOIN ".$this->db_r->dbprefix('order_info')." AS oi ON ps.`rel_no` = oi.`order_sn` "
+                . "WHERE 1";
+        if (!empty($filter['pick_sn'])) $sql .= " AND ps.pick_sn = '".$filter['pick_sn']."'";
+        if (isset($filter['pick_id']) && is_array($filter['pick_id'])) $sql .= " AND p.pick_id IN (".implode(",", $filter['pick_id']).")";
+        $sql .= " GROUP BY oi.`order_id`";
     	$query = $this->db_r->query($sql);
         $result = $query->result();
         return $result;

@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/framework7.material.colors.css?v=version')?>">
 <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/main.css?v=version')?>">
 <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/swiper.min.css?v=version')?>">
+<link rel="stylesheet" href="<?php echo static_style_url('mobile/css/lightGallery.css?v=version')?>">
 <style>
 	
 	.swiper-item-mc{ font-size:0.875em; color:#333;}
@@ -43,7 +44,7 @@ var static_host='';
 	<div class="popover-inner">
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div class="center">爱牙商城</div>
+				<div class="center">悦牙商城</div>
 			</div>
 		</div>
 		<div class="content-block share_modal hcenter">
@@ -67,7 +68,7 @@ var static_host='';
 		</div>
 	</div>
 		
-    <div class="popup-Iliuya-content">
+    <div class="popup-Iliuya-content" style="padding-top:30px;">
 	    <div class="order-details-rr">
 	    	<input type="hidden" placeholder="姓名：" name="name" class="" style="background:white; padding-left:5px;" value="<?php echo $user_name?>">
 	    	<input type="hidden" placeholder="联系方式：" name="mobile" style="background:white; padding-left:5px;" value="<?php echo $mobile?>">
@@ -85,35 +86,32 @@ var static_host='';
 </div>
 <!-- ends 留言对话框 -->
     <div class="views">
-    <!-- 爱牙商城-->
+    <!-- 悦牙商城-->
         <div class="view view-main" data-page="index">
-            <div class="pages">
+            <div class="pages ">
     		    <div data-page="index" class="page no-toolbar edu-fot">
                      <div class="toolbar">
                            <div class="toolbar-inner2 row no-gutter">
                                
    			                 
-   			                  <div class="col-15"></div>
+   			                 <div class="col-15"></div>
 
-							 <div class="col-25 new-cart" style=""><a class="link external" href="/cart/"><span class="number pd-number" id="cart_num" ></span></a></div>
+							 <div class="col-20 new-cart" style=""><a class="link external" href="/cart/"><span class="number pd-number" id="cart_num" ></span></a></div>
 
 							 <?php if ( $p->price_show ): ?>
-							 <div class="col-60 registration-hu Ixunjia">
-							 	<a class="link" href="javascript:void(0)">我要询价</a>
-							 </div>
+                                 <div class="col-40 registration-hu Ixunjia">
+                                    <a class="link" href="javascript:void(0)">我要询价</a>
+                                 </div>
 							 <?php else: ?>
-							 
-							 
-							 <?php if(isset($p->is_zhanpin) && $p->is_zhanpin): ?>
-							 
-							 <div class="col-60 registration-hu new-xunjia"><a class="link" href="javascript:void(0)" disabled="disabled">加入购物车</a></div>
+							 <?php if(isset($p->is_zhanpin) && $p->is_zhanpin): ?>							 
+							 	 <div class="col-40 registration-hu new-xunjia"><a class="link" href="javascript:void(0)" disabled="disabled">加入购物车</a></div>
 							 <?php else: ?>
-							 	<div class="col-60 registration-hu new-xunjia"><a class="link addcart" href="javascript:void(0)" >加入购物车</a></div>
-							 	
+							 	 <div class="col-40 registration-hu new-xunjia"><a class="link addcart" href="javascript:void(0)" >加入购物车</a></div>
+                                                                 <div class="col-25 buy-now"><a class="link buy_product">立即购买</a></div>
+							 <?php endif; ?>							 
 							 <?php endif; ?>
-							 
-							 <?php endif; ?>
-   			                   
+                             
+   			                 
 			               </div>
 	                 </div>
                 
@@ -149,7 +147,7 @@ var static_host='';
                     <!-- ends 顶部快捷键 -->
                     
                     
-                    <div class="page-content " style=" padding-top:0;">
+                    <div class="page-content " style=" padding-top:20px;">
                          <!--轮播图开始-->
      					<div class="swiper-box">
      						<div class="swiper-container swiper1_lunbo">
@@ -259,8 +257,10 @@ var static_host='';
                    <div class="tab-cotent new-details-lb clearfix">
                         <ul>
                         	<li style="display:block">
+                                <ul id="auto-loop" class="gallery" style="display:none"></ul>
                         		<div class="new-details-nr"><?php echo $p->detail1;?></div>
-			                   <section>
+
+			                    <section>
 			   				        <div class="certification">
 			   				        	<img src="<?php echo static_style_url('mobile/img/pro-xq-pic.jpg?v=version')?>" class="">
 			   				        </div>
@@ -394,6 +394,31 @@ var static_host='';
 
 <!-- 页面逻辑 start-->
 <script type="text/javascript" src="<?php echo static_style_url('mobile/js/swiper.min.js?v=version'); ?>"></script>
+<script type="text/javascript" src="<?php echo static_style_url('mobile/js/lightGallery.min.js?v=version'); ?>"></script>
+<script>
+    //详情内容画廊
+    $(document).ready(function(){
+        var v_img_loop = '';
+        $(".new-details-nr img").each(function(){
+            v_img_loop += '<li data-src="'+ $(this)[0].src +'"><a href="#"><img src="'+ $(this)[0].src +'" /></a></li>';
+        });
+        $("#auto-loop").append(v_img_loop);
+
+        $('.tab-cotent img').on('click', function(){
+            $('#auto-loop').show();
+            $('#auto-loop li').eq(0).click();
+        });
+        $("#auto-loop").lightGallery({
+            loop:true,
+            auto:true,
+            pause:4000,
+            counter:true,
+            caption:'yeuyawang',
+            onCloseAfter:function(){$('#auto-loop').hide()}
+        });
+
+    });
+</script>
 <script>
 	//创建轮播图和关联产品
 	var swiper_link_products = new Swiper('.swiper-container-link-products', {
@@ -442,7 +467,17 @@ var static_host='';
 
 	$$('#cart_num').hide();
 	$$('.addcart').on('click', add_to_cart);
+        $$(".buy_product").on('click', function(){
+	    if (!checkLogin(false)) {
+	         return false;
+   	    }
+            var sub_id = $$("#cur_sub_id").val();
+            var buy_num = $$("#choosed_num").val();
+            window.location.href = '/cart/checkout_product/'+sub_id+'/'+buy_num;
+        });
+        
 	function add_to_cart () {
+        ga('send', 'event', 'buy', 'click', 'buychat');
 		var v_max = $$("#cur_sub_num").val();
 	    if (v_max < 1) {
 			myApp.addNotification({

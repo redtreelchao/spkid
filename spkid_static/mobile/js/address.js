@@ -3,7 +3,7 @@ $$('.form-ad-json').on('click', function(){
     var formData = JSON.stringify(myApp.formToJSON('#my-form'));
     $$.ajax({url:'/address/address_check',async:false,dataType:'json',data:{formdata:formData},success:function(data){
         if(data.mobile_check_err == 1){           
-            location.href = data.v_url_add;
+            location.href = data.v_url_add +'?v=' + Math.random();
         }else{
             myApp.alert(null, data.mobile_check_err);
         }
@@ -16,28 +16,30 @@ $$('.form-to-json').on('click', function(){
     var formData = JSON.stringify(myApp.formToJSON('#my-form'));
     $$.ajax({url:'/address/address_check',async:false,dataType:'json',data:{formdata:formData},success:function(data){
         if(data.mobile_check_err == 1){
-            location.href = '/address/index';
+            location.href = '/address/index?v=' + Math.random();
         }else{
             myApp.alert(null, data.mobile_check_err);
         }
     }})
 });
 
+//设置默认
+function address_setdefault(address_id){
+    $$.ajax({url:'/address/address_default',async:false,dataType:'json',data:{address_id:address_id},success:function(data){   
+        if (0 == data.error){
+            location.href = '/address/index?v=' + Math.random();
+        }
+    }});
+}
+
 //删除地址
-$$('.form-del-json').on('click', function(){
-    var formData = JSON.stringify(myApp.formToJSON('#my-form'));
-    $$.ajax({url:'/address/address_delete',async:false,dataType:'json',data:{formdata:formData},
-    	// success:function(data){
-	    //     if(data.mobile_check_err == 2){
-	    //     	console.log(data);
-	    //         //location.href = '/address/index?v=' + rand(1,12);
-	    //     }
-    	// },
-	    complete:function() {
-	    	location.href = '/address/index?v=' + Math.random();
-	    }
-	})
-});
+function address_delete(address_id){
+    $$.ajax({url:'/address/address_delete',async:false,dataType:'json',data:{address_id:address_id},       
+        complete:function() {
+            location.href = '/address/index?v=' + Math.random();
+        }
+    })
+}
 
 //选择省市
 function change_region(type,value,are){

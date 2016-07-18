@@ -1,6 +1,7 @@
 <?php include(APPPATH.'views/common/header.php');?>
 <script type="text/javascript" src="public/js/utils.js"></script>
 <script type="text/javascript" src="public/js/validator.js"></script>
+<script src="public/js/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 	//<![CDATA[
 	$(function(){
@@ -51,6 +52,7 @@
 			}
 		});
 	}
+
 	//]]>
 </script>
 <div class="main">
@@ -123,6 +125,12 @@
 			  <td class="item_title">用户名:</td>
 			  <td class="item_input"><input name="user_name" type="text" id="user_name" value="" size="60"  /></td>
 		  </tr>
+		  	<tr>
+		  		<td class="item_title">评价时间:</td>
+		  		<td>
+                    <input type="text" value="" name="comment_date" id="comment_date" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                </td>
+		  	</tr>
 			<tr>
 				<td class="item_title"></td>
 				<td class="item_input">

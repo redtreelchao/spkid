@@ -53,6 +53,7 @@ class User_model extends CI_Model
 	}
 
 	public function user_data($user_id)
+
     {
     	$sql = "SELECT user_id, user_name, password, email,user_type,discount_percent,mobile,mobile_checked,email_validated" .
     			" FROM " . $this->_db->dbprefix('user_info') . " WHERE user_id='".$user_id."' LIMIT 1";
@@ -1195,12 +1196,19 @@ SQL;
         }
 
         //PC端 个人中心待评价数量
-		public function get_user_pingjia($user_id){
-			$sql = "SELECT * FROM ty_order_product AS og 
-					LEFT JOIN ty_order_info AS o ON og.order_id = o.order_id 
-					LEFT JOIN ty_product_liuyan AS l ON o.user_id = l.user_id AND og.product_id = l.tag_id AND l.tag_type = 1 AND l.comment_type = 2 AND l.is_del = 0 
-					WHERE   o.shipping_status = 1 AND l.comment_id IS NULL AND o.user_id = ".$user_id;
-			$query = $this->_db->query($sql);
-	        return $query->result();
-		}
+        public function get_user_pingjia($user_id){
+                $sql = "SELECT * FROM ty_order_product AS og 
+                                LEFT JOIN ty_order_info AS o ON og.order_id = o.order_id 
+                                LEFT JOIN ty_product_liuyan AS l ON o.user_id = l.user_id AND og.product_id = l.tag_id AND l.tag_type = 1 AND l.comment_type = 2 AND l.is_del = 0 
+                                WHERE   o.shipping_status = 1 AND l.comment_id IS NULL AND o.user_id = ".$user_id;
+                $query = $this->_db->query($sql);
+        return $query->result();
+        }
+        
+        //获取admin_id的值        
+        public function get_admin_id($admin_name){
+            $sql = "SELECT admin_id FROM ty_admin_info WHERE admin_name = '".$admin_name."' LIMIT 1";
+            $result = $this->db->query($sql)->row();
+            return !empty($result) ? $result->admin_id : 0;
+        }
 }                

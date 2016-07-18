@@ -55,6 +55,20 @@ function get_depot_perm(){
     $perms['invoicing_summary_report'] = check_perm('invoicing_summary_report') ? '1' : '2';
     $perms['invoicing_details_report'] = check_perm('invoicing_details_report') ? '1' : '2';
     //$perms['depot_real_inventory_report'] = check_perm('depot_real_inventory_report') ? '1' : '2';
+    $perms['inventory_details_report'] = check_perm('inventory_details_report') ? '1' : '2';
+    
+    $perms['purchase_main_report'] = check_perm('purchase_main_report') ? '1' : '2';
+    $perms['purchase_main_detail_report'] = check_perm('purchase_main_detail_report') ? '1' : '2';
+    return $perms;
+}
+
+function get_order_profits_perm(){
+    $perms = array();
+    $perms['order_profits_detail_report'] = check_perm('order_profits_detail_report') ? '1' : '2';
+    $perms['order_profits_return_report'] = check_perm('order_profits_return_report') ? '1' : '2';
+    $perms['order_profits_summary_report_to'] = check_perm('order_profits_summary_report_to') ? '1' : '2';
+    $perms['order_profits_summary_report_to2'] = check_perm('order_profits_summary_report_to2') ? '1' : '2';
+    $perms['order_profits_sales_report'] = check_perm('order_profits_sales_report') ? '1' : '2';
     return $perms;
 }
 

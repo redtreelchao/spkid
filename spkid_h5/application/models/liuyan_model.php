@@ -84,7 +84,7 @@ class Liuyan_model extends CI_Model
 		
        	//$sql = "{$select} {$from} {$where} {$sort} LIMIT {$start},{$filter['page_size']}";
        	$sql = "{$select} {$from} {$where} {$sort}";
-       	$query = $this->_db->query($sql);    
+       	$query = $this->_db->query($sql);
        	
        	$list = $query->result();
        	return array('filter'=>$filter,'list'=>$list);

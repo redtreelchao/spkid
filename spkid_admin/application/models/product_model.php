@@ -33,7 +33,7 @@ class Product_model extends CI_Model
 				LEFT JOIN ".$this->db->dbprefix('product_provider')." AS prov ON prov.provider_id = p.provider_id
 				LEFT JOIN ".$this->db->dbprefix('purchase_batch')." AS batch ON batch.batch_id = cost.batch_id 
 				LEFT JOIN ya_register_code AS reg ON reg.id = p.register_code_id ";
-		$where = " WHERE 1 ";
+		$where = " WHERE 1 AND p.genre_id = 1 ";
 		$group_by = " GROUP BY p.product_id ";
 		$param = array();
 
@@ -131,11 +131,11 @@ class Product_model extends CI_Model
 				$where .= " AND sub.is_on_sale = 0 ";
 			}
 		}
-		// 商品大类
-		if (!empty($filter['genre_id']))
+                
+                if (!empty($filter['source_id']))
 		{
-			$where .= " AND p.genre_id = ? ";
-			$param[] = $filter['genre_id'];
+			$where .= " AND p.source_id = ? ";
+			$param[] = $filter['source_id'];
 		}
 
 		if (!empty($filter['product_status']) && in_array($filter['product_status'],array('is_best','is_new','is_hot','is_promote','is_offcode','is_gifts','is_stop','is_audit_yes','is_audit_no','is_pic_yes','is_pic_no')))
@@ -329,8 +329,8 @@ class Product_model extends CI_Model
     public function product_sub_for_scan($filter)
 	{
 		$this->db_r
-			->select('ps.product_id,pi.product_name,pr.provider_name,pr.provider_code,pb.brand_name,ps.color_id,ps.size_id,pps.expire_date, 
-			    color_name, size_name,product_sn,pps.product_number as p_number,pps.product_finished_number,pbs.product_number as box_number,
+			->select('ps.product_id,pi.product_name,pr.provider_name,pr.provider_code,pb.brand_name,ps.color_id,ps.size_id,pps.expire_date,
+			    color_name, size_name,product_sn,pps.product_number as p_number,pps.product_finished_number,
 			    ps.provider_barcode,pi.provider_productcode,pi.create_admin,pi.create_date,pi.audit_admin,pi.audit_date')
 			->from('product_sub AS ps')
 			->join('product_info AS pi','ps.product_id=pi.product_id')
@@ -339,7 +339,7 @@ class Product_model extends CI_Model
 			->join('purchase_sub AS pps','ps.product_id=pps.product_id and ps.color_id=pps.color_id and ps.size_id=pps.size_id','left')
 			->join('product_provider AS pr','pr.provider_id=pi.provider_id','left')
 			->join('product_brand AS pb','pb.brand_id=pi.brand_id','left')
-			->join('purchase_box_sub AS pbs','pbs.product_id=pps.product_id and pbs.color_id=pps.color_id and pbs.size_id=pps.size_id','left')
+		//	->join('purchase_box_sub AS pbs','pbs.product_id=pps.product_id and pbs.color_id=pps.color_id and pbs.size_id=pps.size_id','left')
 			->where($filter);
 		$query = $this->db_r->get();
 		return $query->result();
@@ -390,7 +390,7 @@ class Product_model extends CI_Model
 	}
 
     public function get_index_goods(){
-        $max = MOBILE_INDEX_MAX_PRODUCT_NUM;
+        $max = 60;
         
 
         // 优先获得打标的产品 max 个
@@ -399,7 +399,7 @@ class Product_model extends CI_Model
 		    LEFT JOIN ty_product_sub AS ps USING(product_id) 
 		    LEFT JOIN ty_product_gallery AS pg ON ps.`product_id`=pg.`product_id` AND ps.`color_id`=pg.`color_id` WHERE pg.image_type="default"
 		    AND p.`is_audit`=1 AND  ps.is_on_sale = 1 AND (ps.consign_num>0 OR ps.consign_num=-2 OR ps.gl_num>ps.wait_num) AND 
-		    (p.is_best=1 OR p.is_hot=1 OR p.is_new=1 OR p.is_offcode=1 OR p.is_gifts=1) AND p.genre_id=1 group by p.product_id ORDER BY RAND()'. " limit $max";
+		    (p.is_best=1 OR p.is_hot=1 OR p.is_new=1 OR p.is_offcode=1 OR p.is_gifts=1) AND p.genre_id=1 group by p.product_id ORDER BY p.sort_order desc'. " limit $max";
 
         $query = $this->db->query($sql);
         $res = $query->result_array();
@@ -413,7 +413,7 @@ class Product_model extends CI_Model
 			LEFT JOIN ty_product_gallery AS pg ON ps.`product_id`=pg.`product_id` AND ps.`color_id`=pg.`color_id` 
 			WHERE  pg.image_type='default' and
 			p.`is_audit`=1 AND  ps.is_on_sale = 1 AND (ps.consign_num>0 OR ps.consign_num=-2 OR ps.gl_num>ps.wait_num) AND p.genre_id=1 
-			group by p.product_id ORDER BY RAND() limit $left";
+			group by p.product_id ORDER BY p.sort_order desc limit $left";
             $query = $this->db->query($sql);
 
             $res_left  = $query->result_array();
@@ -443,6 +443,12 @@ class Product_model extends CI_Model
 		{
 			$where .= " AND p.product_sn LIKE ? ";
 			$param[] = '%' . $filter['product_sn'] . '%';
+		}
+                
+                if (!empty($filter['product_id2']))
+		{
+			$where .= " AND p.product_id = ? ";
+			$param[] = $filter['product_id2'];
 		}
 
 		if (!empty($filter['product_name']))
@@ -682,7 +688,7 @@ class Product_model extends CI_Model
 	
 	public function get_product_price($product_id)
 	{
-		$sql="SELECT b.batch_code,d.provider_name,d.provider_cooperation,coop.cooperation_name,c.cost_price,c.consign_price,c.consign_rate,c.product_cess ";
+		$sql="SELECT b.batch_code,d.provider_name,d.provider_cooperation,coop.cooperation_name,c.cost_price,c.consign_price,c.consign_rate,c.product_cess,c.product_income_cess ";
 		$from=" FROM ".$this->db->dbprefix("product_cost")." AS c INNER JOIN ty_purchase_batch AS b ON c.batch_id = b.batch_id";
 		$from.=" LEFT JOIN ".$this->db->dbprefix("product_info")." AS p ON c.product_id = p.product_id";
 		$from.=" LEFT JOIN ".$this->db->dbprefix("product_provider")." AS d ON c.provider_id = d.provider_id";
@@ -1466,6 +1472,35 @@ public function update_check_gallery_rows($data){
         $sql= 'update ty_product_gallery set img_exist = ? where product_id = ?';
         return $this->db->query($sql,$data);
 }
-	
+    //更新产品评价量
+    public function product_pjnum_update($id)
+    {
+        $sql = "UPDATE ty_product_info SET pj_real_num = pj_real_num+1 WHERE product_id = ".$id;
+        return $this->db->query($sql);
+    }
+    
+    //锁depot_sub
+    public function lock_depot_sub($filter)
+    {
+        $sql = "SELECT * FROM ya_product_depot_sub WHERE product_id = ? AND color_id = ? AND size_id = ? AND depot_id = ? LIMIT 1 FOR UPDATE";
+        $param = array($filter['product_id'],$filter['color_id'],$filter['size_id'], $filter['depot_id']);
+        $query = $this->db->query($sql,$param);
+        return $query->row();		
+    }
+    
+    public function update_depot_sub($update, $sub_id)
+    {
+        $sql = "UPDATE ya_product_depot_sub SET gl_num = '".$update['gl_num']."' WHERE sub_id = ".$sub_id;
+        return $this->db->query($sql);
+    }
+    
+    public function all_depot_sub($product_ids = array(), $depot_id)
+    {
+        $sql = "SELECT * FROM ya_product_depot_sub ps "
+                . "LEFT JOIN ty_product_color pc ON ps.color_id = pc.color_id "
+                . "LEFT JOIN ty_product_size psize ON psize.size_id = ps.size_id WHERE ps.depot_id = '".$depot_id."' AND ps.gl_num > 0 AND ps.product_id IN (".implode(",", $product_ids).")";
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
 }
 ###

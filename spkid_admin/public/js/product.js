@@ -73,6 +73,7 @@ function add_color () {
 			for(i in result.data){
 				size_select[0].options.add(new Option(result.data[i],i));
 			}
+			$('select[name=cs_size_src]').selected({searchBox:1,maxHeight:300});//for amazeui style
 		}
 	});
 }

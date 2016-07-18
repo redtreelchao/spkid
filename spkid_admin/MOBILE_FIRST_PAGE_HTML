@@ -1,0 +1,87 @@
+2015-10-27<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#2196f3">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+	
+    <title>悦牙网</title>
+    <link rel="stylesheet" href="http://static.yueyawang.com/mobile/css/framework7.material.css">
+    <link rel="stylesheet" href="http://static.yueyawang.com/mobile/css/main.css">
+
+</head>
+<body>
+<div class="statusbar-overlay"></div>
+<div class="panel-overlay"></div>
+<div class="view view-main">
+    <div class="pages">
+<div class="page" data-page="index">
+<div class="page-content" style="padding-top:0;cursor:pointer">
+  <!-- Slider -->
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+        </div>
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
+<div class="yywtoolbar">
+    <div class="yywtoolbar-inner">
+        <div class="left"><a href="/" id="jump" class="button button-fill color-red">跳过</a></div>
+    </div>
+</div>
+</div>
+    </div><!-- pages -->
+</div>
+</div><!-- views -->
+<script type="text/javascript" src="http://static.yueyawang.com/mobile/js/framework7.js"></script>
+<script>
+// @author wangwei
+function setCookie(objName,objValue,objHours){//添加cookie
+    var str = objName + "=" + escape(objValue);
+    if(objHours > 0){//为0时不设定过期时间，浏览器关闭时cookie自动消失
+        var date = new Date();
+        var ms = objHours*3600*1000;
+        date.setTime(date.getTime() + ms);
+        str += "; expires=" + date.toGMTString();
+    }
+    document.cookie = str;
+}
+var $$ = Dom7;
+var swiper=new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        });
+
+/*swiper.on('reachEnd', function(swiper){
+    //append button
+    if (1==$$('.yywtoolbar-inner').children().length)
+    {	 
+        var a=$$('.right');
+        a.on('click',function(e){
+            e.preventDefault();
+            setCookie('fp-started',true,24);
+            //进入页面
+            location.href='/user/signin/register-step1';
+        })
+            $$('.yywtoolbar-inner').append(a);
+    }
+
+})
+ */
+$$('.enter-btn').on('click',function(e){
+    e.preventDefault();
+          setCookie('fp-started',true,24);
+          //进入页面
+          location.href='/user/signin/register-step1';
+})
+$$('#jump').on('click',function(e){
+    e.preventDefault();
+    setCookie('fp-started',true,24);
+    location.href='/';
+})
+</script>

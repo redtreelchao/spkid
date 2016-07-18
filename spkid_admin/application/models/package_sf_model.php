@@ -11,20 +11,34 @@ class Package_sf_model extends CI_Model
 	 * 顺丰下单订单列表
 	 * chenxi 20130527
 	 */
-	public function sf_order_list()
+	public function sf_order_list($shipping)
 	{
-		$sql = "SELECT oi.order_id,oi.order_sn,oi.`consignee`,oi.`province`,oi.`city`,oi.`district`,
+		$sql = "SELECT oi.order_id,oi.order_sn,oi.`consignee`,oi.`province`,oi.`city`,oi.`district`,oi.create_date,
 				oi.`tel`,oi.`mobile`,oi.`zipcode`,p.`region_name` AS province_name,c.`region_name` AS city_name,
-				d.`region_name` AS district_name,oi.`address`, oi.order_price+oi.shipping_fee-oi.paid_price AS order_price, oi.pay_id, oi.confirm_date 
+				d.`region_name` AS district_name,oi.`address`, oi.pay_id,oi.shipping_id,oi.order_price as goods_price, oi.order_price+oi.shipping_fee-oi.paid_price AS order_price, oi.pay_id, oi.confirm_date 
 				FROM `ty_order_info` AS oi 
-				LEFT JOIN `ty_third_region_info` AS p ON oi.`province` = p.`ty_region_id` 
-				LEFT JOIN `ty_third_region_info` AS c ON oi.`city` = c.`ty_region_id` 
+				LEFT JOIN `ty_region_info` AS p ON oi.`province` = p.`region_id` 
+				LEFT JOIN `ty_region_info` AS c ON oi.`city` = c.`region_id` 
 				LEFT JOIN `ty_region_info` AS d ON oi.`district` = d.`region_id` 
-				LEFT JOIN `ty_shipping_package_interface` spi ON oi.order_id = spi.order_id AND spi.filter_remark <> 1101 
+				LEFT JOIN `ty_shipping_package_interface` spi ON oi.order_id = spi.order_id 
 				WHERE oi.order_status = 1 AND oi.invoice_no = '' AND oi.shipping_status = 0 
 					AND oi.lock_admin = 0 AND oi.is_pick = 1 AND oi.is_qc = 0 
-					AND oi.shipping_id = ".SF_SHIPPING_ID." AND spi.sp_id IS NULL 
+					AND oi.shipping_id IN (".implode(',', $shipping).") AND spi.sp_id IS NULL 
 				ORDER BY oi.order_id DESC LIMIT ".SF_ORDER_NUM;
+				
+		/*$sql = "SELECT oi.order_id,oi.order_sn,oi.`consignee`,oi.`province`,oi.`city`,oi.`district`,oi.create_date,
+				oi.`tel`,oi.`mobile`,oi.`zipcode`,p.`region_name` AS province_name,c.`region_name` AS city_name,
+				d.`region_name` AS district_name,oi.`address`, oi.pay_id,oi.shipping_id,oi.order_price as goods_price, oi.order_price+oi.shipping_fee-oi.paid_price AS order_price, oi.pay_id, oi.confirm_date 
+				FROM `ty_order_info` AS oi 
+				LEFT JOIN `ty_region_info` AS p ON oi.`province` = p.`region_id` 
+				LEFT JOIN `ty_region_info` AS c ON oi.`city` = c.`region_id` 
+				LEFT JOIN `ty_region_info` AS d ON oi.`district` = d.`region_id` 
+				LEFT JOIN `ty_shipping_package_interface` spi ON oi.order_id = spi.order_id 
+				WHERE oi.order_status = 1 AND oi.shipping_status = 0 
+					AND oi.lock_admin = 0 AND oi.is_pick = 1 AND oi.is_qc = 0 
+					AND oi.shipping_id IN (".implode(',', $shipping).") AND spi.sp_id IS NULL 
+				ORDER BY oi.order_id DESC";				
+				echo $sql;*/
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -95,6 +109,17 @@ class Package_sf_model extends CI_Model
         $this->db->delete('shipping_package_interface', array('order_id' => $order_id));
 	return $this->db->affected_rows();
     }
+    
+    function set_shipping_package($data) {  
+        if(!empty($data['mailno'])) {
+                $sql = "UPDATE ty_order_info SET invoice_no = '".$data['mailno']."' WHERE order_id = ".$data['order_id'];
+                $this->db->query($sql);
+        }
+        
+        $sql = "REPLACE INTO ty_shipping_package_interface (shipping_id,order_id,order_sn,mailno,filter_status,filter_remark,dist_code,add_time) "
+                        ."VALUES (".$data['shipping_id'].",".$data['order_id'].",'".$data['order_sn']."','".$data['mailno']."',".$data['filter_status'].",'".$data['filter_remark']."','".$data['dist_code']."','".date("Y-m-d H:i:s")."')";
+        $this->db->query($sql);
 
-
+        return true;
+    }
 }

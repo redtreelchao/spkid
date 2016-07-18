@@ -124,7 +124,7 @@
 <!--promo-code start-->
 <div class="home-wrapper no-bottom" >     
      <div class="coupon-box">
-          <div class="use-coupons"><div class="promo-code" onclick="openShutManager(this,'coupon-box-code',false,'-','+')">+</div>爱牙网优惠<span class="coupon-box-title-tip"></span></div>        
+          <div class="use-coupons"><div class="promo-code" onclick="openShutManager(this,'coupon-box-code',false,'-','+')">+</div>悦牙网优惠<span class="coupon-box-title-tip"></span></div>        
           <div id="coupon-box-code" class="coupon-box-code" style="display: none;">
               <?php if(empty($voucher_list)): ?> 
               <div class="coupon-list-no-coupon">对不起，您没有可用优惠券</div>
@@ -288,7 +288,7 @@
                            <div class="v-button hu-button">
                                   <button class="btn btn-lg btn-blue save_invoice" type="submit">保存</button>
                                   <button class="btn cancel" type="submit" data-dismiss="modal">取消</button>
-                                  <p class="wxts">温馨提示：发票金额不含爱牙网积分，优惠券，现金券部分</p>
+                                  <p class="wxts">温馨提示：发票金额不含悦牙网积分，优惠券，现金券部分</p>
                            </div>
                            
                            
@@ -310,7 +310,7 @@
                              <div class="v-button hu-button2">
                                   <button class="btn btn-lg btn-blue save_invoice" type="submit">保存</button>
                                   <button class="btn cancel" type="submit" data-dismiss="modal">取消</button>
-                                  <p class="wxts">温馨提示：发票金额不含爱牙网积分，优惠券，现金券部分</p>
+                                  <p class="wxts">温馨提示：发票金额不含悦牙网积分，优惠券，现金券部分</p>
                             </div>
                           
                         

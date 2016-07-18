@@ -98,5 +98,6 @@
 <script src="<?=static_style_url("js/validate.js")?>" type="text/javascript"></script>
 <script type="text/javascript"> var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://"); document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fcd110102cb2d75c7c366ab586b58bd0f' type='text/javascript'%3E%3C/script%3E")) </script>
 <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1000202399'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1000202399' type='text/javascript'%3E%3C/script%3E"));</script>
+
 </body>
 </html>

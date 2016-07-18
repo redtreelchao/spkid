@@ -46,7 +46,8 @@
 					<?php print form_button('op_unconfirm','反客审',($perms['unconfirm']?'':'disabled').' onclick="order_unconfirm()" class="am-btn am-btn-primary am-radius"'); ?>
 					<?php print form_button('op_shipping','发货',($perms['shipping']?'':'disabled').' class="am-btn am-btn-primary am-radius" id="btn_shipping"'); ?>
 					<?php print form_button('op_deny','拒收',($perms['deny']?'':'disabled').' onclick="order_deny()" class="am-btn am-btn-primary am-radius"'); ?>
-					<?php print form_button('op_pay','财审',($perms['pay']?'':'disabled').' onclick="order_pay()" class="am-btn am-btn-primary am-radius"'); ?>
+                                        <?php print form_button('op_paying','在线支付',($perms['paying']?'':'disabled').' onclick="window.open(\'http://www.yueyawang.com/order/pay/'.$order->order_id.'?aname='.$admin_name.'\');" class="am-btn am-btn-primary am-radius"'); ?>
+                                        <?php print form_button('op_pay','财审',($perms['pay']?'':'disabled').' onclick="order_pay()" class="am-btn am-btn-primary am-radius"'); ?>
                                         <?php print form_button('op_unpay','反财审',($perms['unpay']?'':'disabled').' onclick="order_unpay()" class="am-btn am-btn-primary am-radius"'); ?>
 					<?php print form_button('op_invalid','作废',($perms['invalid']?'':'disabled').' onclick="invalid()" class="am-btn am-btn-primary am-radius"'); ?>
 					<?php if($order->odd):?>
@@ -150,6 +151,19 @@
 					<?php endif ?>
 				</td>
 			</tr>
+                        <tr>
+                            <td class="item_title">销售员</td>
+                            <td colspan="3" class="item_input">
+                                <?php if($perms['edit_order']): ?>
+                                <?php print form_dropdown('saler', array(''=>'请选择')+get_pair($all_admin,'realname','realname'),array($order->saler), 'data-am-selected="{searchBox: 1,maxHeight: 300}"');?>                       
+                                <?php print form_button('btn_saler','保存','onclick="reset_saler();" '.($perms['edit_order']?'':'disabled')) ?>
+                                <?php else: ?>
+                                <?php echo $order->saler; ?>
+                                <?php endif; ?>
+                                
+                            
+                            </td>
+                        </tr>
 			<tr>
 				<td colspan="4" class="item_title_1">
 					其它信息

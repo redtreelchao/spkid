@@ -49,7 +49,7 @@ class mami_tuan_model extends CI_Model
 		{
 			return array('list' => array(), 'filter' => $filter);
 		}
-		$sql = "SELECT mt.tuan_id,mt.tuan_sort,mt.tuan_name,mt.tuan_online_time,mt.tuan_offline_time,mt.tuan_price,mt.status,pi.product_sn,pi.market_price,pi.is_promote,pi.is_onsale FROM ty_mami_tuan AS mt"
+		$sql = "SELECT mt.tuan_id,mt.tuan_sort,mt.tuan_name,mt.tuan_online_time,mt.tuan_offline_time,mt.tuan_price,mt.tuan_unit,mt.product_num,mt.status,pi.product_sn,pi.market_price,pi.is_promote,pi.is_onsale FROM ty_mami_tuan AS mt"
 				. " LEFT JOIN ty_product_info AS pi ON pi.product_id = mt.product_id"
 				. $where
 				. " ORDER BY tuan_id DESC LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'];

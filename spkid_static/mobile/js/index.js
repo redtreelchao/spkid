@@ -7,7 +7,7 @@ var mySwiper = myApp.swiper('.swiper-container', {
 		paginationClickable: true,
 		spaceBetween: 40,
 		centeredSlides: true,
-		autoplay: 2500,
+		autoplay: 5000,
 		autoplayDisableOnInteraction: false,
 		slidesPerView: 1,
 		loop: true
@@ -27,11 +27,11 @@ function article_page_init(){
     $$('.page[data-page="article"] .tabs .tab').eq(0).trigger('show');
 
 }
- if( myApp.mainView.activePage.name == 'article' )article_page_init();
-//myApp.onPageInit('*', function (page) {    
+if( myApp.mainView.activePage.name == 'article' )article_page_init();
+// myApp.onPageInit('*', function (page) {    
 $$('.toolbar-inner>a').on('click',function (){
-    $$('.toolbar-inner>a.active').removeClass('active');
-    $$(this).addClass('active');
+    $$('.toolbar-inner i').removeClass('tabbar-selecte');
+    $$(this).children().addClass('tabbar-selecte');
 });
 
 /*var started=getCookie('started');

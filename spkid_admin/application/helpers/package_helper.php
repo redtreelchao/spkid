@@ -6,7 +6,8 @@
 function get_package_perm($package)
 {
 	$perms = array();
-	$perms['edit'] = ($package->package_status==0 && check_perm('package_edit')) || ($package->package_status==1 && check_perm('package_editpro'));
+	//$perms['edit'] = ($package->package_status==0 && check_perm('package_edit')) || ($package->package_status==1 && check_perm('package_editpro'));
+	$perms['edit'] = check_perm('package_edit');
 	$perms['check'] = $package->package_status==0 && check_perm('package_audit');
 	$perms['over'] = $package->package_status==1 && check_perm('package_stop');
 	$perms['config'] = $package->package_status==0 && check_perm('package_edit');

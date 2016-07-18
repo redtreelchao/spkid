@@ -31,6 +31,7 @@ class Order_api extends CI_Controller
 		$this->load->helper('product');
 		$this->config->load('package');
 		$filter['goods_type'] = trim($this->input->post('goods_type')) == 'product'?'product':'package';
+        $filter['depot_id'] = intval($this->input->post('depot_id'));
 		$filter['category_id'] = intval($this->input->post('category_id'));
 		$filter['brand_id'] = intval($this->input->post('brand_id'));
 		$filter['color_group'] = intval($this->input->post('color_group'));
@@ -43,7 +44,7 @@ class Order_api extends CI_Controller
 		$filter = get_pager_param($filter);
 		$data = $this->order_model->search_product($filter);
 		if($filter['goods_type']=='product') {
-			attach_sub($data['list']);
+			attach_sub($data['list'], $filter['depot_id']);
 		}else{
 			$this->load->vars(array(
 				'all_type' => $this->config->item('package_all_type'),
@@ -64,6 +65,7 @@ class Order_api extends CI_Controller
 		$product_id = intval($this->input->post('product_id'));
 		$color_id = intval($this->input->post('color_id'));
 		$size_id = intval($this->input->post('size_id'));
+                $depot_id = intval($this->input->post('depot_id'));
 		$num = max(intval($this->input->post('num')),1);
 		$this->db->trans_begin();
 		$order = $this->order_model->lock_order($order_id);
@@ -90,13 +92,23 @@ class Order_api extends CI_Controller
 */
                 
 		//检查库存
-		$sub = $this->product_model->lock_sub(array('product_id'=>$product_id,'color_id'=>$color_id,'size_id'=>$size_id));
-		if(!$sub) sys_msg('没有库存',1);
-		if($num>(max($sub->gl_num-$sub->wait_num,0)+max($sub->consign_num,0)) && $sub->consign_num!=-2) sys_msg('库存不足',1);
+                $wait_num = 0;
+                $consign_num2 = 0;
+                if ($depot_id > 0) {
+                    $sub = $this->product_model->lock_depot_sub(array('product_id'=>$product_id,'color_id'=>$color_id,'size_id'=>$size_id, 'depot_id' => $depot_id));
+                    if(!$sub) sys_msg('没有库存',1);
+                    if($num>$sub->gl_num) sys_msg('库存不足',1);
+                } else {
+                    $sub = $this->product_model->lock_sub(array('product_id'=>$product_id,'color_id'=>$color_id,'size_id'=>$size_id));
+                    if(!$sub) sys_msg('没有库存',1);
+                    if($num>(max($sub->gl_num-$sub->wait_num,0)+max($sub->consign_num,0)) && $sub->consign_num!=-2) sys_msg('库存不足',1);
+                    $wait_num = $sub->wait_num;
+                    $consign_num2 = $sub->consign_num;
+                }
 		//插入商品
 		$is_promote = $product->is_promote && $product->promote_start_date<$this->time && $product->promote_end_date>$this->time;
 		$price = $is_promote?$product->promote_price:$product->shop_price;
-		$gl_num = min(max($sub->gl_num-$sub->wait_num,0),$num);//实库数量
+		$gl_num = min(max($sub->gl_num-$wait_num,0),$num);//实库数量
 		$consign_num = $num - $gl_num;//虚库数量
 		$update = array(
 			'order_id'=>$order_id,
@@ -114,7 +126,8 @@ class Order_api extends CI_Controller
 			'total_price'=>fix_price($num*$price),
 			'consign_num'=>$consign_num,
 			'consign_mark'=>$consign_num,
-			'discount_type' => $is_promote?1:0
+			'discount_type' => $is_promote?1:0, 
+                        'operator' => $product->operator
 			);
 		$op_id = $this->order_model->insert_product($update);
 		//更新订单主表价格
@@ -122,9 +135,14 @@ class Order_api extends CI_Controller
 		$order->order_price = fix_price($order->order_price+$num*$price);
 		$this->order_model->update(array('product_num'=>$order->product_num,'order_price'=>$order->order_price),$order_id);
 		//扣除库存
-		$update = array('gl_num'=>$sub->gl_num-$gl_num,'wait_num'=>$sub->wait_num+$consign_num);
-		if($consign_num && $sub->consign_num>0) $update['consign_num'] = $sub->consign_num-$consign_num;
-		$this->product_model->update_sub($update,$sub->sub_id);
+                if ($depot_id > 0) {
+                    $update = array('gl_num'=>$sub->gl_num-$gl_num);
+                    $this->product_model->update_depot_sub($update,$sub->sub_id);
+                } else {
+                    $update = array('gl_num'=>$sub->gl_num-$gl_num,'wait_num'=>$wait_num+$consign_num);
+                    if($consign_num && $consign_num2>0) $update['consign_num'] = $consign_num2-$consign_num;
+                    $this->product_model->update_sub($update,$sub->sub_id);
+                }
 		//分配储位
 		if ($gl_num) {
 			$info = $this->order_model->assign_trans($order,$sub,$gl_num,$op_id,$price);
@@ -173,7 +191,7 @@ class Order_api extends CI_Controller
 		//恢复库存
 		$update = array('gl_num'=>$sub->gl_num+$product->product_num-$product->consign_num,'wait_num'=>$sub->wait_num-$product->consign_num);
 		if($sub->consign_num>=0) $update['consign_num'] = $sub->consign_num+$product->consign_num;
-		$this->product_model->update_sub($update,$sub->sub_id);
+		if ($order->source_id != ORDER_SOURCE_ID) $this->product_model->update_sub($update,$sub->sub_id);
 		//作废已分配的储位
 		$this->order_model->update_trans(
 			array('trans_status'=>TRANS_STAT_CANCELED,'cancel_admin'=>$this->admin_id,'cancel_date'=>$this->time),
@@ -450,7 +468,7 @@ class Order_api extends CI_Controller
 			$subs[$product->sub_id]['consign_num'] += $product->consign_num;
 		}
 		
-		if($subs) {
+		if($subs && $order->source_id != ORDER_SOURCE_ID) {
 			$sub_list = $this->product_model->lock_sub(array('sub_id'=>array_keys($subs)));
 			foreach ($sub_list as $sub) {
 				$update = array('gl_num'=>$sub->gl_num+$subs[$sub->sub_id]['gl_num'],'wait_num'=>$sub->wait_num-$subs[$sub->sub_id]['consign_num']);
@@ -524,6 +542,24 @@ class Order_api extends CI_Controller
 		if(!$perms['edit_order']) sys_msg('不能操作',1);
 		update_shipping_fee($order,$new_shipping_fee);
 		$this->order_model->insert_action($order,'更新运费');
+		$this->db->trans_commit();
+		print json_encode(array('err'=>0,'msg'=>''));
+	}
+        
+        public function reset_saler()
+	{
+		auth('order_edit');
+		$order_id = intval($this->input->post('order_id'));
+		$saler = trim($this->input->post('saler'));
+		if(empty($saler)) sys_msg('请填写销售员',1);
+		$this->db->trans_begin();
+		$order = $this->order_model->lock_order($order_id);
+		if(!$order) sys_msg('订单不存在',1);
+		$perms = get_order_perm($order);
+		if(!$perms['edit_order']) sys_msg('不能操作',1);
+                $this->order_model->update(array('saler' => $saler),$order_id);
+                
+		$this->order_model->insert_action($order,'更新销售员');
 		$this->db->trans_commit();
 		print json_encode(array('err'=>0,'msg'=>''));
 	}

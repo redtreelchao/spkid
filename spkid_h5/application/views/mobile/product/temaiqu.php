@@ -156,6 +156,8 @@
 	<script>
 		$ = Dom7;
 
+		$('.back').click(function(){history.back()});
+
 		$('.searchBar').on('click', function(e){
 			location.href = '/product/search.html';
 		});

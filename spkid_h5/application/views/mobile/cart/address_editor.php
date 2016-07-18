@@ -14,8 +14,7 @@
 	       	<!--yywtoolbar start-->
 	        <div class="yywtoolbar">
 		        <div class="toolbar-inner row no-gutter">
-			       <div class="col-50"><a class="button form-del-json del-hu" href="#" >删除</a></div>
-			       <div class="col-50"><a class="button form-to-json preservation-hu" href="#">保存</a></div>
+			       <div class="col-100"><a class="button form-to-json preservation-hu" href="#">保存</a></div>
 			 	</div>
 		    </div>
 	      	<!--yywtoolbar end-->
@@ -23,8 +22,10 @@
 		        <div class="content-block wrap2">
 			      	<form id="my-form">
 			      		<input type="hidden" name="address_id" value="<?php echo $address->address_id;?>">
-			            <ul class="receiving-address">
-						    <li>
+
+			            <ul class="receiving-address3">
+			                <!-- <div class="writting-address">填写收货地址</div> -->
+						    <li class="v-hu">
 							    <div class="edit-list">
 									<div class="edit-user"><input type="text" name="consignee" placeholder="收件人姓名" value="<?php echo $address->consignee;?>"></div>
 							    </div>
@@ -38,7 +39,7 @@
 								    </select>
 								    <div class="item-content cities">
 										<div class="item-inner icon-dizhi">
-										    <div class="item-title  cits-shi">所在省/市</div>
+										    <div class="item-title cits-shi">所在省/市</div>
 										</div>
 								    </div>
 							    </a>
@@ -75,7 +76,7 @@
 						  	</li>						  
 						   	<li>
 							   	<div class="edit-list">
-									<div class="edit-user xxdz-hu">
+									<div class="edit-user xxdz-hu2">
 										<div class="item-input item-input-field-noheight">
 											<input type="text" name="address" placeholder="详细地址" value="<?php echo $address->address;?>">
 										</div>
@@ -84,7 +85,7 @@
 						   	</li>						   
 						   	<li>
 							   	<div class="edit-list">
-									<div class="edit-user xxdz-hu Phone-number-hu">
+									<div class="edit-user xxdz-hu Phone-number-hu2">
 										<div class="item-input item-input-field-noheight">
 											<input type="text" name="mobile" placeholder="手机号码" value="<?php echo $address->mobile;?>">
 										</div>

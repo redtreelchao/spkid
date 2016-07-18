@@ -1,5 +1,8 @@
 <?php include APPPATH."views/mobile/header.php"; ?>
 <style>
+
+
+
 	.searchResult {
 		background:white;
 		z-index:99999;
@@ -37,20 +40,18 @@
 	}
 
 	.search_css {
-		font-size:0.7em;
+		font-size:16px; color:#646464; float:left; width:10%;
 	}
 
-	.searchbar input[type="search"] {
-		background-image:none;
-		border:1px solid white;
-		padding:2px 2px;
-	}
+	
+	
+	
 
 </style>
 <div class="views">
      <div class="view view-main">
           <div class="pages">
-	       <div data-page="index" class="page article-bg ">
+	       <div data-page="index" class="page article-bg">
 <div class="page-content">
 	             <!--search-top start-->
 		        <!-- <div class="search-top">
@@ -64,9 +65,9 @@
 				</div> -->
 				
 				<form data-search-list=".search-here" data-search-in=".item-title" class="searchbar searchbar-init searchbar-active">
-					<a href="javascript:void(0)" class="link back search-history-back"> <i class="icon icon-back"></i></a>
+					<a href="javascript:void(0)" class="link back search-history-back"> <i class="icon icon-back2"></i></a>
 				    <div class="searchbar-input" style="margin-left:15px">
-				      <input type="search" placeholder="搜索" class=""><a href="#" class="searchbar-clear"></a>
+				      <input type="search" placeholder="搜索" class=""><!--<a href="#" class="searchbar-clear"></a>-->
 				      
 				    </div>
 				    <a href="#" class="button search-confirm search_confirm"></a>
@@ -86,7 +87,7 @@
 					$cnt = count($hotwordlist['list']);
 					foreach ($hotwordlist['list'] as $key => $value) {
 	                                        if ($value['hotword_name']) {
-							$str .= '<a href="#" class="button button-fill button-raised search-anniu search_css">' . $value['hotword_name']  . '</a>';
+							$str .= '<a href="#" class="button search-anniu">' . $value['hotword_name']  . '</a>';
 											 
 						}          
 
@@ -99,9 +100,9 @@
 		       </div>
 	        <!--Hot search end-->
 	        <!--historical-records start-->
-	           <div class="historical">
-		        <div class="historical-tit">历史搜索:</div>
-		      </div>
+            <!--<div class="historical-tit"><span>搜索历史</span></div>-->
+	        
+            <div class="historical"></div>
 
 
 	       <!--historical-records end-->
@@ -128,12 +129,13 @@
 </div>
 <?php include APPPATH."views/mobile/common/footer-js.php"; ?>
 <script type="text/javascript" src="<?php echo static_style_url('mobile/js/hanzi2pinyin.js')?>"></script>
-<script type="text/javascript" src="<?php echo static_style_url('mobile/js/search.js?v=version')?>"></script>
+
 
 <script>
 	$$('.search-history-back').on('click', function(e){
 		location.href = '/';
 	});
+        var search_type = '<?=$type?>';
 </script>
-
+<script type="text/javascript" src="<?php echo static_style_url('mobile/js/search.js?v=version')?>"></script>
 <?php include APPPATH."views/mobile/footer.php"; ?>

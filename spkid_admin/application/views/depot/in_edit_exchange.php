@@ -110,7 +110,7 @@
                     if(loOBJ.pass){
                             obj.value = loOBJ.packet_name;
                     }*/
-                    window.open("/depotio/show_location_win/"+depot_id,'newwindow',"height=500,width=300,toolbar=no,titlebar=no,location=no,menubar=no,resizable=no,z-look=yes");
+                    window.open("/depotio/show_location_win/"+depot_id+"/"+obj.id,'newwindow',"height=500,width=300,toolbar=no,titlebar=no,location=no,menubar=no,resizable=no,z-look=yes");
 		}
 
 		function insert_sel_product(sub_id,index,batch_id)

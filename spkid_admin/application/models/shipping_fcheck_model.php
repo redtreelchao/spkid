@@ -505,6 +505,14 @@ class Shipping_fcheck_model extends CI_Model
                 WHERE batch_id=$batch_id AND rec_type=1 AND cod_amount>0";
         $this->db->query($sql);
 	}
+        //物流公司实际派送包裹的运费
+        public function finance_order_shipping($batch){            
+            $sql = "UPDATE ".$this->db->dbprefix('order_info')." AS o, ".$this->db->dbprefix('shipping_fcheck_sub')." AS sd
+                    SET
+                    o.real_shipping_fee = sd.express_fee 
+                    WHERE sd.batch_id=$batch->batch_id AND o.order_id = sd.order_id AND sd.rec_type=1 AND sd.express_fee>0";
+            $this->db->query($sql);
+        }
 	
 	public function deny_check($batch, $admin_id) {
 		//批量添加操作日志

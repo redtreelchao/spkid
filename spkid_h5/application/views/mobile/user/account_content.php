@@ -10,7 +10,7 @@
 
     <!--account start-->
     <?php if(isset($voucher_all) || isset($voucher_ok)) { ?> 
-	    <div class="page-content article-bg">
+	    <div class="page-content article-bg2">
 		   	<div class="edu-fot">
 	            <div class="guanzhu-hu">
 	            	<!--buttons-row start-->

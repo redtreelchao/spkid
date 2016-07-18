@@ -158,8 +158,8 @@ class CI_Session {
 			// Does the md5 hash match?  This is to prevent manipulation of session data in userspace
 			if ($hash !==  md5($session.$this->encryption_key))
 			{
-				log_message('error', 'The session cookie data did not match what was expected. This could be a possible hacking attempt.');
-				$this->sess_destroy();
+				log_message('debug', 'The session cookie data did not match what was expected. This could be a possible hacking attempt.');
+				$this->sess_destroy( 'hash162');
 				return FALSE;
 			}
 		}
@@ -170,28 +170,28 @@ class CI_Session {
 		// Is the session data we unserialized an array with the correct format?
 		if ( ! is_array($session) OR ! isset($session['session_id']) OR ! isset($session['ip_address']) OR ! isset($session['user_agent']) OR ! isset($session['last_activity']))
 		{
-			$this->sess_destroy();
+			$this->sess_destroy('format:173');
 			return FALSE;
 		}
 
 		// Is the session current?
 		if (($session['last_activity'] + $this->sess_expiration) < $this->now)
 		{
-			$this->sess_destroy();
+			$this->sess_destroy('cur_sess:180');
 			return FALSE;
 		}
 
 		// Does the IP Match?
 		if ($this->sess_match_ip == TRUE AND $session['ip_address'] != $this->CI->input->ip_address())
 		{
-			$this->sess_destroy();
+			$this->sess_destroy('ip:187');
 			return FALSE;
 		}
 
 		// Does the User Agent Match?
 		if ($this->sess_match_useragent == TRUE AND trim($session['user_agent']) != trim(substr($this->CI->input->user_agent(), 0, 120)))
 		{
-			$this->sess_destroy();
+			$this->sess_destroy('agent:194');
 			return FALSE;
 		}
 
@@ -215,7 +215,7 @@ class CI_Session {
 			// No result?  Kill it!
 			if ($query->num_rows() == 0)
 			{
-				$this->sess_destroy();
+				$this->sess_destroy('empty:219');
 				return FALSE;
 			}
 
@@ -396,8 +396,12 @@ class CI_Session {
 	 * @access	public
 	 * @return	void
 	 */
-	function sess_destroy()
+	function sess_destroy($t='')
 	{
+if( !empty($t) ){
+
+			log_message('error', 'Session destroyed by ['.$t.'], old data='.var_export($this->userdata,true));
+}
 		// Kill the session DB row
 		if ($this->sess_use_database === TRUE AND isset($this->userdata['session_id']))
 		{
@@ -426,7 +430,7 @@ class CI_Session {
 	 * @return	string
 	 */
 	function userdata($item)
-	{
+	{		
 		return ( ! isset($this->userdata[$item])) ? FALSE : $this->userdata[$item];
 	}
 
@@ -765,7 +769,7 @@ class CI_Session {
 			$this->CI->db->where("last_activity < {$expire}");
 			$this->CI->db->delete($this->sess_table_name);
 
-			log_message('debug', 'Session garbage collection performed.');
+			log_message('gc:772', 'Session garbage collection performed.');
 		}
 	}
 

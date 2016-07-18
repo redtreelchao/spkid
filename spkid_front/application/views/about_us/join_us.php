@@ -3,7 +3,7 @@
     <div class="about-con">
         <p class="course-tit">首页>加入我们</p>   
         <ul class="about-list clearfix">
-            <li><a href="/about_us/about_us">关于爱牙网</a></li>
+            <li><a href="/about_us/about_us">关于悦牙网</a></li>
             <li><a href="/about_us/service">服务条款</a></li>
             <li><a href="/about_us/feedback">意见反馈</a></li>
             <li><a href="/about_us/sales_policy">售后政策</a></li>
@@ -21,7 +21,7 @@
                     <area shape="rect" coords="249,313,421,414" href="javascript:void(0);" onfocus="blur(this);">
                     <area shape="rect" coords="380,204,523,295" href="javascript:void(0);" onfocus="blur(this);">
                 </map>
-                <br/>HR 邮箱：oswell_hr@oswell.com.cn
+                <br/>HR 邮箱：bellayang@yueyawang.com
             </p>
         </div>
     </div>

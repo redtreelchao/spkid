@@ -89,8 +89,8 @@ class Order_recheck extends CI_Controller
 		auth('order_recheck');
 		$this->load->model('pick_model');
                 
-		$order_sn = $this->input->post('order_sn');
-		$invoice_no = strtoupper($this->input->post('invoice_no'));
+		$order_sn = trim($this->input->post('order_sn'));
+		$invoice_no = trim(strtoupper($this->input->post('invoice_no')));
 		$pick_sn = $this->input->post('pick_sn');
 		$sub_ids = $this->input->post('sub_ids');
 		//POST数量验证

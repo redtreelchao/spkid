@@ -166,6 +166,7 @@ define('NAV_INDEX_ID',26);
 define('INDEX_ARTICEL_CAT_ID',25);
 
 define('INDEX_FOCUS_IMAGE_TAG', 'index_focus_image');
+define('INDEX_COURSE_FOCUS_IMAGE_TAG', 'index_course_focus_image');
 //超值促销广告位position_tag
 define('INDEX_FOOTER_PROMOTIONS_TAG','index_footer_promotions');
 //define('BRAND_AD_TAG', 'm_index_brand_row');
@@ -244,7 +245,11 @@ define('POST_FORMAT_VIDEO', 223);
 define('JSCSS_DIST_VERSION', '160107.2' );
 // 是否注册送积分
 define ('USE_REGIST_POINT', true);
+// 是否开启指定现金券抢购商品 v+2016.03.31 
+define ('CAT_CHECKOUT_VOUCHER', true);
 // sphinx server ip
 define ('SPHINX_SERVER_IP', '127.0.0.1');
+// 指定商品 购买立减活动
+$product_minus_activity=array("product_id"=>"5646","end_time"=>"2016-4-30 23:59:59","minus_price"=>"15");
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

@@ -286,9 +286,9 @@ function get_front_types($genre_id=1){
 				LEFT JOIN " . $this->adoEx->dbprefix('product_provider') . " AS pp ON p.provider_id = pp.provider_id ";
 	
 	if($is_preview){
-	    $where = "WHERE p.genre_id = '".PRODUCT_TOOTH_TYPE."'";
+	    $where = "WHERE p.genre_id = '".PRODUCT_TOOTH_TYPE."' AND p.source_id IN (0, '".SOURCE_ID_WEB."')";
 	}else{
-	   $where = "WHERE p.genre_id = '".PRODUCT_TOOTH_TYPE."' AND p.price_show = 0 AND p.shop_price > 0 AND sub.is_on_sale=1 AND b.is_use = 1 AND pp.is_use = 1 "; 
+	   $where = "WHERE p.genre_id = '".PRODUCT_TOOTH_TYPE."' AND p.source_id IN (0, '".SOURCE_ID_WEB."') AND p.price_show = 0 AND p.shop_price > 0 AND sub.is_on_sale=1 AND b.is_use = 1 AND pp.is_use = 1 "; 
 	}
 	if (!empty($filter['type_id']) )//category_id
 	    $where.=" AND (pt.type_id = '{$filter['type_id']}' OR pt.parent_id = '{$filter['type_id']}' OR pt.parent_id2 = '{$filter['type_id']}')";

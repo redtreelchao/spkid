@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<express size="370">
-    <senderNo x="32" y="80">5720310685</senderNo>
-    <cardNo x="300" y="113">5720310685</cardNo>
-    <monthCard x="394" y="103">5720310685</monthCard>
-    <addressNo x="389" y="47">572H</addressNo>
-    <siteName x="30" y="95">爱牙网</siteName>
-	<companyPhone x="83" y="156">400-696-6161</companyPhone>
-    <companyAddress x="29" y="116" width="300" wrapLength="18" indent="18">浙江省 湖州市 吴兴区七幸路999号 金泰科技4栋</companyAddress>	
-    <orderSn x="92" y="0"/>
-    <orderCell x="140" y="15"/>
-    <reMark x="385" y="336" wrapLength="6" indent="18">集团客户 请先验货后签收</reMark>
+<express size="300">
+    <senderNo x="32" y="80"></senderNo>
+    <cardNo x="300" y="113"></cardNo>
+    <monthCard x="394" y="103"></monthCard>
+    <addressNo x="389" y="47"></addressNo>
+    <siteName x="20" y="72">上海欧思蔚奥医疗器材有限公司</siteName>
+	<companyPhone x="20" y="90">400-9905-920</companyPhone>
+    <companyAddress x="15" y="106" width="300" wrapLength="18" indent="18">上海市 浦东新区 周浦镇 建韵路618号3幢楼305室</companyAddress>	
+    <orderSn x="62" y="30"/>
+    <orderCell x="110" y="43"/>
+    <reMark x="280" y="286" wrapLength="14" indent="18">支持开包验货 请先验货后签收</reMark>
     <isCod ifEqual="1">
-		<right x="230" y="114">√</right>
-		<codAmount x="316" y="124" />
+		<right x="255" y="205">√</right>
 	</isCod>
-    <rcvPerson x="184" y="208"/>
-    <rcvAddress x="22" y="229" append="bestTime" wrapLength="21" indent="18"/>
-	<rcvMobile x="80" y="270"/>
-    <category x="15" y="325">牙科器材</category>
-    <goodsnum x="200" y="325"/>
-    <sender x="450" y="220">爱牙网</sender>
+    <rcvPerson x="180" y="173"/>
+    <rcvAddress x="15" y="208" append="bestTime" wrapLength="21" indent="18"/>
+	<rcvMobile x="145" y="193"/>
+    <category x="20" y="265">牙科器材</category>
+    <weight x="78" y="286"/>
+    <goodsnums x="20" y="286">1</goodsnums>
+    <sender x="290" y="260">悦牙网</sender>
+    <pdate x="275" y="273"/>
+    <account x="330" y="223">0216350608</account>
 </express>
 <!-- 
  * 一级元素支持：

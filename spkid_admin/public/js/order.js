@@ -112,6 +112,7 @@ function post_advice () {
 
 function add_product (product_id) {
 	var order_id = $(':hidden[name=order_id]').val();
+        var depot_id = $(':hidden[name=depot_id]').val();
 	var tr = $('tr.p_'+product_id);
 	if(tr.length<1){
 		alert('商品不存在');
@@ -129,7 +130,7 @@ function add_product (product_id) {
 	
     $.ajax({
     	url:'order_api/add_product',
-    	data:{order_id:order_id,product_id:product_id,color_id:color_id,size_id:size_id,num:num,rnd:new Date().getTime()},
+    	data:{order_id:order_id,product_id:product_id,color_id:color_id,size_id:size_id,num:num,depot_id:depot_id,rnd:new Date().getTime()},
     	dataType:'json',
     	type:'POST',
     	success:function(result){
@@ -260,6 +261,27 @@ function reset_shipping_fee () {
 			location.href=location.href;
 		}
 	});
+}
+
+
+function reset_saler () {
+    var order_id = $(':hidden[name=order_id]').val();
+    var saler = $.trim($(':input[name=saler]').val());
+    if(saler=='') {
+            alert('请输入销售员');
+            return false;
+    }	
+    $.ajax({
+            url:'order_api/reset_saler',
+            data:{order_id:order_id,saler:saler,rnd:new Date().getTime()},
+            dataType:'json',
+            type:'POST',
+            success:function(result){
+                    if(result.msg) alert(result.msg);
+                    if(result.err) return false;
+                    location.href=location.href;
+            }
+    });
 }
 
 function update_shipping_fee () {

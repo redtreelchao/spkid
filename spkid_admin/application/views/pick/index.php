@@ -74,7 +74,9 @@ function search(){
 			</select>
 			<label>已打印:<input type="checkbox" name="is_print" value="1"/></label>
 			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
+                        <input type="button" name="" value="批量打印装箱单" class="am-btn am-btn-primary" onclick="print_picks();"/>
 			</form>
+                    
 		</div>
 		<div class="blank5"></div>
 		<div id="listDiv">
@@ -84,7 +86,7 @@ function search(){
 					<td colspan="13" class="topTd"> </td>
 				</tr>
 				<tr class="row">
-					<th width="120px">拣货单号</th>
+					<th width="120px"><input type="checkbox" id="pick_ids" value="1"/>拣货单号</th>
 					<th>类型</th>
 					<th>配送方式</th>
 					<th>创建人</th>
@@ -98,7 +100,8 @@ function search(){
 				</tr>
 				<?php foreach($list as $row): ?>
 				<tr class="row">
-					<td><a href="pick/info/<?php print $row->pick_sn; ?>"><?php print $row->pick_sn; ?></a></td>
+					<td style="width: 150px;"><input type="checkbox" name="pick_id" value="<?php print $row->pick_id; ?>"/><a href="pick/info/<?php print $row->pick_sn; ?>">
+					<?php print $row->pick_sn; ?></a></td>
 					<td><?php print $this->pick_type[$row->type]; ?></td>
 					<td><?php print $row->shipping_name; ?></td>
 					<td><?php print $row->admin_name.'/'.$row->create_date; ?></td>
@@ -130,5 +133,26 @@ function search(){
 <?php if($full_page): ?>
 		</div>
 	</div>
+<script type="text/javascript">
+$(document).on('click', '#pick_ids', function (e) {
+    var v_checked = $(this).prop('checked');
+    $("input[name=pick_id]").each(function(i, obj){
+        if (v_checked){
+            $(obj).prop('checked', true);
+        } else {
+            $(obj).removeAttr('checked');
+        }
+    });
+});
+function print_picks(){
+    var ids = new Array();
+    $("input[name=pick_id]:checked").each(function(i, obj){
+        ids[i] = $(obj).val();
+    });
+    var ids2 = ids.join('-');
+    if (ids2 == '') return;
+    window.location.href='/pick/print_orders/'+ids2;
+}
+</script>
 <?php include_once(APPPATH.'views/common/footer.php'); ?>
 <?php endif; ?>

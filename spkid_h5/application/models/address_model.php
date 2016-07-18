@@ -61,4 +61,16 @@ class Address_model extends CI_Model
         $this->_db->delete('user_address', array('address_id' => $address_id));
         return $this->_db->affected_rows();
     }
+
+    public function update_address_used($address_id,$user_id)
+    {
+		$this->_db->update('user_address', array('is_used'=>0), "user_id = $user_id");
+		$this->_db->update('user_address', array('is_used'=>1), "address_id = $address_id");
+    }
+
+    public function update($data, $user_id)
+    {
+        $this->_db->update('user_info', $data, "user_id = $user_id");
+        return $this->_db->affected_rows();
+    }
 }

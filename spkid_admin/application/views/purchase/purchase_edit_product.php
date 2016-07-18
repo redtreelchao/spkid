@@ -411,6 +411,7 @@
             <th>颜色</th>
             <th>尺码</th>
             <th>过期日期</th>
+            <th>生产批号</th>
             <th width="60px;">预采购数量</th>
           </tr>
           <?php foreach($goods_list as $row): ?>
@@ -424,7 +425,8 @@
             <td><?php print $row->provider_name; ?></td>
             <td><?php print $row->color_name.'['.$row->color_sn.']'; ?></td>
             <td><?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
-            <td><?php print $row->expire_date; ?></td>
+            <td><?php print ($row->expire_date == '0000-00-00' || $row->expire_date == '0000-00-00 00:00:00' || $row->expire_date == '')?'无':$row->expire_date; ?></td>
+            <td><?php print $row->production_batch; ?></td>
             <td><input type="text" size="4" id="purchase_num_<?php print $row->purchase_sub_id; ?>" value="<?php print $row->product_number; ?>" /></td>
           </tr>
           <?php endforeach; ?>

@@ -100,33 +100,49 @@ limit 5";
         return $detail; 
         
     }
-    public function search_article($kw, $page = 1){
+    public function search_article($kw, $page = 1,$is_preview){
         $page_size = M_LIST_PAGE_SIZE;
         $page = ($page < 1) ? 1 : intval($page);
         $start = ($page-1)*$page_size;       
-        
         // LIMIT $start, $page_size
-        if (!$rows = $this->cache->get('keyword_'.$kw)){
-        $sql = "SELECT p.ID id,p.post_title title,p.post_date,u.`display_name` author,pm.meta_value cover FROM wp_posts p LEFT JOIN wp_postmeta pm ON p.`ID`=pm.`post_id` AND pm.`meta_key`='cover' LEFT JOIN wp_users u ON u.ID=p.`post_author` WHERE p.post_type='post' AND p.post_status='publish' AND p.post_title like '%$kw%'";
-        //echo $sql;
-        $rows = $this->db_wp->query($sql)->result_array();
-        //tag
-        $sql = "SELECT p.ID id,p.post_title title,p.post_date,u.`display_name` author,pm.meta_value cover FROM wp_posts p LEFT JOIN wp_postmeta pm ON p.`ID`=pm.`post_id` AND pm.`meta_key`='cover' LEFT JOIN wp_users u ON u.ID=p.`post_author` LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID` LEFT JOIN wp_terms t ON tr.`term_taxonomy_id`=t.`term_id` WHERE p.post_type='post' AND p.post_status='publish' AND t.`name`='$kw'";
-        $rows1 = $this->db_wp->query($sql)->result_array();
-        $rows = array_merge($rows, $rows1);
-        
-        foreach($rows as &$row){
-            //echo $row['cover'];
-            $row['cover'] = $this->get_cover($row['cover']);
-        }
+        if($is_preview == '1'){
 
-        $this->cache->save('keyword_'.$kw, $rows, 1800);
+            $sql = "SELECT p.ID id,p.post_title title,p.post_date,u.`display_name` author,pm.meta_value cover FROM wp_posts p LEFT JOIN wp_postmeta pm ON p.`ID`=pm.`post_id` AND pm.`meta_key`='cover' LEFT JOIN wp_users u ON u.ID=p.`post_author` WHERE p.post_type='post' AND p.post_status='publish' AND p.post_title like '%$kw%'";
+            //echo $sql;
+            $rows = $this->db_wp->query($sql)->result_array();
+            //tag
+            $sql = "SELECT p.ID id,p.post_title title,p.post_date,u.`display_name` author,pm.meta_value cover FROM wp_posts p LEFT JOIN wp_postmeta pm ON p.`ID`=pm.`post_id` AND pm.`meta_key`='cover' LEFT JOIN wp_users u ON u.ID=p.`post_author` LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID` LEFT JOIN wp_terms t ON tr.`term_taxonomy_id`=t.`term_id` WHERE p.post_type='post' AND p.post_status='publish' AND t.`name`='$kw'";
+            $rows1 = $this->db_wp->query($sql)->result_array();
+            $rows = array_merge($rows, $rows1);
+            
+            foreach($rows as &$row){
+                //echo $row['cover'];
+                $row['cover'] = $this->get_cover($row['cover']);
+            }
+            $this->cache->save('keyword_'.$kw, $rows, 1800);
+        }else{
+            if (!$rows = $this->cache->get('keyword_'.$kw)){
+                $sql = "SELECT p.ID id,p.post_title title,p.post_date,u.`display_name` author,pm.meta_value cover FROM wp_posts p LEFT JOIN wp_postmeta pm ON p.`ID`=pm.`post_id` AND pm.`meta_key`='cover' LEFT JOIN wp_users u ON u.ID=p.`post_author` WHERE p.post_type='post' AND p.post_status='publish' AND p.post_title like '%$kw%'";
+                //echo $sql;
+                $rows = $this->db_wp->query($sql)->result_array();
+                //tag
+                $sql = "SELECT p.ID id,p.post_title title,p.post_date,u.`display_name` author,pm.meta_value cover FROM wp_posts p LEFT JOIN wp_postmeta pm ON p.`ID`=pm.`post_id` AND pm.`meta_key`='cover' LEFT JOIN wp_users u ON u.ID=p.`post_author` LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID` LEFT JOIN wp_terms t ON tr.`term_taxonomy_id`=t.`term_id` WHERE p.post_type='post' AND p.post_status='publish' AND t.`name`='$kw'";
+                $rows1 = $this->db_wp->query($sql)->result_array();
+                $rows = array_merge($rows, $rows1);
+                
+                foreach($rows as &$row){
+                    //echo $row['cover'];
+                    $row['cover'] = $this->get_cover($row['cover']);
+                }
+
+                $this->cache->save('keyword_'.$kw, $rows, 1800);
+            }
         }
         $result_rows = array();
         foreach ($rows as $key => $value) {
             $result_rows[$value['id']] = $value;
         }
-        $result_rows = array_slice($result_rows, $start, $page_size, true);
+        // $result_rows = array_slice($result_rows, $start, $page_size, true);
         
         return $result_rows;
     }
@@ -137,16 +153,58 @@ limit 5";
         if ($cid){
         $ids = $this->get_children_term($cid);
         array_push($ids, $cid);
-        $ids = implode(',', $ids);
-        $sql = "SELECT p.`ID`,p.post_title,p.post_date,p.comment_count,u.`display_name`,GROUP_CONCAT(pm.meta_key, '=', pm.`meta_value` SEPARATOR '&') meta 
-	FROM wp_posts p LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID` LEFT JOIN wp_users u ON u.ID=p.`post_author` 
-	LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' and
-    p.post_status='publish' and tr.term_taxonomy_id IN ($ids) AND pm.meta_key IN ('intro','cover') GROUP BY p.`ID` ORDER BY p.post_date DESC LIMIT $start, $page_size";
+        $ids = implode(',', $ids);        
+        $sql = "SELECT
+            p.`ID`,
+            p.`post_title`,
+            p.`post_date`,
+            p.`comment_count`,
+            u.`display_name`,
+            comments.`comment_count`,
+            GROUP_CONCAT(
+                pm.`meta_key`,
+                '=',
+                pm.`meta_value` SEPARATOR '&'
+            ) meta
+        FROM
+            wp_posts p
+        LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID`
+        LEFT JOIN wp_users u ON u.ID = p.`post_author`
+        LEFT JOIN wp_postmeta pm ON pm.`post_id` = p.`ID`
+        LEFT JOIN (select comment_post_ID, count(comment_post_ID) as comment_count from wp_comments GROUP BY comment_post_ID) comments on comments.comment_post_ID = p.ID
+        WHERE
+            p.post_type = 'post'
+        AND p.post_status = 'publish'
+        AND tr.term_taxonomy_id IN ($ids)
+        AND pm.meta_key IN ('intro', 'cover')
+        GROUP BY
+            p.`ID`
+        ORDER BY
+            p.post_date DESC
+        LIMIT $start, $page_size";
         } else{//人气排序
-            $sql = "SELECT p.`ID`,p.post_title,p.post_date,p.comment_count,u.`display_name`,pm.`meta_value` views 
-	FROM wp_posts p LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID` LEFT JOIN wp_users u ON u.ID=p.`post_author` 
-	LEFT JOIN wp_postmeta pm ON pm.`post_id`=p.`ID` WHERE p.post_type='post' AND
-    p.post_status='publish' AND pm.meta_key='views' GROUP BY p.ID ORDER BY views DESC LIMIT $start, $page_size";
+            $sql = "SELECT
+                p.`ID`,
+                p.`post_title`,
+                p.`post_date`,
+                comments.`comment_count`,
+                u.`display_name`,
+                pm.`meta_value` views
+            FROM
+                wp_posts p
+            LEFT JOIN wp_term_relationships tr ON tr.`object_id` = p.`ID`
+            LEFT JOIN wp_users u ON u.ID = p.`post_author`
+            LEFT JOIN wp_postmeta pm ON pm.`post_id` = p.`ID`
+            LEFT JOIN (select comment_post_ID, count(comment_post_ID) as comment_count from wp_comments GROUP BY comment_post_ID) comments on comments.comment_post_ID = p.ID
+            WHERE
+                p.post_type = 'post'
+            AND p.post_status = 'publish'
+            AND pm.meta_key = 'views'
+            GROUP BY
+                p.ID
+            ORDER BY
+                100 * views DESC
+            LIMIT $start, $page_size";
         }
     
         $res = $this->db_wp->query($sql);

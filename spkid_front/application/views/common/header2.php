@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta http-equiv=Content-Type content="text/html;charset=utf-8">
-<title>爱牙网首页</title>
+<title>悦牙网首页</title>
 <link href="<?php echo static_style_url('pc/css/bootstrap.css?v=version')?>" rel="stylesheet" type="text/css" media="all">
 <link href="<?php echo static_style_url('pc/css/common.css?v=version')?>" rel="stylesheet" type="text/css">
 <link href="<?php echo static_style_url('pc/css/main.css?v=version')?>" rel="stylesheet" type="text/css">
@@ -17,12 +17,12 @@
 <body>
 <!--nav start-->
 <div class="nav-wrap min-wrapper">
-    <div class="nav clearfix">
+    <div class="nav2 clearfix">
           <a href="/" class="logo"><img src="<?php echo static_style_url('pc/images/logo2.png')?>"></a>
           <?php if(!isset($page_type)): ?>
           <div id="navContentBox" class="nav-contentbox" style="right: 320px;"><img src="<?php echo static_style_url('pc/images/cart-img'.((isset($page) && $page == 'success')? '2' : '1').'.png')?>" class="order-flow"></div>
           <?php endif; ?>
-          <div class="nav-right">
+          <div class="nav-right2">
                
               <div class="nav-lb">
                    <div class="nav-users">

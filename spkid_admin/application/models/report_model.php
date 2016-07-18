@@ -21,6 +21,14 @@ class report_model extends CI_Model
 		return $list;
 	}
 
+	public function all_order()
+	{
+		$sql = "SELECT * FROM ty_admin_action WHERE parent_id IN (SELECT action_id FROM ty_admin_action WHERE action_code = 'order_report') ORDER BY sort_order ASC";
+		$query = $this->db->query($sql);
+		$list = $query->result();
+		return $list;
+	}
+
 	/**
 	 * 获得指定分类下的子分类的数组
 	 *
@@ -228,9 +236,11 @@ class report_model extends CI_Model
 	        return $spec_cat_id_array;
 	    }
 	}
-
+	/**
+	* 供应商名称
+	*/
 	public function provider_list(){
-		$sql="SELECT p.provider_id, p.provider_name from ty_product_provider AS p where 1 order by provider_id asc";
+		$sql="SELECT p.provider_id, p.provider_name from ty_product_provider AS p where 1 order by convert(p.provider_name using gbk) asc";
 		$query = $this->db->query($sql);
 		$res = $query->result();
 		return $res;
@@ -238,18 +248,7 @@ class report_model extends CI_Model
 
 	public function brand_list()
 	{
-	    $sql = 'SELECT brand_id, brand_name FROM ty_product_brand ORDER BY sort_order';
-	    $query = $this->db->query($sql);
-		$res = $query->result();
-	    return $res;
-	}
-
-	/**
-	* 颜色
-	*/
-	public function color_list()
-	{
-		$sql = 'SELECT color_id, color_name FROM ty_product_color ORDER BY sort_order';
+	    $sql = 'SELECT brand_id, brand_name, brand_initial FROM ty_product_brand ORDER BY brand_initial asc,brand_id asc';
 	    $query = $this->db->query($sql);
 		$res = $query->result();
 	    return $res;
@@ -303,6 +302,7 @@ class report_model extends CI_Model
 		$color_id = isset($filter['color_id'])?$filter['color_id']:'0';
 		$size_id = isset($filter['size_id'])?$filter['size_id']:'0';
 		$product_sn = isset($filter['product_sn'])?$filter['product_sn']:'';
+                $product_id = isset($filter['product_id'])?$filter['product_id']:'';
 		$keyword = isset($filter['keyword'])?$filter['keyword']:'';
 		$cooperation_id = isset($filter['cooperation_id'])?$filter['cooperation_id']:'0';
 		$depot_id = isset($filter['depot_id'])?$filter['depot_id']:'0';
@@ -324,6 +324,7 @@ class report_model extends CI_Model
 		if($color_id != '0') $whereadd .= " AND tr.color_id  = '" . $color_id . "' ";
 		if($size_id != '0') $whereadd .= " AND tr.size_id  = '" . $size_id . "' ";
 		if(!empty($product_sn)) $whereadd .= " AND g.product_sn  LIKE '%" . $product_sn . "%' ";
+                if(!empty($product_id)) $whereadd .= " AND g.product_id  = '" . $product_id . "' ";
 		if(!empty($keyword)) $whereadd .= " AND g.product_name  LIKE '%" . $keyword . "%' ";
 		if($cooperation_id != '0') $whereadd .= " AND g.cooperation_id  = '" . $cooperation_id . "' ";
 		if($depot_id != '0') $whereadd .= " AND tr.depot_id  = '" . $depot_id . "' ";
@@ -532,7 +533,7 @@ class report_model extends CI_Model
 				" WHERE 1 " . $timewhere . $whereadd . $whereadd2 . " ORDER BY g.category_id ASC,tr.product_id ASC ,tr.color_id ASC,tr.size_id ASC";
 		$query = $this->db->query($sql);
 		$result = $query->result_array();
-print_r($result);
+
 		$sql = "SELECT product_id,color_id,size_id,SUM(IF((trans_type NOT IN ('3','4') AND trans_status IN ('2','4') AND TO_DAYS(update_date)< TO_DAYS('" . $starttime . "')) OR (trans_type IN ('3','4') AND trans_status IN ('1','2','3','4') AND finance_check_date > 0 AND TO_DAYS(finance_check_date)< TO_DAYS('" . $starttime . "')),product_number,0)) AS before_product_number," .
 					"SUM(IF((trans_type NOT IN ('3','4') AND trans_status IN ('2','4') AND TO_DAYS(update_date)<= TO_DAYS('" . $endtime . "')) OR (trans_type IN ('3','4') AND trans_status IN ('1','2','3','4') AND finance_check_date > 0 AND TO_DAYS(finance_check_date)<= TO_DAYS('" . $endtime . "')),product_number,0)) AS after_product_number FROM ty_transaction_info WHERE 1 ";
 		if($depot_id != '0') $sql .= " AND depot_id = '".$depot_id."'";
@@ -1883,11 +1884,11 @@ print_r($result);
 
 			if($category_id != '0') $sql .= " AND (g.category_id = '" . $category_id . "' OR pc.category_id = '" . $category_id . "') ";
 			if($brand_id != '0') $sql .= " AND g.brand_id  = '" . $brand_id . "' ";
-			if($color_id != '0') $sql .= " AND tr.color_id  = '" . $color_id . "' ";
-			if($size_id != '0') $sql .= " AND tr.size_id  = '" . $size_id . "' ";
+			//if($color_id != '0') $sql .= " AND tr.color_id  = '" . $color_id . "' ";
+			//if($size_id != '0') $sql .= " AND tr.size_id  = '" . $size_id . "' ";
 			if(!empty($product_sn)) $sql .= " AND g.product_sn  LIKE '%" . $product_sn . "%' ";
-			if(!empty($keyword)) $sql .= " AND g.product_name  LIKE '%" . $keyword . "%' ";
-			if($cooperation_id != '0') $sql .= " AND g.cooperation_id  = '" . $cooperation_id . "' ";
+			//if(!empty($keyword)) $sql .= " AND g.product_name  LIKE '%" . $keyword . "%' ";
+			//if($cooperation_id != '0') $sql .= " AND g.cooperation_id  = '" . $cooperation_id . "' ";
 			if($depot_id != '0') $sql .= " AND tr.depot_id  = '" . $depot_id . "' ";
 
 		$sql .= " GROUP BY product_id,color_id,size_id";
@@ -2186,9 +2187,559 @@ print_r($result);
 		return $data;	
 	}
 
+	/**
+	 * v@2016-03-24  v@2016-05-24(修改版)
+	 * 订单销售利润报表
+	 */ 
+	public function order_profits_detail_report ($filter)
+	{	
+		if(empty($filter))
+		{
+			return array();
+		}
+
+		$order_sn = isset($filter['order_sn'])?$filter['order_sn']:'';
+		$category_id = isset($filter['category_id'])?$filter['category_id']:'0';
+		$brand_id = isset($filter['brand_id'])?$filter['brand_id']:'0';
+		$provider_id = isset($filter['provider_id'])?$filter['provider_id']:'0';
+		$product_sn = isset($filter['product_sn'])?$filter['product_sn']:'';
+        $product_id = isset($filter['product_id'])?$filter['product_id']:'';
+		$keyword = isset($filter['keyword'])?$filter['keyword']:'';
+		$starttime = isset($filter['start_time'])?$filter['start_time']:'';
+		$endtime = isset($filter['end_time'])?$filter['end_time']:'';
+		$is_start_time = isset($filter['is_start_time'])?$filter['is_start_time']:'';
+		$is_end_time = isset($filter['is_end_time'])?$filter['is_end_time']:'';
+
+		
+		$timewhere = "";
+		if(!empty($starttime) && !empty($endtime))
+		{
+			$timewhere = " AND TO_DAYS(tf.finance_check_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tf.finance_check_date)<= TO_DAYS('" . $endtime . "')";
+		}
+		if(!empty($is_start_time) && !empty($is_end_time))
+		{
+			$timewhere = " AND TO_DAYS(tf.update_date)>= TO_DAYS('" . $is_start_time . "') AND TO_DAYS(tf.update_date)<= TO_DAYS('" . $is_end_time . "')";
+		}
+
+		$whereadd = "";
+		if($category_id != '0') $whereadd .= " AND (pf.category_id = '" . $category_id . "' OR pg1.category_id = '" . $category_id . "') ";
+		if($brand_id != '0') $whereadd .= " AND pf.brand_id  = '" . $brand_id . "' ";
+		if($provider_id != '0') $whereadd .= " AND pp.provider_id  = '" . $provider_id . "' ";
+		if(!empty($product_sn)) $whereadd .= " AND pf.product_sn  LIKE '%" . $product_sn . "%' ";
+        if(!empty($product_id)) $whereadd .= " AND tf.product_id  = '" . $product_id . "' ";
+		if(!empty($keyword)) $whereadd .= " AND pf.product_name  LIKE '%" . $keyword . "%' ";
+		if(!empty($order_sn)) $whereadd .= " AND tf.trans_sn LIKE '%" . $order_sn . "%' ";
+
+		//获取已经完结的订单
+		$sql = "SELECT DISTINCT tf.transaction_id, tf.trans_sn,tf.shop_price, op.operator,of.order_price, of.recheck_shipping_fee, of.real_shipping_fee, IF(tf.trans_type = 3,of.is_ok_date,rt.is_ok_date) is_ok_date, pf.product_sn, pf.product_name, pf.brand_name, pp.provider_name, ps.size_name, tf.product_number, tf.shop_price paid_price, IF(tf.consign_price > 0, tf.consign_price, tf.cost_price) cost_price, pg.category_name class_one, pg1.category_name class_two, tf.finance_check_date
+				FROM ty_transaction_info AS tf
+				  LEFT JOIN ty_product_size AS ps ON ps.size_id = tf.size_id
+				  LEFT JOIN ty_product_info AS pf ON pf.product_id = tf.product_id
+				  LEFT JOIN ty_product_category AS pg1 ON pg1.category_id = pf.category_id
+				  LEFT JOIN ty_product_category AS pg ON pg.category_id = pg1.parent_id 
+				  LEFT JOIN ty_product_provider AS pp ON pp.provider_id = pf.provider_id 
+				  LEFT JOIN ty_order_info AS of ON of.order_sn = tf.trans_sn 
+                                  LEFT JOIN ty_order_product AS op ON of.order_id = op.order_id AND tf.sub_id = op.op_id AND tf.trans_type = 3  
+				  LEFT JOIN ty_order_return_info AS rt ON rt.return_sn = tf.trans_sn 
+				WHERE 
+				  1 AND tf.trans_type = 3 AND trans_status != 5  AND ((of.is_ok = 1 AND of.order_status = 1 AND of.pay_status = 1 AND of.shipping_status = 1 ) OR rt.is_ok = 1 ) ".$timewhere.$whereadd."
+				  ORDER BY is_ok_date DESC,tf.update_date DESC,tf.transaction_id DESC";
+		$query = $this->db->query($sql);
+		$order_product = $query->result();
+		return array('order_product'=>$order_product);
+	}
+
+	/**
+	 * v@2016-03-24  v@2016-05-25
+	 * 订单销售利润汇总表  修改为退货表
+	 */ 
+	public function order_profits_return_report ($filter)
+	{
+		$order_sn = isset($filter['order_sn'])?$filter['order_sn']:'';
+		$admin_name = isset($filter['admin_name'])?$filter['admin_name']:'';
+		$starttime = isset($filter['start_time'])?$filter['start_time']:'';
+		$endtime = isset($filter['end_time'])?$filter['end_time']:'';
+		$is_start_time = isset($filter['is_start_time'])?$filter['is_start_time']:'';
+		$is_end_time = isset($filter['is_end_time'])?$filter['is_end_time']:'';
+
+		if((empty($starttime) || empty($endtime)) && (empty($is_start_time) || empty($is_end_time)) && empty($order_sn) && empty($admin_name))
+		{
+			return array();
+		}
+
+		$timewhere = "";
+		if(!empty($starttime) && !empty($endtime))
+		{
+			$timewhere = " AND TO_DAYS(rt.finance_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(rt.finance_date)<= TO_DAYS('" . $endtime . "')";
+		}
+		if(!empty($is_start_time) && !empty($is_end_time))
+		{
+			$timewhere = " AND TO_DAYS(rt.is_ok_date)>= TO_DAYS('" . $is_start_time . "') AND TO_DAYS(rt.is_ok_date)<= TO_DAYS('" . $is_end_time . "')";
+		}
+
+		$whereadd = "";
+		if(!empty($order_sn)) $whereadd .= " AND tf.trans_sn LIKE '%" . $order_sn . "%' ";
+		if(!empty($admin_name)) $whereadd .= " AND ai.admin_name LIKE '%" . $admin_name . "%' ";
+
+		//获取订单明细
+		$sql = "SELECT 
+				  tf.trans_sn,
+				  rt.paid_price,
+				  rt.finance_date,
+				  rt.create_date,
+				  SUM(
+				    IF(
+				      tf.consign_price > 0,
+				      tf.consign_price,
+				      tf.cost_price
+				    ) * tf.product_number
+				  ) cost_price,
+				  op.payment_date,
+				  pf.pay_name,
+				  ai.admin_name order_name,
+				  ai1.admin_name return_name
+				FROM
+				  ty_transaction_info AS tf 
+				  LEFT JOIN ty_order_return_info AS rt 
+				    ON rt.return_sn = tf.trans_sn 
+				  LEFT JOIN ty_order_info AS of 
+				    ON of.order_id = rt.order_id 
+				  LEFT JOIN ty_order_payment AS op 
+				    ON op.order_id = rt.order_id
+				  LEFT JOIN ty_payment_info AS pf 
+				    ON pf.pay_id = op.pay_id 
+				  LEFT JOIN ty_admin_info AS ai 
+				    ON ai.admin_id = of.create_admin
+				  LEFT JOIN ty_admin_info AS ai1 
+				    ON ai1.admin_id = rt.create_admin  
+				WHERE 1 
+				  AND tf.trans_type = 4 
+				  AND tf.trans_status = 4 
+				  AND rt.is_ok = 1 
+				  AND rt.pay_status = 1
+				  ".$timewhere.$whereadd."				
+				GROUP BY tf.trans_sn 
+				ORDER BY rt.is_ok_date DESC,
+				  tf.update_date DESC,
+				  tf.transaction_id DESC ";
+
+		$query = $this->db->query($sql);
+		$order_profits = $query->result();
+		return array('order_profits'=>$order_profits);
+	}
+
+	/**
+	 * v@2016-05-18
+	 * 订单销售利润汇总表 修改版
+	 */ 
+	public function order_profits_summary_report_to ($filter)
+	{
+		$order_sn = isset($filter['order_sn'])?$filter['order_sn']:'';
+		$admin_name = isset($filter['admin_name'])?$filter['admin_name']:'';
+		$starttime = isset($filter['start_time'])?$filter['start_time']:'';
+		$endtime = isset($filter['end_time'])?$filter['end_time']:'';
+		$is_start_time = isset($filter['is_start_time'])?$filter['is_start_time']:'';
+		$is_end_time = isset($filter['is_end_time'])?$filter['is_end_time']:'';
+
+		if((empty($starttime) || empty($endtime)) && (empty($is_start_time) || empty($is_end_time)) && empty($order_sn) && empty($admin_name))
+		{
+			return array();
+		}
+
+		$timewhere = "";
+		if(!empty($starttime) && !empty($endtime))
+		{
+			$timewhere = " AND TO_DAYS(tf.finance_check_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tf.finance_check_date)<= TO_DAYS('" . $endtime . "')";
+		}
+		if(!empty($is_start_time) && !empty($is_end_time))
+		{
+			$timewhere = " AND TO_DAYS(tf.update_date)>= TO_DAYS('" . $is_start_time . "') AND TO_DAYS(tf.update_date)<= TO_DAYS('" . $is_end_time . "')";
+		}
+		$whereadd = "";
+		if(!empty($order_sn)) $whereadd .= " AND tf.trans_sn LIKE '%" . $order_sn . "%' ";
+		if(!empty($admin_name)) $whereadd .= " AND ai.admin_name LIKE '%" . $admin_name . "%' ";
+
+		//获取订单明细
+		$sql = "SELECT 
+  MAX(tf.finance_check_date) finance_check_date,
+  MAX(tf.update_date) update_date,
+  tf.trans_sn,
+  zenpin.zenpin_cost,
+  of.paid_price AS shop_price,
+  (
+    SUM(
+      IF(
+        tf.consign_price > 0,
+        tf.consign_price,
+        tf.cost_price
+      ) * tf.product_number * - 1
+    ) - IF(
+      zenpin.zenpin_cost IS NULL,
+      0,
+      zenpin.zenpin_cost
+    )
+  ) cost_price,
+  os.source_name,
+  ri.region_name AS province_name, 
+  rito.region_name AS city_name,
+  ai.admin_name,
+  of.invoice_title,
+  of.consignee,
+  of.order_status,
+  of.payment_date,
+  pf.pay_name,
+  of.invoice_no,
+  of.is_ok,
+  of.shipping_date,
+  IF(ro.order_id IS NULL, 0, 1) AS has_return,
+  ro.paid_price AS tui_price,
+  ro.return_cost_price 
+  ,recheck_weight_unreal, recheck_shipping_fee,real_shipping_fee,saler 
+FROM
+  ty_transaction_info AS tf 
+  INNER JOIN
+    (SELECT 
+	DISTINCT(oi.order_id), invoice_title,consignee,order_status,recheck_weight_unreal, recheck_shipping_fee,real_shipping_fee,saler, invoice_no,is_ok,shipping_date,IF(op.pay_id = 6,paid_price - payment_money,paid_price) paid_price,pay_status, shipping_status,order_sn,source_id,province,city,create_admin,oi.pay_id, MAX(op.payment_date) AS payment_date 
+    FROM	
+      ty_order_info AS oi, ty_order_payment AS op WHERE oi.order_id = op.order_id GROUP BY oi.order_id
+      ) AS of 
+    ON of.order_sn = tf.trans_sn
+     LEFT JOIN ty_payment_info AS pf 
+    ON pf.pay_id = of.pay_id  
+  LEFT JOIN ty_order_source AS os 
+    ON os.source_id = of.source_id 
+  LEFT JOIN ty_region_info AS ri 
+    ON ri.region_id = of.province 
+  LEFT JOIN ty_region_info AS rito 
+    ON rito.region_id = of.city 
+  LEFT JOIN ty_admin_info AS ai 
+    ON ai.admin_id = of.create_admin 
+  LEFT JOIN 
+    (SELECT  
+       roi.order_id, roi.`return_sn`, 
+      roi.is_ok,
+      SUM(
+        IF(
+          ti.`consign_price` > 0,
+          ti.consign_price,
+          ti.cost_price
+        ) * ti.product_number
+      ) return_cost_price, 
+      
+      SUM(
+        ti.`shop_price` * ti.product_number
+      ) paid_price  
+    FROM
+      ty_order_return_info AS roi 
+      LEFT JOIN ty_transaction_info AS ti 
+        ON ti.`trans_sn` = roi.return_sn 
+       LEFT JOIN ty_order_info i2 ON roi.`order_id` = i2.`order_id` 
+    WHERE roi.return_status = 1 AND roi.pay_status = 1 AND roi.is_ok = 1 AND i2.`shipping_true` = 1 GROUP BY roi.`order_id`) ro 
+    ON of.order_id = ro.order_id 
+  LEFT JOIN 
+    (SELECT 
+      trans_sn,
+      SUM(
+        IF(
+          consign_price > 0,
+          consign_price,
+          cost_price
+        ) * product_number * - 1
+      ) zenpin_cost 
+    FROM
+      ty_transaction_info 
+    WHERE shop_price = 0 AND trans_type = 3 AND trans_status <> 5 
+    GROUP BY trans_sn ) zenpin 
+    ON tf.trans_sn = zenpin.trans_sn 
+WHERE 1 
+  AND tf.trans_type = 3 
+  AND trans_status != 5 
+  AND (
+    (
+      of.is_ok = 1 
+      AND of.order_status = 1 
+      AND of.pay_status = 1 
+      AND of.shipping_status = 1
+    ) 
+    OR ro.is_ok = 1
+  ) 
+  ".$timewhere.$whereadd."	
+GROUP BY tf.trans_sn 
+ORDER BY tf.finance_check_date DESC,
+  tf.update_date DESC,
+  tf.transaction_id DESC ";
+		$query = $this->db->query($sql);
+		$order_profits = $query->result();
+		return array('order_profits'=>$order_profits);
+	}
+	
+	public function inventory_details_report ($filter)
+	{
+		$brand_id = isset($filter['brand_id'])? (int)$filter['brand_id']:'0';
+		$is_expire_date = isset($filter['is_expire_date'])? (int)$filter['is_expire_date']:'0';
+		$product_sn = isset($filter['product_sn'])? trim($filter['product_sn']) : '';
+                $sku = isset($filter['sku'])? trim($filter['sku']) : '';
+                $keyword = isset($filter['keyword'])? trim($filter['keyword']):'';
+                $provider_barcode = isset($filter['provider_barcode'])? trim($filter['provider_barcode']):'';               
+		//$starttime = isset($filter['start_time'])?$filter['start_time']:'';
+		$endtime = isset($filter['end_time'])?$filter['end_time']:'';                
+                $e_starttime = isset($filter['e_start_time'])?$filter['e_start_time']:'';
+		$e_endtime = isset($filter['e_end_time'])?$filter['e_end_time']:'';
+
+		if(empty($endtime))
+		{
+			return array();
+		}
+
+		$timewhere = "((ti.trans_status IN ('2', '4') AND TO_DAYS(ti.update_date) <= TO_DAYS('".$endtime."')) 
+                    OR (ti.trans_type IN ('3') AND ti.trans_status IN ('1') AND TO_DAYS(ti.create_date) <= TO_DAYS('".$endtime."')))";
+
+
+                $where2 = "";
+                $whereadd = "";
+
+		if($brand_id != '0') $whereadd .= " AND p.brand_id  = '" . $brand_id . "' ";
+                //没有有效期
+		if($is_expire_date == 1) {
+                    $whereadd .= " AND ti.expire_date = '0000-00-00' ";
+                } elseif ($is_expire_date == 2) {
+                    $whereadd .= " AND ti.expire_date != '0000-00-00' ";
+                }
+
+		if(!empty($product_sn)) $whereadd .= " AND p.product_sn  = '" . $product_sn . "' ";
+		if(!empty($keyword)) $whereadd .= " AND p.product_name  LIKE '%" . $keyword . "%' ";
+		if(!empty($provider_barcode)) $whereadd .= " AND ps.provider_barcode = '" . $provider_barcode . "' ";
+                if (!empty($sku)){
+                    $sku_arr = explode("_", $sku);
+                    $whereadd .= " AND p.product_sn  = '" . $sku_arr[0] . "' ";
+                    if (!empty($sku_arr[1])) $whereadd .= " AND s.size_sn  = '" . $sku_arr[1] . "' ";
+                }
+                
+                if (!empty($filter['actual_stock']) && $filter['actual_stock'] == 1){
+                    $where2 .= " AND a.real_num = 0";
+                } elseif (!empty($filter['actual_stock']) && $filter['actual_stock'] == 2){
+                    $where2 .= " AND a.real_num > 0";
+                }
+                
+                if (!empty($filter['order_stock']) && $filter['order_stock'] == 1){
+                    $where2 .= " AND a.order_num = 0";
+                } elseif (!empty($filter['order_stock']) && $filter['order_stock'] == 2){
+                    $where2 .= " AND a.order_num > 0";
+                }
+                
+                if (!empty($filter['avail_stock']) && $filter['avail_stock'] == 1){
+                    $where2 .= " AND a.avail_num = 0";
+                } elseif (!empty($filter['avail_stock']) && $filter['avail_stock'] == 2){
+                    $where2 .= " AND a.avail_num > 0";
+                }
+
+		$sql = "SELECT * FROM (SELECT p.product_id, p.brand_name, p.`product_name`, p.provider_productcode, p.product_sn, ps.`provider_barcode`, 
+                    pc.`category_name`, s.size_sn, s.`size_name`, di.`depot_name`, li.`location_name`, MIN(IF(ti.trans_status = 4, ti.`update_date`, NOW())) AS rk_time ,
+                    ti.`expire_date`, SUM(GREATEST(ti.`consign_price`, ti.`cost_price`)*ti.`product_number`) AS s_cost_price, 
+                    SUM(IF(ti.trans_status IN ('2','4'),ti.product_number,0)) AS real_num, 
+                    SUM(IF((ti.trans_type IN ('3') AND ti.trans_status IN ('1')),ti.product_number,0)) AS order_num, 
+                    SUM(ti.product_number) AS avail_num  
+                    FROM ty_transaction_info ti 
+                    LEFT JOIN ty_product_info p ON ti.product_id = p.`product_id` 
+                    LEFT JOIN ty_product_sub ps ON ti.`product_id` = ps.`product_id` AND ti.color_id = ps.color_id AND ti.size_id = ps.`size_id` 
+                    LEFT JOIN `ty_product_size` s ON s.`size_id` = ti.`size_id` 
+                    LEFT JOIN `ty_product_category` pc ON p.category_id = pc.`category_id` 
+                    LEFT JOIN ty_depot_info di ON ti.`depot_id` = di.`depot_id` 
+                    LEFT JOIN `ty_location_info` li ON ti.`location_id` = li.`location_id` 
+                    WHERE 1 AND ".$timewhere.$whereadd." 
+                    GROUP BY ti.product_id,ti.color_id,ti.size_id, ti.depot_id, ti.location_id) a WHERE 1".$where2;
+
+		$query = $this->db->query($sql);
+		$result = $query->result();
+		return array("list" => $result);
+	}
+
+	/**
+	 * v@2016-05-19
+	 * 订单销售台帐（已财审，已发货/未发货）
+	 */ 
+	public function order_profits_sales_report ($filter)
+	{
+		$order_sn = isset($filter['order_sn'])?$filter['order_sn']:'';
+		$admin_name = isset($filter['admin_name'])?$filter['admin_name']:'';
+		$starttime = isset($filter['start_time'])?$filter['start_time']:'';
+		$endtime = isset($filter['end_time'])?$filter['end_time']:'';
+
+		if(empty($starttime) && empty($endtime) && empty($order_sn) && empty($admin_name))
+		{
+			return array();
+		}
+
+		$timewhere = "";
+		if(!empty($starttime) && !empty($endtime))
+		{
+			$timewhere = " AND TO_DAYS(tf.finance_check_date)>= TO_DAYS('" . $starttime . "') AND TO_DAYS(tf.finance_check_date)<= TO_DAYS('" . $endtime . "')";
+		}
+		$whereadd = "";
+		if(!empty($order_sn)) $whereadd .= " AND tf.trans_sn LIKE '%" . $order_sn . "%' ";
+		if(!empty($admin_name)) $whereadd .= " AND ai.admin_name LIKE '" . $admin_name . "' ";
+
+		//获取订单明细
+		$sql = "SELECT tf.trans_sn, zenpin.zenpin_cost,
+		of.paid_price as shop_price, 
+		(SUM(IF(tf.consign_price > 0,tf.consign_price,tf.cost_price)* tf.product_number * -1) - if(zenpin.zenpin_cost IS NULL, 0, zenpin.zenpin_cost)) cost_price , 
+		of.invoice_title, of.payment_date, pf.pay_name,of.consignee,of.order_status,os.source_name,ri.region_name as province_name,rito.region_name as city_name,ai.admin_name,of.invoice_no,tf.finance_check_date,tf.update_date,of.shipping_date,IF(ro.order_id IS NULL, 0, 1) AS has_return,
+  ro.paid_price AS tui_price,
+  ro.return_cost_price,of.pay_status,of.shipping_status    
+				FROM ty_transaction_info AS tf
+				  INNER JOIN
+    (SELECT 
+	DISTINCT(oi.order_id), invoice_title,consignee,order_status,recheck_weight_unreal, recheck_shipping_fee,real_shipping_fee, invoice_no,is_ok,shipping_date,IF(op.pay_id = 6,paid_price - payment_money,paid_price) paid_price,pay_status, shipping_status,order_sn,source_id,province,city,create_admin,oi.pay_id, MAX(op.payment_date) AS payment_date 
+    FROM	
+      ty_order_info AS oi, ty_order_payment AS op WHERE oi.order_id = op.order_id GROUP BY oi.order_id
+      ) AS of  ON of.order_sn = tf.trans_sn
+				  LEFT JOIN ty_payment_info AS pf ON pf.pay_id = of.pay_id
+				  LEFT JOIN ty_order_source AS os ON os.source_id = of.source_id
+				  LEFT JOIN ty_region_info AS ri ON ri.region_id = of.province	  
+				  LEFT JOIN ty_region_info AS rito ON rito.region_id = of.city	  
+				  LEFT JOIN ty_admin_info AS ai ON ai.admin_id = of.create_admin
+				  LEFT JOIN 
+    (SELECT  
+       roi.order_id, roi.`return_sn`, 
+      roi.is_ok,
+      SUM(
+        IF(
+          ti.`consign_price` > 0,
+          ti.consign_price,
+          ti.cost_price
+        ) * ti.product_number
+      ) return_cost_price, 
+      
+      SUM(
+        ti.`shop_price` * ti.product_number
+      ) paid_price  
+    FROM
+      ty_order_return_info AS roi 
+      LEFT JOIN ty_transaction_info AS ti 
+        ON ti.`trans_sn` = roi.return_sn 
+       LEFT JOIN ty_order_info i2 ON roi.`order_id` = i2.`order_id` 
+    WHERE roi.return_status = 1 AND roi.pay_status = 1 AND roi.is_ok = 1 AND i2.`shipping_true` = 1 GROUP BY roi.`order_id`) ro 
+    ON of.order_id = ro.order_id   
+				  LEFT JOIN (SELECT trans_sn, 
+							  SUM(IF(consign_price > 0,consign_price,cost_price)* product_number * -1) zenpin_cost
+							FROM
+							  ty_transaction_info
+							WHERE shop_price = 0
+							GROUP BY trans_sn) zenpin on tf.trans_sn = zenpin.trans_sn
+				WHERE 1 
+				  AND tf.trans_type = 3 
+				  AND of.order_status = 1 
+				  AND of.pay_status = 1 
+				".$timewhere.$whereadd."						
+				GROUP BY tf.trans_sn
+				ORDER BY tf.finance_check_date DESC, tf.update_date DESC, tf.transaction_id DESC";
+		$query = $this->db->query($sql);
+		$order_profits = $query->result();
+		return array('order_profits'=>$order_profits);
+	}
+        
+	public function purchase_main_report ($filter)
+	{
+		$provider_id = isset($filter['provider_id'])?$filter['provider_id']:'';
+                $purchase_code = isset($filter['purchase_code'])?$filter['purchase_code']:'';
+                $batch_code = isset($filter['batch_code'])?$filter['batch_code']:'';
+		$admin_name = isset($filter['admin_name'])?$filter['admin_name']:'';
+		$starttime = isset($filter['start_time'])?$filter['start_time']:'';
+		$endtime = isset($filter['end_time'])?$filter['end_time']:'';
+
+		if(empty($starttime) && empty($endtime))
+		{
+			return array();
+		}
+
+		$whereadd = "";
+		if(!empty($starttime) && !empty($endtime))
+		{
+                    $whereadd .= "AND pm.create_date >= '".$starttime."' AND pm.create_date <= '".$endtime."'";
+		}
+		
+                if(!empty($provider_id)) $whereadd .= " AND pm.purchase_provider = '".$provider_id."'";
+		if(!empty($purchase_code)) $whereadd .= " AND pm.purchase_code = '".$purchase_code."'";
+		if(!empty($admin_name)) $whereadd .= " AND pm.create_admin = '".$admin_name."'";
+                if(!empty($batch_code)) $whereadd .= " AND pb.batch_code = '".$batch_code."'";
+
+		//获取订单明细
+		$sql = "SELECT pp.provider_code, pm.purchase_code,pm.create_date, pb.batch_code, pm.purchase_amount, pm.purchase_number, pm.purchase_finished_number, ai.realname 
+FROM `ty_purchase_main` pm 
+INNER JOIN ty_product_provider pp ON pm.purchase_provider = pp.provider_id 
+INNER JOIN `ty_purchase_batch` pb ON pm.batch_id = pb.batch_id 
+INNER JOIN `ty_admin_info` ai ON ai.admin_id = pm.create_admin 
+WHERE pm.purchase_check_admin > 0 AND pm.purchase_finished_number > 0 ".$whereadd;
+		$query = $this->db->query($sql);
+		$result = $query->result();
+		return array('list'=>$result);
+	}
+
+	public function purchase_main_detail_report ($filter)
+	{
+		$provider_id = isset($filter['provider_id'])?$filter['provider_id']:'';
+                $brand_id = isset($filter['brand_id'])?$filter['brand_id']:'';
+                $product_sn = isset($filter['product_sn'])?$filter['product_sn']:'';
+                $product_name = isset($filter['product_name'])?$filter['product_name']:'';
+                $purchase_code = isset($filter['purchase_code'])?$filter['purchase_code']:'';
+                $batch_code = isset($filter['batch_code'])?$filter['batch_code']:'';
+		$admin_name = isset($filter['admin_name'])?$filter['admin_name']:'';               
+                $medical1 = isset($filter['medical1'])?$filter['medical1']:'';
+                $product_cess = isset($filter['product_cess'])?$filter['product_cess']:'';                
+		$starttime = isset($filter['start_time'])?$filter['start_time']:'';
+		$endtime = isset($filter['end_time'])?$filter['end_time']:'';               
+                $r_starttime = isset($filter['r_start_time'])?$filter['r_start_time']:'';
+		$r_endtime = isset($filter['r_end_time'])?$filter['r_end_time']:'';
+
+		if(empty($starttime) && empty($endtime))
+		{
+                    return array();
+		}
+
+		$whereadd = "";
+		if(!empty($starttime) && !empty($endtime))
+		{
+                    $whereadd .= "AND pm.create_date >= '".$starttime."' AND pm.create_date <= '".$endtime."'";
+		}
+                
+                if (!empty($r_starttime)){
+                    $whereadd .= " AND a.depot_in_date >= '".$r_starttime."'";
+                }
+                
+                if (!empty($r_endtime)){
+                    $whereadd .= " AND a.depot_in_date <= '".$r_endtime."'";
+                }
+		
+                if(!empty($provider_id)) $whereadd .= " AND pm.purchase_provider = '".$provider_id."'";
+                if(!empty($brand_id)) $whereadd .= " AND pm.purchase_brand = '".$brand_id."'";
+		if(!empty($purchase_code)) $whereadd .= " AND pm.purchase_code = '".$purchase_code."'";
+		if(!empty($admin_name)) $whereadd .= " AND pm.create_admin = '".$admin_name."'";
+                if(!empty($batch_code)) $whereadd .= " AND pb.batch_code = '".$batch_code."'";
+                if(!empty($product_sn)) $whereadd .= " AND g.product_sn = '".$product_sn."'";
+                if(!empty($product_name)) $whereadd .= " AND g.product_name LIKE '%".$product_name."%'";
+                if(!empty($medical1)) $whereadd .= " AND rc.medical1 = '".$medical1."'";
+                if(!empty($product_cess)) $whereadd .= " AND pc.product_cess = '".$product_cess."'";
+
+		//获取订单明细
+		$sql = "SELECT pm.purchase_code, pm.create_date, pp.provider_code, pb.batch_code, b.brand_name, s.size_name, 
+                    rc.medical1, g.product_name, g.product_sn, pc.product_cess, pc.consign_price, ps.product_number, 
+                    (pc.consign_price * ps.product_number) amount, ps.product_finished_number, ai.realname, a.depot_in_date 
+                    FROM `ty_purchase_main` pm 
+                    INNER JOIN `ty_purchase_sub` ps ON pm.purchase_id = ps.purchase_id 
+                    INNER JOIN `ty_product_provider` pp ON pm.purchase_provider = pp.provider_id 
+                    INNER JOIN `ty_purchase_batch` pb ON pm.batch_id = pb.batch_id 
+                    INNER JOIN `ty_product_brand` b ON b.brand_id = pm.purchase_brand 
+                    INNER JOIN `ty_product_size` s ON ps.size_id = s.size_id 
+                    INNER JOIN ty_product_info g ON ps.product_id = g.product_id 
+                    INNER JOIN `ty_product_cost` pc ON pm.batch_id = pc.batch_id AND ps.product_id = pc.product_id 
+                    INNER JOIN `ya_register_code` rc ON g.register_code_id = rc.id 
+                    INNER JOIN `ty_admin_info` ai ON ai.admin_id = pm.create_admin 
+                    INNER JOIN (SELECT MAX(dim.depot_in_date) AS depot_in_date, dim.order_sn FROM `ty_depot_in_main` dim WHERE dim.depot_in_type = 11 GROUP BY dim.order_sn ) a ON pm.purchase_code = a.order_sn 
+                    WHERE pm.purchase_check_admin > 0 AND pm.purchase_finished_number > 0 ".$whereadd;
+		$query = $this->db->query($sql);
+		$result = $query->result();
+		return array('list'=>$result);
+	}        
 }
-
-
-
 
 ?>

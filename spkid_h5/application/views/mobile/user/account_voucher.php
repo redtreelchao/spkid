@@ -7,7 +7,7 @@
         </div>
     </div>
     <!--navbar end-->       
-    <div class="page-content public-bg no-top2 v-acc-vou">
+    <div class="page-content article-bg2 no-top2 v-acc-vou">
         <div class="page-content-inner no-top">
             <div class="content-block wrap">
                 <ul class="receiving-address">

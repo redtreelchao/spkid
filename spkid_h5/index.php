@@ -21,8 +21,8 @@ if(is_file($_SERVER['DOCUMENT_ROOT'].'/360safe/360webscan.php')){
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	//define('ENVIRONMENT', 'production');
-	define('ENVIRONMENT', 'development');
+	define('ENVIRONMENT', 'production');
+	//define('ENVIRONMENT', 'development');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

@@ -59,7 +59,7 @@
 					</div>
 				</div>
 				<div class="product-info fl-left">
-					<div class="product-title product-row"><?php echo isset($ititle) ? $ititle : ''?></div>
+                    <div class="product-title product-row"><?php echo $p->brand_name?><?php echo isset($ititle) ? $ititle : ''?></div>
 
 					<div class="product-summary product-row">
 						<!-- <?php echo $p->product_desc ? $p->product_desc: ''?> -->

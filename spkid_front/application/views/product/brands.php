@@ -3,7 +3,7 @@
 <!--course-bar start-->
 <div class="course-bar">
      <div class="all-exhibits clearfix">
-          <div class="exhibits-qb"><a href="/brand/lists/0">全部</a></div>
+          <a href="/brand/lists/0"><div class="exhibits-qb">全部</div></a>
           <ul class="exhibits-name">
 <?php foreach($flags as $f):
 if ($fid == $f['flag_id']):

@@ -39,6 +39,9 @@ label.label-checkbox i.icon-form-checkbox:after {
   -webkit-background-size: 100% auto;
   background-size: 100% auto;
 }
+.toolbar:not(.messagebar) ~ .page-content {
+  padding-top: 26px;
+}
 
 </style>
 <div class="views">
@@ -50,22 +53,22 @@ label.label-checkbox i.icon-form-checkbox:after {
                     <div class="navbar-inner">
                         <div class="left"><a href="#" class="link icon-only history-back"><i class="icon icon-back"></i></a></div>
                         <div class="center">购物车(<?php print $cart_summary['product_num']; ?>)</div>
-                        <div class="right" style="margin-right:8px;"><a href="#cart-edit" style="color:#76DEFF;">编辑</a>
+                        <div class="right" style="margin-right:8px;"><a href="#cart-edit" style="color:#e1e1e1;">编辑</a>
                         </div>
                     </div>
                 </div> 
             	<!-- 底部工具栏开始 -->    
                 <div class="toolbar">
                     <div class="toolbar-inner row no-gutter hu-cart-settlement">
-                        <div class="col-60"><a href="#" class="link" style="color:#fff;">合计：<span class="heji-car-hu" id="h_total_price">￥<?php print fix_price($cart_summary['product_price']); ?></span> 不含运费</a></div>
+                        <div class="col-60"><a href="#" class="link"><em style="color:#333; font-style:normal; font-size:1em;">合计：</em><span class="heji-car-hu" id="h_total_price">￥<?php print fix_price($cart_summary['product_price']); ?></span><span style="color:#666;">不含运费</span></a></div>
                         <div class="col-40 settlemen-hu"><a href="/cart/checkout/<?=$default_provider?>" class="link external" style="color:#fff;">结算(<span id="h_total_num"><?php print $cart_summary['product_num']; ?></span>)</a></div>
                     </div>
                 </div>
             	<!-- 底部工具栏结束 -->    
                 <div class="page-content article-bg no-top2">
 		     		<div class="page-content-inner edu-fot">
-	                    <div class="list-block media-list no-top" style="margin-top:0;">
-	                    	<div class="v-activity-postage">10kg内购满399元包邮</div>			    
+	                    <div class="list-block media-list no-top" style="margin-top:25px;">
+	                    	<!-- <div class="v-activity-postage">购满200元包邮</div> -->			    
 	                        <ul class="hu-cart-shops">
 							<?php foreach ($cart_summary['product_list'] as $provider): ?>
 	                          	<?php foreach ($provider['product_list'] as $product): ?>
@@ -77,9 +80,10 @@ label.label-checkbox i.icon-form-checkbox:after {
 		                              	<div class="item-inner">
 			                                <div class="public-text"><?php print $product->brand_name . ' ' . $product->product_name; ?></div>
 			                                <div class="item-text hu-gwc">规格：<span class="c_size<?=$product->rec_id?>" data-subid="<?=$product->sub_id;?>"><?php print $product->size_name; ?><span></div>
-			                                <div class="item-title-row hu-cart-nobg" style="padding-top:10px;">
+			                                <div class="hu-cart-nobg clearfix" style="padding-top:20px;">
+                                                <div class="hu-cart-number">X<span><?php print $product->product_num;?></span></div>
 			                                  	<div class="guanzhu-jiage">￥<?php print fix_price($product->product_price); ?></div>
-			                                  	<div class="item-after">X <?php print $product->product_num; ?></div>
+			                                  	
 			                                </div>          
 		                              	</div>
 	                              	</a>
@@ -103,7 +107,7 @@ label.label-checkbox i.icon-form-checkbox:after {
                             </a>
                         </div>
                         <div class="center">购物车(<?php print $cart_summary['product_num']; ?>)</div>
-                        <div class="right" style="margin-right:8px;"><a href="#" class="open-popover" style="color:#76DEFF;">完成</a></div>
+                        <div class="right" style="margin-right:8px;"><a href="#" class="open-popover" style="color:#e1e1e1;">完成</a></div>
                     </div>
                 </div> 
                 
@@ -132,7 +136,7 @@ label.label-checkbox i.icon-form-checkbox:after {
                     <!--
                     <div><?php print $provider['provider_name'] ?></div>
                     -->
-                    <div class="list-block media-list no-top" style="margin-top:20px;">
+                    <div class="list-block media-list no-top" style="margin-top:55px;">
                         <ul class="hu-cart-shops">
 			 <?php foreach ($cart_summary['product_list'] as $provider): ?>
                             <?php foreach ($provider['product_list'] as $product): ?>
@@ -151,19 +155,19 @@ label.label-checkbox i.icon-form-checkbox:after {
                                  </div>
                                 <div class="item-inner" style="flex-basis:60%;  -webkit-flex-basis:60%; -moz-flex-basis:60%;">
                                   <div class="public-text"><?php print $product->product_name; ?></div>
-                                  <div class="item-title-row" style="border-bottom:solid 1px #2785ab; padding-bottom:5px;">
+                                  <div class="item-title-row" style="border-bottom:solid 1px #a1a1a1; padding-bottom:5px;">
                                       <div class="item-title" style="color:#000; padding-top:5px;">规格：<span class="c_size<?=$product->rec_id?>" data-subid="<?=$product->sub_id;?>" ><?php print $product->size_name; ?><span></div>
                                     <div class="item-after edit_size" style="font-weight: bold;" data-recid="<?php print $product->rec_id; ?>"></div>
                                   </div>
-                                  <div class="item-title-row" style="border-bottom:solid 1px #2785ab; padding-bottom:5px;">
+                                  <div class="item-title-row" style="border-bottom:solid 1px #a1a1a1; padding-bottom:5px;">
                                     <div class="down" data-recid="<?php print $product->rec_id; ?>"></div>
-                                    <div><input type="number" onblur="j_change_num(this)" id="qty_<?php print $product->rec_id; ?>" min="1" max="<?=$cart_goods_buy_num?>" step="1" value="<?php print $product->product_num; ?>" style="color:#fff; text-align:center;"></div>
+                                    <div><input type="number" onblur="j_change_num(this)" id="qty_<?php print $product->rec_id; ?>" min="1" max="<?=$cart_goods_buy_num?>" step="1" value="<?php print $product->product_num; ?>" style="color:#666; text-align:center; padding-top:5px;"></div>
                                     <div class="up" data-recid="<?php print $product->rec_id; ?>"></div>
                                   </div>
-                                  <div class="item-subtitle guanzhu-jiage" style="font-size:1em;" id="money_<?php print $product->rec_id; ?>">￥<?php print fix_price($product->product_price); ?></div>
+                                  <div class="item-subtitle guanzhu-jiage2" style="font-size:1em; padding-left:0" id="money_<?php print $product->rec_id; ?>">￥<?php print fix_price($product->product_price); ?></div>
                                 </div>
                                 <div style="flex-basis:15%; -webkit-flex-basis:15%; -moz-flex-basis:15%; ">
-                                    <input type="button" value="删除" style="width:100%; height:6.5em; background-color:#f9221d; color:#ffffff;font-size:1em; text-align:center; " class="cart_del" data-recid="<?php print $product->rec_id; ?>"/>
+                                    <input type="button" value="删除" style="width:100%; height:12em; background-color:#f9221d; color:#ffffff;font-size:1em; text-align:center; " class="cart_del" data-recid="<?php print $product->rec_id; ?>"/>
                                 </div>
                                  <!--
                                 </label>

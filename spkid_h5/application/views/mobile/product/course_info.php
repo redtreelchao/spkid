@@ -1,6 +1,7 @@
-<?php include APPPATH."views/mobile/header.php"; ?>
-<link rel="stylesheet" type="text/css" href="<?php echo static_style_url('mobile/css/tabs.css?v=version')?>">
-<link rel="stylesheet" href="<?php echo static_style_url('mobile/css/animate.css?v=version')?>">
+<?php include APPPATH . "views/mobile/header.php";?>
+<link rel="stylesheet" type="text/css" href="<?php echo static_style_url('mobile/css/tabs.css?v=version') ?>">
+<link rel="stylesheet" href="<?php echo static_style_url('mobile/css/animate.css?v=version') ?>">
+<link rel="stylesheet" href="<?php echo static_style_url('mobile/css/lightGallery.css?v=version')?>">
 <style>
 	.comment_item_r em{ font-style:normal; font-weight:normal; font-size:0.8em;}
 	.comment_item_r strong{ font-weight:normal; }
@@ -12,7 +13,7 @@
 	<div class="popover-inner">
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div class="center">爱牙商城</div>
+				<div class="center">悦牙商城</div>
 			</div>
 		</div>
 		<div class="content-block share_modal">
@@ -33,7 +34,7 @@
 	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="center">
-				<?php echo isset($title) ? $title : ''?></div>
+				<?php echo isset($title) ? $title : '' ?></div>
 			<div class="right close-popup" style="margin-right:1em">关闭</div>
 		</div>
 	</div>
@@ -45,12 +46,12 @@
 	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="center">
-				<?php echo isset($title) ? $title : ''?></div>
+				<?php echo isset($title) ? $title : '' ?></div>
 			<div class="right close-popup" style="margin-right:1em">关闭</div>
 		</div>
 	</div>
 	<div class="content-block tabs-pannel-content">
-		<?php echo $p->detail1?>
+		<?php echo $p->detail1 ?>
 	</div>
 </div>
 <!-- ends 点击tab标签的时候，出现tab面板 -->
@@ -60,12 +61,12 @@
 	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="center">
-				<?php echo isset($title) ? $title : ''?></div>
+				<?php echo isset($title) ? $title : '' ?></div>
 			<div class="right close-popup" style="margin-right:1em">关闭</div>
 		</div>
 	</div>
 	<div class="content-block tabs-pannel-content">
-		<?php echo $p->detail2?>
+		<?php echo $p->detail2 ?>
 	</div>
 </div>
 <!-- ends 点击tab标签的时候，出现tab面板 -->
@@ -75,12 +76,12 @@
 	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="center">
-				<?php echo isset($title) ? $title : ''?></div>
+				<?php echo isset($title) ? $title : '' ?></div>
 			<div class="right close-popup" style="margin-right:1em">关闭</div>
 		</div>
 	</div>
 	<div class="content-block tabs-pannel-content">
-		<?php echo $p->detail3?>
+		<?php echo $p->detail3 ?>
 	</div>
 </div>
 <!-- ends 点击tab标签的时候，出现tab面板 -->
@@ -90,12 +91,12 @@
 	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="center">
-				<?php echo isset($title) ? $title : ''?></div>
+				<?php echo isset($title) ? $title : '' ?></div>
 			<div class="right close-popup" style="margin-right:1em">关闭</div>
 		</div>
 	</div>
 	<div class="content-block tabs-pannel-content">
-		<?php echo $p->detail4?>
+		<?php echo $p->detail4 ?>
 	</div>
 </div>
 <!-- ends 点击tab标签的时候，出现tab面板 -->
@@ -105,7 +106,7 @@
 	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="center">
-				<?php echo isset($title) ? $title : ''?></div>
+				<?php echo isset($title) ? $title : '' ?></div>
 			<div class="right close-popup" style="margin-right:1em">关闭</div>
 		</div>
 	</div>
@@ -131,37 +132,37 @@
 		<div class="list-block liuyan-box-info" style="margin:10px 0;">
 			<ul>
 			  <li>
-			    <div class="item-content">	
-			      <div class="item-media"><i class="user-tracey"></i></div>		      
-			      <div class="item-inner"> 			        
+			    <div class="item-content">
+			      <div class="item-media"><i class="user-tracey"></i></div>
+			      <div class="item-inner">
 			        <div class="item-input">
-			          <input type="text" placeholder="姓名：" name="name" class="" style="background:white; padding-left:5px;" value="<?php echo $user_name?>"/>
+			          <input type="text" placeholder="姓名：" name="name" class="" style="background:white; padding-left:5px;" value="<?php echo $user_name ?>"/>
 			        </div>
 			      </div>
 			    </div>
 			  </li>
-			  
+
 			  <li>
-			    <div class="item-content">	
-			    <div class="item-media"><i class="phone-ico-hu"></i></div>		      
-			      <div class="item-inner">			        
+			    <div class="item-content">
+			    <div class="item-media"><i class="phone-ico-hu"></i></div>
+			      <div class="item-inner">
 			        <div class="item-input">
-			          <input type="tel" placeholder="联系方式：" name="mobile" style="background:white; padding-left:5px;" value="<?php echo $mobile?>">
+			          <input type="tel" placeholder="联系方式：" name="mobile" style="background:white; padding-left:5px;" value="<?php echo $mobile ?>">
 			        </div>
 			      </div>
 			    </div>
 			  </li>
-			  
+
 			</ul>
 		</div>
 	</div>
-	
+
 	<div class="popup-Iliuya-content">
 	    <div class="order-details-rr">
-		 <textarea name="popup-liuya-content" class="liuyan-hu" placeholder='请填写您关于产品的问题，提交后，我们尽快请专家整理答案回复于您，并有可能将此问题，录入产品的”说明“选项中' onfocus="this.style.color='#000'; this.value='';" style="color: #f00;"></textarea> 
-            </div>	
-	</div>	
-	
+		 <textarea name="popup-liuya-content" class="liuyan-hu" placeholder='请填写您关于产品的问题，提交后，我们尽快请专家整理答案回复于您，并有可能将此问题，录入产品的”说明“选项中' onfocus="this.style.color='#000'; this.value='';" style="color: #f00;"></textarea>
+            </div>
+	</div>
+
 	<div class="yywtoolbar">
 	        <div class="yywtoolbar-inner row no-gutter">
 	            <div class="col-100  payment-hu"><a class="link button-tijiao" href="javascript:void(0)">提交</a></div>
@@ -174,7 +175,7 @@
 
 
 
-
+	<?php $product_desc_additional = (!empty($p->product_desc_additional)) ? json_decode($p->product_desc_additional, true) : array();?>
 
 <div class="views">
 	<div class="view view-main">
@@ -182,23 +183,23 @@
 		<div class="toolbar">
 			<div class="toolbar-inner2 row no-gutter">
 				<div class="col-20"></div>
-				<?php if( !empty($collect_data) && deep_in_array($p->product_id, $collect_data)) { ?>
+				<?php if (!empty($collect_data) && deep_in_array($p->product_id, $collect_data)) {?>
 				<div class="col-20 heart-hu-red">
 					<a class="link" href="#"></a>
 				</div>
-				<?php }else{ ?>
-				<div class="col-20 heart-hu-gray" onclick="add_to_collect (<?php echo $p->product_id;?>,3,this,'heart-hu');" >
+				<?php } else {?>
+				<div class="col-20 heart-hu-gray" onclick="add_to_collect (<?php echo $p->product_id; ?>,3,this,'heart-hu');" >
 					<a class="link" href="#"></a>
 				</div>
-				<?php } ?>
+				<?php }?>
 
-				
+
 				<div class="col-60 registration-hu">
-				<?php if(date("Y-m-d", strtotime($p->package_name)) > date('Y-m-d')) {?>
-					<a class="link external" href="/cart/checkout_course/<?=$sub_list[$color_id]['sub_list'][0]->sub_id?>" style="color:#fff;">我要报名</a>
-				<?php }else{ ?>
+				<?php if (date("Y-m-d", strtotime($product_desc_additional['desc_waterproof'])) > date('Y-m-d')) {?>
+					<a class="link woyaobaoming" data-href="/cart/checkout_course/<?=$sub_list[$color_id]['sub_list'][0]->sub_id?>" href="javascript:void(0)" style="color:#fff;">我要报名</a>
+				<?php } else {?>
 					<a disabled="disabled" class="link external" href="/cart/checkout_course/<?=$sub_list[$color_id]['sub_list'][0]->sub_id?>" style="color:#fff;">已结束报名</a>
-				<?php } ?>
+				<?php }?>
 				</div>
 			</div>
 		</div>
@@ -219,14 +220,14 @@
 						</div>
 					</div>
 				</div>
-				<div class="page-content article-bg edu-fot ">
+				<div class="page-content article-bg3 edu-fot ">
 				<!-- 顶部快捷键 -->
 				<div class="short-func-box animated">
 					<div class="short-func-row">
 						<section id="kefu">
 							<div class="kefu-erji hu-pro-gg"><p>客服</p></div>
 						</section>
-					
+
 						<section id="fenxiang" class="open-popover"  data-popover=".popover-menu">
 							<div class="hu-share hu-pro-gg"><p>分享</p></div>
 						</section>
@@ -238,21 +239,19 @@
 				<!-- ends 顶部快捷键 -->
 
 					<div class="details" >
-						<img  src="<?php print img_url($g_list[$color_id]["default"]->img_url.".850x850.jpg"); ?>" /></div>
+						<img  src="<?php print img_url($g_list[$color_id]["default"]->img_url . ".850x850.jpg");?>" /></div>
 
 					<!-- educational-training start -->
 					<div class="educational-training">
 						<div class="edc-dw">
 							<h2>
-								<?php print $p->product_name ?></h2>
+								<?php print $p->product_name?></h2>
 							<div class="browse">
 								<span>
-									<?php echo get_page_view('course',$p->product_id);?></span>
+									<?php echo get_page_view('course', $p->product_id); ?></span>
 							</div>
 						</div>
 						<div class="educational-xq ">
-							<?php $product_desc_additional = (!empty($p->
-							product_desc_additional)) ? json_decode($p->product_desc_additional, true) : array(); ?>
 							<ul class="edu-lb">
 								<li>
 									老师：
@@ -260,8 +259,11 @@
 								<li>
 									时间:
 									<?php echo date("Y.m.d", strtotime($p->
-									package_name));?>
-									<?php if (isset($product_desc_additional['desc_waterproof'])) echo '-' . date("Y.m.d", strtotime($product_desc_additional['desc_waterproof']))?></li>
+		package_name)); ?>
+									<?php if (isset($product_desc_additional['desc_waterproof'])) {
+	echo '-' . date("Y.m.d", strtotime($product_desc_additional['desc_waterproof']));
+}
+?></li>
 								<li>
 									地点:
 									<?if (isset($product_desc_additional['desc_crowd'])) echo $product_desc_additional['desc_crowd']?></li>
@@ -281,29 +283,29 @@
 									<div class="jgsm">促销信息</div>
 									<div class="fylb">
                                                                             <!--
-										<?php if($p->
-										is_promote):?>
+										<?php if ($p->
+	is_promote): ?>
 										<div class="fy-list">
 											<?=date("m/d", strtotime($p->
-											promote_start_date))?> -
+	promote_start_date))?> -
 											<?=date("m/d", strtotime($p->
-											promote_end_date))?>期间报名可以优惠￥
+	promote_end_date))?>期间报名可以优惠￥
 											<?=$p->shop_price - $p->promote_price?>元</div>
 										<?php else: ?>
 										<div class="fy-list">本课程暂无促销活动</div>
 										<?php endif;?>
-										<?php if($p->
-										is_promote):?>
+										<?php if ($p->
+	is_promote): ?>
 										<div class="fy-list">
 											非促销活动期间价格：￥
 											<?=$p->shop_price?></div>
 										<?php endif;?>
                                                                             -->
-                                                                            <?php if(isset($product_desc_additional['desc_dimensions']) && !empty($product_desc_additional['desc_dimensions'])): ?>
+                                                                            <?php if (isset($product_desc_additional['desc_dimensions']) && !empty($product_desc_additional['desc_dimensions'])): ?>
                                                                             <div class="fy-list"><?=$product_desc_additional['desc_dimensions']?></div>
                                                                             <?php else: ?>
                                                                             <div class="fy-list">本课程暂无促销活动</div>
-                                                                            <?php endif; ?>
+                                                                            <?php endif;?>
                                                                         </div>
 								</div>
 							</div>
@@ -312,33 +314,26 @@
 
 						<!-- yyrz start -->
 						<div class="certification">
-							<img src="<?php echo static_style_url('mobile/img/education-img.jpg')?>"></div>
+							<img src="<?php echo static_style_url('mobile/img/education-img.jpg') ?>"></div>
 						<!-- yyrz start -->
 
 						<!-- course start -->
 						<div class="educational-training">
-							<div class="educational-xq course">
-								<?=$p->product_desc?></div>
+							<ul id="auto-loop" class="gallery" style="display:none"></ul>
+							<div class="educational-xq course"><?=$p->product_desc?></div>
 						</div>
 						<!-- course end -->
 
 						<!-- buttons-row start -->
-						<!-- <div class="buttons-row tab-qh">
-						<a href="#tabs1" class="tab-link active button tab-hu">培训详情</a>
-						<a href="#tabs2" class="tab-link button tab-hu">老师介绍</a>
-						<a href="#tabs3" class="tab-link button tab-hu">交通路线</a>
-						<a href="#tabs4" class="tab-link button tab-hu">学员评价</a>
-						<a href="#tabs5" class="tab-link button tab-hu">往期培训</a>
-					</div>
-                    -->
+						
                     <div class="tabbar buttons-row">
-                    		<a class="tab-link button open-popup" data-fun="peixunxiangqing" href="#tab1" data-popup=".popup-detail1"> 培训详情 </a> 
-                    		<a class="tab-link button open-popup" data-fun="laoshijieshao" href="#tab2" data-popup=".popup-detail2"> 老师介绍 </a> 
-                    		<a class="tab-link button open-popup" data-fun="jiaotongluxian" href="#tab3" data-popup=".popup-detail3"> 交通路线 </a> 
-                    		<a class="tab-link button open-popup" data-fun="xuanyuanpingjia" href="#tab4" data-popup=".popup-detail4"> 学员评价 </a> 
+                    		<a class="tab-link button open-popup" data-fun="peixunxiangqing" href="#tab1" data-popup=".popup-detail1"> 培训详情 </a>
+                    		<a class="tab-link button open-popup" data-fun="laoshijieshao" href="#tab2" data-popup=".popup-detail2"> 老师介绍 </a>
+                    		<a class="tab-link button open-popup" data-fun="jiaotongluxian" href="#tab3" data-popup=".popup-detail3"> 交通路线 </a>
+                    		<a class="tab-link button open-popup" data-fun="xuanyuanpingjia" href="#tab4" data-popup=".popup-detail4"> 学员评价 </a>
                     		<a class="tab-link button open-popup" data-fun="xiangguanpeixun" href="#tab5" data-popup=".popup-detail5"> 电子书下载</a>
                     </div>
-					
+
 					<!-- buttons-row end -->
 
 					<!-- registration  start -->
@@ -376,36 +371,67 @@
 </div>
 
 </div>
-<?php include APPPATH."views/mobile/common/footer-js.php"; ?>
+<?php include APPPATH . "views/mobile/common/footer-js.php";?>
 <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-
+<script type="text/javascript" src="<?php echo static_style_url('mobile/js/lightGallery.min.js?v=version'); ?>"></script>
 <script>
-	
+    //详情内容画廊
+    $(document).ready(function(){
+        var v_img_loop = '';
+        $(".educational-xq img").each(function(){
+            v_img_loop += '<li data-src="'+ $(this)[0].src +'"><a href="#"><img src="'+ $(this)[0].src +'" /></a></li>';
+        });
+        $("#auto-loop").append(v_img_loop);
 
+        $('.educational-training img').on('click', function(){
+            $('#auto-loop').show();
+            $('#auto-loop li').eq(0).click();
+        });
+        $("#auto-loop").lightGallery({
+            loop:true,
+            auto:true,
+            pause:4000,
+            counter:true,
+            caption:'yeuyawang',
+            onCloseAfter:function(){$('#auto-loop').hide()}
+        });
+
+    });
+</script>
+<script>
 	$(function (){
 	    var list = $(".navbar .center");
 	    list.each(function(index, element) {
 	        var str = $(this).text();
 	        $(this).text(cutStr(str,28)+'   ');
 	    });
-	    $('.toolbar.tabbar').remove(); 
+	    $('.toolbar.tabbar').remove();
 	});
-	
+
 </script>
 <script>
-	var tag_id = product_id = '<?php echo $p ->product_id ? $p -> product_id : 0; ?>';
+	var tag_id = product_id = '<?php echo $p->product_id ? $p->product_id : 0; ?>';
 	var tagType = 3; //代表课程
 	var comment_type = 1;
 
 	$$('#kefu').on('click', function(e){
 	    myApp.confirm('服务时间 9:00-21:00', '现在拨打热线', function () {
-            $$('<a href="tel://4009905920">拨打电话</a>').click();            
+            $$('<a href="tel://4009905920">拨打电话</a>').click();
         });
+	});
+
+
+	$$('.woyaobaoming').on('click', function(e){
+		if(checkLogin(false)) {
+			location.href = $$(this).attr('data-href');
+		} else {
+			//do nothing;
+		}
 	});
 </script>
 
 <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
 <script type="text/javascript" src="<?php echo static_style_url('mobile/js/tabs.js?v=version'); ?>"></script>
 
-<?php include APPPATH."views/mobile/common/meiqia.php"; ?>
-<?php include APPPATH."views/mobile/footer.php"; ?>
+<?php include APPPATH . "views/mobile/common/meiqia.php";?>
+<?php include APPPATH . "views/mobile/footer.php";?>

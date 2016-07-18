@@ -39,7 +39,7 @@
 */
 
 $route['default_controller'] = "index";
-$route['404_override'] = '';
+$route['404_override'] = 'index/error404';
 
 $route['activity'] = 'index/start_page';
 $route['index-(.+)?'] = 'index/index/$1';
@@ -59,9 +59,9 @@ $route['product-(.+)'] = 'product/course_info/$1.html';
 
 $route['tuan-(.+)'] = 'tuan/index/$1.html';
 $route['tuanDetail-(.+)'] = 'tuanDetail/info/$1.html';
-$route['search'] = 'search/index';
-//$route['brand-(.+)'] = 'product/brand/$1';
 
+//$route['brand-(.+)'] = 'product/brand/$1';
+$route['search'] = 'product/search';
 $route['searchResult'] = 'product/searchResult';
 //$route['pdetail-(\d+)'] = 'product/pdetail/$1.html';
 $route['prodetail-(\d+)'] = 'product/pdetail/$1.html';

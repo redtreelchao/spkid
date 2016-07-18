@@ -100,7 +100,9 @@ class Address extends CI_Controller {
         $address_id = intval($this->input->get('address_id'));
         $delete_num = $this->address_model->delete_address($address_id);
         if(!empty($delete_num)){
-            echo json_encode(array('mobile_check_err' => 2));
+            echo json_encode(array('error' => 0));
+        }else{
+            echo json_encode(array('error' => 0));
         }
     }
     

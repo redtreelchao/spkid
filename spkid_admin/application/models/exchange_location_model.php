@@ -156,14 +156,14 @@ class Exchange_location_model extends CI_Model {
               ." (trans_type, trans_status, trans_sn, product_id, color_id, size_id, 
                   product_number, depot_id, location_id, create_admin, create_date, update_admin, update_date, 
                   trans_direction, sub_id, related_id, batch_id, shop_price, 
-                  consign_price, cost_price, consign_rate, product_cess,expire_date) "
+                  consign_price, cost_price, consign_rate, product_cess,expire_date,production_batch) "
               ." SELECT "
               .TRANS_TYPE_PACKET_EXCHANGE." AS trans_type, ".TRANS_STAT_IN." AS trans_status, em.exchange_code AS trans_sn, e.product_id, e.color_id, e.size_id, 
                   e.product_number, e.dest_depot_id AS depot_id, e.dest_location_id AS location_id, 
                   ". $admin_id ." AS create_admin, '". date('Y-m-d H:i:s') ."' AS create_date, 
                   ". $admin_id ." AS update_admin, '". date('Y-m-d H:i:s') ."' AS update_date, 
                   1 AS trans_direction, e.exchange_leaf_id AS sub_id, 0 AS related_id, e.batch_id, pi.shop_price, 
-                  pc.consign_price, pc.cost_price, pc.consign_rate, pc.product_cess,e.expire_date "
+                  pc.consign_price, pc.cost_price, pc.consign_rate, pc.product_cess,e.expire_date,e.production_batch "
               ." FROM " . $this->db->dbprefix('exchange_in') . " AS e "
               ." LEFT JOIN " . $this->db->dbprefix('exchange_main') . " AS em ON em.exchange_id = e.exchange_id "
               ." LEFT JOIN " . $this->db->dbprefix('product_info') . " AS pi ON pi.product_id = e.product_id "
@@ -179,14 +179,14 @@ class Exchange_location_model extends CI_Model {
               ." (trans_type, trans_status, trans_sn, product_id, color_id, size_id, 
                   product_number, depot_id, location_id, create_admin, create_date, update_admin, update_date, 
                   trans_direction, sub_id, related_id, batch_id, shop_price, 
-                  consign_price, cost_price, consign_rate, product_cess,expire_date) "
+                  consign_price, cost_price, consign_rate, product_cess,expire_date,production_batch) "
               ." SELECT "
               .TRANS_TYPE_PACKET_EXCHANGE." AS trans_type, ".TRANS_STAT_OUT." AS trans_status, em.exchange_code AS trans_sn, e.product_id, e.color_id, e.size_id, 
                   -1 * e.product_number AS product_number, e.source_depot_id AS depot_id, e.source_location_id AS location_id, 
                   ". $admin_id ." AS create_admin, '". date('Y-m-d H:i:s') ."' AS create_date, 
                   ". $admin_id ." AS update_admin, '". date('Y-m-d H:i:s') ."' AS update_date, 
                   1 AS trans_direction, e.exchange_sub_id AS sub_id, 0 AS related_id, e.batch_id, pi.shop_price, 
-                  pc.consign_price, pc.cost_price, pc.consign_rate, pc.product_cess,e.expire_date "
+                  pc.consign_price, pc.cost_price, pc.consign_rate, pc.product_cess,e.expire_date,e.production_batch "
               ." FROM " . $this->db->dbprefix('exchange_out') . " AS e "
               ." LEFT JOIN " . $this->db->dbprefix('exchange_main') . " AS em ON em.exchange_id = e.exchange_id "
               ." LEFT JOIN " . $this->db->dbprefix('product_info') . " AS pi ON pi.product_id = e.product_id "

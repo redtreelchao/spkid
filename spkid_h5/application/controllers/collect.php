@@ -11,9 +11,17 @@ class Collect extends CI_Controller {
         $this->user_id = $this->session->userdata('user_id');
         $this->load->model('collect_model');
         $this->load->model('wordpress_model');
+        $this->load->library('user_obj');
     }
 
     public function index() {
+        if ($this->user_obj->is_login())
+        {
+            $user_id = $this->session->userdata('user_id');
+        } else
+        {
+            redirect('/user/login');
+        }
         $user_id = $this->user_id;
         $data['product'] = $this->collect_model->collect_list($user_id);    //用户收藏的 产品、 课程 列表
         $data['article'] = $this->wordpress_model->article_collect_list($user_id);    //用户收藏的 文章、视频 列表

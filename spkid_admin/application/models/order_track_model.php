@@ -165,10 +165,10 @@ class Order_track_model extends CI_Model {
 
                     $sql = "INSERT INTO ".$this->db->dbprefix('transaction_info')."(trans_type,trans_status,trans_sn,product_id,color_id,size_id,product_number," .
                                     "depot_id,location_id,create_admin,create_date,update_admin,update_date,cancel_admin,cancel_date,trans_direction,sub_id," .
-                                    "batch_id,product_cess,cost_price,consign_price,consign_rate,shop_price,expire_date) ".
+                                    "batch_id,product_cess,cost_price,consign_price,consign_rate,shop_price,expire_date,production_batch) ".
                                     " SELECT ".TRANS_TYPE_DIRECT_IN.",".TRANS_STAT_IN.",b.depot_in_code,a.product_id,a.color_id,size_id,a.product_number,".
                                     "a.depot_id,a.location_id,a.create_admin,a.create_date,0,'0000-00-00',0,'0000-00-00',1,a.depot_in_sub_id," .
-                                    "a.batch_id,c.product_cess,c.cost_price,c.consign_price,c.consign_rate,d.shop_price,a.expire_date" .
+                                    "a.batch_id,c.product_cess,c.cost_price,c.consign_price,c.consign_rate,d.shop_price,a.expire_date,a.production_batch" .
                                     " FROM ".$this->db->dbprefix('depot_in_sub')." a" .
                                     " LEFT JOIN ".$this->db->dbprefix('depot_in_main')." b ON b.depot_in_id = a.depot_in_id " .
                                     " LEFT JOIN ".$this->db->dbprefix('product_cost')." c ON c.product_id = a.product_id AND c.batch_id = a.batch_id " .

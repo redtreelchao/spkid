@@ -92,16 +92,16 @@ class Article extends CI_Controller
 
     public function search(){
         $this->load->model('wordpress_model');
-        //$vars = get_class_vars(get_class($this->wordpress_model));
         $kw = $this->input->get('kw');
+        $is_preview = $this->input->get('is_preview');
         if(!empty($kw)){
             $kw = urldecode($kw);
-            $article_list = $this->wordpress_model->search_article($kw);
-            if(!empty($article_list))
+            $article_list = $this->wordpress_model->search_article($kw,$page = 1,$is_preview);
+            if(!empty($article_list)){
                 $this->load->view('mobile/article/search_ajax', array('list' => $article_list));
-            else
+            }else{
                 echo 'empty';
-            //echo $html;
+            }
         } else{
             $this->load->view('mobile/article/search');
         }
@@ -156,8 +156,19 @@ class Article extends CI_Controller
         $seo = $this->lib_seo->get_seo_by_pagetag('article_detail', array(
 								'post_title' => $article_detail->post_title							
 								));
-        $this->load->vars(array('article' => $article_detail, 'tag' => $post_tag, 'category' => $category, 'views' => $views, 'prev' => $prev, 'next' => $next, 'relative_articles' => $relative_articles,
-        	'title' => $seo['title'],'collect_data'=>get_collect_data(),'praise_data'=>get_praise_data(),'article_praise_num'=>$article_praise_num->praise_num));
+        $this->load->vars(array(
+        	'article' => $article_detail, 
+        	'tag' => $post_tag, 
+        	'category' => $category, 
+        	'views' => $views, 
+        	'prev' => $prev, 
+        	'next' => $next, 
+        	'relative_articles' => $relative_articles,
+        	'title' => $seo['title'],
+        	'description' => preg_replace('/[\n\r\t]/', '', strip_tags($article_detail->post_content)),
+        	'keywords' => $post_tag,
+        	'collect_data'=>get_collect_data(),
+        	'praise_data'=>get_praise_data(),'article_praise_num'=>$article_praise_num->praise_num));
         $this->load->view('mobile/article/detail');
     }
 	

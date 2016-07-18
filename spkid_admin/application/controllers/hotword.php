@@ -51,6 +51,7 @@ class Hotword extends CI_Controller
         $data['hotword_url'] = $this->input->post('hotword_url');
         $data['sort_order'] = $this->input->post('sort_order'); 
         $data['click_count'] = $this->input->post('click_count'); 
+        $data['hotword_type'] = $this->input->post('hotword_type'); 
         $data['create_admin'] = $this->admin_id;
         $data['create_date'] = date('Y-m-d H:i:s' , time());
         $this->load->library('form_validation');
@@ -84,6 +85,7 @@ class Hotword extends CI_Controller
         $data['hotword_url'] = $this->input->post('hotword_url');
         $data['sort_order'] = $this->input->post('sort_order'); 
         $data['click_count'] = $this->input->post('click_count'); 
+        $data['hotword_type'] = $this->input->post('hotword_type'); 
         $this->load->library('form_validation');
         $this->form_validation->set_rules('hotword_name', 'hotword_name', 'trim|required');
         $this->form_validation->set_rules('hotword_url', 'hotword_url', 'trim|required');

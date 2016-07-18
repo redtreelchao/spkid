@@ -39,7 +39,7 @@
 */
 
 $route['default_controller'] = "index";
-$route['404_override'] = '';
+$route['404_override'] = 'index/err404';
 
 $route['activity'] = 'index/start_page';
 $route['index-(.+)?'] = 'index/index/$1';

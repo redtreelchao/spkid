@@ -113,6 +113,7 @@ class Pay extends CI_Controller
 			}
 			$genre_id = PRODUCT_TOOTH_TYPE;
 			$arr_order = array();
+                        $admin_id = $this->cache->get('aname'.$pay_track->order_ids);
 			foreach ($order_list as $order) {
 			    // 金额有问题或已全部付完，退出循环
 			    if($order_changed || $total_price<=0) {
@@ -138,6 +139,7 @@ class Pay extends CI_Controller
 			        'payment_account' => $o1['openid'],
 			        'payment_money' => $payment_money,
 			        'trade_no' => $o1['transaction_id'],
+                                'payment_admin' => (int)$admin_id,
 			        'payment_date' => $this->time,
 			        'payment_remark' => 'weixin notify'
 			    ));
@@ -148,7 +150,7 @@ class Pay extends CI_Controller
 			    $arr_order[$order->order_id] = $order;
 			}
 			// 如果还有金额未进入订单，转入用户余额
-			if (round($total_price, 2) > 0) {
+			/*if (round($total_price, 2) > 0) {
 			    $sql_log = "INSERT INTO 
 			            ty_user_account_log
 			            (link_id, user_id, user_money, pay_points, change_desc, change_code, create_admin, create_date)
@@ -157,7 +159,7 @@ class Pay extends CI_Controller
 			    $this->db->query($sql_log, array($pay_track->track_id, $pay_track->user_id, $total_price));
 			    $sql_user = "UPDATE ty_user_info SET user_money = user_money + ? WHERE user_id = ?";
 			    $this->db->query($sql_user, array($total_price, $pay_track->user_id)); 
-			}
+			}*/
 			append_write_file($log_name, '2 track_sn:' . $track_sn);
 			$this->order_model->update_pay_track_by_sn(array('pay_status' => 1),$track_sn);
 			$this->db->trans_commit();   
@@ -279,6 +281,7 @@ class Pay extends CI_Controller
         }
         
         $arr_order = array();
+        $admin_id = $this->cache->get('aname'.$pay_track->order_ids);
         foreach ($order_list as $order) {
             // 金额有问题或已全部付完，退出循环
             if($order_changed || $total_price<=0) {
@@ -304,6 +307,7 @@ class Pay extends CI_Controller
             	    'payment_account' => trim($post['buyer_email']),
             	    'payment_money' => $payment_money,
             	    'trade_no' => trim($post['trade_no']),
+                    'payment_admin' => (int)$admin_id,
             	    'payment_date' => $this->time,
             	    'payment_remark' => $type
             	));
@@ -316,7 +320,7 @@ class Pay extends CI_Controller
         }
 		append_write_file($write_filename, '支付' . var_export($order, true));
         // 如果还有金额未进入订单，转入用户余额
-        if (round($total_price, 2) > 0) {
+        /*if (round($total_price, 2) > 0) {
             $sql_log = "INSERT INTO 
                     ty_user_account_log
                     (link_id, user_id, user_money, pay_points, change_desc, change_code, create_admin, create_date)
@@ -326,7 +330,7 @@ class Pay extends CI_Controller
             $sql_user = "UPDATE ty_user_info SET user_money = user_money + ? WHERE user_id = ?";
             $this->db->query($sql_user, array($total_price, $pay_track->user_id)); 
 	    append_write_file($write_filename, '状态改变' . $sql_user);
-        }
+        }*/
         $this->order_model->update_pay_track_by_sn(array('pay_status' => 1),$track_sn);
         $this->db->trans_commit();   
 	

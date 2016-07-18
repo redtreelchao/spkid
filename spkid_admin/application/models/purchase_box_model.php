@@ -96,7 +96,7 @@ class Purchase_box_model extends CI_Model
         {
             $this->db->update('purchase_box_main',
                     array('product_number'=>$box_main['product_number']+$box_result->product_number
-                           ,'scan_id'=>$box_main['scan_id']
+                           ,'scan_id'=>$box_main['scan_id'], 'delivery_date' => $box_main['delivery_date']
                            ,'scan_end_time'=>$box_main['scan_end_time']),
                     array('box_id'=>$box_result->box_id));
             if(!$this->db->affected_rows())
@@ -133,10 +133,10 @@ class Purchase_box_model extends CI_Model
             {
                 $this->db->update('purchase_box_sub',
                                    array('product_number'=>$product['product_number']+$sub_result->product_number,
-                                   'scan_id'=>$product['scan_id'],
+                                   'production_batch'=>$product['production_batch'],'expire_date'=>$product['expire_date'],
+                                   'scan_id'=>$product['scan_id'], 'check_num' => $product['check_num'],'oqc' => $product['oqc'],
                                    'scan_endtime'=>$product['scan_endtime']),
                                    array('box_sub_id'=>$sub_result->box_sub_id));
-                
                 if(!$this->db->affected_rows())
                 {
                     $this->db->query('rollback');
@@ -204,8 +204,8 @@ class Purchase_box_model extends CI_Model
 	      left join ty_purchase_sub as ps on ps.product_id =  pbs.product_id and ps.color_id = pbs.color_id and ps.size_id=pbs.size_id
               where box_id=$box_id group by pbs.product_id,pbs.color_id,pbs.size_id";*/
         $sql="select ps.product_number as pnum,pbs.product_id,pbs.color_id,pbs.size_id,ps.product_finished_number,ps.expire_date, 
-                pbs.product_number,realname,pi.product_sn,color_name,size_name,pi.product_name,b.brand_name,
-                pbs.provider_barcode,pi.provider_productcode,pbs.over_num,pbs.box_sub_id 
+                pbs.product_number,realname,pi.product_sn,color_name,size_name,pi.product_name,b.brand_name,pbs.check_num, pbs.oqc,
+                pbs.provider_barcode,pi.provider_productcode,pbs.over_num,pbs.box_sub_id,pbs.production_batch,pbs.box_sub_id,pbs.expire_date v_expire_date,pbs.production_batch 
               from ty_purchase_box_sub as pbs
               left join ty_product_info as pi on pbs.product_id=pi.product_id
 	      left join ty_product_brand as b on b.brand_id = pi.brand_id 

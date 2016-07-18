@@ -2,7 +2,7 @@
 
     <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/yyw-app.css')?>">
     <link rel="stylesheet" href="<?php echo static_style_url('mobile/css/tank.css')?>">
-    <!-- 爱牙商城-->
+    <!-- 悦牙商城-->
 	<div class="views">
 	    <div class="view view-main" data-page="index">
 	        <div class="pages">
@@ -11,7 +11,7 @@
 				  	<!-- navbar start -->
 				    <div class="navbar">
 				     	<div class="navbar-inner">
-				           <div class="left"><a class="link icon-only back history_back_for_pay" href="#"> <i class="icon back"></i></a></div>
+				           <div class="left"><a class="link icon-only history-back" href="#"> <i class="icon icon-back"></i></a></div>
 				           <div class="center c_name">订单详情</div>
 				     	</div>
 				    </div>
@@ -25,7 +25,7 @@
 				    </div>
 				    <?php } ?>
 					  
-					<div class="page-content public-bg no-top2">
+					<div class="page-content article-bg2 no-top2">
 					    <div class="page-content-inner no-top">
 					        <div class="content-block article-video no-top">
 					 			<!-- order-details-pic start --> 
@@ -127,10 +127,10 @@
 							  	</div>
 						     	 <!-- Invoiceend -->
 								<?php if ('pending' == $status): ?>
-								<div class="not-paid">
+								<div class="not-paid not-paid2">
 								    <div class="order-details-rr">
 									 	<a href="#" class="item-link item-content open-picker" data-picker=".picker-pay">
-									      	<div class="not-paid-wr clearfix">	           
+									      	<div class="not-paid-wr not-paid-wr2 clearfix">	           
 								                <div id="default_pay" data-id="<?php echo $order->pay_id;?>">
 								                	支付方式： <img src="<?php echo img_url($order->pay_logo);?>" />
 								                	<?php echo $order->pay_name?>
@@ -227,7 +227,9 @@
 	<?php include APPPATH . "views/mobile/common/footer-js.php"; ?>
 	<script type="text/javascript">
 		function j_order_pay(p_order_ids){
+			ga('send', 'event', 'order-pay2', 'click', 'pay-two');
 		    var pay_id = $$("#default_pay").attr('data-id');
+		    myApp.showIndicator();
 		    window.location.href="/order/pay/"+p_order_ids+"/"+pay_id;
 		}
 		//选择支付方式
@@ -242,9 +244,9 @@
 		    myApp.closeModal('.picker-modal.modal-in');
 		});
 
-		$$(document).on('click', '.history_back_for_pay', function(e){
-					location.href = '/user/order';
-				});
+		// $$(document).on('click', '.history_back_for_pay', function(e){
+		// 			location.href = '/user/order';
+		// 		});
 	</script>
 	<!-- 支付弹层结束-->	
 <?php include APPPATH . "views/mobile/common/meiqia.php"; ?>	

@@ -11,9 +11,9 @@
 		{
 			$('span.pro_tip').cluetip({showTitle:false,arrows: true,width:'650px'});
 			$(':input[name=add_start]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
-			$(':input[name=add_end]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
+			$(':input[name=add_ends]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
 			$(':input[name=pay_start]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
-			$(':input[name=pay_end]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
+			$(':input[name=pay_ends]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
 			$(':input[name=shipping_start]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
 			$(':input[name=shipping_end]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
 			$(':input[name=inv_export_date]').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true, nextText:'', prevText:''});
@@ -47,13 +47,13 @@
 			listTable.filter['city'] = $.trim($(':input[name=city]').val());
 			listTable.filter['district'] = $.trim($(':input[name=district]').val());
 			listTable.filter['add_start'] = $.trim($(':input[name=add_start]').val());
-			listTable.filter['add_end'] = $.trim($(':input[name=add_end]').val());
+			listTable.filter['add_end'] = $.trim($(':input[name=add_ends]').val());
 			listTable.filter['pay_start'] = $.trim($(':input[name=pay_start]').val());
-			listTable.filter['pay_end'] = $.trim($(':input[name=pay_end]').val());
+			listTable.filter['pay_end'] = $.trim($(':input[name=pay_ends]').val());
 			listTable.filter['shipping_start'] = $.trim($(':input[name=shipping_start]').val());
 			listTable.filter['shipping_end'] = $.trim($(':input[name=shipping_end]').val());
-                        listTable.filter['odd']=$(':checkbox:checked[name=odd]').length;
-                        listTable.filter['pick']=$(':checkbox:checked[name=pick]').length;
+            listTable.filter['odd']=$(':checkbox:checked[name=odd]').length;
+            listTable.filter['pick']=$(':checkbox:checked[name=pick]').length;
 			listTable.filter['consign']=$(':checkbox:checked[name=consign]').length;
 			listTable.filter['tel'] = $.trim($(':input[name=tel]').val());
 			listTable.filter['mobile'] = $.trim($(':input[name=mobile]').val());
@@ -81,55 +81,55 @@
 		<div class="main_title"><span class="l">订单列表</span><span class="r"><a href="order/add" class="add">新增</a></span></div>
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
-			订单号：<input type="text" class="ts" name="order_sn" value="" style="width:100px;" />
-			购货人手机/Email：<input type="text" class="ts" name="user_name" value="" style="width:100px;" />
-			收货人：<input type="text" class="ts" name="consignee" value="" style="width:60px;" />
-			
-			<?php print form_dropdown('source_id',array(''=>'订单来源')+get_pair($source_list,'source_id','source_name')); ?>
-			<?php print form_dropdown('pay_id',array(''=>'支付方式')+get_pair($pay_list,'pay_id','pay_name')); ?>
-			<?php print form_dropdown('payment_status',array(''=>'付款状态','-1'=>'未付款','1'=>'已付款')); ?>
-			<?php print form_dropdown('shipping_id',array(''=>'配送方式')+get_pair($shipping_list,'shipping_id','shipping_name')); ?>
-			<?php print form_dropdown('order_status2',array('0'=>'订单状态','-1'=>'未客审','1'=>'已客审','4'=>'作废','5'=>'拒收')); ?>
-			<?php print form_dropdown('pay_status2',array('0'=>'财审状态','-1'=>'未财审','1'=>'已财审')); ?>
-			<?php print form_dropdown('shipping_status2',array('0'=>'配送状态','-1'=>'未发货','1'=>'已发货')); ?>
-			<?php print form_dropdown('is_ok',array('0'=>'完结状态','-1'=>'未完结','1'=>'已完结')); ?>
+				订单号：<input type="text" class="ts" name="order_sn" value="" style="width:100px;" />
+				购货人手机/Email：<input type="text" class="ts" name="user_name" value="" style="width:100px;" />
+				收货人：<input type="text" class="ts" name="consignee" value="" style="width:60px;" />
+				
+				<?php print form_dropdown('source_id',array(''=>'订单来源')+get_pair($source_list,'source_id','source_name')); ?>
+				<?php print form_dropdown('pay_id',array(''=>'支付方式')+get_pair($pay_list,'pay_id','pay_name')); ?>
+				<?php print form_dropdown('payment_status',array(''=>'付款状态','-1'=>'未付款','1'=>'已付款')); ?>
+				<?php print form_dropdown('shipping_id',array(''=>'配送方式')+get_pair($shipping_list,'shipping_id','shipping_name')); ?>
+				<?php print form_dropdown('order_status2',array('0'=>'订单状态','-1'=>'未客审','1'=>'已客审','4'=>'作废','5'=>'拒收')); ?>
+				<?php print form_dropdown('pay_status2',array('0'=>'财审状态','-1'=>'未财审','1'=>'已财审')); ?>
+				<?php print form_dropdown('shipping_status2',array('0'=>'配送状态','-1'=>'未发货','1'=>'已发货')); ?>
+				<?php print form_dropdown('is_ok',array('0'=>'完结状态','-1'=>'未完结','1'=>'已完结')); ?>
 				品牌:<?php print form_dropdown('brand_id',array(''=>'品牌')+get_pair($brand_list,'brand_id','brand_name'),''," data-am-selected='{searchBox:1}'"); ?>
 				商品款号：<input type="text" class="ts" name="product_sn" value="" style="width:100px;" />
-			
-			<a href="javascript:void(0);" onclick="switch_advanced_search();" style="color:red;">高级</a>
-			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
-			<div id="advanced_search_div" style="display:none;">
-                        <label><input type="checkbox" name="odd" value="1" />问题单</label>
-                        <label><input type="checkbox" name="pick" value="1" />拣货中</label>
-			<label><input type="checkbox" name="consign" value="1" />虚库销售</label>
-			<a href="javascript:;" onclick="export_inv();return false;">导出当日发票记录</a>
-			发票查询：<?php print form_input('inv_export_date','','style="width:100px;"readonly="readonly"') ?>
-				锁定人：<input type="text" class="ts" name="lock_admin" value="" style="width:100px;" />
-				<select name="category_id">
-					<option value="">分类</option>
-					<?php foreach ($category_list as $cat): ?>
-						<option value="<?php print $cat->category_id; ?>"><?php print "{$cat->level_space} {$cat->category_name}" ?></option>
-					<?php endforeach ?>
-				</select>
-				<?php print form_dropdown('provider_id',array(''=>'供应商')+get_pair($provider_list,'provider_id','provider_name',''," data-am-selected='{searchBox:1}'")); ?>
-				礼包ID：<input type="text" class="ts" name="package_id" value="" style="width:40px;" />
-				<?php print form_dropdown('country',array(''=>'国家')+get_pair($country_list,'region_id','region_name'),'','id="selCountries" onChange="region.changed(this, \'selProvinces\')"'); ?>
-				<?php print form_dropdown('province',array(''=>'省'),'','id="selProvinces" onChange="region.changed(this, \'selCities\')"'); ?>
-				<?php print form_dropdown('city',array(''=>'市'),'','id="selCities" onChange="region.changed(this, \'selDistricts\')"'); ?>
-				<?php print form_dropdown('district',array(''=>'区'),'','id="selDistricts"'); ?>
-				收货人电话号码：<?php print form_input('tel','','style="width:100px;"') ?>
-				收货人手机号：<?php print form_input('mobile','','style="width:100px;"') ?>
-				<br/>
-				下单时间：
-				<?php print form_input('add_start','','style="width:100px;"') ?> - 
-				<?php print form_input('add_end','','style="width:100px;"') ?>
-				财审时间：
-				<?php print form_input('pay_start','','style="width:100px;"') ?> - 
-				<?php print form_input('pay_end','','style="width:100px;"') ?>
-				发货时间：
-				<?php print form_input('shipping_start','','style="width:100px;"') ?> - 
-				<?php print form_input('shipping_end','','style="width:100px;"') ?>
-			</div>
+				
+				<a href="javascript:void(0);" onclick="switch_advanced_search();" style="color:red;">高级</a>
+				<input type="submit" class="am-btn am-btn-primary" value="搜索" />
+				<div id="advanced_search_div" style="display:none;">
+	                <label><input type="checkbox" name="odd" value="1" />问题单</label>
+	                <label><input type="checkbox" name="pick" value="1" />拣货中</label>
+					<label><input type="checkbox" name="consign" value="1" />虚库销售</label>
+					<a href="javascript:;" onclick="export_inv();return false;">导出当日发票记录</a>
+					发票查询：<?php print form_input('inv_export_date','','style="width:100px;"readonly="readonly"') ?>
+					锁定人：<input type="text" class="ts" name="lock_admin" value="" style="width:100px;" />
+					<select name="category_id">
+						<option value="">分类</option>
+						<?php foreach ($category_list as $cat): ?>
+							<option value="<?php print $cat->category_id; ?>"><?php print "{$cat->level_space} {$cat->category_name}" ?></option>
+						<?php endforeach ?>
+					</select>
+					<?php print form_dropdown('provider_id',array(''=>'供应商')+get_pair($provider_list,'provider_id','provider_name',''," data-am-selected='{searchBox:1}'")); ?>
+					礼包ID：<input type="text" class="ts" name="package_id" value="" style="width:40px;" />
+					<?php print form_dropdown('country',array(''=>'国家')+get_pair($country_list,'region_id','region_name'),'','id="selCountries" onChange="region.changed(this, \'selProvinces\')"'); ?>
+					<?php print form_dropdown('province',array(''=>'省'),'','id="selProvinces" onChange="region.changed(this, \'selCities\')"'); ?>
+					<?php print form_dropdown('city',array(''=>'市'),'','id="selCities" onChange="region.changed(this, \'selDistricts\')"'); ?>
+					<?php print form_dropdown('district',array(''=>'区'),'','id="selDistricts"'); ?>
+					收货人电话号码：<?php print form_input('tel','','style="width:100px;"') ?>
+					收货人手机号：<?php print form_input('mobile','','style="width:100px;"') ?>
+					<br/>
+					下单时间：
+					<?php print form_input('add_start','','style="width:100px;"') ?> - 
+					<?php print form_input('add_ends','','style="width:100px;"') ?>
+					财审时间：
+					<?php print form_input('pay_start','','style="width:100px;"') ?> - 
+					<?php print form_input('pay_ends','','style="width:100px;"') ?>
+					发货时间：
+					<?php print form_input('shipping_start','','style="width:100px;"') ?> - 
+					<?php print form_input('shipping_end','','style="width:100px;"') ?>
+				</div>
 			</form>
 		</div>
 		<div class="blank5"></div>

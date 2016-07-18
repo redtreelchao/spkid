@@ -526,6 +526,11 @@ function is_date_string($str)
 {
 	return (boolean) preg_match("/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/",$str);
 }
+//获取微秒时间
+function get_microsecond(){
+    list($s1, $s2) = explode(" ", microtime());
+    return (float)sprintf('%.0f', (floatval($s1) + floatval($s2)) * 1000);
+}
 
 //检查日期字符串及其年月日是否合法
 function is_date_str_check($str ){

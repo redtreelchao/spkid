@@ -56,7 +56,7 @@
                         if(result.error == 0)
                         {
                             var content = result.content;
-                            new $.dialog({ id:'thepanel',height:300,width:500,maxBtn:false, title:'商品所在仓储信息',iconTitle:false,cover:true,html: content}).ShowDialog();
+                            new $.dialog({ id:'thepanel',height:300,width:600,maxBtn:false, title:'商品所在仓储信息',iconTitle:false,cover:true,html: content}).ShowDialog();
                         }
                     }
                  });

@@ -35,6 +35,15 @@
 			  <td class="item_title">点击量:</td>
 			  <td class="item_input"><input name="click_count" class="textbox require" id="click_count" value="0" /></td>
 		  </tr>
+		  <tr>
+			  <td class="item_title">类别:</td>
+			  <td class="item_input">
+			  	<select name="hotword_type" id="hotword_type">
+			  		<option value="0">商品</option>
+			  		<option value="1">课程</option>
+			  	</select>
+			  </td>
+		  </tr>
 			<tr>
 				<td class="item_title">排序号:</td>
 				<td class="item_input"><input name="sort_order" class="textbox require" id="sort_order" value="0" /></td>

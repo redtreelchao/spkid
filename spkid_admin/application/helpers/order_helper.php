@@ -119,8 +119,9 @@ function get_order_perm($order)
     $perms['edit_price'] = $order->order_status==0 && check_perm('order_edit_price');
     $perms['odd'] = !$order->odd && check_perm('order_edit');
     // 未财审订单不允许取消异常标记
-    $perms['odd_cancel'] = $order->odd && check_perm('order_edit') && (false);
+    $perms['odd_cancel'] = $order->odd && check_perm('order_edit');
     $perms['lock'] = !$order->lock_admin && in_array(TRUE,$perms);
+    $perms['paying'] = $order->order_status==0 && check_perm('order_confirm') && !$order->odd && $order->order_amount > 0;
     
     $CI = & get_instance();
     $order->self_lock = $order->lock_admin==$CI->admin_id;
@@ -161,14 +162,15 @@ function calc_shipping_fee($order){
     $weight_obj = $CI->order_model->get_order_product_weight($order->order_id);
     $weight = $weight_obj['weight'];
     $fee = $CI->region_model->get_shipping_fee_province($order->shipping_id, $order->province);
-
+    
     if (!$fee){
         $shipping_fee = SHIPPING_FEE_DEFAULT;
     } else {
-        if ($weight <= 1000){
+        $first_wt = ($fee->first_weight > 0) ? $fee->first_weight : 1000;
+        if ($weight <= $first_wt){
             $shipping_fee = $fee->shipping_fee1;
         } else {
-            $shipping_fee = $fee->shipping_fee1 + ceil($weight-1000)/1000*$fee->shipping_fee2;
+            $shipping_fee = $fee->shipping_fee1 + ceil($weight-$first_wt)/1000*$fee->shipping_fee2;
         }
     }
     return fix_price($shipping_fee);
@@ -196,6 +198,30 @@ function calc_shipping_fee($order){
     if($order->shipping_id==SHIPPING_ID_CAC) $shipping_fee = 0;
     if($order->order_price>=SHIPPING_FREE_ORDER_PRICE && SHIPPING_FREE_ORDER_PRICE!=-1) $shipping_fee = 0;
     */
+}
+//根据重量计算运费
+function calc_weight_shipping_fee($order, $weight){
+    $CI = & get_instance();
+    $CI->load->model('order_model');
+    $CI->load->model('region_model');
+    if (empty($order->shipping_id) || empty($order->province)){
+        return 0;
+    }
+
+    $fee = $CI->region_model->get_shipping_fee_province($order->shipping_id, $order->province);
+    
+    if (!$fee){
+        $shipping_fee = SHIPPING_FEE_DEFAULT;
+    } else {
+        $first_wt = ($fee->first_weight > 0) ? $fee->first_weight : 1000;
+        
+        if ($weight <= $first_wt){
+            $shipping_fee = $fee->shipping_fee1;
+        } else {
+            $shipping_fee = $fee->shipping_fee1 + ceil($weight-$first_wt)/1000*$fee->shipping_fee2;
+        }
+    }
+    return fix_price($shipping_fee);
 }
 
 function get_order_routing($order)

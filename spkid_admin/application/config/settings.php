@@ -7,7 +7,7 @@ defined('SYS_USE_COD_YES') || define('SYS_USE_COD_YES', '1'); // 支持
 defined('SYS_USE_COD_NO') || define('SYS_USE_COD_NO', '2'); // 不支持
 
 //可用券数
-defined('COUPON_MAX_NUM') || define('COUPON_MAX_NUM', '1500'); 
+defined('COUPON_MAX_NUM') || define('COUPON_MAX_NUM', '300'); 
 
 //商品款号生成规则
 defined('PRODUCT_SN_RULE') || define('PRODUCT_SN_RULE', 'cat_rand'); // 商品款号生成规则
@@ -53,7 +53,7 @@ defined('DICT_TYPES_CUST_TYPE') || define('DICT_TYPES_CUST_TYPE', 'cust_type'); 
 defined('DICT_TYPES_UNIT') || define('DICT_TYPES_UNIT', 'unit'); // 单位
 
 //商品表字段对照
-defined('PRODUCT_INFO_FIELD_MAP') || define('PRODUCT_INFO_FIELD_MAP', 'category_id, product_sn, product_name,brand_id,subhead, package_name,desc_material,desc_waterproof,desc_crowd,desc_expected_shipping_date,desc_composition,desc_dimensions,desc_use_explain,desc_function_exlain,desc_notes,register_id ,unit_name ,shop_id ,genre_id,flag_id ,product_weight ,size_image ,price_show ,limit_num,content_source ,is_stop ,provider_id ,provider_productcode ,brand_id'); 
+defined('PRODUCT_INFO_FIELD_MAP') || define('PRODUCT_INFO_FIELD_MAP', 'category_id, product_sn, product_name,brand_id,subhead, package_name,pack_method,desc_material,desc_waterproof,desc_crowd,desc_expected_shipping_date,desc_composition,desc_dimensions,desc_use_explain,desc_function_exlain,desc_notes,register_id ,unit_name ,shop_id ,genre_id,flag_id ,product_weight ,size_image ,price_show ,limit_num,content_source ,is_stop ,provider_id ,provider_productcode ,brand_id'); 
 
 //订单客户信息对照
 defined('SYS_ORDER_CLIENT_MAP') || define('SYS_ORDER_CLIENT_MAP', 'name,mobile_phone,field1,field2,field3,field4,field5,field6,field7,field8,field9,field10'); 
@@ -66,3 +66,32 @@ defined('GENRE_COURSE_ID') || define('GENRE_COURSE_ID', '2');
 
 //课程默认品牌
 defined('DEFAULT_BRAND_ID') || define('DEFAULT_BRAND_ID', '112'); 
+
+//留言关联类型
+$liuyan_rel_types = array (
+  1 => '商品',
+  2 => '礼包',
+  3 => '课程',
+  4 => '意见反馈',
+  5 => '品牌',
+);
+defined('LIUYAN_REL_TYPES_1') || define('LIUYAN_REL_TYPES_1', '1'); // 商品
+defined('LIUYAN_REL_TYPES_2') || define('LIUYAN_REL_TYPES_2', '2'); // 礼包
+defined('LIUYAN_REL_TYPES_3') || define('LIUYAN_REL_TYPES_3', '3'); // 课程
+defined('LIUYAN_REL_TYPES_4') || define('LIUYAN_REL_TYPES_4', '4'); // 意见反馈
+defined('LIUYAN_REL_TYPES_5') || define('LIUYAN_REL_TYPES_5', '5'); // 品牌
+
+//留言类型
+$liuyan_types = array (
+  1 => '咨询/留言',
+  2 => '评价',
+  3 => '测评',
+  4 => '询价',
+);
+defined('LIUYAN_TYPES_1') || define('LIUYAN_TYPES_1', '1'); // 咨询/留言
+defined('LIUYAN_TYPES_2') || define('LIUYAN_TYPES_2', '2'); // 评价
+defined('LIUYAN_TYPES_3') || define('LIUYAN_TYPES_3', '3'); // 测评
+defined('LIUYAN_TYPES_4') || define('LIUYAN_TYPES_4', '4'); // 询价
+
+//电话订单来源ID
+defined('ORDER_SOURCE_TEL_ID') || define('ORDER_SOURCE_TEL_ID', '2'); 

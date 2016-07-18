@@ -10,6 +10,7 @@ class Special_model extends CI_Model
 	{
 		parent::__construct();
 		$this->_db = $db ? $db : $this->db;
+		$this->user_id = $this->session->userdata('user_id');
 	}
 
 	public function all_special_list($rush_id){
@@ -37,4 +38,36 @@ class Special_model extends CI_Model
 		return $query->row();
 	}
 
+	//获取限时抢购活动信息
+	public function limit_sale($product_id){
+		$sql = " SELECT * FROM ".$this->_db->dbprefix('front_campaign')." WHERE campaign_type = 3 AND is_use = 1 AND start_date <=NOW() AND end_date >=NOW() AND product_id = ".$product_id;
+		$query = $this->_db->query($sql);
+		return $query->row();
+	}
+
+	//获取限时抢购 的 商品数量 信息
+	public function num_sale($product_id){
+		$sql = " SELECT COUNT(id) num FROM ".$this->_db->dbprefix('front_sale')." WHERE product_id = ".$product_id." AND pay_status = 1 AND pay_date BETWEEN DATE_FORMAT(NOW(),'%Y-%m-%d 00:00:00') AND DATE_FORMAT(NOW(),'%Y-%m-%d 23:59:59')";
+		$query = $this->_db->query($sql);
+		return $query->row(); 
+	}
+
+	// 向限时抢购表中插入记录
+	public function insert_sale($sale_data){
+		$this->_db->insert('front_sale',$sale_data);
+		return $this->_db->insert_id();
+	}
+
+	//当用户 抢购付款后，记录表修改已支付状态
+	public function update_sale($order_id,$user_id)
+	{
+		$this->_db->update('front_sale',array('pay_status' => 1,'pay_date' => date('Y-m-d H:i:s')),array('order_id'=>$order_id,'user_id'=>$user_id));
+	}
+
+	//获取已抢购用户的id
+	public function user_data(){
+		$sql = " SELECT user_id FROM ".$this->_db->dbprefix('front_sale')." WHERE pay_status = 1 AND pay_date BETWEEN DATE_FORMAT(NOW(),'%Y-%m-%d 00:00:00') AND DATE_FORMAT(NOW(),'%Y-%m-%d 23:59:59')";
+		$query = $this->_db->query($sql);
+		return $query->result();
+	}
 }

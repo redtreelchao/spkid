@@ -4,7 +4,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta http-equiv=Content-Type content="text/html;charset=utf-8">
 
-<title><?php echo isset($title) ? $title : '爱牙网'?></title>
+<title><?php echo isset($title) ? $title : '悦牙网'?></title>
 <meta name="Keywords" content="<?php echo isset($keywords) ? $keywords : '';?>">
 <meta name="Description" content="<?php echo isset($description) ? $description : '';?>">
 
@@ -16,6 +16,18 @@
 <script type="text/javascript" src="<?php echo static_style_url('pc/js/jquery-migrate-1.2.1.min.js?v=version')?>"></script>
 <script src="<?php echo static_style_url('pc/js/search.js?v=version')?>" type="text/javascript"></script>
 <script src="<?php echo static_style_url('pc/js/home.js?v=version')?>" type="text/javascript"></script>
+
+<script>
+$(function(){
+	//给这个menu样式下的li 的a标签 绑定点击事件
+	$('.menu li a').bind("click",function(){
+		//移除menu样式下所有//
+		$('.menu li a').removeClass('active');
+		$(this).addClass('active');
+	});
+});
+</script>
+
 <!--[if lte IE 7]>
 <div class="goodbye-modal hide"></div>
 <div class="goodbye-ie hide" id="goodbyeIE">
@@ -40,50 +52,35 @@
 </head>
 
 <body>
-<!--nav start-->
-<div id="back-to-top"><a href="#top"><span></span></a></div>  
-<div class="nav-wrap">
-     <div class="nav clearfix">
-          <a href="/" class="logo">
-            <img src="<?php echo static_style_url('pc/images/logo.png?v=version')?>">
-          </a>
-          <div class="nav-right">
-              <div class="textbox">
-                  <div class="nav-search" style="position:relative">
-                  
-					  <input name="" type="search" class="nav-search-input" id="navtion-input" value="" style="">
-					  <ul style="" class="autocomplete">
-					    	
-					  </ul>
-                  	<span class="search-ico search_confirm"></span>
-                  </div>
-              </div>
-              <div class="nav-lb">
-                  <div class="naver-login">
-                  
-                  </div>
-                  <a href="/user/order_list" class="nav-order">我的订单</a>
-                  <a href="/cart" class="nav-cart">购物车</a>
-              </div>
-          </div>
+<!--header start-->
+<div class="header">
+    <div class="nav clearfix">
+        <p class="nav-left">
+        	
+        </p>
+        <div class="nav-func">
+            
+        </div>    
     </div>
+</div>
 <!--header end-->
-<?php 
-if(!isset($index)) $index = 0;$menus = array(array('name' => '首页', 'href' => '/'), array('name' => '全部商品', 'href' => '/category-0-0-0-0-11.html'), array('name' => '全部展品', 'href' => '/brand/lists'), array('name' => '课程表', 'href' => '/index/course.html'), array('name' => '视频', 'href' => '/video.html')
-//, array('name' => '新牙医同盟会', 'href' => '#')
-);?>
-<!--menu start-->
+<?php if(!isset($index)) $index = 0;$menus = array(array('name' => '首页', 'href' => '/'), array('name' => '全部商品', 'href' => '/category-0-0-0-0-11.html'), array('name' => '全部展品', 'href' => '/brand/lists'), array('name' => '课程表', 'href' => '/index/course.html'), array('name' => '视频', 'href' => '/video.html'));?>
+<div class="navtion clearfix">
+    <div id="logo"><a href="/" class="logo">悦牙网</a></div>
     <div class="menu">
-    <ul class="menu-list">
-<?php 
-foreach($menus as $key => $m):
-    if ($index == $key):?>
-        <li class="active"><a href="<?php echo $m['href']?>"><?php echo $m['name']?></a></li>
-<?php else:?>
-        <li><a href="<?php echo $m['href']?>"><?php echo $m['name']?></a></li>
-<?php endif;endforeach?>
-         </ul>
+        <ul>
+          <?php foreach($menus as $key => $m): if ($index == $key):?>
+            <li><a class="active" href="<?php echo $m['href']?>"><?php echo $m['name']?></a></li>
+          <?php else:?>
+            <li><a href="<?php echo $m['href']?>"><?php echo $m['name']?></a></li>
+          <?php endif;endforeach?>
+        </ul>
     </div>
-<!--menu end-->
-
+    <div class="navtion-search">
+        <div class="search-form nav-search" style="position:relative">
+            <input name="" type="search" class="search-text nav-search-inpu" id="navtion-input" value="">
+            <ul style="" class="autocomplete"></ul>
+            <input name="" type="submit" class="nav-gg search-btn search_confirm">
+        </div>
+    </div>
 </div>

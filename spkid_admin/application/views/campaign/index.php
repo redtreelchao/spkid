@@ -33,7 +33,12 @@
 		//]]>
 	</script>
 	<div class="main">
-		<div class="main_title"><span class="l">活动列表</span><span class="r"><a href="campaign/add/2" class="add">免邮</a></span><span class="r"><a href="campaign/add" class="add">新增</a></span></div>
+		<div class="main_title">
+			<span class="l">活动列表</span>
+			<span class="r"><a href="campaign/add/3" class="add">抢购</a></span>
+			<span class="r"><a href="campaign/add/2" class="add">免邮</a></span>
+			<span class="r"><a href="campaign/add" class="add">新增</a></span>
+		</div>
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
 			活动名称：<input type="text" class="ts" name="campaign_name" value="" style="width:100px;" />
@@ -55,7 +60,7 @@
 					<th width="68">活动名称</th>
 					<th width="68">活动类型</th>
 					<th width="68">最小金额</th>
-					<th width="85">赠送/免邮商品</th>
+					<th width="85">赠送/免邮/抢购</th>
 					<th width="69">开始时间</th>
 					<th>结束时间</th>
 					<th width="45">启用</th>

@@ -63,6 +63,7 @@
 				<span style="color: #FF0000;font: 12px verdana;">*</span>期间：<input type="text" name="start_time" id="start_time" value="<?php echo $start_time;?>" /><input type="text" name="end_time" id="end_time" value="<?php echo $end_time;?>" />
 
      			商品款号 <input type="text" name="product_sn" value="<?php echo $product_sn;?>" size="15" />
+                        商品ID <input type="text" name="product_id" value="<?php echo $product_id;?>" size="15" />
     			<!-- 关键字 -->
     			商品名称 <input type="text" name="keyword" value="<?php echo $keyword;?>" size="15" />
 

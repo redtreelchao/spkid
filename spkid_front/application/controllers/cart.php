@@ -1323,10 +1323,11 @@ class Cart extends CI_Controller {
         if (!$fee){
             $result = SHIPPING_FEE_DEFAULT;
         } else {
-            if ($cart_summary['product_weight'] <= 1000){
+            $first_wt = ($fee->first_weight > 0) ? $fee->first_weight : 1000;
+            if ($cart_summary['product_weight'] <= $first_wt){
                 $result = $fee->shipping_fee1;
             } else {
-                $result = $fee->shipping_fee1 + ceil($cart_summary['product_weight']-1000)/1000*$fee->shipping_fee2;
+                $result = $fee->shipping_fee1 + ceil($cart_summary['product_weight']-$first_wt)/1000*$fee->shipping_fee2;
             }
         }
 
@@ -1555,5 +1556,17 @@ class Cart extends CI_Controller {
         $this->db->trans_commit();
 
         print json_encode(array('err' => 0, 'msg' => '', 'order_id' => implode('-', $arr_order_id)));
+    }
+
+
+    //购物车数量 
+    function get_cart_num(){
+        $cart_sn = get_cart_sn();
+        $cart_list = $this->cart_model->cart_info($cart_sn, TRUE);
+        // var_dump($cart_list);
+        $checkout = get_checkout();
+        $cart_summary = summary_cart($cart_list, $checkout['payment']['voucher']);
+        // var_dump($cart_summary);
+        print json_encode(array('err' => 0, 'msg' => '', 'cart_num' => $cart_summary['product_num']));
     }    
 }

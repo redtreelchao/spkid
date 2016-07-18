@@ -2,6 +2,10 @@ var $$ = Dom7;
 var isEnter = false;
 var fv, ft, sv, ft;
 window.search_interval = null;
+
+if(typeof search_type == 'undefined') {
+	search_type = 0;		
+}
 function unique(arr) {
     var result = [], hash = {};
     for (var i = 0, elem; (elem = arr[i]) != null; i++) {
@@ -16,16 +20,25 @@ function unique(arr) {
 function jump2SearchResult(kw) {
 
   if (localStorage) {
-    var history = localStorage.getItem('search_history');
+   
+    if (search_type == 1){
+        var history = localStorage.getItem('search_course_history');
+    } else {
+        var history = localStorage.getItem('search_history');
+    }
     if(!history || history.indexOf(kw) == -1){
       var str = !history ? kw : history + '+++' + kw;
-
-      localStorage.setItem('search_history', str);
+      if (search_type == 1){
+          localStorage.setItem('search_course_history', str);
+      } else {
+          localStorage.setItem('search_history', str);
+      }
     }
     
-  };  
-  location.href = '/searchResult?kw=' + kw;
-  
+  };
+  var v_url = '/searchResult?kw=' + kw+'&search_type='+search_type;
+  if (search_type == 1) v_url = v_url+'&sort=10';
+  location.href = v_url;
 }
 
 //热搜 只针对产品搜索
@@ -37,7 +50,11 @@ $$(document).on('click', '.hotword .button', function (e) {
 
 function showSearchHistory() {
   if (localStorage) {
-    var hotWords = localStorage.getItem('search_history');
+    if (search_type == 1){
+        var hotWords = localStorage.getItem('search_course_history');
+    } else {
+        var hotWords = localStorage.getItem('search_history');
+    }
     if (!hotWords) {
       //当前没有搜索历史
       return;
@@ -60,17 +77,22 @@ function showSearchHistory() {
 showSearchHistory();
 
 $$(document).on('click', '.history-rm', function(e){
-    $$(this).parent().remove();
-    var str = '';
-    $$.each($$('.historical > ul > li > .history-kw'), function(index, value){
+    $$(this).parent().remove();    
+    var str = '';   
+    $$('.historical-wz').each(function(index, obj){
         if (index == 0) {
-            str += (value.innerText ? value.innerText : '');
+            str += ($$(obj).html() ? $$(obj).html() : '');
         } else {
-            str += '+++' + (value.innerText ? value.innerText : '');
+            str += '+++' + ($$(obj).html() ? $$(obj).html() : '');
         }
     });
+    
     if (localStorage) {
-        localStorage.setItem('search_history', str);
+        if (search_type == 1){
+            localStorage.setItem('search_course_history', str);
+        } else {
+            localStorage.setItem('search_history', str);
+        }
     };
 
 });
@@ -89,7 +111,11 @@ $$(document).on('click', 'a.historical-wz', function(e){
 
 $$('.clear-history-but').on('click', function(e){
   if (localStorage) {
-    localStorage.setItem('search_history', '');
+      if (search_type == 1) {
+          localStorage.setItem('search_course_history', '');
+      } else {
+          localStorage.setItem('search_history', '');
+      }
     $$('.historical').html('');
   };
 });
@@ -122,7 +148,7 @@ var searchAjax = function(kw){
   
   isFinished = true;
   console.log('set isFinished to true');
-  var pinyin = kw;//ConvertPinyin(kw);
+  var pinyin = ConvertPinyin(kw);
   if (pinyin == '') {
    $$('.searchResult').html('');
     return;
@@ -130,7 +156,7 @@ var searchAjax = function(kw){
 
   var _this = this;
   $$.ajax({
-    url:'/product/autoComplete',
+    url:'/product/searchAjax',
     type:'POST',
     data:'data=' + pinyin,
     success:function(data){

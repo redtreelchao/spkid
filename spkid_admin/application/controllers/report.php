@@ -39,6 +39,17 @@ class Report extends CI_Controller
         $this->load->view('report/report_list');
     }
 
+    public function order_report()
+    {
+        auth(array('order_profits_detail_report','order_profits_summary_report','order_profits_summary_report_to', 'order_profits_summary_report_to2'));
+        $this->load->helper('perms_helper');
+        $this->load->vars('perms' , get_order_profits_perm());
+        $all_list = $this->report_model->all_order();
+        $this->load->vars('list', $all_list);
+        $this->load->vars('report_type', '订单利润报表');
+        $this->load->view('report/report_list');
+    }
+
     public function finance_invoicing_de_report()
     {
 		auth('finance_invoicing_de_report');
@@ -51,6 +62,10 @@ class Report extends CI_Controller
         if(!empty($brand_id)) $filter['brand_id'] = $brand_id;
         $product_sn = $this->input->post("product_sn");
         if(!empty($product_sn)) $filter['product_sn'] = $product_sn;
+        
+        $product_id = $this->input->post("product_id");
+        if(!empty($product_id)) $filter['product_id'] = $product_id;
+        
         $keyword = $this->input->post("keyword");
         if(!empty($keyword)) $filter['keyword'] = $keyword;
         $color_id = $this->input->post("color_id");
@@ -72,6 +87,7 @@ class Report extends CI_Controller
         //$filter = get_pager_param($filter);
         $data = $this->report_model->finance_invoicing_de_report($filter);
 		$data['product_sn']=$product_sn;
+                $data['product_id']=$product_id;
 		$data['keyword']=$keyword;
 		$data['brand_id']=$brand_id;
 		$data['category_id']=$category_id;
@@ -137,6 +153,8 @@ class Report extends CI_Controller
     {
 		auth('invoicing_details_report');
         $this->load->helper('perms_helper');
+	$this->load->model('color_model');
+	$this->load->model('size_model');
         $this->load->vars('perms' , get_depot_perm());
         $filter = $this->uri->uri_to_assoc(3);
         $category_id = $this->input->post("category_id");
@@ -180,8 +198,8 @@ class Report extends CI_Controller
 
         $this->load->vars('cat_list',$this->report_model->cat_list(0,$category_id));
         $this->load->vars('brand_list',$this->report_model->brand_list());
-        $this->load->vars('color_list',$this->report_model->color_list());
-        $this->load->vars('size_list',$this->report_model->size_list());
+        $this->load->vars('color_list',$this->color_model->color_list());
+        $this->load->vars('size_list',$this->size_model->size_list());
         $this->load->vars('coop_list',$this->report_model->coop_list());
         $this->load->vars('depot_list',$this->report_model->depot_list());
         $this->load->view('report/invoicing_details_report', $data);
@@ -264,6 +282,8 @@ class Report extends CI_Controller
 		$data['depot_id']=$depot_id;
 		$data['onsale_id']=$onsale_id;
 		$data['product_sn']=$product_sn;
+                $data['start_time']=$start_time;
+                $data['end_time']=$end_time;
 
         $this->load->vars('cat_list',$this->report_model->cat_list(0,$category_id));
         $this->load->vars('brand_list',$this->report_model->brand_list());
@@ -322,5 +342,402 @@ class Report extends CI_Controller
         $data['weekly_pv'] = $this->report_model->get_weekly_pv();
         $data['monthly_pv'] = $this->report_model->get_monthly_pv();
         $this->load->view('report/pv_report', $data);
+    }
+
+    public function order_profits_detail_report()
+    {
+        auth('order_profits_detail_report');
+        $this->load->helper('perms_helper');
+        $this->load->vars('perms' , get_order_profits_perm());
+        $filter = $this->uri->uri_to_assoc(3);
+        $order_sn = $this->input->post("order_sn");
+        if(!empty($order_sn)) $filter['order_sn'] = $order_sn;
+        $category_id = $this->input->post("category_id");
+        if(!empty($category_id)) $filter['category_id'] = $category_id;
+        $brand_id = $this->input->post("brand_id");
+        if(!empty($brand_id)) $filter['brand_id'] = $brand_id;
+        $product_sn = $this->input->post("product_sn");
+        if(!empty($product_sn)) $filter['product_sn'] = $product_sn;
+        $provider_id = $this->input->post("provider_id");
+        if(!empty($provider_id)) $filter['provider_id'] = $provider_id;
+        $product_id = $this->input->post("product_id");
+        if(!empty($product_id)) $filter['product_id'] = $product_id;        
+        $keyword = $this->input->post("keyword");
+        if(!empty($keyword)) $filter['keyword'] = $keyword;
+        $start_time = $this->input->post("start_time");
+        if(!empty($start_time)) $filter['start_time'] = $start_time;
+        $end_time = $this->input->post("end_time");
+        if(!empty($end_time)) $filter['end_time'] = $end_time;
+        $is_start_time = $this->input->post("is_start_time");
+        if(!empty($is_start_time)) $filter['is_start_time'] = $is_start_time;
+        $is_end_time = $this->input->post("is_end_time");
+        if(!empty($is_end_time)) $filter['is_end_time'] = $is_end_time;
+
+        $data = $this->report_model->order_profits_detail_report($filter);
+        $data['order_sn']=$order_sn;
+        $data['product_sn']=$product_sn;
+        $data['product_id']=$product_id;
+        $data['keyword']=$keyword;
+        $data['brand_id']=$brand_id;
+        $data['provider_id']=$provider_id;
+        $data['category_id']=$category_id;
+        $data['start_time']=$start_time;
+        $data['end_time']=$end_time;
+        $data['is_start_time']=$is_start_time;
+        $data['is_end_time']=$is_end_time;
+        
+        if ($this->input->post('export')){
+            $data['tag'] = '?';
+            $this->load->view('report/order_profits_detail_report_export', $data);
+            $file_name = "order_profits_detail_report_export.xls";
+            header("Content-type:application/vnd.ms-excel");
+            header("Content-Disposition:attachment;filename=".$file_name);           
+            return;
+        }
+        
+        $this->load->helper('category');
+        $this->load->model('category_model');
+
+        $this->load->vars('all_category',category_flatten(category_tree($this->category_model->all_category()),'-- '));
+        $this->load->vars('brand_list',$this->report_model->brand_list());
+        $this->load->vars('provider_list',$this->report_model->provider_list());
+        $this->load->view('report/order_profits_detail_report', $data);
+    }
+
+    public function order_profits_return_report()
+    {
+        auth('order_profits_return_report');
+        $this->load->helper('perms_helper');
+        $this->load->vars('perms' , get_order_profits_perm());
+        $filter = $this->uri->uri_to_assoc(3);
+        
+        $order_sn = $this->input->post("order_sn");
+        if(!empty($order_sn)) $filter['order_sn'] = $order_sn;
+        $admin_name = $this->input->post("admin_name");
+        if(!empty($admin_name)) $filter['admin_name'] = $admin_name;
+        $start_time = $this->input->post("start_time");
+        if(!empty($start_time)) $filter['start_time'] = $start_time;
+        $end_time = $this->input->post("end_time");
+        if(!empty($end_time)) $filter['end_time'] = $end_time;
+        $is_start_time = $this->input->post("is_start_time");
+        if(!empty($is_start_time)) $filter['is_start_time'] = $is_start_time;
+        $is_end_time = $this->input->post("is_end_time");
+        if(!empty($is_end_time)) $filter['is_end_time'] = $is_end_time;
+
+        $data = $this->report_model->order_profits_return_report($filter);
+        $data['order_sn']=$order_sn;
+        $data['admin_name']=$admin_name;
+        $data['start_time']=$start_time;
+        $data['end_time']=$end_time;
+        $data['is_start_time']=$is_start_time;
+        $data['is_end_time']=$is_end_time;
+        
+	if ($this->input->post('export')){
+            $data['tag'] = '?';
+            $this->load->view('report/order_profits_return_report_export', $data);
+            $file_name = "order_profits_return_report_export.xls";
+            header("Content-type:application/vnd.ms-excel");
+            header("Content-Disposition:attachment;filename=".$file_name);           
+            return;
+        }        
+        $this->load->view('report/order_profits_return_report', $data);
+    }
+
+    public function order_profits_summary_report_to()
+    {
+        auth('order_profits_summary_report_to');
+        $this->load->helper('perms_helper');
+        $this->load->helper('order_helper');
+        $this->load->vars('perms' , get_order_profits_perm());
+        $filter = $this->uri->uri_to_assoc(3);
+        
+        $order_sn = $this->input->post("order_sn");
+        if(!empty($order_sn)) $filter['order_sn'] = $order_sn;
+        $admin_name = $this->input->post("admin_name");
+        if(!empty($admin_name)) $filter['admin_name'] = $admin_name;
+        $start_time = $this->input->post("start_time");
+        if(!empty($start_time)) $filter['start_time'] = $start_time;
+        $end_time = $this->input->post("end_time");
+        if(!empty($end_time)) $filter['end_time'] = $end_time;
+        $is_start_time = $this->input->post("is_start_time");
+        if(!empty($is_start_time)) $filter['is_start_time'] = $is_start_time;
+        $is_end_time = $this->input->post("is_end_time");
+        if(!empty($is_end_time)) $filter['is_end_time'] = $is_end_time;
+        
+        $data = $this->report_model->order_profits_summary_report_to($filter);
+        $data['order_sn']=$order_sn;
+        $data['admin_name']=$admin_name;
+        $data['start_time']=$start_time;
+        $data['end_time']=$end_time;
+        $data['is_start_time']=$is_start_time;
+        $data['is_end_time']=$is_end_time;
+        if ($this->input->post('export')){
+            $data['tag'] = '?';
+            $this->load->view('report/order_profits_summary_report_to_export', $data);
+            $file_name = "order_profits_summary_report_to_export.xls";
+            header("Content-type:application/vnd.ms-excel");
+            header("Content-Disposition:attachment;filename=".$file_name);           
+            return;
+        }
+        $this->load->view('report/order_profits_summary_report_to', $data);
+    }
+
+    public function order_profits_summary_report_to2()
+    {
+        auth('order_profits_summary_report_to2');
+        $this->load->helper('perms_helper');
+        $this->load->helper('order_helper');
+        $this->load->vars('perms' , get_order_profits_perm());
+        $filter = $this->uri->uri_to_assoc(3);
+        
+        $order_sn = $this->input->post("order_sn");
+        if(!empty($order_sn)) $filter['order_sn'] = $order_sn;
+        $admin_name = $this->input->post("admin_name");
+        if(!empty($admin_name)) $filter['admin_name'] = $admin_name;
+        $start_time = $this->input->post("start_time");
+        if(!empty($start_time)) $filter['start_time'] = $start_time;
+        $end_time = $this->input->post("end_time");
+        if(!empty($end_time)) $filter['end_time'] = $end_time;
+        $is_start_time = $this->input->post("is_start_time");
+        if(!empty($is_start_time)) $filter['is_start_time'] = $is_start_time;
+        $is_end_time = $this->input->post("is_end_time");
+        if(!empty($is_end_time)) $filter['is_end_time'] = $is_end_time;
+        
+        $data = $this->report_model->order_profits_summary_report_to($filter);
+        $data['order_sn']=$order_sn;
+        $data['admin_name']=$admin_name;
+        $data['start_time']=$start_time;
+        $data['end_time']=$end_time;
+        $data['is_start_time']=$is_start_time;
+        $data['is_end_time']=$is_end_time;
+        if ($this->input->post('export')){
+            $data['tag'] = '?';
+            $this->load->view('report/order_profits_summary_report_to2_export', $data);
+            $file_name = "order_profits_summary_report_to2_export.xls";
+            header("Content-type:application/vnd.ms-excel");
+            header("Content-Disposition:attachment;filename=".$file_name);           
+            return;
+        }
+        $this->load->view('report/order_profits_summary_report_to2', $data);
+    }    
+	//库存明细表
+    public function inventory_details_report()
+    {
+	auth('inventory_details_report');
+        $this->load->helper('perms_helper');
+        $this->load->vars('perms' , get_finance_perm());
+        $filter = $this->uri->uri_to_assoc(3);
+
+        $brand_id = $this->input->post("brand_id");
+        if(!empty($brand_id)) $filter['brand_id'] = $brand_id;
+        $product_sn = $this->input->post("product_sn");
+        if(!empty($product_sn)) $filter['product_sn'] = $product_sn;
+        
+        $sku = $this->input->post("sku");
+        if(!empty($sku)) $filter['sku'] = $sku;
+                
+        $keyword = $this->input->post("keyword");
+        if(!empty($keyword)) $filter['keyword'] = $keyword;
+        
+        $is_expire_date = $this->input->post("is_expire_date");
+        if(!empty($is_expire_date)) $filter['is_expire_date'] = (int)$is_expire_date;
+        
+        $provider_barcode = $this->input->post("provider_barcode");
+        if(!empty($provider_barcode)) $filter['provider_barcode'] = $provider_barcode;
+        
+        $actual_stock = $this->input->post("actual_stock");
+        if(!empty($actual_stock)) $filter['actual_stock'] = $actual_stock;
+        
+        $avail_stock = $this->input->post("avail_stock");
+        if(!empty($avail_stock)) $filter['avail_stock'] = $avail_stock;
+        
+        $order_stock = $this->input->post("order_stock");
+        if(!empty($order_stock)) $filter['order_stock'] = $order_stock;
+
+        //$start_time = $this->input->post("start_time");
+        //if(!empty($start_time)) $filter['start_time'] = $start_time;
+        $end_time = $this->input->post("end_time");
+        if(!empty($end_time)) $filter['end_time'] = $end_time;
+        
+        $e_start_time = $this->input->post("e_start_time");
+        if(!empty($e_start_time)) $filter['e_start_time'] = $e_start_time;
+        $e_end_time = $this->input->post("e_end_time");
+        if(!empty($e_end_time)) $filter['e_end_time'] = $e_end_time;
+
+        $data = $this->report_model->inventory_details_report($filter);
+        
+        $data['product_sn']=$product_sn;
+        $data['sku']=$sku;
+        $data['provider_barcode']=$provider_barcode;
+        $data['keyword']=$keyword;
+        $data['brand_id']=$brand_id;
+        $data['is_expire_date']=$is_expire_date;
+        //$data['start_time']=$start_time;
+        $data['end_time']=$end_time;
+        $data['e_start_time']=$e_start_time;
+        $data['e_end_time']=$e_end_time;
+        $data['actual_stock']=$actual_stock;
+        $data['avail_stock']=$avail_stock;
+        $data['order_stock']=$order_stock;
+        if ($this->input->post('export')){
+            $data['tag'] = '?';
+            $this->load->view('report/inventory_details_report_export', $data);
+            $file_name = "inventory_details_report_export.xls";
+            header("Content-type:application/vnd.ms-excel");
+            header("Content-Disposition:attachment;filename=".$file_name);           
+            return;
+        }
+        $this->load->vars('brand_list',$this->report_model->brand_list());
+        $this->load->view('report/inventory_details_report', $data);
+    }
+
+    public function order_profits_sales_report()
+    {
+        auth('order_profits_sales_report');
+        $this->load->helper('perms_helper');
+        $this->load->helper('order_helper');
+        $this->load->vars('perms' , get_order_profits_perm());
+        $filter = $this->uri->uri_to_assoc(3);
+        
+        $order_sn = $this->input->post("order_sn");
+        if(!empty($order_sn)) $filter['order_sn'] = $order_sn;
+        $admin_name = $this->input->post("admin_name");
+        if(!empty($admin_name)) $filter['admin_name'] = $admin_name;
+        $start_time = $this->input->post("start_time");
+        if(!empty($start_time)) $filter['start_time'] = $start_time;
+        $end_time = $this->input->post("end_time");
+        if(!empty($end_time)) $filter['end_time'] = $end_time;
+
+
+        $data = $this->report_model->order_profits_sales_report($filter);
+        $data['order_sn']=$order_sn;
+        $data['admin_name']=$admin_name;
+        $data['start_time']=$start_time;
+        $data['end_time']=$end_time;
+        
+	if ($this->input->post('export')){
+            $data['tag'] = '?';
+            $this->load->view('report/order_profits_sales_report_export', $data);
+            $file_name = "order_profits_sales_report_export.xls";
+            header("Content-type:application/vnd.ms-excel");
+            header("Content-Disposition:attachment;filename=".$file_name);           
+            return;
+        }
+
+        $this->load->view('report/order_profits_sales_report', $data);
+    }
+
+    public function purchase_main_report()
+    {   
+        auth('purchase_main_report');
+        $this->load->model('admin_model');
+        $this->load->helper('perms_helper');
+        $this->load->helper('order_helper');
+        $this->load->vars('perms' , get_depot_perm());
+        $filter = $this->uri->uri_to_assoc(3);
+        
+        $batch_code = $this->input->post("batch_code");
+        if(!empty($batch_code)) $filter['batch_code'] = $batch_code;
+        $purchase_code = $this->input->post("purchase_code");
+        if(!empty($purchase_code)) $filter['purchase_code'] = $purchase_code;
+        $provider_id = $this->input->post("provider_id");
+        if(!empty($provider_id)) $filter['provider_id'] = $provider_id;
+        $admin_name = $this->input->post("admin_name");
+        if(!empty($admin_name)) $filter['admin_name'] = $admin_name;
+        $start_time = $this->input->post("start_time");
+        if(!empty($start_time)) $filter['start_time'] = $start_time;
+        $end_time = $this->input->post("end_time");
+        if(!empty($end_time)) $filter['end_time'] = $end_time;
+
+        $data = $this->report_model->purchase_main_report($filter);
+        $data['batch_code']=$batch_code;
+        $data['purchase_code']=$purchase_code;
+        $data['admin_name']=$admin_name;
+        $data['start_time']=$start_time;
+        $data['end_time']=$end_time;
+        
+	if ($this->input->post('export')){
+            $data['tag'] = '?';
+            $this->load->view('report/purchase_main_report_export', $data);
+            $file_name = "purchase_main_report_export.xls";
+            header("Content-type:application/vnd.ms-excel");
+            header("Content-Disposition:attachment;filename=".$file_name);           
+            return;
+        }
+        
+        $this->load->vars('all_admin', $this->admin_model->all_admin(array('user_status' => 1)));
+        $this->load->vars('provider_list',$this->report_model->provider_list());
+        $this->load->view('report/purchase_main_report', $data);        
+    }
+
+    public function purchase_main_detail_report()
+    {   
+        auth('purchase_main_detail_report');
+        $this->load->model('admin_model');
+        $this->load->helper('perms_helper');
+        $this->load->helper('order_helper');
+        $this->load->vars('perms' , get_depot_perm());
+        $filter = $this->uri->uri_to_assoc(3);
+        
+        $brand_id = $this->input->post("brand_id");
+        if(!empty($brand_id)) $filter['brand_id'] = $brand_id;
+        $product_sn = $this->input->post("product_sn");
+        if(!empty($product_sn)) $filter['product_sn'] = $product_sn;
+        $product_name = $this->input->post("product_name");
+        if(!empty($product_name)) $filter['product_name'] = $product_name;
+        
+        $medical1 = $this->input->post("medical1");
+        if(!empty($medical1)) $filter['medical1'] = $medical1;
+        
+        $batch_code = $this->input->post("batch_code");
+        if(!empty($batch_code)) $filter['batch_code'] = $batch_code;
+        $purchase_code = $this->input->post("purchase_code");
+        if(!empty($purchase_code)) $filter['purchase_code'] = $purchase_code;
+        $provider_id = $this->input->post("provider_id");
+        if(!empty($provider_id)) $filter['provider_id'] = $provider_id;
+        $admin_name = $this->input->post("admin_name");
+        if(!empty($admin_name)) $filter['admin_name'] = $admin_name;
+        $start_time = $this->input->post("start_time");
+        if(!empty($start_time)) $filter['start_time'] = $start_time;
+        $end_time = $this->input->post("end_time");
+        if(!empty($end_time)) $filter['end_time'] = $end_time;
+        
+        $product_cess = $this->input->post("product_cess");
+        if(!empty($product_cess)) $filter['product_cess'] = $product_cess;
+        
+        $r_start_time = $this->input->post("r_start_time");
+        if(!empty($r_start_time)) $filter['r_start_time'] = $r_start_time;
+        $r_end_time = $this->input->post("r_end_time");
+        if(!empty($r_end_time)) $filter['r_end_time'] = $r_end_time;
+
+        $data = $this->report_model->purchase_main_detail_report($filter);
+        $data['provider_id']=$provider_id;
+        $data['batch_code']=$batch_code;
+        $data['purchase_code']=$purchase_code;
+        $data['admin_name']=$admin_name;
+        $data['start_time']=$start_time;
+        $data['end_time']=$end_time;
+        $data['brand_id']=$brand_id;
+        $data['product_sn']=$product_sn;
+        $data['product_name']=$product_name;
+        $data['medical1']=$medical1;
+        $data['product_cess']=$product_cess;
+        $data['r_start_time']=$r_start_time;
+        $data['r_end_time']=$r_end_time;
+        $data['medical_arr'] = array('0' => '非医械', '1' => 'I', '2' => 'II', '3' => 'III');
+        
+	if ($this->input->post('export')){
+            $data['tag'] = '?';
+            $this->load->view('report/purchase_main_detail_report_export', $data);
+            $file_name = "purchase_main_detail_report_export.xls";
+            header("Content-type:application/vnd.ms-excel");
+            header("Content-Disposition:attachment;filename=".$file_name);           
+            return;
+        }
+        
+        $this->load->vars('all_admin', $this->admin_model->all_admin(array('user_status' => 1)));
+        $this->load->vars('provider_list',$this->report_model->provider_list());
+        $this->load->vars('brand_list',$this->report_model->brand_list());
+        $this->load->view('report/purchase_main_detail_report', $data);        
     }
 }

@@ -40,11 +40,11 @@
 	//加入收藏
 	function addFavorite(){
 		if(document.all){
-			window.external.addFavorite('http://www.mammytree.com','爱牙网');
+			window.external.addFavorite('http://www.mammytree.com','悦牙网');
 		}else if(window.sidebar){
-			window.sidebar.addPanel('爱牙网','http://www.mammytree.com','');
+			window.sidebar.addPanel('悦牙网','http://www.mammytree.com','');
 		}else{
-			alert('您的浏览器不支持加入收藏，请用 ctrl+d 收藏爱牙网');
+			alert('您的浏览器不支持加入收藏，请用 ctrl+d 收藏悦牙网');
 		}
 	}
 	

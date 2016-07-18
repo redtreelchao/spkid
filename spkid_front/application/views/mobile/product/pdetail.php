@@ -169,7 +169,7 @@ div > div.col-20 > div > div > a.active {
 	<div class="popover-inner">
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div class="center">爱牙商城</div>
+				<div class="center">悦牙商城</div>
 			</div>
 		</div>
 		<div class="content-block share_modal hcenter">
@@ -403,7 +403,7 @@ div > div.col-20 > div > div > a.active {
                     <div class="yueya_shop_box">
 					    <div class="yueya_shop_price">
 					    	
-					         爱牙售价：
+					         悦牙售价：
 					          <span class="shop_price">&#65509;<?php echo $p ->product_price ? $p->product_price : ""; ?></span><s class="market_price">&#65509;<?php echo $p ->market_price ? $p -> market_price : ""; ?></s>
 					      	
 						  <div class="yueya_shop_price_add"><?php echo $p->subhead?></div>

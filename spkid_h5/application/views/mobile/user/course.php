@@ -9,7 +9,7 @@
      </div>
 </div>
 
-<div class="page-content public-bg">
+<div class="page-content article-bg2">
     <div class="content-block article-video">
 
     <!--order-list start--> 

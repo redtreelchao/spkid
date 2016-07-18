@@ -35,7 +35,7 @@ border-top-right-radius:10px; -moz-border-top-right-radius:10px; -webkit-border-
 .details-right{  text-align:right; float:right; padding:0 10px 5px 0; overflow:hidden;} 
 
 .details-lb{  
-	padding:10px 10px 80px 10px;  background-color: #fff;}
+	padding:40px 10px 80px 10px;  background-color: #fff;}
 
 
 .author-information{ overflow:hidden; padding-bottom: 15px;}

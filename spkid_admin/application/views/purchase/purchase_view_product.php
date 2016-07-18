@@ -54,6 +54,7 @@
 					<th>颜色</th>
 					<th>尺码</th>
                                         <th>过期日期</th>
+                                        <th>生产批号</th>
 					<th>预采购数量</th>
 					<th>已收货数量</th>
 					<th width="60px;">上架数量</th>
@@ -69,7 +70,8 @@
 					<td><?php print $row->provider_name."[".$row->provider_code."]"; ?></td>
 					<td><?php print $row->color_name.'['.$row->color_sn.']'; ?></td>
 					<td><?php print $row->size_name.'['.$row->size_sn.']'; ?></td>
-                                        <td><?php print $row->expire_date; ?></td>
+                                        <td><?php print ($row->expire_date == '0000-00-00' || $row->expire_date == '0000-00-00 00:00:00' || $row->expire_date == '')?'无':$row->expire_date; ?></td>
+                                        <td><?php print $row->production_batch; ?></td>
                                         <td><?php print $row->product_number; ?></td>					
 					<td><?php print $row->product_finished_number; ?></td>
 					<td><?php print intval($row->finish_product_number); ?></td>

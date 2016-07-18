@@ -316,10 +316,10 @@ class Depotio_model extends CI_Model
 			$sql .= " LEFT JOIN ".$this->db->dbprefix('depot_out_sub')." p ON p.product_id = a.product_id AND p.color_id = a.color_id AND p.size_id = a.size_id" .
 			" LEFT JOIN ".$this->db->dbprefix('purchase_batch')." pb ON pb.batch_id = p.batch_id" .
                         " LEFT JOIN ".$this->db->dbprefix('product_provider')." c ON c.provider_id = pb.provider_id" ;
-// 		} else {
-// 			$sql .= " LEFT JOIN ".$this->db->dbprefix('product_cost')." p ON p.product_id = a.product_id " .
-// 					" LEFT JOIN ".$this->db->dbprefix('purchase_batch')." pb ON pb.batch_id = p.batch_id " .
-// 					" LEFT JOIN ".$this->db->dbprefix('product_provider')." c ON c.provider_id = pb.provider_id " ;
+ 		} else {
+ 			$sql .= " LEFT JOIN ".$this->db->dbprefix('product_cost')." p ON p.product_id = a.product_id " .
+ 					" LEFT JOIN ".$this->db->dbprefix('purchase_batch')." pb ON pb.batch_id = p.batch_id " .
+ 					" LEFT JOIN ".$this->db->dbprefix('product_provider')." c ON c.provider_id = pb.provider_id " ;
 		}
                 
 		$sql .= $where;
@@ -356,11 +356,11 @@ class Depotio_model extends CI_Model
 			$sql .= " LEFT JOIN ".$this->db->dbprefix('depot_out_sub')." p ON p.product_id = a.product_id AND p.color_id = a.color_id AND p.size_id = a.size_id" .
 				" LEFT JOIN ".$this->db->dbprefix('purchase_batch')." pb ON pb.batch_id = p.batch_id" .
                                 " LEFT JOIN ".$this->db->dbprefix('product_provider')." c ON c.provider_id = pb.provider_id" ;
-		} /*else {
-			$sql .= " LEFT JOIN ".$this->db->dbprefix('product_cost')." ps ON p.product_id = a.product_id " .
-					" LEFT JOIN ".$this->db->dbprefix('purchase_batch')." pb ON pb.batch_id = p.batch_id " .
+		} else {
+			$sql .= " LEFT JOIN ".$this->db->dbprefix('product_cost')." ps ON ps.product_id = a.product_id " .
+					" LEFT JOIN ".$this->db->dbprefix('purchase_batch')." pb ON pb.batch_id = ps.batch_id " .
 					" LEFT JOIN ".$this->db->dbprefix('product_provider')." c ON c.provider_id = pb.provider_id " ;
-		}*/
+		}
 		
 		$sql .= $where . " ORDER BY " . $filter['sort_by'] . " " . $filter['sort_order'].
 				" LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size'];
@@ -645,7 +645,7 @@ class Depotio_model extends CI_Model
 				" b.shop_price,b.promote_price," .
 				" c.provider_name,d.brand_name,e.color_name,e.color_sn,f.size_name,f.size_sn," .
 				" h.location_code1,h.location_code2,h.location_code3,h.location_code4,h.location_name,g.depot_name " .
-				" ,pb.batch_code " ;
+				" ,pb.batch_code,a.expire_date,a.production_batch " ;
 		$from = " FROM ".$this->db->dbprefix('depot_out_sub')." a" .
 				" LEFT JOIN ".$this->db->dbprefix('product_info')." b ON b.product_id = a.product_id" .
 				" LEFT JOIN ".$this->db->dbprefix('product_brand')." d ON d.brand_id = b.brand_id" .
@@ -955,7 +955,7 @@ class Depotio_model extends CI_Model
 	{
 		$param = array();
 		//b.consign_price,b.cost_price,b.consign_rate,b.consign_type,b.cooperation_id,b.goods_cess,
-		$sql = "SELECT a.*,b.pack_method,b.package_name,b.product_sn,b.product_name,b.provider_productcode,b.is_audit,b.is_onsale,b.is_stop,b.market_price," .
+		$sql = "SELECT a.*,b.pack_method,b.package_name, b.product_weight, b.product_sn,b.product_name,b.provider_productcode,b.is_audit,b.is_onsale,b.is_stop,b.market_price," .
 				" b.shop_price,b.promote_price," .
 				" c.provider_name,d.brand_name,e.color_name,e.color_sn,f.size_name,f.size_sn," .
 				" h.location_code1,h.location_code2,h.location_code3,h.location_code4,h.location_name,g.depot_name,x.sub_id,x.provider_barcode " .
@@ -1443,14 +1443,15 @@ class Depotio_model extends CI_Model
 				$_update_finished_number = ",'".$product_number."' ";
 			}
 			$sql = "INSERT INTO ".$this->db->dbprefix('depot_out_sub')." (depot_out_id,product_id,product_name,color_id,size_id,depot_id,location_id,shop_price," .
-					"product_number,product_amount,create_admin,create_date,batch_id".$_select.",expire_date) " .
+					"product_number,product_amount,create_admin,create_date,batch_id".$_select.",expire_date,production_batch) " .
 					"SELECT '".$depot_out_id."',a.product_id,b.product_name,a.color_id,a.size_id,a.depot_id,a.location_id,b.shop_price,".
-					"'".$product_number."',b.shop_price*".$product_number.",'".$admin_id."','".date('Y-m-d H:i:s')."',batch_id " .$_update_finished_number.",a.expire_date ".
+					"'".$product_number."',b.shop_price*".$product_number.",'".$admin_id."','".date('Y-m-d H:i:s')."',batch_id " .$_update_finished_number.",a.expire_date,a.production_batch ".
 					"FROM " . $this->db->dbprefix('transaction_info') ." a " .
 					"LEFT JOIN " . $this->db->dbprefix('product_info') . " b ON a.product_id = b.product_id " .
 					"WHERE a.transaction_id = '".$transaction_id."'";
 			//echo $sql;die;
 			$this->db->query($sql);
+			
 			$sub_id = $this->db->insert_id();
 			$sub_id = $sub_id > 0?$sub_id:0;
 			if ($sub_id == 0)
@@ -1460,10 +1461,10 @@ class Depotio_model extends CI_Model
 			
 			$sql = "INSERT INTO ".$this->db->dbprefix('transaction_info')."(trans_type,trans_status,trans_sn,product_id,color_id,size_id,product_number," .
 					"depot_id,location_id,create_admin,create_date,update_admin,update_date,cancel_admin,cancel_date,trans_direction,sub_id," .
-					"batch_id,product_cess,cost_price,consign_price,consign_rate,shop_price,expire_date) ".
+					"batch_id,product_cess,cost_price,consign_price,consign_rate,shop_price,expire_date,production_batch) ".
 					" SELECT ".TRANS_TYPE_DIRECT_OUT.",".TRANS_STAT_AWAIT_OUT.",b.depot_out_code,a.product_id,a.color_id,size_id,(0-a.product_number),".
 					"a.depot_id,a.location_id,a.create_admin,a.create_date,0,'0000-00-00',0,'0000-00-00',0,a.depot_out_sub_id," .
-					"a.batch_id,c.product_cess,c.cost_price,c.consign_price,c.consign_rate,d.shop_price,a.expire_date" .
+					"a.batch_id,c.product_cess,c.cost_price,c.consign_price,c.consign_rate,d.shop_price,a.expire_date,a.production_batch" .
 					" FROM ".$this->db->dbprefix('depot_out_sub')." a" .
 					" LEFT JOIN ".$this->db->dbprefix('depot_out_main')." b ON b.depot_out_id = a.depot_out_id " .
 					" LEFT JOIN ".$this->db->dbprefix('product_cost')." c ON c.product_id = a.product_id AND c.batch_id = a.batch_id " .
@@ -1532,19 +1533,20 @@ class Depotio_model extends CI_Model
 			{
 				return false;
 			}
-
+                
 			$sql = "INSERT INTO ".$this->db->dbprefix('transaction_info')."(trans_type,trans_status,trans_sn,product_id,color_id,size_id,product_number," .
 					"depot_id,location_id,create_admin,create_date,update_admin,update_date,cancel_admin,cancel_date,trans_direction,sub_id," .
-					"batch_id,product_cess,cost_price,consign_price,consign_rate,shop_price,expire_date) ".
+					"batch_id,product_cess,cost_price,consign_price,consign_rate,shop_price,expire_date,production_batch) ".
 					" SELECT ".TRANS_TYPE_DIRECT_IN.",".TRANS_STAT_AWAIT_IN.",b.depot_in_code,a.product_id,a.color_id,size_id,a.product_number,".
-					"a.depot_id,a.location_id,a.create_admin,a.create_date,0,'0000-00-00',0,'0000-00-00',1,a.depot_in_sub_id,a.expire_date" .
-					"a.batch_id,c.product_cess,c.cost_price,c.consign_price,c.consign_rate,d.shop_price" .
+					"a.depot_id,a.location_id,a.create_admin,a.create_date,0,'0000-00-00',0,'0000-00-00',1,a.depot_in_sub_id,".
+                                        "a.batch_id,c.product_cess,c.cost_price,c.consign_price,c.consign_rate,d.shop_price,a.expire_date,a.production_batch" .
 					" FROM ".$this->db->dbprefix('depot_in_sub')." a" .
 					" LEFT JOIN ".$this->db->dbprefix('depot_in_main')." b ON b.depot_in_id = a.depot_in_id " .
 					" LEFT JOIN ".$this->db->dbprefix('product_cost')." c ON c.product_id = a.product_id AND c.batch_id = a.batch_id " .
 					" LEFT JOIN ".$this->db->dbprefix('product_info')." d ON d.product_id = a.product_id" .
 					" WHERE a.depot_in_sub_id = '".$sub_id."' ";
 			$this->db->query($sql);
+                        //echo $this->db->last_query();
 			if (!$this->db->insert_id())
 			{
 				return false;

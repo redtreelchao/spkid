@@ -37,6 +37,9 @@ class Index extends CI_Controller
      */
     public function index($tab='')
     {
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Cache-Control:no-cache,must-revalidate");
+        header("Pragma:no-cache");
        // 引导页
        if (!isset($_COOKIE['fp-started'])){
 	       $startPage=@file_get_contents(static_style_url('index/mobile_first_page.html'));
@@ -70,6 +73,7 @@ class Index extends CI_Controller
             $data['index_good'] = false; 
         // 轮播图
         $front_focus_image = $this->lib_ad->get_focus_image(INDEX_FOCUS_IMAGE_TAG);
+        $course_focus_image = $this->lib_ad->get_focus_image(INDEX_COURSE_FOCUS_IMAGE_TAG, 5);
         /*foreach ($front_focus_image as $k => $row) {
             $front_focus_image[$k]['img_src'] = img_url($row['img_src']);
         }*/
@@ -114,6 +118,7 @@ class Index extends CI_Controller
         $this->load->vars(array(
             'active_tab'=> $tab,
             'index_focus_image' => $front_focus_image, 
+            'course_focus_image' => $course_focus_image, 
         ));
  
         $this->load->view('mobile/index/index',$data);
@@ -178,7 +183,7 @@ class Index extends CI_Controller
             $this->load->library('memcache');
             $goods_list = $this->memcache->get('index_goods_list');
             if ($goods_list && array_key_exists($page-1, $goods_list)){
-                $result['data'] = $goods_list[$page];
+                $result['data'] = $goods_list[$page - 1];
             }else{
                 $result['success'] = 0;
             }
@@ -365,5 +370,9 @@ class Index extends CI_Controller
         $this->load->library('lib_ad');
         return $this->lib_ad->get_ad_by_position_tag($cache_key,$position_tag, $size);
     }  
+
+    public function err404() {
+        $this->load->view('mobile/index/err404');
+    } 
       
 }

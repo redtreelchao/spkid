@@ -81,7 +81,8 @@
                         <td colspan="10" class="topTd"></td>
                     </tr>
                     <tr class="row">
-                        <th>下单时间</th><th>订单号</th><th>订单状态</th><th>审核时间</th><th>配送方式</th><th>配送状态</td>
+                        <th>下单时间</th><th>订单号</th><th>订单状态</th><th>审核时间</th><th>配送方式</th><th>配送状态</th>
+                        <th>打印</th>
                     </tr>
                     <?php foreach($list as $row): ?>
                         <tr class="row">
@@ -91,6 +92,7 @@
                             <td><?php print $row->confirm_date ?></td>
                             <td><?php print $shipping[$row->shipping_id] ?></td>
                             <td><?php print $row->shipping_status ?></td>
+                            <td><a href="order_track/print_order/<?=$row->order_id?>" target="_blank" class="icon_xiang" title="打印包裹装箱单"></a></td>
                         </tr>
                     <?php endforeach; ?>
                     <tr>

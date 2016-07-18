@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta http-equiv=Content-Type content="text/html;charset=utf-8">
-<title>个人中心-爱牙网</title>
+<title>个人中心-悦牙网</title>
 <link href="<?php echo static_style_url('pc/css/bootstrap.css?v=version')?>" rel="stylesheet" type="text/css">
 <link href="<?php echo static_style_url('pc/css/common.css?v=version')?>" rel="stylesheet" type="text/css">
 <link href="<?php echo static_style_url('pc/css/main.css?v=version')?>" rel="stylesheet" type="text/css">
@@ -28,12 +28,12 @@
 <body>
     <!--nav start-->
     <div class="nav-wrap min-wrapper">
-        <div class="nav clearfix">
-            <a href="/" class="logo"><img src="<?php echo static_style_url('pc/images/logo2.png?v=version');?>" alt="爱牙网"></a>
-            <div class="nav-right">
+        <div class="nav2 clearfix">
+            <a href="/" class="logo"><img src="<?php echo static_style_url('pc/images/logo2.png?v=version');?>" alt="悦牙网"></a>
+            <div class="nav-right2">
                 <div class="textbox">
-                    <div class="nav-search">
-                        <input name="" type="search" class="nav-search-input" id="navtion-input">
+                    <div class="nav-search2">
+                        <input name="" type="search" class="nav-search2-input" id="navtion-input">
                         <ul style="" class="autocomplete"></ul>
                         <span class="search-ico search_confirm"></span>
                     </div>

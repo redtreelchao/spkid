@@ -73,7 +73,7 @@ class Depot_order_model extends CI_Model
 			return array('list' => array(), 'filter' => $filter);
 		}
         
-		$sql = "select oi.create_date,oi.order_sn,
+		$sql = "select oi.order_id, oi.create_date,oi.order_sn,
                 if(oi.order_status = 0,'未确认',if(oi.order_status = 1,'已确认',if(oi.order_status = 4,'作废','其他'))) order_status,
                 oi.confirm_date,oi.shipping_id,
                 if(oi.shipping_status=1,'已发货',if(oi.is_qc=1,'已复核',if(oi.is_pick=1,'已拣货','未拣货'))) shipping_status "

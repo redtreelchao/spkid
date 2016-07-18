@@ -209,7 +209,7 @@ class Return_model extends CI_Model
                     ." WHERE trans_status in (1,2,4) and trans_sn ".$cond
                     ." GROUP BY product_id,color_id,size_id,batch_id";
             */
-            $sql = "SELECT product_id,color_id,size_id,batch_id,shop_price,consign_price,cost_price,consign_rate,product_cess,SUM(product_number) as product_num,expire_date"
+            $sql = "SELECT product_id,color_id,size_id,batch_id,shop_price,consign_price,cost_price,consign_rate,product_cess,SUM(product_number) as product_num,expire_date,production_batch"
                     ." FROM ".$this->db->dbprefix('transaction_info')
                     ." WHERE trans_status in (1,2,4) and trans_sn ".$cond
                     ." GROUP BY product_id,color_id,size_id,batch_id HAVING product_num < 0 ";
@@ -232,6 +232,7 @@ class Return_model extends CI_Model
                 $result[$key][$row['batch_id']]['consign_rate'] = $row['consign_rate'] ;
                 $result[$key][$row['batch_id']]['product_cess'] = $row['product_cess'] ;
                 $result[$key][$row['batch_id']]['expire_date'] = $row['expire_date'] ;
+                $result[$key][$row['batch_id']]['production_batch'] = $row['production_batch'] ;
                 
             }
             return $result;
@@ -603,7 +604,7 @@ class Return_model extends CI_Model
 		$product_list = array();
 	    $sql = "SELECT o.*, gl.gl_num,gl.consign_num as gl_consign_num,gl.wait_num,
 	    		g.product_name,g.product_sn,g.unit_name,g.provider_productcode,g.brand_id,g.category_id,g.is_gifts,
-	    		c.color_name, s.size_name,b.brand_name,cat.category_name,bcat.category_name as bcategory_name,gl.provider_barcode,l.location_name,d.depot_name " .
+	    		c.color_name, s.size_name,b.brand_name,cat.category_name,bcat.category_name as bcategory_name,gl.provider_barcode,l.location_name,d.depot_name,t.production_batch,t.expire_date " .
 	        "FROM " . $this->db->dbprefix('order_return_product') . " AS o ".
 	        "LEFT JOIN " . $this->db->dbprefix('product_sub') . " AS gl ON o.product_id = gl.product_id and o.color_id = gl.color_id and o.size_id = gl.size_id " .
 	        "LEFT JOIN " . $this->db->dbprefix('product_info') ." AS g ON o.product_id = g.product_id " .
@@ -1113,19 +1114,25 @@ class Return_model extends CI_Model
 	    return $arr;
 	}
 
-	public function get_return_advice($return_id){
+	public function get_return_advice($order_id){
 	    /*$sql="SELECT s.*, st.type_name,st.type_color,ad.admin_name
 	            FROM ".$this->db->dbprefix('order_advice') ." AS s
 	            LEFT JOIN ". $this->db->dbprefix('order_advice_type'). " AS st ON s.type_id= st.type_id
 	            LEFT JOIN ". $this->db->dbprefix('admin_info') ." AS ad ON s.advice_admin = ad. admin_id
 	            WHERE s.order_id = '".$return_id."' and s.is_return = 2";
             //*/
+	        $order_id = intval($order_id);
             $sql = "select oa.*,ai.admin_name,t.type_name,t.type_color from ".$this->db->dbprefix('order_advice') ." oa 
                 left join ".$this->db->dbprefix('admin_info') ." ai on oa.advice_admin = ai.admin_id 
                 left join ". $this->db->dbprefix('order_advice_type'). " t on oa.type_id = t.type_id
-                where oa.is_return = 2 and oa.order_id = 1 
+                where oa.is_return = 2 and oa.order_id = '".$order_id."' 
                 or oa.is_return = 1 
-                and oa.order_id in (select order_id from ". $this->db->dbprefix('order_return_info'). " where return_id = 1) ORDER BY oa.advice_date DESC";
+                and oa.order_id in (select order_id from ". $this->db->dbprefix('order_return_info'). " where return_id = '".$order_id."') ORDER BY oa.advice_date DESC";
+
+            /*$sql = "select oa.*,ai.admin_name,t.type_name,t.type_color from ".$this->db->dbprefix('order_advice') ." oa 
+                left join ".$this->db->dbprefix('admin_info') ." ai on oa.advice_admin = ai.admin_id 
+                left join ". $this->db->dbprefix('order_advice_type'). " t on oa.type_id = t.type_id
+                where oa.order_id = $order_id";*/
 	    $query = $this->db->query($sql);
 	    $result = $query->result_array();
 	    return $result;

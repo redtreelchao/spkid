@@ -19,7 +19,7 @@ class Campaign extends CI_Controller
 	public function index ()
 	{
         auth(array('campaign_view','campaign_edit'));
-        $campaign_type =array(1=>'其他',2=>'免邮');
+        $campaign_type =array(1=>'其他',2=>'免邮',3=>'抢购');
 		$filter = $this->uri->uri_to_assoc(3);
 		$campaign_name = trim($this->input->post('campaign_name'));
 		if (!empty($campaign_name)) $filter['campaign_name'] = $campaign_name;

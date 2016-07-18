@@ -36,7 +36,7 @@
 		<input type="hidden" name="sku[]" value="<?php print $product['product_sn'].' '.$product['color_sn'].' '.$product['size_sn']; ?>" />
 		<input type="hidden" name="goods_barcode[]" value="<?php print $product['provider_barcode']; ?>" />
         <input type="hidden" name="max_return_number[]" value="<?php print $product['product_num']; ?>" />
-        <input type="text" name="product_num[]" value="0" size="3" <?php if ($return['shipping_true']) : ?> readonly <?php endif; ?> />
+        <input type="text" name="product_num[]" value="0" size="3"/>
     </td>
     <td><?php print $product['color_name']; ?>--<?php print $product['size_name']; ?> [ <?php print $product['real_num']; ?>+<?php if ($product['consign_num'] == -1): ?>0<?php elseif ($product['consign_num'] == -2): ?>+<?php else: print $product['consign_num'];endif; ?> ]</td>:
     <td>
@@ -106,11 +106,11 @@
 		<td align="right"><strong>退货原因</strong></td>
                 <td colspan="3">
                 <select name="return_reason" id="return_reason">
-                <option value="次品-具体问题">次品-具体问题</option>
-                <option value="尺码不合">尺码不合</option>
-                <option value="发错货">发错货</option>
-                <option value="发错尺码">发错尺码</option>
                 <option value="顾客原因">顾客原因</option>
+                <option value="运营原因">运营原因</option>
+                <option value="仓库原因">仓库原因</option>
+                <option value="快递原因">快递原因</option>
+                <option value="其他原因">其他原因</option>
                 </select>
                 </td>
 	</tr>

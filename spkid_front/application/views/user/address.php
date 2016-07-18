@@ -161,8 +161,10 @@ $(function(){
     })
     $('.btn.confirm').click(function(){
         $.getJSON('/address/address_delete', {address_id:address_id}, function(data){
-            if (2 == data.mobile_check_err){
-                location.reload();
+            if (0 == data.error){
+                location.href = '/user/address.html?v='+Math.random();
+            }else{
+                location.href = '/user/address.html?v='+Math.random();
             }
         });
     })
@@ -173,7 +175,7 @@ $(function(){
         address_id = $(this).siblings('.del').attr('address-id');
         $.getJSON('/address/address_default', {address_id:address_id}, function(data){
             if (0 == data.error){
-                location.reload();
+                location.href = '/user/address.html?v='+Math.random();
             }
         });
     })
@@ -221,7 +223,7 @@ $(function(){
         if (is_ok) {
             $.ajax({url:'/address/address_check', data:$('.address_info').serialize(), method:'POST', dataType:'json', success:function(data){
                 if (data.error == 0 ){    
-                    location.reload();
+                    location.href = '/user/address.html?v='+Math.random();
                 }else if(data.error == 1 ){
                     alert(msg);
                 }
@@ -292,7 +294,7 @@ function v_address_form (address_id) {
 function v_edit_address(){
     $.ajax({url:'/address/address_check', data:$('.v_edit_info').serialize(), method:'POST', dataType:'json', success:function(data){
         if (data.error == 0 ){    
-            location.reload();
+            location.href = '/user/address.html?v='+Math.random();
         }else if(data.error == 1 ){
             alert(msg);
         }

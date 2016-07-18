@@ -6,30 +6,46 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="expires" content="Wed, 23 Aug 2006 12:40:27 UTC" />
     <base href="<?php print base_url(); ?>" target="_self" />
-    <title>爱牙网电子商务管理系统</title>
+    <title>悦牙网电子商务管理系统</title>
     <link rel="stylesheet" href="public/style/style.css" type="text/css" media="all" />
     <script type="text/javascript" src="public/js/jquery.js"></script>
     <script type="text/javascript">var base_url='<?php print base_url(); ?>';</script>
 </head>
 <body bgcolor="<?php print empty($print_bgcolor)?'#FAFEF0':$print_bgcolor; ?>">
  <script type="text/javascript">
+    function scan_invoice(e){
+        e = e ? e : (window.event ? window.event : null);    
+        var invoice_no=$.trim($('#scan_input').val()).toUpperCase();
+        if (e.keyCode != 13) 
+        {   
+            return false;
+        }
+        $('#scan_weight').focus();
+    }
 	//<![CDATA[
 	/**
 	 * scan
 	 */	
 	function scan(e) {
-        e = e ? e : (window.event ? window.event : null);    
-		var invoice_no=$.trim($('#scan_input').val()).toUpperCase();		
-        if (e.keyCode != 13) 
-        {   
-            return false;
-        }   
-                                      
-        if (invoice_no == '') 
-        {   
-            alert('请您扫描运单号！'); 
-            return false
-        }        
+            e = e ? e : (window.event ? window.event : null);    
+            var invoice_no=$.trim($('#scan_input').val()).toUpperCase();
+            var scan_weight=$.trim($('#scan_weight').val());
+            if (e.keyCode != 13) 
+            {   
+                return false;
+            }   
+
+            if (invoice_no == '') 
+            {   
+                alert('请您扫描运单号！'); 
+                return false;
+            }
+            
+            if (scan_weight == '' || scan_weight <= 0) 
+            {   
+                alert('请输入包裹重量！'); 
+                return false;
+            }
         //var e=$('#scan_input');
 		//if(sn==''){//输入的是订单号
 		//	if(!/^(DD|HH)\d{13}$/.test(content) || $('tr[sn='+content+']').length<1){
@@ -68,21 +84,22 @@
 		//	}
 			$.ajax({
 				url:'pick/scan_shipping_process',
-				data:{invoice_no:invoice_no,rnd:new Date().getTime()},
+				data:{invoice_no:invoice_no,scan_weight:scan_weight, rnd:new Date().getTime()},
 				dataType:'json',
 				type:'POST',
 				success:function(result){
 					//if(result.msg) alert(result.msg);
-                    $('#scan_input').val('').focus();
-                    if(result.err){
-                        alert(result.msg);
-                        return false;
-					//	$('td:eq(0) a',tr).css('color','');
-					//	$('td:eq(1)',tr).html('');
-                    //                            e.val('').focus();
-					//	return false;
-                    }
-                    $('#order_sn').html(result.msg+"已发运。");
+                                    $('#scan_input').val('').focus();
+                                    $('#scan_weight').val('');
+                                    if(result.err){
+                                        alert(result.msg);
+                                        return false;
+                                                        //	$('td:eq(0) a',tr).css('color','');
+                                                        //	$('td:eq(1)',tr).html('');
+                                    //                            e.val('').focus();
+                                                        //	return false;
+                                    }
+                                    $('#order_sn').html(result.msg+"已发运。");
 					//$('td:eq(0) a',tr).css('color','');
 					//$('td:eq(1)',tr).html(invoice_no);
                     //                    tr.attr('status','1');
@@ -140,11 +157,13 @@
            <table class="form" cellpadding=0 cellspacing=0>
                 <tr>
                 <td class="item_title">运单号：</td>
-                <td class="item_input"><input type="text" name="scan_input" id="scan_input" onkeydown="scan(event);" value="" size="32" style="ime-mode:disabled;" />
+                <td class="item_input"><input type="text" name="scan_input" id="scan_input" value="" size="32" style="ime-mode:disabled;" onkeydown="scan_invoice(event);"/>
+                <td class="item_title">重量：</td>
+                <td class="item_input"><input type="text" name="scan_weight" id="scan_weight" onkeydown="scan(event);" value="" size="32" style="ime-mode:disabled;" />KG
                 </tr>
                 <tr>
                 <td class="item_title">订单号：</td>
-                <td class="item_input"><span id="order_sn"></span></td>
+                <td class="item_input" colspan="3"><span id="order_sn"></span></td>
                 </tr>
            </table> 
            <span style="color:red;font-weight:bold;">注：扫描运单号后，该包裹在系统中将标识为已发货</span>    

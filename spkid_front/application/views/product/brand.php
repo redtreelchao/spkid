@@ -18,7 +18,7 @@
     <div class="course-list">
          <div class="sorting-nr">
              <ul class="brand-tab clearfix">
-             <li data-value="0" class="brand-currt">全部品牌</li>
+             <li data-value="0" class="brand-currt">全部展品</li>
              <li data-value="1">品牌简介与故事</li>
              </ul>
              <div class="brand-list">

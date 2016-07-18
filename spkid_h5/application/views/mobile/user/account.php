@@ -16,7 +16,7 @@
             <!--navbar end-->
 
             <!--account start-->  
-            <div class="page-content public-bg no-top2">
+            <div class="page-content article-bg2 no-top2">
                 <div class="page-content-inner no-top">
                 <div class="content-block wrap">
                   <ul class="v_account">

@@ -9,6 +9,8 @@
 		listTable.url = 'register_code/index';
 		function search(){
 			listTable.filter['register_no'] = $.trim($('input[type=text][name=register_no]').val());
+                        listTable.filter['product_name'] = $.trim($('input[type=text][name=product_name]').val());
+                        listTable.filter['unit'] = $.trim($('input[type=text][name=unit]').val());
 			listTable.loadList();
 		}
 		//]]>
@@ -22,6 +24,8 @@
 		<div class="search_row">
 			<form name="search" action="javascript:search(); ">
 			注册号：<input type="text" class="ts" name="register_no" id="register_no" value="" style="width:230px;" />
+                        产品名称：<input type="text" class="ts" name="product_name" id="product_name" value="" style="width:230px;" />
+                        生产单位：<input type="text" class="ts" name="unit" id="unit" value="" style="width:230px;" />
 			<input type="submit" class="am-btn am-btn-primary" value="搜索" />
 			</form>
 		</div>
@@ -47,14 +51,14 @@
 				</tr>
 				<?php foreach($list as $row): ?>
 				<tr class="row">
-					<td><?php print $row->id; ?></td>
+					<td><span><?php if(!empty($fields_source)&&isset($fields_source["id"])&&isset($fields_source["id"]["$row->id"]))echo $fields_source["id"]["$row->id"] ;else echo $row->id; ?></span></td>
 					<td><?php print $row->register_no; ?><br/><?php print $row->field_value1; ?> 、<?php print $row->field_value2; ?></td>
-					<td><?php print $row->product_name; ?></td>
-					<td><?php print $row->unit; ?></td>
-					<td><?php print $row->standard; ?></td>
-					<td><?php print $row->property; ?></td>
-					<td><?php print $row->scope; ?></td>
-					<td><?php print $row->valid_time; ?></td>
+					<td><span data-type="textarea" data-pk="<?php print $row->id; ?>" data-name="product_name" class="editable" data-title="产品名称" data-value="<?php print $row->product_name; ?>"><?php if(!empty($fields_source)&&isset($fields_source["product_name"])&&isset($fields_source["product_name"]["$row->product_name"]))echo $fields_source["product_name"]["$row->product_name"] ;else echo ($row->product_name)?$row->product_name:' 无 '; ?></span></td>
+					<td><span data-type="textarea" data-pk="<?php print $row->id; ?>" data-name="unit" class="editable" data-title="生产单位" data-value="<?php print $row->unit; ?>"><?php if(!empty($fields_source)&&isset($fields_source["unit"])&&isset($fields_source["unit"]["$row->unit"]))echo $fields_source["unit"]["$row->unit"] ;else echo ($row->unit)?$row->unit:' 无 '; ?></span></td>
+					<td><span data-type="textarea" data-pk="<?php print $row->id; ?>" data-name="standard" class="editable" data-title="产品标准" data-value="<?php print $row->standard; ?>"><?php if(!empty($fields_source)&&isset($fields_source["standard"])&&isset($fields_source["standard"]["$row->standard"]))echo $fields_source["standard"]["$row->standard"] ;else echo ($row->standard)?$row->standard:' 无 '; ?></span></td>
+					<td><span data-type="textarea" data-pk="<?php print $row->id; ?>" data-name="property" class="editable" data-title="产品性能结构及组成" data-value="<?php print $row->property; ?>"><?php if(!empty($fields_source)&&isset($fields_source["property"])&&isset($fields_source["property"]["$row->property"]))echo $fields_source["property"]["$row->property"] ;else echo ($row->property)?$row->property:' 无 '; ?></span></td>
+					<td><span data-type="textarea" data-pk="<?php print $row->id; ?>" data-name="scope" class="editable" data-title="产品适用范围" data-value="<?php print $row->scope; ?>"><?php if(!empty($fields_source)&&isset($fields_source["scope"])&&isset($fields_source["scope"]["$row->scope"]))echo $fields_source["scope"]["$row->scope"] ;else echo ($row->scope)?$row->scope:' 无 '; ?></span></td>
+					<td><span data-viewformat="yyyy-mm-dd" data-type="date" data-pk="<?php print $row->id; ?>" data-name="valid_time" class="editable" data-title="有效期" data-value="<?php print $row->valid_time; ?>"><?php if(!empty($fields_source)&&isset($fields_source["valid_time"])&&isset($fields_source["valid_time"]["$row->valid_time"]))echo $fields_source["valid_time"]["$row->valid_time"] ;else echo ($row->valid_time)?$row->valid_time:' 无 '; ?></span></td>
 					<td><?php print $row->admin_name; ?></td>
 					<td><?php print date('Y-m-d',$row->add_admin_time); ?></td>
 					<td>
@@ -76,6 +80,19 @@
 			<div class="page">
 				<?php include(APPPATH.'views/common/page.php') ?>
 			</div>
+			<script>
+				// jquery editable 
+				function _editable(){
+				$('.editable').editable({ url: '/register_code/editable', emptytext:'',
+				        success: function(response, newValue) {
+				            if(!response.success) return response.msg;
+				            if( response.value != newValue ) return '操作失败';
+				        }
+				    });
+				}
+				listTable.func = _editable; // 分页加载后调用的函数名
+				_editable();
+			</script>
 <?php if($full_page): ?>
 		</div>
 	</div>

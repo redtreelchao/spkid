@@ -14,7 +14,7 @@ class Order_model extends CI_Model
 				LEFT JOIN ".$this->db->dbprefix('payment_info')." AS p ON o.pay_id = p.pay_id
 				LEFT JOIN ".$this->db->dbprefix('admin_info')." AS a ON o.lock_admin = a.admin_id
 				";
-		$where = " WHERE 1 ";
+		$where = " WHERE 1 AND o.genre_id = 1 ";
 		$param = array();
 
         if($filter['lock_admin']){
@@ -62,6 +62,8 @@ class Order_model extends CI_Model
                 $where .= " AND o.order_status = ? ";
                 $param[] = $filter['order_status'];
             }
+        } else {
+            $where .= " AND o.order_status <> 4 ";
         }
         if($filter['pay_status']){
             if($filter['pay_status']==-1) {
@@ -271,7 +273,7 @@ class Order_model extends CI_Model
                 LEFT JOIN ".$this->db->dbprefix('product_brand')." AS b ON p.brand_id=b.brand_id
                 LEFT JOIN ".$this->db->dbprefix('product_style')." AS s ON p.style_id=s.style_id
                 LEFT JOIN ".$this->db->dbprefix('product_season')." AS ss ON p.season_id=ss.season_id";
-                $where = " WHERE p.is_audit=1 ";
+                $where = " WHERE p.is_audit=1 AND p.genre_id = 1 ";
                 $param = array();
                 if ($filter['category_id']) {
                     $where .= "AND p.category_id = ? ";
@@ -293,7 +295,11 @@ class Order_model extends CI_Model
                     $where .= "AND p.provider_productcode LIKE ? ";
                     $param[] = '%'.$filter['provider_productcode'].'%';
                 }
-                $where .= "AND EXISTS (SELECT 1 FROM ".$this->db->dbprefix('product_sub')." AS sub WHERE sub.product_id=p.product_id  AND (sub.gl_num>0 OR sub.consign_num>0 OR sub.consign_num=-2) ";
+                if ($filter['depot_id']) {
+                    $where .= "AND EXISTS (SELECT 1 FROM ya_product_depot_sub AS sub WHERE sub.product_id=p.product_id AND sub.depot_id ='".$filter['depot_id']."' AND sub.gl_num>0 ";
+                } else {
+                    $where .= "AND EXISTS (SELECT 1 FROM ".$this->db->dbprefix('product_sub')." AS sub WHERE sub.product_id=p.product_id  AND (sub.gl_num>0 OR sub.consign_num>0 OR sub.consign_num=-2) ";
+                }
                 if ($filter['size_id']) {
                    $where .= "AND sub.size_id=? ";
                    $param[] = $filter['size_id']; 
@@ -425,7 +431,7 @@ class Order_model extends CI_Model
     public function order_deny($order_sn)
     {
         $sql = "SELECT sub.`sub_id`,ABS(ti.`product_number`) AS product_number,op.`consign_num`,op.`op_id`,ti.`product_id`,ti.`color_id`,ti.`size_id`,
-		ti.shop_price,ti.batch_id,ti.consign_price,ti.cost_price,ti.consign_rate,ti.product_cess
+		ti.shop_price,ti.batch_id,ti.consign_price,ti.cost_price,ti.consign_rate,ti.product_cess,ti.expire_date,ti.production_batch
                 FROM ".$this->db->dbprefix('transaction_info')." AS ti
                 LEFT JOIN ".$this->db->dbprefix('order_info')." AS oi ON oi.`order_sn` = ti.`trans_sn`
 		LEFT JOIN ".$this->db->dbprefix('order_product')." AS op ON op.`order_id` = oi.`order_id` AND op.product_id = ti.product_id AND op.color_id = ti.color_id AND op.size_id = ti.size_id
@@ -662,6 +668,12 @@ class Order_model extends CI_Model
     public function assign_trans($order,$sub,$num,$sub_id,$shop_price=NULL)
     {
         if($num<1) return array('err'=>0,'msg'=>'');
+        $where = "";
+        if (isset($sub->depot_id)) {
+	    $where .= " AND t.depot_id = '".$sub->depot_id."'";
+        } else {
+	    $where = " AND d.is_return = 0";
+	}
         /*
         $sql = "SELECT t.depot_id,t.location_id,SUM(t.product_number) AS product_number,
                 pc.batch_id,pc.consign_price,pc.cost_price,pc.consign_rate,pc.product_cess,
@@ -685,13 +697,13 @@ class Order_model extends CI_Model
 		从程序严谨性角度来讲有一点遗憾，在此做注释。 20130318 frank		
 		*/
 		$sql = "SELECT t.depot_id,t.location_id,SUM(t.product_number) AS product_number,
-                t.batch_id,t.consign_price,t.cost_price,t.consign_rate,t.product_cess,t.expire_date,
+                t.batch_id,t.consign_price,t.cost_price,t.consign_rate,t.product_cess,t.expire_date,t.production_batch,
                 pi.shop_price
                 FROM ".$this->db->dbprefix('transaction_info')." AS t
                 LEFT JOIN ".$this->db->dbprefix('depot_info')." AS d ON t.depot_id=d.depot_id
                 LEFT JOIN ".$this->db->dbprefix('location_info')." AS l ON t.location_id=l.location_id
                 LEFT JOIN ".$this->db->dbprefix('product_info')." as pi on pi.product_id=t.product_id
-                WHERE d.is_use = 1 AND d.is_return = 0 AND l.is_use = 1 AND t.trans_status IN (1,2,4) 
+                WHERE d.is_use = 1 ".$where." AND l.is_use = 1 AND t.trans_status IN (1,2,4) 
                 AND t.product_id=? AND t.color_id = ? AND t.size_id = ?
                 GROUP BY t.batch_id,l.location_id HAVING product_number>0 ORDER BY MIN(expire_date) ASC, MIN(t.batch_id) ASC,d.depot_priority ASC;";
         $query = $this->db->query($sql, array($sub->product_id,$sub->color_id,$sub->size_id));
@@ -723,7 +735,8 @@ class Order_model extends CI_Model
             $row['consign_rate'] = $t->consign_rate;
             $row['cost_price'] = $t->cost_price;
             $row['product_cess'] = $t->product_cess;
-			$row['expire_date'] = "'$t->expire_date'";
+            $row['expire_date'] = "'{$t->expire_date}'";
+	    $row['production_batch'] = "'{$t->production_batch}'";
             $result[] = $row;
             $num += $row['product_number']; //因为$row['product_number']为负值，所以此处用+
             if($num==0) break;
@@ -743,7 +756,7 @@ class Order_model extends CI_Model
     public function insert_trans_batch($updates)
     {
         $keys = array('trans_type','trans_status','trans_sn','product_id','color_id','size_id','sub_id','create_admin','create_date','trans_direction','depot_id','location_id','product_number',
-                'batch_id','shop_price','consign_price','consign_rate','cost_price','product_cess','update_admin','update_date', 'finance_check_date', 'finance_check_admin','expire_date');
+                'batch_id','shop_price','consign_price','consign_rate','cost_price','product_cess','update_admin','update_date', 'finance_check_date', 'finance_check_admin','expire_date','production_batch');
         $sql = "INSERT INTO ".$this->db->dbprefix('transaction_info');
                 //." (".implode(',',$keys).") VALUES ";
         $result = array();
@@ -1241,6 +1254,22 @@ class Order_model extends CI_Model
                 FROM ".$this->db->dbprefix('order_client_info')." 
                 WHERE order_id = ?";
         $query = $this->db->query($sql, array(intval($order_id)));
+        return $query->result();
+    }
+    
+    public function get_orders_info($order_ids)
+    {
+        $sql = "SELECT distinct o.order_id, o.*, spi.mailno, spi.dist_code, s.shipping_code,s.shipping_name,sc.source_code,sc.source_name,pr.region_name as province_name,cr.region_name as city_name,dr.region_name as district_name, ps.pick_cell 
+                FROM ".$this->db->dbprefix('order_info')." AS o
+                INNER JOIN ".$this->db->dbprefix('order_source')." AS sc ON o.source_id = sc.source_id                
+                INNER JOIN ".$this->db->dbprefix('shipping_info')." AS s ON o.shipping_id = s.shipping_id
+                INNER JOIN ".$this->db->dbprefix('region_info')." AS pr ON o.province = pr.region_id
+                INNER JOIN ".$this->db->dbprefix('region_info')." AS cr ON o.city = cr.region_id
+                INNER JOIN ".$this->db->dbprefix('region_info')." AS dr ON o.district = dr.region_id
+		INNER JOIN ".$this->db->dbprefix('pick_sub')." AS ps ON o.order_sn = ps.rel_no 
+                INNER JOIN ".$this->db->dbprefix('shipping_package_interface')." AS spi ON o.order_id = spi.order_id 
+                WHERE spi.filter_status = 1000 AND o.order_id IN (".implode(",", $order_ids).")";
+        $query = $this->db->query($sql);
         return $query->result();
     }
 }

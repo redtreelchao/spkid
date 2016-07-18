@@ -411,6 +411,7 @@ class Exchange extends CI_Controller
 		$this->exchange_model->update_exchange_out_total($exchange_id);
 		//show	
 		$exchange_goods = $this->exchange_model->exchange_out_products($exchange_id);
+
 		$error_msg = ''; 
 		if(!empty($exchange_goods))
 		{
@@ -871,16 +872,24 @@ class Exchange extends CI_Controller
 			 return;
 		}
 		$this->db->query('BEGIN');
+
 		$exchange_out = $this->exchange_model->query_exchange_out(array("sub_id"=>$sub_id,"exchange_id"=>$exchange_id,"batch_id"=>$batch_id));
 		if(empty($exchange_out)){
 		     echo json_encode(array('error'=>1,'msg'=>'不存在对应出库信息记录'));
 		     return;
 		}
-		$exchange_out_info = $exchange_out[0];
+		/*$exchange_out_info = $exchange_out[0];
 		if(empty($exchange_out_info)){
 		    echo json_encode(array('error'=>1,'msg'=>'不存在对应出库信息'));
 		    return;
+		}*/
+                $out_num = 0;
+                if(!empty($exchange_out)){
+		    foreach ($exchange_out as $exchange_out_info){
+			$out_num += $exchange_out_info->product_number;
+		    }
 		}
+                
 		$old_in_num = 0;
 		$exchange_in = $this->exchange_model->query_exchange_in(array("sub_id"=>$sub_id,"exchange_id"=>$exchange_id,"batch_id"=>$batch_id));
 		
@@ -889,7 +898,7 @@ class Exchange extends CI_Controller
 			$old_in_num += $exchange_in_info->product_number;
 		    }
 		}
-		$out_num = $exchange_out_info->product_number;
+		//$out_num = $exchange_out_info->product_number;
 		if($in_num > $out_num - $old_in_num){
 		    echo json_encode(array('error'=>1,'msg'=>'商品入库数量不能大于出库数量'));
 		    return;
@@ -1229,8 +1238,11 @@ class Exchange extends CI_Controller
 					     return ;
 					}else{
 					    $exchange_in_info = $exchange_in[0];
-					    $old_in_num = $exchange_in_info->product_number;
-					    $old_sub_id = $exchange_in_info ->sub_id;
+					    
+					    $old_sub_id = $exchange_in_info ->sub_id;                                           
+                                            foreach ($exchange_in as $exchange_in_tmp2){
+					       $old_in_num += $exchange_in_tmp2->product_number;
+                                            }
 					}
 					$exchange_in_list = $this->exchange_model->query_exchange_in(array("sub_id"=>$old_sub_id,"exchange_id"=>$exchange_id));
 					foreach ($exchange_in_list as $exchange_in_tmp){
@@ -1242,12 +1254,17 @@ class Exchange extends CI_Controller
 					     echo json_encode(array('error'=>1,'msg'=>'不存在对应出库信息记录'));
 					     return;
 					}
-					$exchange_out_info = $exchange_out[0];
-					$out_num = $exchange_out_info ->product_number;
-					if(empty($exchange_out_info)){
+					//$exchange_out_info = $exchange_out[0];
+					//$out_num = $exchange_out_info ->product_number;
+					if(empty($exchange_out)){
 					    echo json_encode(array('error'=>1,'msg'=>'不存在对应出库信息'));
 					    return;
 					}
+                                        
+                                        foreach ($exchange_out as $exchange_out_tmp){
+					    $out_num += $exchange_out_tmp->product_number;
+                                        }
+                                        
 					if($value > ($out_num - $old_in_num)){
 					    echo json_encode(array('error'=>1,'msg'=>'商品入库数量不能大于出库数量'));
 					    return;

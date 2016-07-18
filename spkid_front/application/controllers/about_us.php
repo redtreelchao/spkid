@@ -13,7 +13,7 @@ class About_us extends CI_Controller {
         $this->team_type = array( 0 => '口腔医疗商品', 1 => '口腔医学培训', 2 => '新牙医同盟会', 3 => '其他'); 
     }
 
-    //关于爱牙网
+    //关于悦牙网
     public function index(){
         $data = array();
         $this->load->view('about_us/index',$data);
@@ -103,7 +103,7 @@ class About_us extends CI_Controller {
 
         $team_work_id = $this->about_us_model->team_work_insert($param);
         if(!empty($team_work_id)){
-            $team_msg = "您的合作申请爱牙网已经收到，请耐心等待客服与您联系";
+            $team_msg = "您的合作申请悦牙网已经收到，请耐心等待客服与您联系";
             echo json_encode(array('error' => 1, 'team_msg' => $team_msg));
             return;
         }

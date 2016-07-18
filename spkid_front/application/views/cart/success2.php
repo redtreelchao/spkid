@@ -107,7 +107,7 @@
         <div class="modal-content">
           <div class="modal-header v-close">
               <button type="button" class="close triangle-topright" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">支付遇到问题，您可以：<br>1、爱牙网帮助中心  客服电话：400-9905-920<br>2、支付宝帮助中心  客服电话：95188</h4>
+              <h4 class="modal-title">支付遇到问题，您可以：<br>1、悦牙网帮助中心  客服电话：400-9905-920<br>2、支付宝帮助中心  客服电话：95188</h4>
           </div>
         </div>
       </div>

@@ -19,8 +19,9 @@
 					<th>商品名称</th>
                                         <th>代销价</th>
                                         <th>成本价</th>
-                                        <th>代销率</th>
-					<th>税率</th>
+                                        <th>代销率</th>					
+					<th>进项税率</th>
+					<th>销项税率</th>
 					<th width="250px">状态</th>
 				</tr>
 				<?php foreach($error_records as $row): ?>
@@ -32,6 +33,7 @@
                                         <td><?php print $row['cost_price']; ?></td>
 					<td><?php print $row['consign_rate']; ?></td>
 					<td><?php print $row['product_cess']; ?></td>
+					<td><?php print $row['product_income_cess']; ?></td>
 					<td><font color="red">失败</font> <?php print $row['msg']; ?></td>
 				</tr>
 				<?php endforeach; ?>
@@ -44,6 +46,7 @@
                                         <td><?php print $row['cost_price']; ?></td>
 					<td><?php print $row['consign_rate']; ?></td>
 					<td><?php print $row['product_cess']; ?></td>
+					<td><?php print $row['product_income_cess']; ?></td>
 					<td><font color="green">成功</font></td>
 				</tr>
 				<?php endforeach; ?>

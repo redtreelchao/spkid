@@ -41,19 +41,23 @@ class Lib_ad{
    }
    
    function get_focus_image($cache_key, $type = 1){
-        $img_arr = array();
-        $img_arr = $this->CI->cache->get($cache_key);
-        
-        if (empty($img_arr)) {
-            $this->load->model('ad_model');
-            $img_arr = $this->CI->ad_model->get_focus_image($type);
-            if (empty($img_arr)) {
-                return array();
-            }
-            $this->CI->cache->save($cache_key, $img_arr,CACHE_TIME_INDEX_FOCUS_IMAGE);
-        }
-       
-        return $img_arr;      
-    }
+       $is_preview = isset($_GET['is_preview']) && $_GET['is_preview']== 1 ?TRUE:FALSE;
+       if ($is_preview){
+           $img_arr = false;
+       } else {      
+           $img_arr = $this->CI->cache->get($cache_key);
+       }
+
+       if (!$img_arr) {
+           $this->load->model('ad_model');
+           $img_arr = $this->CI->ad_model->get_focus_image($type);
+           if (empty($img_arr)) {
+               return array();
+           }
+           $this->CI->cache->save($cache_key, $img_arr,CACHE_TIME_INDEX_FOCUS_IMAGE);
+       }
+
+       return $img_arr;      
+   }
 }
 ?>

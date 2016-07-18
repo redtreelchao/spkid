@@ -7,7 +7,8 @@
 	    <td width="50"> 成本价 </td>
 	    <td width="50"> 代销价格 </td>
 	    <td width="50"> 浮动代销率 </td>
-	    <td width="50"> 税率 </td>
+	    <td width="50"> 进项税率 </td>
+	    <td width="50"> 销项税率 </td>
 	</tr>
 <?php foreach($list as $row): ?>
 	<tr class="row">
@@ -18,6 +19,7 @@
 	    <td><?php print $row->consign_price; ?></td>
 	    <td><?php print $row->consign_rate; ?></td>
 	    <td><?php print $row->product_cess; ?></td>
+	    <td><?php print $row->product_income_cess; ?></td>
 	</tr>
 <?php endforeach; ?>
     </table>

@@ -121,7 +121,7 @@ include_once (APPPATH . "views/common/header.php");
 								
 							<span class="product-icon-bar" style="position:relative; top:10px;">
 								<span class="product-icon-box clearfix">
-									<span class="product-icon like-icon <?php echo $is_collected ? 'active' : ''?>" id="add_to_collect"></span>
+									<span class="product-icon like-icon" id="add_to_collect"></span>
 								</span>
 								<span style="position: relative;top: -12px;left:-13px; color:#909090;">关注课程</span>
 							</span>
@@ -226,7 +226,7 @@ include_once (APPPATH . "views/common/header.php");
 <!-- 留言结束 -->
 
 <!--相关课程及分享开始-->
-<div class="related_courses fixed" style="border-left:1px solid rgb(240, 240, 240)">
+<div class="related_courses fixed" style="border-left:1px solid rgb(240, 240, 240);display:none">
 	<div class="course_share" style=" background-color:#f6f6f6; height:100px;">
 		<div style="border-bottom:solid 1px #f1f1f1; padding:7px 0 10px 0;">
 			<div class="clearfix">
@@ -248,7 +248,7 @@ include_once (APPPATH . "views/common/header.php");
 	</div>
 	
 	<div style="padding-left:20px;">
-		<p style="margin-top:28px; font-size:14px; color:#333;">爱牙网课代表</p>
+		<p style="margin-top:28px; font-size:14px; color:#333;">悦牙网课代表</p>
 		<p style="color:#909090; font-size:12px;">联系方式只对报名学生可见</p>
 		<p style="color:#909090; font-size:12px;">报名前对课程有疑问请点击
 			<a href="javascript:void(0)" onclick="$('#keqianwenda').click();">课前问答</a>
@@ -340,8 +340,9 @@ include_once (APPPATH . "views/common/header.php");
 <!-- 登陆弹层结束 -->
 
 <script>
-	$(function(){
+	$(function(){		
 		$(".navbar li:first a").click();
+
 		$('#add_to_collect').click(function(){
 			var is_log_in = parseInt(user_id);
 			if (!is_log_in) {
@@ -420,10 +421,13 @@ with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createEle
 				top:top + 'px',
 				zIndex:999,
 				width:250 + 'px'
-			});
+			}).show();
 		}
 		
-		relayout();
+		$(window).load(function(){
+			relayout();
+		});
+		
 
 		$(window).resize(function(){
 			console.log('window resize');
@@ -437,11 +441,16 @@ with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createEle
 		var user_id = '<?php echo $user_id; ?>';		
 
 $(function() {
-	
-get_liuyan(3, tag_id, 1, $('#ct-list-full'));
-get_liuyan(3, tag_id, 2, $('#ct-list-full'));
+	setTimeout(function(){
+		get_liuyan(3, tag_id, 1, $('#ct-list-full'));	
+	}, 1000);	
 
-gototop = function() {
+	setTimeout(function(){
+		get_liuyan(3, tag_id, 2, $('#ct-list-full'));		
+	}, 1000);
+
+
+	gototop = function() {
         var t = $(".navbar-placeholder"), a = $(".navbar-wrapper"), e = t.offset(), b = $(".related_courses");
         function fix_related_courses() {
         	$(".related_courses").css({
@@ -685,7 +694,36 @@ $(function() {
 	});
 
 	
-	});</script>
+	});
+
+	// fetch whether user add this product to collected box
+	setTimeout(
+	function(){
+		$.ajax({
+			url:'/product/is_product_collected',
+			type:'POST',
+			timeout:30000,
+			data:{
+				product_id:tag_id,
+				product_type:3
+			},
+			success:function(data){
+				if(data == 1) {
+					$('#add_to_collect').addClass('active');			
+				}
+				console.log('data is: ' + data);
+			},
+			error:function(xhr, status, err) {
+				console.log("DEBUG: status"+status+" \nError:"+err);
+			},
+			complete:function(xhr) {
+				console.log(xhr);
+			}
+		});
+	}
+	,3000);
+
+	</script>
 	
 
 <?php include APPPATH . 'views/common/footer.php'?>

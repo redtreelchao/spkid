@@ -7,6 +7,7 @@
 	//<![CDATA[
 	listTable.url = 'order_api/search_product';
 	function search () {
+                listTable.filter['depot_id'] = $.trim($(':input[name=depot_id]').val());
                 listTable.filter['goods_type'] = $.trim($(':input[name=goods_type]').val());
                 listTable.filter['category_id'] = $.trim($(':input[name=category_id]').val());
                 listTable.filter['brand_id']    = $.trim($(':input[name=brand_id]').val());
@@ -30,12 +31,19 @@
 	</div>
         <?php print form_hidden('order_id',$order->order_id); ?>
 	<div class="search_row">
-		<form name="search" action="javascript:search(); ">
-		<select name="goods_type" id="goods_type">
-                    <option value="product">商品</option>
-                    <option value="package">礼包</option>
-                </select>
-                <!-- 分类 -->
+            <form name="search" action="javascript:search(); ">
+            <?php if($order->source_id == 6): ?>
+            <select name="depot_id" id="depot_id">
+                <option value="9">展会借货仓库</option>
+                <option value="11">展会借货仓库2</option>
+            </select>
+            <?php endif; ?>
+
+            <select name="goods_type" id="goods_type">
+                <option value="product">商品</option>
+                <option value="package">礼包</option>
+            </select>
+        <!-- 分类 -->
 		<?php print form_product_category('category_id', $all_category, 0, '', array('分类'));?>
 		<!-- 品牌 -->
 		<?php print form_dropdown('brand_id',array('品牌')+get_pair($all_brand,'brand_id','brand_name'));?>

@@ -61,7 +61,7 @@
 				<td class="item_title">最小金额:</td>
 				<td class="item_input"><?php print form_input(array('name'=> 'limit_price','class'=> 'textbox require'));?></td>
 			</tr>
-			<?php if($campaign_type != 2 || $campaign_type = '') {?>
+			<?php if($campaign_type == '') {?>
 				<tr>
 					<td class="item_title">赠送商品:</td>
 					<td class="item_input">                
@@ -71,7 +71,7 @@
 			        </select></td>
 				</tr>
 				<input type="hidden" name="campaign_type" value="1" />
-			<?php }else{ ?>
+			<?php }else if($campaign_type == 2 ){ ?>
 				<tr>
 					<td class="item_title">免邮商品:</td>
 					<td class="item_input">                
@@ -81,6 +81,16 @@
 			        </select></td>
 				</tr>
 				<input type="hidden" name="campaign_type" value="2" />
+			<?php }else if($campaign_type == 3 ){ ?>
+				<tr>
+					<td class="item_title">抢购商品:</td>
+					<td class="item_input">                
+	                <input name="pro" type="text" id="pro" value="" size="20" onblur="return sel(this.value);"  />
+					<select name="tag_id" id="tag_id">
+					    <option value="">--请选择--</option>
+			        </select></td>
+				</tr>
+				<input type="hidden" name="campaign_type" value="3" />
 			<?php } ?>
 			
 			<tr>

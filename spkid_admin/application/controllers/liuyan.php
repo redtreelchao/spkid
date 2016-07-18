@@ -203,7 +203,7 @@ class Liuyan extends CI_Controller
             $data['weight'] = $this->input->post('weight');
             $data['size_id'] = $this->input->post('size_id');
             $data['suitable'] = $this->input->post('suitable');
-            $data['comment_date'] = date('Y-m-d H:i:s');
+            $data['comment_date'] = $this->input->post('comment_date'); 
             $data['create_admin'] = $this->admin_id;
             $this->load->library('form_validation');
             $this->form_validation->set_rules('tag_type', '分类名称', 'required');

@@ -12,6 +12,9 @@ class Index extends CI_Controller
 		$this->time = date('Y-m-d H:i:s');
         $this->load->vars('page_title','');//这里设置空title即可
 	}
+    public function error404(){
+        $this->load->view('index/404');
+    }
 	/**
 	 * 公开访问引导页面。
 	 */
@@ -98,61 +101,70 @@ class Index extends CI_Controller
         
         $this->load->model('product_model');
         $this->load->helper('product');
+
         //pc热销商品第一排
-        $hot_sale_product = $this->_get_ad('pc_hot_sale_product1','pc_hot_sale_product1'); 
-        
-        if (isset($hot_sale_product[0])) {
-            $data['pc_hot_sale_product']['first']['col_name'] = $hot_sale_product[0]->position_name;
+        $hot_sale_product1 = $this->_get_ad('pc_hot_sale_product1','pc_hot_sale_product1'); 
+        if (isset($hot_sale_product1[0])) {
+            $data['pc_hot_sale_product']['first']['col_name'] = $hot_sale_product1[0]->position_name;
         }
-        foreach ($hot_sale_product as $key => $value) {
+        foreach ($hot_sale_product1 as $key => $value) {
             $product_id = array();
             preg_match('/\/prodetail-(\d+)\.html/i', $value->ad_link, $product_id);
             if (empty($product_id)) {
                 continue;
             }
             $p = $this->_get_cache_product_info($product_id[1]);
-            //$p = $this->product_model->get_pc_index_product_info($product_id[1]);
             $p[0]->ad_code = $value->ad_code;
             $data['pc_hot_sale_product']['first']['items'][] = $p;
         }
+
         //pc热销商品第二排        
-        $hot_sale_product = $this->_get_ad('pc_hot_sale_product2','pc_hot_sale_product2'); 
-                
-        if (isset($hot_sale_product[0])) {
-            $data['pc_hot_sale_product']['second']['col_name'] = $hot_sale_product[0]->position_name;
+        $hot_sale_product2 = $this->_get_ad('pc_hot_sale_product2','pc_hot_sale_product2');                
+        if (isset($hot_sale_product2[0])) {
+            $data['pc_hot_sale_product']['second']['col_name'] = $hot_sale_product2[0]->position_name;
         }        
-        foreach ($hot_sale_product as $key => $value) {
+        foreach ($hot_sale_product2 as $key => $value) {
             $product_id = array();
             preg_match('/\/prodetail-(\d+)\.html/i', $value->ad_link, $product_id);
             if (empty($product_id)) {
                 continue;
             }
-
-            //$p = $this->product_model->get_pc_index_product_info($product_id[1]);
             $p = $this->_get_cache_product_info($product_id[1]);
             $p[0]->ad_code = $value->ad_code;
             $data['pc_hot_sale_product']['second']['items'][] = $p;
         }
         
-        //pc热销课程
-        $hot_sale_course = $this->_get_ad('pc_hot_sale_course1','pc_hot_sale_course1');
+        //pc热销课程第一排        
+        $hot_sale_course1 = $this->_get_ad('pc_hot_sale_course1','pc_hot_sale_course1');
+        if (isset($hot_sale_course1[0])) {
+            $data['pc_hot_sale_course']['first']['col_name'] = $hot_sale_course1[0]->position_name;
+        }    
+        foreach ($hot_sale_course1 as $key => $value) {
+            $product_id = array();
+            preg_match('/\/product-(\d+)\.html/i', $value->ad_link, $product_id);
+            if (empty($product_id)) {
+                continue;
+            }
+            $p = $this->_get_cache_product_info($product_id[1]);
+            $p[0]->ad_code = $value->ad_code;
+            $data['pc_hot_sale_course']['first']['items'][] = $p;
+        }
 
-       if (isset($hot_sale_course[0])) {
-           $data['pc_hot_sale_course']['first']['col_name'] = $hot_sale_course[0]->position_name;
-       }    
-       
-       foreach ($hot_sale_course as $key => $value) {
-           $product_id = array();
-           preg_match('/\/product-(\d+)\.html/i', $value->ad_link, $product_id);
-           if (empty($product_id)) {
-               continue;
-           }
-
-           //$p = $this->product_model->get_pc_index_product_info($product_id[1]);
-           $p = $this->_get_cache_product_info($product_id[1]);
-           $p[0]->ad_code = $value->ad_code;
-           $data['pc_hot_sale_course']['first']['items'][] = $p;
-       }
+        //pc热销课程第二排        
+        $hot_sale_course2 = $this->_get_ad('pc_hot_sale_course2','pc_hot_sale_course2');
+        if (isset($hot_sale_course2[0])) {
+            $data['pc_hot_sale_course']['second']['col_name'] = $hot_sale_course2[0]->position_name;
+        }    
+        foreach ($hot_sale_course2 as $key => $value) {
+            $product_id = array();
+            preg_match('/\/product-(\d+)\.html/i', $value->ad_link, $product_id);
+            if (empty($product_id)) {
+                continue;
+            }
+            $p = $this->_get_cache_product_info($product_id[1]);
+            $p[0]->ad_code = $value->ad_code;
+            $data['pc_hot_sale_course']['second']['items'][] = $p;
+        }
 
         //pc推荐产品1
         $remcommand_pro = $this->_get_ad('pc_recommand_pro1','pc_recommand_pro1');
@@ -241,6 +253,16 @@ class Index extends CI_Controller
            $data['pc_show_pro']['first']['items'][] = $p;
         }
 
+        //牙医视频
+        $this->load->model('wordpress_model');
+        $cache_key_video = 'pc_index_video_list';
+        $index_video_list = $this->cache->get($cache_key_video);   
+        if(!isset($index_video_list) || empty($index_video_list)){
+            $index_video_list = $this->wordpress_model->fetch_videos_for_index_page(223);
+            $this->cache->save($cache_key_video, $index_video_list, CACHE_TIME_PC_INDEX_PRODUCT_INFO);      
+        }
+        $data['index_video_list'] = $index_video_list;    
+		
         //品牌广告
         //品牌广告位(多个广告)
         $result = $this->_get_ad('pc_brand_list','pc_brand_list');

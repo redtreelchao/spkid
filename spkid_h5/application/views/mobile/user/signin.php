@@ -32,7 +32,7 @@
 <div class="navbar">
                 <div class="navbar-inner">
 <div class="left sliding"><a href="#" class="link back history-back"><i class="icon icon-back"></i></a></div>
-                    <div class="center sliding">注册爱牙</div>
+                    <div class="center sliding">注册悦牙</div>
                 </div>
             </div>
         <div class="page-content">
@@ -52,7 +52,7 @@
               </ul>
             </div>
 <div class="content-block">
-<a href="#register-step2" class="button button-raised button-fill color-indigo">下一步</a>
+<a href="#register-step3" class="button button-raised button-fill color-indigo">下一步</a>
             </div>
           </form>
         </div>
@@ -256,7 +256,7 @@ var myApp = new Framework7({
                 }
                 v_submit_flag = true;                
                 var authcode = $$('#'+prevPage+' input[name="authcode"]').val();
-                $$.ajax({url:'/user/verify_msgcode', async:false, data:{authcode:authcode}, success:function(data){
+                /*$$.ajax({url:'/user/verify_msgcode', async:false, data:{authcode:authcode}, success:function(data){
                     if (0 == data){
                         self.go = true;
                     } else{
@@ -268,7 +268,7 @@ var myApp = new Framework7({
                 complete:function(){
                     v_submit_flag = false;
                 }
-                })
+            })*/
             self.go = true;
             v_submit_flag = false;
             } else if('register-step3' == prevPage) {
@@ -285,8 +285,9 @@ var myApp = new Framework7({
                 
                 var user_name = $$('input[name=user_name]').val();
                 var password = $$('#password').val();
+                var mobile = $$('.page[data-page="register-step1"] input[name="mobile"]').val();
                 
-                $$.ajax({url:'/user/proc_register', method:'POST', data:{user_name:user_name, password:password}, success:function(data){
+                $$.ajax({url:'/user/proc_register', method:'POST', data:{user_name:user_name, password:password, mobile:mobile}, success:function(data){
                     if ('success' == data.substr(0, 7)){
                         myApp.alert(data.substr(8), '注册成功!', function(){
                             
@@ -375,7 +376,7 @@ $$('#login-page form.ajax-submit').on('submitted', function (e) {
 
 })
     function login(){
-        myApp.yywLogin(false,'登录爱牙网',function(username, password){
+        myApp.yywLogin(false,'登录悦牙网',function(username, password){
 
             $$.ajax({url:'/user/proc_login', method:'POST', dataType:'json', data:{username:username,password:password}, success:function(data){
                 if (1==data.error)

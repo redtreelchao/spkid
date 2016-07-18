@@ -350,23 +350,27 @@ class Pick extends CI_Controller
 		$this->load->helper('order');
         //$sn=trim($this->input->post('sn'));
 		$invoice_no=trim($this->input->post('invoice_no'));
+                $scan_weight =  floatval($this->input->post('scan_weight'))* 1000;
 		//$pick_sn=trim($this->input->post('pick_sn'));
 		$this->db->trans_begin();
 		//if(substr($sn,0,2)=='DD'){
 			//订单发货
-        $order=$this->order_model->lock_order('', $invoice_no);
-        if(!$order||$order->shipping_status || !$order->is_qc || $order->odd){
-                //sys_msg('不可操作',1);
-            print json_encode(array('err' => 1, 'msg' => '订单必须是未发货、已复核、正常的订单，才可发货'));
-            exit;
+                $order=$this->order_model->lock_order('', $invoice_no);
+                if(!$order||$order->shipping_status || !$order->is_qc || $order->odd){
+                    //sys_msg('不可操作',1);
+                    print json_encode(array('err' => 1, 'msg' => '订单必须是未发货、已复核、正常的订单，才可发货'));
+                    exit;
 		}
+                $recheck_shipping_fee = calc_weight_shipping_fee($order, $scan_weight);
 		$order_id=$order->order_id;
 		$update = array(
 			'shipping_status' => 1,
 			'shipping_admin' => $this->admin_id,
 			'shipping_date' => $this->time,
 			'lock_admin' => 0,
-			'invoice_no' => $invoice_no
+			'invoice_no' => $invoice_no, 
+                        'recheck_weight_unreal' => $scan_weight, 
+                        'recheck_shipping_fee' => $recheck_shipping_fee
 		);	
 		$trans_update = array('trans_status'=>TRANS_STAT_OUT,'update_admin'=>$this->admin_id,'update_date'=>$this->time);		
 		$action_note = "订单扫描发货";
@@ -543,6 +547,7 @@ class Pick extends CI_Controller
         auth('pick_edit');
         $data = array();
         $data['pick_sn'] = $pick_sn;
+        $data['blank_shipping'] = '|'.implode('|', array(DB_SHIPPING_ID, DBDS_SHIPPING_ID)).'|';
         $this->load->view('pick/print_main', $data);
 	}
 	
@@ -567,15 +572,15 @@ class Pick extends CI_Controller
 				$p = strpos($order->address, $order->province_name);
 				$c = strpos($order->address, $order->city_name);
 				$d = strpos($order->address, $order->district_name);
-                if ($p === 0 && $c === 0 && $d === 0) {
-                    $order->address=$order->address;
-                } else {				
+                                if ($p === 0 && $c === 0 && $d === 0) {
+                                    $order->address=$order->address;
+                                } else {				
 				    $order->address=$order->province_name.' '.$order->city_name.' '.$order->district_name.' '.$order->address;
 				}
 				$order->city=$order->district_name;
 				$order->codAmount=($order->pay_id==PAY_ID_COD && $order->order_amount>0)?$order->order_amount:0;
 				$html=$this->load->view('pick/print_main_list',array('list'=>array($order)),TRUE);
-				print json_encode(array('err'=>0,'msg'=>'','html'=>$html,'type'=>'order'));
+				print json_encode(array('err'=>0,'msg'=>'','html'=>$html, 'shipping_id' => $order->shipping_id,'type'=>'order'));
 				break;
 			case 'HH':
 				$change=$this->change_model->change_info(0,$sn);
@@ -599,23 +604,24 @@ class Pick extends CI_Controller
 					{
 						$order=format_order($order);
 						$order->sn=$order->order_sn;
-                        $order->id=$order->order_id;
-				        $order->pick_cell= sprintf('%02d', $order->pick_cell);				
-                        $order->goods_num = $order->product_num;
-				        $p = strpos($order->address, $order->province_name);
-                        $c = strpos($order->address, $order->city_name);
-                        $d = strpos($order->address, $order->district_name);
-                        if ($p === 0 && $c === 0 && $d === 0) {
-                            $order->address=$order->address;
-                        } else {				
-				            $order->address=$order->province_name.' '.$order->city_name.' '.$order->district_name.' '.$order->address;
-				        }
+						$order->id=$order->order_id;
+						$order->pick_cell= sprintf('%02d', $order->pick_cell);				
+						$order->goods_num = $order->product_num;
+						$order->weight= $order->order_weight_unreal;
+						$p = strpos($order->address, $order->province_name);
+						$c = strpos($order->address, $order->city_name);
+						$d = strpos($order->address, $order->district_name);
+						if ($p === 0 && $c === 0 && $d === 0) {
+							$order->address=$order->address;
+						} else {				
+							$order->address=$order->province_name.' '.$order->city_name.' '.$order->district_name.' '.$order->address;
+						}
 						$order->city=$order->district_name;
 						$order->codAmount=($order->pay_id==PAY_ID_COD && $order->order_amount>0)?$order->order_amount:0;
 						$orders[$key] = $order;						
 					}
 					$html=$this->load->view('pick/print_main_list',array('list'=>$orders),TRUE);
-					print json_encode(array('err'=>0,'msg'=>'','html'=>$html,'type'=>'order'));
+					print json_encode(array('err'=>0,'msg'=>'','html'=>$html, 'shipping_id' => $pick->shipping_id,'type'=>'order'));
 				}else{
 					$changes=$this->pick_model->picked_change_info($sn);
 					if(!$changes) sys_msg('拣货单中没有相关换货单数据');
@@ -654,7 +660,7 @@ class Pick extends CI_Controller
 		$pick = $this->pick_model->filter(array('pick_sn'=>$pick_sn));
 		if(!$pick) 
 			sys_msg('拣货单不存在',1,array(array('href'=>'pick/','text'=>'返回订单拣货列表')));
-		$orders = $this->pick_model->get_orders_by_picksn($pick_sn);
+		$orders = $this->pick_model->get_orders_by_picksn(array('pick_sn' => $pick_sn));
 		if (empty($orders) || count($orders) <= 0) 
 			sys_msg("没有需要打印的包裹装箱单",1,array(array('href'=>'pick/','text'=>'返回订单拣货列表')));
 		$order_ids = array();
@@ -666,6 +672,19 @@ class Pick extends CI_Controller
 		
 		$this->load->view('pick/print_order',array('order_info'=>$order_info, 'pick_sn' => $pick_sn));
 	}
+        
+        public function print_orders($pick_ids){
+            $pick_id_arr = explode('-', $pick_ids);
+            $orders = $this->pick_model->get_orders_by_picksn(array('pick_id' => $pick_id_arr));
+            if (empty($orders) || count($orders) <= 0) 
+                sys_msg("没有需要打印的包裹装箱单",1,array(array('href'=>'pick/','text'=>'返回订单拣货列表')));
+            $order_ids = array();
+            foreach ($orders as $row) {
+                $order_ids[] = $row->order_id;
+            }
+            $order_info = $this->pick_model->get_order_info($order_ids);
+            $this->load->view('pick/print_order',array('order_info'=>$order_info, 'pick_sn' => $pick_sn));
+        }
         
         public function search_admin() {
 		auth('pick_edit');
@@ -760,6 +779,40 @@ class Pick extends CI_Controller
 	$this->pick_model->update(array('is_print'=>$flag),$pick_sn);
 	echo json_encode(array('err'=>0,"msg"=>"","flag"=>$flag));
 	return;
+    }
+    
+    public function blank_print($order_ids){
+        $this->load->model('order_model');
+	 $order_ids2 = urldecode($order_ids);
+        $code = '';
+        $order_id_arr = explode('|', $order_ids2);
+        $orders=$this->order_model->get_orders_info($order_id_arr);
+	//print_r($orders);
+        if(!$orders) sys_msg('订单不存在或运单号缺失',1);
+        foreach ($orders as $key => $order) {
+            $order=format_order($order);
+            if ($code == '') $code = $order->shipping_code;
+            if ($code != $order->shipping_code) sys_msg('订单中存在不同的快递公司，系统无法处理',1);
+            $order->sn=$order->order_sn;
+            $order->goods_num=$order->product_num;
+            $order->id=$order->order_id;				
+            $order->pick_cell= sprintf('%02d', $order->pick_cell);
+            $p = strpos($order->address, $order->province_name);
+            $c = strpos($order->address, $order->city_name);
+            $d = strpos($order->address, $order->district_name);
+            if ($p === 0 && $c === 0 && $d === 0) {
+                $order->address=$order->address;
+            } else {				
+                $order->address=$order->province_name.' '.$order->city_name.' '.$order->district_name.' '.$order->address;
+            }
+            $order->city=$order->district_name;
+            $order->codAmount=($order->pay_id==PAY_ID_COD && $order->order_amount>0)?$order->order_amount:0;
+            $order->transportType = ($order->shipping_id == DBDS_SHIPPING_ID) ? '360特惠件' : '标准快递';
+            $order->insuranceValue = 300;
+            if ($order->order_price >= 300) $order->insuranceValue = intval($order->order_price/300)*300;
+            $orders[$key] = $order;
+        }
+        $this->load->view('pick/'.$code,array('list'=>$orders, 'full_src' => true));
     }
         
 }
