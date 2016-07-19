@@ -39,7 +39,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 /**
  * 各服务器host定义
  */
-define('STATIC_HOST_CONFIG','$static_host_arr=array("http://s.redtravel.cn","http://s.redtravel.cn");');
+define('STATIC_HOST_CONFIG','$static_host_arr=array("http://static.redtravel.cn","http://static.redtravel.cn");');
 
 define('MAX_SALE_NUM', 200);//商品最大可售数
 define('MIN_SALE_CUE_NUM', 2);//库存紧张数

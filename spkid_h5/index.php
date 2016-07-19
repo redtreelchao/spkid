@@ -22,7 +22,7 @@ if(is_file($_SERVER['DOCUMENT_ROOT'].'/360safe/360webscan.php')){
  *
  */
 	define('ENVIRONMENT', 'production');
-	//define('ENVIRONMENT', 'development');
+//define('ENVIRONMENT', 'development');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

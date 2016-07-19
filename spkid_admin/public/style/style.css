@@ -123,7 +123,7 @@ td.item_input {text-align:left;}
 .img_tip{ display:inline-block; width:16px; height:16px; background-image:url(img/picflag.gif);}
 /*登陆页面*/
 #login{ width:704px; height:206px; position:absolute; top:50%; left:50%; margin-left:-352px; margin-top:-163px;}
-.lt{ height:88px; background:url(img/blue_lt_bg.png) no-repeat;}
+.lt{ height:88px; background:url(img/blue_lt_bg.png) no-repeat; font-size:20px; text-align:center; }
 .ld{ height:204px; background:url(img/blue_ld_bg.png) no-repeat;}
 .ld td{ padding:10px 5px;}
 .notice{ height:28px;overflow:hidden;border:1px solid #F6E774;background:url(img/blue_notice_bg.png) repeat-x; color:#333; width:98%; margin:0 auto 10px auto;}

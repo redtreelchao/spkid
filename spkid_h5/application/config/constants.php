@@ -1,5 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+define('FRONT_HOST', 'h5.redtravel.cn');
 /*
 |--------------------------------------------------------------------------
 | File and Directory Modes

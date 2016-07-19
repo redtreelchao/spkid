@@ -11,7 +11,7 @@
 <body bgcolor="#FAFEF0">
 <form method="post" action="index/proc_login">
 <div id="login">
-  <div class="lt"></div>
+  <div class="lt">ERP管理系统</div>
   <div class="ld">
      <table width="704" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
