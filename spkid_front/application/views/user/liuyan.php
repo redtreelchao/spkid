@@ -28,7 +28,7 @@
                         <div class="fl-right pingjia-right">
                             <?php if(empty($liuyan->comment_content)): ?>
                              <a href="#" class="click-pingjia" onclick="load_dianping_panel('<?php echo $liuyan->product_id ?>')">点击评价</a>                            
-                             <p>评价审核通过后您将有机会获得血色烂漫积分（最多不超过<?=$user->comment_point?>个）</p>
+                             <p>评价审核通过后您将有机会获得演示站积分（最多不超过<?=$user->comment_point?>个）</p>
                              <?php else: ?>
                              <span title="<?=$liuyan->comment_content?>"><?php echo mask_str($liuyan->comment_content, 40, 0); ?></span>
                              <?php endif; ?>

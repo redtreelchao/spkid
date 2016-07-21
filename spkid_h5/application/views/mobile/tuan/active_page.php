@@ -134,7 +134,7 @@
      
      </div>
     <div class="focus-on">
-        关注血色烂漫公众号，第一时间知晓最新的优惠促销活动！
+        关注演示站公众号，第一时间知晓最新的优惠促销活动！
         <a href="http://mp.weixin.qq.com/s?__biz=MzA3MDY0MDkyNw==&mid=100000226&idx=1&sn=f6e613192384f61d2b31edd212f86540#rd"><img src="<?php echo static_style_url('mobile/img/guanzhu.png?v=version')?>"></a>
     </div>
 </div>
@@ -463,7 +463,7 @@ $(document).ready(function(){
 		console.log('');
 		},
 		success: function (res) {
-		alert('十分感谢您对血色烂漫的支持！！！');
+		alert('十分感谢您对演示站的支持！！！');
 		},
 		cancel: function (res) {
         
@@ -482,7 +482,7 @@ $(document).ready(function(){
 	        console.log('');
 	      },
 	      success: function (res) {
-	        alert('十分感谢您对血色烂漫的支持！！！');
+	        alert('十分感谢您对演示站的支持！！！');
 	      },
 	      cancel: function (res) {
         

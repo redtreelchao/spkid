@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="theme-color" content="#2196f3">
-    <title><?php echo isset($title) ? $title : '血色烂漫'?></title>
+    <title><?php echo isset($title) ? $title : '演示站'?></title>
     <meta name="Keywords" content="<?php echo isset($keywords) ? $keywords : '';?>">
     <meta name="Description" content="<?php echo isset($description) ? $description : '';?>">
 	

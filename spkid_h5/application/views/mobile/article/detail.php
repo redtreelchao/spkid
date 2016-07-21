@@ -45,7 +45,7 @@
 	    <div class="order-details-rr" style="margin:20px auto">
 		 	 <p style="font-weight:bold;color:black;">您可以添加我们的微信公众号</p>
 		 	 <p style="font-weight:bold;color:black;">从那里分享</p>
-		 	 <p style="text-alig:center;font-weight:bold;color:black;font-size:1.5em">血色烂漫</p>
+		 	 <p style="text-alig:center;font-weight:bold;color:black;font-size:1.5em">演示站</p>
 		 	 <p style="text-alig:center;">牙科行业的精品文章和专业资讯</p>
 		 	 <p style="text-alig:center;">m.yueyawang.com</p>
         </div>
@@ -69,7 +69,7 @@
 					    <div class="left">
 					    	<a href="#" class="link back article-detail-back"><i class="icon icon-back"></i></a>
 					    </div>
-					    <div class="center">血色烂漫文章视频频道</div>
+					    <div class="center">演示站文章视频频道</div>
 
 	                </div>
 		       	</div>
@@ -159,7 +159,7 @@
 									</div>
 									<div class="article-yuegao">
 									  	<div class="yuegao-title"><img src="<?php echo static_url('mobile/img/yuegao.gif?v=version');?>" alt=""></div>
-                                      	<div class="yuegao-nr">成为血色烂漫文章专栏作家,投稿可联系<br/>Sunny<span>QQ：3273941713</span></div>
+                                      	<div class="yuegao-nr">成为演示站文章专栏作家,投稿可联系<br/>Sunny<span>QQ：3273941713</span></div>
 									</div>
 									<div class="v-article-product clearfix">
 										<div class="rr-tracey"><a href="/index" class="article-arrow  tarticle-arrow2 external">热卖牙科产品</a></div>
@@ -168,14 +168,14 @@
 								</div>					
 							</div>
 							<div class="v-article-yyw">
-								<p class="v-article-nbsp">血色烂漫-中国首家牙科电商与产品教育平台，致力于服务牙科人，为中国牙科行业创造价值！网站设三个频道：产品展销频道，课程培训频道，文章视频频道。最新商品，课程，技术与文章，登陆<a href="/index" class="external">yueyawang.com</a>，可一览无余。 </p>
-								<p>商品、课程打折促销，最新热门技术与文章，还可以通过血色烂漫微信公众号第一时间获悉。</p>
+								<p class="v-article-nbsp">演示站-中国首家牙科电商与产品教育平台，致力于服务牙科人，为中国牙科行业创造价值！网站设三个频道：产品展销频道，课程培训频道，文章视频频道。最新商品，课程，技术与文章，登陆<a href="/index" class="external">yueyawang.com</a>，可一览无余。 </p>
+								<p>商品、课程打折促销，最新热门技术与文章，还可以通过演示站微信公众号第一时间获悉。</p>
 								<img src="<?php echo static_url('mobile/img/wx.jpg?v=version');?>" alt="">
 
 								<?php if (strpos($this->input->server('HTTP_USER_AGENT'), 'MicroMessenger')){?>
 									<p class="v-article-code">长按识别二维码,加关注</p>
 					       		<?php }else{ ?>
-									<p class="v-article-code">微信搜索公众号“血色烂漫”,加关注</p>
+									<p class="v-article-code">微信搜索公众号“演示站”,加关注</p>
 					       		<?php }?>							
 							</div>
 						</div>

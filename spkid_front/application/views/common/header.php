@@ -4,7 +4,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta http-equiv=Content-Type content="text/html;charset=utf-8">
 
-<title><?php echo isset($title) ? $title : '血色烂漫'?></title>
+<title><?php echo isset($title) ? $title : '演示站'?></title>
 <meta name="Keywords" content="<?php echo isset($keywords) ? $keywords : '';?>">
 <meta name="Description" content="<?php echo isset($description) ? $description : '';?>">
 
@@ -66,7 +66,7 @@ $(function(){
 <!--header end-->
 <?php if(!isset($index)) $index = 0;$menus = array(array('name' => '首页', 'href' => '/'), array('name' => '全部商品', 'href' => '/category-0-0-0-0-11.html'), array('name' => '全部展品', 'href' => '/brand/lists'), array('name' => '课程表', 'href' => '/index/course.html'), array('name' => '视频', 'href' => '/video.html'));?>
 <div class="navtion clearfix">
-    <div id="logo"><a href="/" class="logo">血色烂漫</a></div>
+    <div id="logo"><a href="/" class="logo">演示站</a></div>
     <div class="menu">
         <ul>
           <?php foreach($menus as $key => $m): if ($index == $key):?>

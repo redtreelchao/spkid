@@ -13,7 +13,7 @@
 	<div class="popover-inner">
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div class="center">血色烂漫商城</div>
+				<div class="center">演示站商城</div>
 			</div>
 		</div>
 		<div class="content-block share_modal">

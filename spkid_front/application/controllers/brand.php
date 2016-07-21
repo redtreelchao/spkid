@@ -38,11 +38,11 @@ class Brand extends CI_Controller {
             $page = 1;
             $data = $this->rush_model->brand_product_list($bid, $page);
 
-            $data['title'] = isset($data['brand']) ? $data['brand']->brand_name . '-血色烂漫' : '血色烂漫品牌';
+            $data['title'] = isset($data['brand']) ? $data['brand']->brand_name . '-演示站' : '演示站品牌';
 
-            $data['keywords'] = isset($data['brand']) ? $data['brand']->brand_info . '-血色烂漫' : '血色烂漫品牌';
+            $data['keywords'] = isset($data['brand']) ? $data['brand']->brand_info . '-演示站' : '演示站品牌';
 
-            $data['description'] = isset($data['brand']) ? strip_tags($data['brand']->brand_story) . '-血色烂漫' : '血色烂漫品牌';
+            $data['description'] = isset($data['brand']) ? strip_tags($data['brand']->brand_story) . '-演示站' : '演示站品牌';
 
             $this->load->view('product/brand',$data);
         }

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta http-equiv=Content-Type content="text/html;charset=utf-8">
-<title>个人中心-血色烂漫</title>
+<title>个人中心-演示站</title>
 <link href="<?php echo static_style_url('pc/css/bootstrap.css?v=version')?>" rel="stylesheet" type="text/css">
 <link href="<?php echo static_style_url('pc/css/common.css?v=version')?>" rel="stylesheet" type="text/css">
 <link href="<?php echo static_style_url('pc/css/main.css?v=version')?>" rel="stylesheet" type="text/css">
@@ -29,7 +29,7 @@
     <!--nav start-->
     <div class="nav-wrap min-wrapper">
         <div class="nav2 clearfix">
-            <a href="/" class="logo"><img src="<?php echo static_style_url('pc/images/logo2.png?v=version');?>" alt="血色烂漫"></a>
+            <a href="/" class="logo"><img src="<?php echo static_style_url('pc/images/logo2.png?v=version');?>" alt="演示站"></a>
             <div class="nav-right2">
                 <div class="textbox">
                     <div class="nav-search2">

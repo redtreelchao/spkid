@@ -248,7 +248,7 @@ include_once (APPPATH . "views/common/header.php");
 	</div>
 	
 	<div style="padding-left:20px;">
-		<p style="margin-top:28px; font-size:14px; color:#333;">血色烂漫课代表</p>
+		<p style="margin-top:28px; font-size:14px; color:#333;">演示站课代表</p>
 		<p style="color:#909090; font-size:12px;">联系方式只对报名学生可见</p>
 		<p style="color:#909090; font-size:12px;">报名前对课程有疑问请点击
 			<a href="javascript:void(0)" onclick="$('#keqianwenda').click();">课前问答</a>

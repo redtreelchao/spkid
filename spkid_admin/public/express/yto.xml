@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <express size="300" width="530">
-	<siteName x="20" y="50">血色烂漫</siteName>
+	<siteName x="20" y="50">演示站</siteName>
     <company x="30" y="72">上海欧思蔚奥医疗器材有限公司</company>
 	<companyPhone x="65" y="133">400-9905-920</companyPhone>
     <companyAddress x="20" y="98" width="300" wrapLength="19" indent="18" fontWeight="bold">上海市 浦东新区 周浦镇 建韵路618号3号楼305室</companyAddress>	
@@ -20,7 +20,7 @@
     <category x="22" y="180">牙科器材</category>
     <goodsnums x="130" y="172">1</goodsnums>
     <weight x="195" y="172"/>
-    <sender x="110" y="255">血色烂漫</sender>
+    <sender x="110" y="255">演示站</sender>
     <pdate x="160" y="255"/>
     
 </express>

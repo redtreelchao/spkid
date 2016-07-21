@@ -19,7 +19,7 @@
 <html class="no-js">
   <head>
     <meta charset="utf-8">
-    <title>血色烂漫</title>
+    <title>演示站</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-sclae=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="description" content="">
     <meta name="keywords" content="">

@@ -10,6 +10,6 @@
     
 </head>
 <body>
-    <div class="footer">血色烂漫电子商务管理系统</div>
+    <div class="footer">演示站电子商务管理系统</div>
 </body>
 </html>

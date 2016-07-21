@@ -45,7 +45,7 @@ define('MAX_SALE_NUM', 200);//商品最大可售数
 define('MIN_SALE_CUE_NUM', 2);//库存紧张数
 
 define("BASE_URL", "/");
-define('SHOP_NAME','血色烂漫');
+define('SHOP_NAME','演示站');
 // 事务状态常量定义
 define('TRANS_STAT_AWAIT_OUT',	1);
 define('TRANS_STAT_OUT',	2);
@@ -214,9 +214,9 @@ define('M_LIST_PAGE_SIZE',12);//手机端每页显示多少商品
 define('M_INDEX_PAGE_MAX',3);//手机端首页最多加载几页
 
 //seo
-define('SITE_NAME', '血色烂漫网');
+define('SITE_NAME', '演示站网');
 
-define('SITE_NAME_MOBILE', '血色烂漫网 www.redtravel.cn');
+define('SITE_NAME_MOBILE', '演示站网 www.redtravel.cn');
 define('PAGE_KEYWORDS' , SITE_NAME.'，keywords content.');
 define('PAGE_DESCRIPTION' , SITE_NAME.'description content！');
 define('PAGE_TITLE_SITE_NAME' , SITE_NAME.'_site_name_here');

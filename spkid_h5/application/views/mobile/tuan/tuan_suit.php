@@ -344,7 +344,7 @@ ul,li{    -webkit-margin-before: 0; -webkit-margin-after: 0;}
         console.log('');
         },
         success: function (res) {
-        alert('十分感谢您对血色烂漫的支持！！！');
+        alert('十分感谢您对演示站的支持！！！');
         },
         cancel: function (res) {
         
@@ -363,7 +363,7 @@ ul,li{    -webkit-margin-before: 0; -webkit-margin-after: 0;}
             console.log('');
           },
           success: function (res) {
-            alert('十分感谢您对血色烂漫的支持！！！');
+            alert('十分感谢您对演示站的支持！！！');
           },
           cancel: function (res) {
         

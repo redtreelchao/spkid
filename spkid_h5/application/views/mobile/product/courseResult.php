@@ -46,7 +46,7 @@
                                                 <?php 
 $now = date('Y-m-d H:i:s');
     if($course['is_promote'] && $now >= $course['promote_start_date'] && $now <= $course['promote_end_date']):?>
-                                                <p class="l-sale1">通过血色烂漫报名 立减&nbsp;&yen;<?=$course['shop_price'] - $course['promote_price']?></p>
+                                                <p class="l-sale1">通过演示站报名 立减&nbsp;&yen;<?=$course['shop_price'] - $course['promote_price']?></p>
                                                 <?php endif; ?>
                                             </div>
                                         </div>

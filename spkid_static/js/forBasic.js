@@ -40,11 +40,11 @@
 	//加入收藏
 	function addFavorite(){
 		if(document.all){
-			window.external.addFavorite('http://www.mammytree.com','血色烂漫');
+			window.external.addFavorite('http://www.mammytree.com','演示站');
 		}else if(window.sidebar){
-			window.sidebar.addPanel('血色烂漫','http://www.mammytree.com','');
+			window.sidebar.addPanel('演示站','http://www.mammytree.com','');
 		}else{
-			alert('您的浏览器不支持加入收藏，请用 ctrl+d 收藏血色烂漫');
+			alert('您的浏览器不支持加入收藏，请用 ctrl+d 收藏演示站');
 		}
 	}
 	

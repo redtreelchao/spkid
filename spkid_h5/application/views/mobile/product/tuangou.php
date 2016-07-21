@@ -66,7 +66,7 @@ var static_host='';
 </div>
 <!-- ends 留言对话框 -->
     <div class="views">
-    <!-- 血色烂漫商城-->
+    <!-- 演示站商城-->
         <div class="view view-main" data-page="index">
             <div class="pages ">
     		    <div data-page="index" class="page no-toolbar edu-fot">

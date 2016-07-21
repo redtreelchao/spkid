@@ -19,7 +19,7 @@
 <html class="no-js">
   <head>
     <meta charset="utf-8">
-    <title>血色烂漫</title>
+    <title>演示站</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-sclae=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="description" content="">
     <meta name="keywords" content="">
@@ -79,7 +79,7 @@
     <ul class="am-list">
     <li class="am-g am-list-item-dated">
         
-	<a href="##" class="am-list-item-hd ">商　品：血色烂漫订单</a>
+	<a href="##" class="am-list-item-hd ">商　品：演示站订单</a>
         
       </li>
       <li class="am-g am-list-item-dated">

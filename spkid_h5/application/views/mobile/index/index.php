@@ -24,7 +24,7 @@
 	</div>
 </div>
 <div class="views">
-<!-- 血色烂漫商城-->
+<!-- 演示站商城-->
 <div class="view view-main" data-page="<?=$active_tab?>">
     <div class="toolbar tabbar-labels tabbar">
         <div class="toolbar-inner">
@@ -209,7 +209,7 @@
 <!--navtion start--> 
      <div class="navtion">
           <div class="menu clearfix">
-               <h1 class="nav-bt">血色烂漫课堂</h1>
+               <h1 class="nav-bt">演示站课堂</h1>
                <div class="menu-login menu-search"><span class="nav-search"></span></div>
           </div>
      </div>  

@@ -264,7 +264,7 @@ function cnlength(str){return Math.ceil(str.replace(/[^\x00-\xff]/g, "**").lengt
 window.onbeforeunload = function(e){
     if(!getCookie('bookmark')){
         setCookie('bookmark',1,30);
-        confirm("是否要将血色烂漫加入收藏夹？");
-        addBookmark('血色烂漫','http://www.mammytree.com');
+        confirm("是否要将演示站加入收藏夹？");
+        addBookmark('演示站','http://www.mammytree.com');
     }
 };

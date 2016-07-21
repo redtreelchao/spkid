@@ -26,9 +26,9 @@ class Tuan extends CI_Controller
     	$key = 'v_tuan_list_' . $str;
     	$is_preview = isset($_GET['is_preview']) && $_GET['is_preview'] == 1 ? TRUE : FALSE;
 
-	$data['title'] = '血色烂漫牙科精品团购热销';
-	$data['keywords'] = '血色烂漫牙科精品团购热销，牙科 牙医首选，实惠，品质';
-	$data['description'] = '血色烂漫牙科精品团购热销，牙科 牙医首选，实惠，品质';
+	$data['title'] = '演示站牙科精品团购热销';
+	$data['keywords'] = '演示站牙科精品团购热销，牙科 牙医首选，实惠，品质';
+	$data['description'] = '演示站牙科精品团购热销，牙科 牙医首选，实惠，品质';
         if($str == 'product'){
         	$product_type = 1;
         	$data['tuan_product'] = $this->tuangou_model->tuan_list($product_type);
