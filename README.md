@@ -36,3 +36,6 @@ CSS/js等文件
 ### 其中用到的点:
 - wordpress,文章管理
 -sphinx-for-chinese中文搜索
+-----
+author:redtreelchao
+date:20160818
