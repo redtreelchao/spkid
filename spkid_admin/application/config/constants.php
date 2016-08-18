@@ -417,6 +417,7 @@ define('PRODUCT_TOOTH_TYPE', 1);//牙科大类ID
 define('PRODUCT_COURSE_TYPE', 2);//课程大类ID
 
 define('ORDER_SOURCE_ID', 6); 
+define('WEIXIN_CACHE_TIME', 2592000); //30天
 $refund = array('1' => '不退货补偿');
 // 参数配置文件路径
 define('SYSTEM_SETTINGS', ROOT_PATH.'application/config/settings.php');

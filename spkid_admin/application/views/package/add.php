@@ -63,6 +63,12 @@
 				</td>
 			</tr>
 			<tr>
+				<td class="item_title">分享图片</td>
+				<td class="item_input">
+					<?php print form_upload('package_wechat_image', '', 'class="textbox"');?>
+				</td>
+			</tr>
+			<tr>
 				<td class="item_title">礼包设置</td>
 				<td class="item_input">
 					<label><?php print form_checkbox('is_liuyan', '1', FALSE);?>启用留言功能</label>

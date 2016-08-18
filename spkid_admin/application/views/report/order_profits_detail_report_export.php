@@ -110,18 +110,20 @@
   </Style>
  </Styles>
  <Worksheet ss:Name="订单销售利润明细表（已完结，退货单为负利润）">
-  <Table ss:ExpandedColumnCount="16" x:FullColumns="1"
+  <Table x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
    <Column ss:Index="8" ss:Width="63"/>
    <Column ss:Width="57"/>
    <Row ss:AutoFitHeight="0">
     <Cell ss:StyleID="s70"><Data ss:Type="String">单号</Data></Cell>
+    <Cell ss:StyleID="s70"><Data ss:Type="String">订单类型</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">财审日期</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">完结日期</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">商品款号</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">商品名称</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">品牌</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">供应商名称</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">供应商条码</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">规格</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">数量</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">含税销售单价</Data></Cell>
@@ -131,16 +133,21 @@
     <Cell ss:StyleID="s71"><Data ss:Type="String">运营专员</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">实际运费</Data></Cell>
     <Cell ss:StyleID="s71"><Data ss:Type="String">理论运费</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">收货人</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">手机号</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">地址</Data></Cell>
    </Row>
    <?php foreach ($order_product as $key => $op_val): ?>
    <Row ss:AutoFitHeight="0">
     <Cell ss:StyleID="s72"><Data ss:Type="String"><?php print $op_val->trans_sn; ?></Data></Cell>
+    <Cell ss:StyleID="s72"><Data ss:Type="String"><?php print $op_val->genre_name; ?></Data></Cell>
     <Cell ss:StyleID="s68"><Data ss:Type="String"><?php print $op_val->finance_check_date; ?></Data></Cell>
     <Cell ss:StyleID="s68"><Data ss:Type="String"><?php print $op_val->is_ok_date; ?></Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String"><?php print $op_val->product_sn; ?></Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String"><?php print $op_val->product_name; ?></Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String"><?php print $op_val->brand_name; ?></Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String"><?php print $op_val->provider_name; ?></Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="String"><?php print $op_val->provider_barcode; ?></Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String"><?php print $op_val->size_name; ?></Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="Number"><?php print ($op_val->product_number < 0) ? substr($op_val->product_number, 1) : '-'.$op_val->product_number; ?></Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="Number"><?php print $op_val->paid_price; ?></Data></Cell>
@@ -150,6 +157,10 @@
     <Cell ss:StyleID="s73"><Data ss:Type="String"><?=$op_val->operator?></Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="Number"><?=($op_val->real_shipping_fee > 0) ? round($op_val->real_shipping_fee*$op_val->shop_price*abs($op_val->product_number)/$op_val->order_price, 2) : 0; ?></Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="Number"><?=($op_val->recheck_shipping_fee > 0) ? round($op_val->recheck_shipping_fee*$op_val->shop_price*abs($op_val->product_number)/$op_val->order_price, 2) : 0; ?></Data></Cell>
+    <Cell ss:StyleID="s68"><Data ss:Type="String"><?php print $op_val->consignee; ?></Data></Cell>
+    <Cell ss:StyleID="s68"><Data ss:Type="String"><?php print $op_val->mobile; ?></Data></Cell>
+    <Cell ss:StyleID="s68"><Data ss:Type="String"><?php print $op_val->address; ?></Data></Cell>
+
    </Row>
    <?php endforeach; ?>
   </Table>

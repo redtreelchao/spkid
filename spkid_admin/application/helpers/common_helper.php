@@ -624,7 +624,8 @@ function generate_where_by_filter( $filter, $useOr=false ){
         foreach( $filter['search_keys'] AS $key ){
             array_push( $tmpStr, $key ." = ? " );
             array_push( $param, $filter[$key] );
-        }   
+        }
+
         $where .= ($useOr?"(":''). implode($tmpStr,' '.$sqlConcat.' '). ($useOr?")":'');
         array_push( $param, $where );
     }

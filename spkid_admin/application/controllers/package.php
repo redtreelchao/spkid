@@ -113,6 +113,10 @@ class Package extends CI_Controller
 			$file = $this->upload->data();
 			$update['package_homepage_image'] = 'package/'.$sub_dir.'/'.$file['file_name'];
 		}
+		if($this->upload->do_upload('package_wechat_image')){
+			$file = $this->upload->data();
+			$update['package_wechat_image'] = 'package/'.$sub_dir.'/'.$file['file_name'];
+		}
 		if ($update) {
 			$this->package_model->update($update, $package_id);
 		}
@@ -250,6 +254,10 @@ class Package extends CI_Controller
 			@unlink(CREATE_IMAGE_PATH.$package->package_homepage_image);
 			$update['package_homepage_image'] = '';
 		}
+		if($this->input->post('delete_package_wechat_image') && $package->package_wechat_image) {
+			@unlink(CREATE_IMAGE_PATH.$package->package_wechat_image);
+			$update['package_wechat_image'] = '';
+		}
 
 		$sub_dir = ($package_id-$package_id%100)/100;
 		if(!file_exists($base_path)) mkdir($base_path, 0700, true);
@@ -268,6 +276,11 @@ class Package extends CI_Controller
 			$file = $this->upload->data();
 			$update['package_homepage_image'] = 'package/'.$sub_dir.'/'.$file['file_name'];
 			if($package->package_homepage_image) @unlink(CREATE_IMAGE_PATH.$package->package_homepage_image);
+		}
+		if($this->upload->do_upload('package_wechat_image')){
+			$file = $this->upload->data();
+			$update['package_wechat_image'] = 'package/'.$sub_dir.'/'.$file['file_name'];
+			if($package->package_wechat_image) @unlink(CREATE_IMAGE_PATH.$package->package_wechat_image);
 		}
 
 		$this->package_model->update($update, $package_id);

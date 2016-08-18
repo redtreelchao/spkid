@@ -234,17 +234,17 @@ class rush_model extends CI_Model
             }
             
             // 排除已添加的限抢商品
-            $where .= " AND NOT EXISTS (
-                            SELECT product_id FROM ".$this->db->dbprefix('rush_product')." AS rp
-                            LEFT JOIN ".$this->db->dbprefix('rush_info')." AS r ON r.rush_id = rp.rush_id 
-                            WHERE rp.product_id = p.product_id AND r.status <= 1 
-                      )";
+            // $where .= " AND NOT EXISTS (
+            //                 SELECT product_id FROM ".$this->db->dbprefix('rush_product')." AS rp
+            //                 LEFT JOIN ".$this->db->dbprefix('rush_info')." AS r ON r.rush_id = rp.rush_id 
+            //                 WHERE rp.product_id = p.product_id AND r.status <= 1 
+            //           )";
 					  
 			// 排除已添加的团购商品
-            $where .= " AND NOT EXISTS (
-                            SELECT product_id FROM ".$this->db->dbprefix('mami_tuan')." AS mt 
-                            WHERE mt.product_id = p.product_id AND mt.status <= 1 
-                      )";
+            // $where .= " AND NOT EXISTS (
+            //                 SELECT product_id FROM ".$this->db->dbprefix('mami_tuan')." AS mt 
+            //                 WHERE mt.product_id = p.product_id AND mt.status <= 1 
+            //           )";
 
             $filter['sort_by'] = empty($filter['sort_by']) ? 'p.product_id' : trim($filter['sort_by']);
             $filter['sort_order'] = empty($filter['sort_order']) ? 'DESC' : trim($filter['sort_order']);

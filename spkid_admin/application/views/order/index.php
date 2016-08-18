@@ -184,6 +184,9 @@
 						<?php if ($row->has_return): ?>
 							<a style="color:red;" href="order_return/index/order_sn/<?php print $row->order_sn ?>">有退货</a>
 						<?php endif ?>
+                                                <?php if ($row->has_refund): ?>
+                                                    <a style="color:red;" href="order_refund/index/order_sn/<?php print $row->order_sn ?>">有退款</a>
+						<?php endif ?>
 						<?php if ($row->has_change): ?>
 							<a style="color:red;" href="order_change/index/order_sn/<?php print $row->order_sn ?>">有换货</a>
 						<?php endif ?>
@@ -197,6 +200,7 @@
 						<a class="edit" href="order/info/<?php print $row->order_id; ?>" title="编辑"></a>
 						<?php if ($row->order_status==1 && $row->shipping_status==1 && $row->pay_status == 1): ?>				
 							<br/><a href="order_return/add/<?php print $row->order_id; ?>">退货</a>
+                                                        <br/><a href="order_refund/add/<?php print $row->order_sn; ?>">退款</a>
                         <!--<br/><a href="order_change/add/<?php print $row->order_id; ?>">换货</a>-->
 						<?php endif ?>
 					</td>

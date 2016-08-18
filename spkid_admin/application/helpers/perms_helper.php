@@ -164,4 +164,11 @@ function get_yyw_pv_report() {
     
     return $perms;
 }
+
+function get_order_refund_perm(){
+    $perms = array();
+    $perms['order_refund_delete'] = check_perm('order_refund_delete') ? '1' : '2';
+    $perms['order_refund_edit'] = check_perm('order_refund_edit') ? '1' : '2';
+    return $perms;
+}
 ?>

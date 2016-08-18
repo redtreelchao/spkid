@@ -267,7 +267,7 @@ class Return_model extends CI_Model
 	    	}
 	    }
 	    if(empty($result)) return $result;
-            
+
             // 取得的退货单中商品储位
 
 	    //减去退货单中的商品 cp_id换货单子表主键

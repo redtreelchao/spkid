@@ -1726,7 +1726,7 @@ class Cron extends CI_Controller
             $params['transportType'] = 'PACKAGE';
 	    $params['insuranceValue'] = 300;
             if ($order['goods_price'] >= 300) $params['insuranceValue'] = intval($order['goods_price']/300)*300;
-            if ($order['pay_id'] == PAY_ID_COD && $order['order_price'] > 0 && $order['shipping_id'] == DBDS_SHIPPING_ID){
+            if ($order['pay_id'] == PAY_ID_COD && $order['order_price'] > 0){
                 $params['transportType'] = 'RCP';
                 $params['codValue'] = $order['order_price'];
                 $params['codType'] = 3;
@@ -1756,6 +1756,17 @@ class Cron extends CI_Controller
             $set['filter_remark'] = $rs_arr['reason'];
             $this->package_sf_model->set_shipping_package($set);
             $this->db->trans_commit();
+        }
+        echo "已完成";
+    }
+    
+    function weixin_setting_cache(){
+        $this->load->model('weixin_settings_model');
+        $result = $this->weixin_settings_model->filter_all();
+        $key_prefix = 'wechat_share_';
+        foreach ($result as $data) {
+            $mem_val = serialize(array('title' => $data['title'], 'describe' => $data['describe'], 'file_url' => $data['file_url']));
+            $this->memcache->save($key_prefix . $data['key_code'], $mem_val, WEIXIN_CACHE_TIME);
         }
         echo "已完成";
     }

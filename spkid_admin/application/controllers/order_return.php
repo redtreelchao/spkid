@@ -1217,116 +1217,117 @@ class Order_return extends CI_Controller
 
 	public function get_order_data ()
 	{
-		$order_sn = trim($this->input->post('order_sn'));
-                $apply_id = $this->input->post('apply_id');
-		$order_info = $this->return_model->get_order_info(0,$order_sn, $apply_id);
-		if ( empty($order_info) )
-		{
-			echo json_encode(array('error'=>1,'msg'=>'订单不存在'));
-			return;
-		}
-		if (!$this->return_model->can_return($order_info))
-		{
-			echo json_encode(array('error'=>1,'msg'=>'订单不满足退货条件'));
-			return;
-		}
-                
-                $this->load->model('apply_return_model');
-                if (empty($apply_id)) {
-                    $returnCt = $this->apply_return_model->check_apply_return($order_info['order_id']);
-                    if (!empty($returnCt['ct'])) {
-                        echo json_encode(array('error'=>1,'msg'=>'订单有未完结的申请退货单，请先处理后再操作。'));
-                        return;
-                    }
-                } else {
-                    $apply_info = $this->apply_return_model->apply_info($apply_id);
-                    if (empty($apply_info)) {
-                        echo json_encode(array('error'=>1,'msg'=>'没有找到申请退货单。'));
-                        return;
-                    }
-                    //申请退货理由 0:尺寸偏大 1:尺寸偏小 2:款式不喜欢 3:配送错误 4:其他
-                    $apply_reason_list = array(
-                            '0'=>'尺寸偏大',
-                            '1'=>'尺寸偏小',
-                            '2'=>'款式不喜欢',
-                            '3'=>'配送错误',
-                            '4'=>'其他问题',
-                            '5'=>'商品质量问题'
-                    );
-                    //计算已退货数量
-                    $return_goods_num = $this->apply_return_model->get_return_goods_num($apply_info['order_id']);
-                    //取得申请退货单商品
-                    $apply_product = $this->apply_return_model->apply_return_goods($apply_id,$apply_info['order_id']);
-                    foreach($apply_product as $key=>$v){
-                        //可退数量
-                        $k = $v['product_id'].' '.$v['color_id'].' '.$v['size_id'];
-                        if(isset($return_goods_num[$k])) {
-                                $v['n_product_num'] = (int)$v['o_product_number'] - (int)$return_goods_num[$k];
-                        } else {
-                                $v['n_product_num'] = $v['o_product_number'];
-                        }
-
-                        $v['reason'] = $apply_reason_list[$v['return_reason']];
-                        $apply_product[$key] = $v;
-                    }
-                    //取得申请退货单意见列表
-                    $apply_suggest = $this->apply_return_model->apply_return_suggest($apply_id);
-                    //$data['apply_id'] = $apply_id;
-                    $data['apply_product'] = $apply_product;
-                    $data['apply_suggest'] = $apply_suggest;
-                }
-                
-		$order_product = $this->return_model->order_product_can_return($order_info['order_id']);
-		$data['add'] = $order_product;
-		if (empty($order_product))
-		{
-			echo json_encode(array('error'=>1,'msg'=>'没有可退商品'));
-			return;
-		}
-		$voucher = $this->return_model->get_voucher_payment($order_info['order_id']);
-        if(!empty($voucher)) {
-            $voucher['product_arr'] = empty($voucher['product'])?array():explode(',',$voucher['product']);
-            $voucher['category_arr'] = empty($voucher['category'])?array():explode(',',$voucher['category']);
-            $voucher['brand_arr'] = empty($voucher['brand'])?array():explode(',',$voucher['brand']);
-        }
-
-		$voucher_product_amount = 0;
-        foreach($order_product as $key=>$product) {
-            //if(isset($product['discount_type']) && $product['discount_type'] == 4) unset($order_product[$key]); //赠品不能退滴
-            $product['real_num'] = max($product['gl_num']-$product['wait_num'],0);
-            if(!empty($voucher) && $product['shop_price']==$product['product_price'] && $product['package_id'] == 0 && ($voucher['product_arr']===array()||in_array($product['product_id'],$voucher['product_arr']))&&($voucher['category_arr']===array()||in_array($product['category_id'],$voucher['category_arr']))&&($voucher['brand_arr']===array()||in_array($product['brand_id'],$voucher['brand_arr']))) {
-                $product['product_name'] = "<font color='red'>[券]</font> ".$product['product_name'];
-                $voucher_product_amount += $product['product_num']*$product['product_price'];
+            $order_sn = trim($this->input->post('order_sn'));
+            $apply_id = $this->input->post('apply_id');
+            $order_info = $this->return_model->get_order_info(0,$order_sn, $apply_id);
+            if ( empty($order_info) )
+            {
+                    echo json_encode(array('error'=>1,'msg'=>'订单不存在'));
+                    return;
             }
-            $order_product[$key] = $product;
-        }
-        if(!empty($voucher) && $voucher['payment_money']==$voucher_product_amount) {
-        	$data['product_alert'] = "<font color='red'>该订单涉及现金券的商品如果要退货需要全部退。</font>";
-        }
-        $order_info['hope_time'] = date('Y-m-d',time() + 86400 * 7);
-		$data['imagedomain'] = '/public/images';
-
-		$data['return'] = $order_info;
-		$data['return_product'] = $order_product;
-		$data['return_reasons'] = $this->return_model->get_return_reasons();
-		$data['my_id'] = $this->admin_id;
-        $data['apply_id'] = $apply_id;
-        // 下退货单时显示订单意见
-        $this->load->model('order_model');
-        $order_advice = $this->order_model->order_advice($order_info['order_id']);
-        $data['order_advice'] = $order_advice;
-        // add by shangguannan
-        //用户退货运费，快递公司选择
-        $this->load->model('return_user_shipping_fee_model');
-        $shipping_name_list = $this->return_user_shipping_fee_model->get_all_shipping();
-        $this->load->vars('shipping_name_list', $shipping_name_list);
+            if (!$this->return_model->can_return($order_info))
+            {
+                    echo json_encode(array('error'=>1,'msg'=>'订单不满足退货条件'));
+                    return;
+            }
                 
-		$data['content'] = $this->load->view('order_return/add_lib', $data, TRUE);
-		$data['error'] = 0;
-		unset($data['return_product']);
-		unset($data['return']);
-		echo json_encode($data);
-		return;
+            $this->load->model('apply_return_model');
+            if (empty($apply_id)) {
+                $returnCt = $this->apply_return_model->check_apply_return($order_info['order_id']);
+                if (!empty($returnCt['ct'])) {
+                    echo json_encode(array('error'=>1,'msg'=>'订单有未完结的申请退货单，请先处理后再操作。'));
+                    return;
+                }
+            } else {
+                $apply_info = $this->apply_return_model->apply_info($apply_id);
+                if (empty($apply_info)) {
+                    echo json_encode(array('error'=>1,'msg'=>'没有找到申请退货单。'));
+                    return;
+                }
+                //申请退货理由 0:尺寸偏大 1:尺寸偏小 2:款式不喜欢 3:配送错误 4:其他
+                $apply_reason_list = array(
+                        '0'=>'尺寸偏大',
+                        '1'=>'尺寸偏小',
+                        '2'=>'款式不喜欢',
+                        '3'=>'配送错误',
+                        '4'=>'其他问题',
+                        '5'=>'商品质量问题'
+                );
+                //计算已退货数量
+                $return_goods_num = $this->apply_return_model->get_return_goods_num($apply_info['order_id']);
+                //取得申请退货单商品
+                $apply_product = $this->apply_return_model->apply_return_goods($apply_id,$apply_info['order_id']);
+                foreach($apply_product as $key=>$v){
+                    //可退数量
+                    $k = $v['product_id'].' '.$v['color_id'].' '.$v['size_id'];
+                    if(isset($return_goods_num[$k])) {
+                            $v['n_product_num'] = (int)$v['o_product_number'] - (int)$return_goods_num[$k];
+                    } else {
+                            $v['n_product_num'] = $v['o_product_number'];
+                    }
+
+                    $v['reason'] = $apply_reason_list[$v['return_reason']];
+                    $apply_product[$key] = $v;
+                }
+                //取得申请退货单意见列表
+                $apply_suggest = $this->apply_return_model->apply_return_suggest($apply_id);
+                //$data['apply_id'] = $apply_id;
+                $data['apply_product'] = $apply_product;
+                $data['apply_suggest'] = $apply_suggest;
+            }
+                
+            $order_product = $this->return_model->order_product_can_return($order_info['order_id']);
+
+            $data['add'] = $order_product;
+            if (empty($order_product))
+            {
+                    echo json_encode(array('error'=>1,'msg'=>'没有可退商品'));
+                    return;
+            }
+            $voucher = $this->return_model->get_voucher_payment($order_info['order_id']);
+            if(!empty($voucher)) {
+                $voucher['product_arr'] = empty($voucher['product'])?array():explode(',',$voucher['product']);
+                $voucher['category_arr'] = empty($voucher['category'])?array():explode(',',$voucher['category']);
+                $voucher['brand_arr'] = empty($voucher['brand'])?array():explode(',',$voucher['brand']);
+            }
+
+            $voucher_product_amount = 0;
+            foreach($order_product as $key=>$product) {
+                //if(isset($product['discount_type']) && $product['discount_type'] == 4) unset($order_product[$key]); //赠品不能退滴
+                $product['real_num'] = max($product['gl_num']-$product['wait_num'],0);
+                if(!empty($voucher) && $product['shop_price']==$product['product_price'] && $product['package_id'] == 0 && ($voucher['product_arr']===array()||in_array($product['product_id'],$voucher['product_arr']))&&($voucher['category_arr']===array()||in_array($product['category_id'],$voucher['category_arr']))&&($voucher['brand_arr']===array()||in_array($product['brand_id'],$voucher['brand_arr']))) {
+                    $product['product_name'] = "<font color='red'>[券]</font> ".$product['product_name'];
+                    $voucher_product_amount += $product['product_num']*$product['product_price'];
+                }
+                $order_product[$key] = $product;
+            }
+            if(!empty($voucher) && $voucher['payment_money']==$voucher_product_amount) {
+                    $data['product_alert'] = "<font color='red'>该订单涉及现金券的商品如果要退货需要全部退。</font>";
+            }
+            $order_info['hope_time'] = date('Y-m-d',time() + 86400 * 7);
+            $data['imagedomain'] = '/public/images';
+
+            $data['return'] = $order_info;
+            $data['return_product'] = $order_product;
+            $data['return_reasons'] = $this->return_model->get_return_reasons();
+            $data['my_id'] = $this->admin_id;
+            $data['apply_id'] = $apply_id;
+            // 下退货单时显示订单意见
+            $this->load->model('order_model');
+            $order_advice = $this->order_model->order_advice($order_info['order_id']);
+            $data['order_advice'] = $order_advice;
+            // add by shangguannan
+            //用户退货运费，快递公司选择
+            $this->load->model('return_user_shipping_fee_model');
+            $shipping_name_list = $this->return_user_shipping_fee_model->get_all_shipping();
+            $this->load->vars('shipping_name_list', $shipping_name_list);
+                
+            $data['content'] = $this->load->view('order_return/add_lib', $data, TRUE);
+            $data['error'] = 0;
+            unset($data['return_product']);
+            unset($data['return']);
+            echo json_encode($data);
+            return;
 	}
 
     public function print_barcode($barcode='', $product_name='', $color_name='', $size_name='', $provider_productcode='') {

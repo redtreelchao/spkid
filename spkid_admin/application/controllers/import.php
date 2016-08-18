@@ -484,7 +484,7 @@ class Import extends CI_Controller
             $products = array();
 
             $file = IMPORT_PATH_PRO_COST.'product_cost.xml';//$file = APPPATH.'../public/import/product_cost/product_cost.xml';
-            $exc_data = read_xml($file, 7);
+            $exc_data = read_xml($file, 8);
             foreach ($exc_data as $k => $v) {
                 if ($k == 1) {
                     //批次主要信息
@@ -500,6 +500,7 @@ class Import extends CI_Controller
                     $tmp['cost_price'] = $v[4];
                     $tmp['consign_rate'] = $v[5];
                     $tmp['product_cess'] = $v[6];
+                    $tmp['product_income_cess'] = $v[7];
                     
                     if( $tmp['product_cess'] < 0 || $tmp['product_cess'] > 1 || strlen( $tmp['product_cess']) != 4 ){//批次成本价格导入税率（两位小数，位数多了不行，少了也不行；数值大于等于0.00，小于等于1.00）
                         sys_msg("$tmp[product_sn]：$tmp[product_cess],税率值必须为两位小数，且大于等于0.00，小于等于1.00",1 ,array() ,FALSE);

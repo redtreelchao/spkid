@@ -114,6 +114,14 @@
 				</td>
 			</tr>
 			<tr>
+				<td class="item_title">分享图片</td>
+				<td class="item_input" colspan=3>
+					<?php print form_upload('package_wechat_image','',''.($perms['edit']?'':'disabled'));?>
+					<?php print img_tip(PUBLIC_DATA_IMAGES,$package->package_wechat_image);?>
+					<label><?php if ($package->package_wechat_image) print form_checkbox('delete_package_wechat_image',1, FALSE, ''.($perms['edit']?'':'disabled')) . '删除原图'?></label>
+				</td>
+			</tr>
+			<tr>
 				<td class="item_title">礼包设置</td>
 				<td colspan="3" class="item_input">
 					<label><?php print form_checkbox('is_liuyan', '1', $package->is_liuyan, ''.($perms['edit']?'':'disabled'));?>启用留言功能</label>

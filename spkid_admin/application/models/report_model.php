@@ -2222,7 +2222,7 @@ class report_model extends CI_Model
 		}
 
 		$whereadd = "";
-		if($category_id != '0') $whereadd .= " AND (pf.category_id = '" . $category_id . "' OR pg1.category_id = '" . $category_id . "') ";
+		if($category_id != '0') $whereadd .= " AND (pf.category_id = '" . $category_id . "' OR pg.category_id = '" . $category_id . "') ";
 		if($brand_id != '0') $whereadd .= " AND pf.brand_id  = '" . $brand_id . "' ";
 		if($provider_id != '0') $whereadd .= " AND pp.provider_id  = '" . $provider_id . "' ";
 		if(!empty($product_sn)) $whereadd .= " AND pf.product_sn  LIKE '%" . $product_sn . "%' ";
@@ -2231,16 +2231,21 @@ class report_model extends CI_Model
 		if(!empty($order_sn)) $whereadd .= " AND tf.trans_sn LIKE '%" . $order_sn . "%' ";
 
 		//获取已经完结的订单
-		$sql = "SELECT DISTINCT tf.transaction_id, tf.trans_sn,tf.shop_price, op.operator,of.order_price, of.recheck_shipping_fee, of.real_shipping_fee, IF(tf.trans_type = 3,of.is_ok_date,rt.is_ok_date) is_ok_date, pf.product_sn, pf.product_name, pf.brand_name, pp.provider_name, ps.size_name, tf.product_number, tf.shop_price paid_price, IF(tf.consign_price > 0, tf.consign_price, tf.cost_price) cost_price, pg.category_name class_one, pg1.category_name class_two, tf.finance_check_date
+		$sql = "SELECT DISTINCT tf.transaction_id, tf.trans_sn,tf.shop_price,pgr.name AS genre_name,of.consignee, of.mobile, CONCAT(p.region_name,' ', c.region_name, ' ', d.region_name, ' ', of.address) AS address, op.operator,of.order_price, of.recheck_shipping_fee, of.real_shipping_fee, IF(tf.trans_type = 3,of.is_ok_date,rt.is_ok_date) is_ok_date, pf.product_sn, pf.product_name, pf.brand_name, pp.provider_name, pp.provider_code, sub.provider_barcode, ps.size_name, tf.product_number, tf.shop_price paid_price, IF(tf.consign_price > 0, tf.consign_price, tf.cost_price) cost_price, pg.category_name class_one, pg1.category_name class_two, tf.finance_check_date
 				FROM ty_transaction_info AS tf
 				  LEFT JOIN ty_product_size AS ps ON ps.size_id = tf.size_id
 				  LEFT JOIN ty_product_info AS pf ON pf.product_id = tf.product_id
+				  LEFT JOIN ty_product_sub AS sub ON sub.color_id = tf.color_id AND sub.size_id = tf.size_id AND sub.product_id = tf.product_id
 				  LEFT JOIN ty_product_category AS pg1 ON pg1.category_id = pf.category_id
 				  LEFT JOIN ty_product_category AS pg ON pg.category_id = pg1.parent_id 
 				  LEFT JOIN ty_product_provider AS pp ON pp.provider_id = pf.provider_id 
 				  LEFT JOIN ty_order_info AS of ON of.order_sn = tf.trans_sn 
                                   LEFT JOIN ty_order_product AS op ON of.order_id = op.order_id AND tf.sub_id = op.op_id AND tf.trans_type = 3  
 				  LEFT JOIN ty_order_return_info AS rt ON rt.return_sn = tf.trans_sn 
+                                  LEFT JOIN ty_product_genre pgr ON pgr.id = of.genre_id 
+                                  LEFT JOIN ty_region_info p ON of.province = p.region_id 
+                                  LEFT JOIN ty_region_info c ON of.city = c.region_id 
+                                  LEFT JOIN ty_region_info d ON of.district = d.region_id 
 				WHERE 
 				  1 AND tf.trans_type = 3 AND trans_status != 5  AND ((of.is_ok = 1 AND of.order_status = 1 AND of.pay_status = 1 AND of.shipping_status = 1 ) OR rt.is_ok = 1 ) ".$timewhere.$whereadd."
 				  ORDER BY is_ok_date DESC,tf.update_date DESC,tf.transaction_id DESC";

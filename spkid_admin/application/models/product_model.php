@@ -1147,6 +1147,7 @@ class Product_model extends CI_Model
             unset($upd_record['consign_type']);
             unset($upd_record['provider_id']);
             unset($upd_record['product_cess']);
+            unset($upd_record['product_income_cess']);
             $sql = "SELECT * FROM ty_product_cost WHERE product_id = ? AND batch_id = ? AND provider_id = ? ";
             $row = $this->db->query($sql , array($upd_arr['product_id'], $upd_arr['batch_id'], $upd_arr['provider_id'] ))->row();
             if(empty($row) ){//新增

@@ -85,6 +85,8 @@ class Order_course_api extends CI_Controller
 		$update = array(
 			'order_id'=>$order_id,
 			'product_id'=>$product_id,
+                        'color_id' => $sub->color_id, 
+                        'size_id' => $sub->size_id, 
 			'product_num'=>$num,
 			'market_price'=>$product->market_price, 
 			'shop_price'=>$product->shop_price,
