@@ -41,3 +41,18 @@ function split_area_product($all_area, $all_product)
 
 	return $result;
 }
+
+
+/**
+* 获取折扣礼包的可执行操作
+*/
+function get_package_discount_perm($package)
+{
+	$perms = array();
+	$perms['edit'] = check_perm('package_discount_edit');
+	$perms['check'] = $package->pag_dis_status==0 && check_perm('package_discount_audit');
+	$perms['over'] = $package->pag_dis_status==1 && check_perm('package_discount_stop');
+	$perms['config'] = $package->pag_dis_status==0 && check_perm('package_discount_edit');
+	$perms['delete'] = $package->pag_dis_status==0 && check_perm('package_discount_edit');
+	return $perms;
+}

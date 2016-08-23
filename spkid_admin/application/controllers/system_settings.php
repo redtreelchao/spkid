@@ -209,7 +209,11 @@ class System_settings extends CI_Controller
 
 				$config_value_key = array_keys($config_value);
 	
+				// 若数组是二维的或以上，则将第二维及以上进行 serialize
 				for ($i=0; $i < count($config_value_key); $i++) { 
+				  if( is_array($config_value[$config_value_key[$i]]) )
+					fwrite($file,"defined('".strtoupper($value->config_code)."_".strtoupper($config_value_key[$i])."') || define('".strtoupper($value->config_code)."_".strtoupper($config_value_key[$i])."', '".serialize($config_value[$config_value_key[$i]])."'); // ".$config_value_key[$i]."\n");
+				  else
 					fwrite($file,"defined('".strtoupper($value->config_code)."_".strtoupper($config_value_key[$i])."') || define('".strtoupper($value->config_code)."_".strtoupper($config_value_key[$i])."', '".$config_value_key[$i]."'); // ".$config_value[$config_value_key[$i]]."\n");
 				}
 

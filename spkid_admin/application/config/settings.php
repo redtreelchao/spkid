@@ -95,3 +95,21 @@ defined('LIUYAN_TYPES_4') || define('LIUYAN_TYPES_4', '4'); // 询价
 
 //电话订单来源ID
 defined('ORDER_SOURCE_TEL_ID') || define('ORDER_SOURCE_TEL_ID', '2'); 
+
+//短信商
+$sms_supply = array (
+  'supply_one' => 
+  array (
+    'key' => '12345',
+    'key2' => '44333',
+    'url' => 'http://www.baidu.com',
+  ),
+  'supply_2' => 
+  array (
+    'key' => '111',
+    'key2' => '111',
+    'url' => 'http://www.111.com',
+  ),
+);
+defined('SMS_SUPPLY_SUPPLY_ONE') || define('SMS_SUPPLY_SUPPLY_ONE', 'a:3:{s:3:"key";s:5:"12345";s:4:"key2";s:5:"44333";s:3:"url";s:20:"http://www.baidu.com";}'); // supply_one
+defined('SMS_SUPPLY_SUPPLY_2') || define('SMS_SUPPLY_SUPPLY_2', 'a:3:{s:3:"key";s:3:"111";s:4:"key2";s:3:"111";s:3:"url";s:18:"http://www.111.com";}'); // supply_2

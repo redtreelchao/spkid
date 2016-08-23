@@ -188,7 +188,7 @@ class Order_model extends CI_Model
 		{
 			return array('list' => array(), 'filter' => $filter);
 		}
-		$sql = "SELECT t.*, IF (r.order_id IS NULL, 0, 1) AS has_return, IF (c.order_id IS NULL, 0, 1) AS has_change
+		$sql = "SELECT t.*, IF (r.order_id IS NULL, 0, 1) AS has_return,IF(rd.order_id IS NULL, 0, 1) AS has_refund, IF (c.order_id IS NULL, 0, 1) AS has_change
                           FROM
                           (
                           SELECT o.*, u.user_name, u.create_date as reg_date, os.source_name,s.shipping_name,p.pay_name,a.admin_name as lock_name"
@@ -197,6 +197,7 @@ class Order_model extends CI_Model
                           . " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ", " . $filter['page_size']
                           . " ) t"
                           . " LEFT JOIN (SELECT DISTINCT order_id FROM ty_order_return_info WHERE return_status IN (0, 1)) r ON t.order_id = r.order_id"
+                          . " LEFT JOIN (SELECT DISTINCT order_id FROM ty_order_refund) rd ON t.order_id = rd.order_id"
                           . " LEFT JOIN (SELECT DISTINCT order_id FROM ty_order_change_info WHERE change_status IN (0, 1)) c ON t.order_id = c.order_id";
                 $query = $this->db->query($sql, $param);
 		$list = $query->result();
