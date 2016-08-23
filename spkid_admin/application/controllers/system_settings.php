@@ -181,7 +181,17 @@ class System_settings extends CI_Controller
 		$file = fopen($dirname,'w');
 		$data = $this->settings_model->settings_list();
 
-		fwrite($file,"<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');\n\n");
+$gen_date = date('Y-m-d');
+$declare =<<<EOD
+/**
+ * 系统参数配置，所生成的文件。
+ * 生成日期：$gen_date
+ * @author: nobody
+ */
+
+
+EOD;
+		fwrite($file,"<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');\n".$declare);
 
 		foreach ($data['list'] as $value) {
 

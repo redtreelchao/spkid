@@ -1,4 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * 系统参数配置，所生成的文件。
+ * 生成日期：2016-08-23
+ * @author: nobody
+ */
 
 
 //是否支持货到付款
@@ -113,3 +118,6 @@ $sms_supply = array (
 );
 defined('SMS_SUPPLY_SUPPLY_ONE') || define('SMS_SUPPLY_SUPPLY_ONE', 'a:3:{s:3:"key";s:5:"12345";s:4:"key2";s:5:"44333";s:3:"url";s:20:"http://www.baidu.com";}'); // supply_one
 defined('SMS_SUPPLY_SUPPLY_2') || define('SMS_SUPPLY_SUPPLY_2', 'a:3:{s:3:"key";s:3:"111";s:4:"key2";s:3:"111";s:3:"url";s:18:"http://www.111.com";}'); // supply_2
+
+//正用短信商
+defined('CURRENT_SMS_SUPPLY') || define('CURRENT_SMS_SUPPLY', 'supply_one'); 
