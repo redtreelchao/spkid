@@ -193,7 +193,7 @@ class transport
         }
 
         /* 构造HTTP请求头部 */
-        $request = "$method $path HTTP/1.0$crlf"
+        $request = "$method $path HTTP/1.1$crlf"
                 . 'Host: ' . $url_parts['host'] . $crlf
                 . $auth
                 . $my_header
@@ -203,7 +203,7 @@ class transport
 
         if ($this->connect_timeout > -1)
         {
-            $fp = @fsockopen($url_parts['host'], $url_parts['port'], $error, $errstr, $connect_timeout);
+            $fp = @fsockopen($url_parts['host'], $url_parts['port'], $error, $errstr, $this->connect_timeout);
         }
         else
         {
