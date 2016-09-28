@@ -192,7 +192,7 @@ define("PUBLIC_DATA_IMAGES", "public/data/images/");
 /*
  * 后台域名
  */
-define("ERP_HOST", "http://b.redtravel.cn");
+define("ERP_HOST", "https://b.redtravel.cn");
 
 //上传根目录
 define('UPLOAD_PATH_BATH', CREATE_IMAGE_PATH );
