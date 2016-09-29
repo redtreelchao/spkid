@@ -41,7 +41,7 @@ class sykj_http_sms extends abstractSms{
         //$my_header = array('Connection' => 'Close');
         
         $result = $this->_transport->request($this->url, $data, '', $my_header);
-print_r($result);
+
         $res_data = explode(',',$result['body']);
         if($res_data[1] == 0){
             return true;

@@ -120,4 +120,4 @@ defined('SMS_SUPPLY_SUPPLY_ONE') || define('SMS_SUPPLY_SUPPLY_ONE', 'a:3:{s:3:"k
 defined('SMS_SUPPLY_SUPPLY_2') || define('SMS_SUPPLY_SUPPLY_2', 'a:3:{s:3:"key";s:3:"111";s:4:"key2";s:3:"111";s:3:"url";s:18:"http://www.111.com";}'); // supply_2
 
 //正用短信商
-defined('CURRENT_SMS_SUPPLY') || define('CURRENT_SMS_SUPPLY', 'supply_one'); 
+defined('CURRENT_SMS_SUPPLY') || define('CURRENT_SMS_SUPPLY', 'sykj_http_sms'); 

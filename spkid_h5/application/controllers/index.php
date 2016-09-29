@@ -53,7 +53,7 @@ class Index extends CI_Controller
 	       }
        }
        $avail_tabs = array( 'article','course', 'index','user' );
-       $this->output->cache(CACHE_HTML_INDEX);
+       //$this->output->cache(CACHE_HTML_INDEX);
        if( empty($tab) || !in_array($tab,$avail_tabs)) $tab = 'index';
        
        if( $tab == 'course' ) get_page_view('course','-2');
@@ -65,12 +65,11 @@ class Index extends CI_Controller
         $this->config->load('global', true);
         $data = array();
         $data['hot_brand_arr'] = array();        
-        $goods_list = $this->memcache->get('index_goods_list');
+        $goods_list = $this->memcache->get('index_goods_list'); //这里的数据是后台定时任务跑出来的
 
         if (is_array($goods_list))
             $data['index_good'] = $goods_list[0];
-        else
-            $data['index_good'] = false; 
+        else $data['index_good'] = false;
         // 轮播图
         $front_focus_image = $this->lib_ad->get_focus_image(INDEX_FOCUS_IMAGE_TAG);
         $course_focus_image = $this->lib_ad->get_focus_image(INDEX_COURSE_FOCUS_IMAGE_TAG, 5);
@@ -95,7 +94,6 @@ class Index extends CI_Controller
         $articles['cat_1'] = $this->wordpress_model->fetch_articles(1, 1);// 行业
         $data['articles'] = $articles;
         //首页产品列表
-    //print_r($ad);
 
         /*$ad1 = $this->_get_ad('m_index_brand_row1','m_index_brand_row1');
         if(!empty($ad1))

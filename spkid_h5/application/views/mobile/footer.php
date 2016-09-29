@@ -1,6 +1,9 @@
+
+<?php if(isReqFromWechat()):?>
 <?php
-	$appId = 'wxd11be5ecb1367bcf';
-	$appsecret = '6d05ab776fd92157d6833e2936d6f17c';
+// 这里设置 appid secret
+	$appId = '';
+	$appsecret = '';
 
 	$timestamp = time();
 	$jsapi_ticket = make_ticket($appId,$appsecret);
@@ -9,7 +12,6 @@
 	$signature = make_signature($nonceStr,$timestamp,$jsapi_ticket,$url);
 
 ?>
-<?php if(isReqFromWechat()):?>
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript"></script>
 <script>
 	wx.config({

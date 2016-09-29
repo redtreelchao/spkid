@@ -7,13 +7,10 @@ class Api extends CI_Controller
     }
     
     function do_sms(){
-        if (!defined('CURRENT_SMS_SUPPLY')) exit;echo CURRENT_SMS_SUPPLY;
+        if (!defined('CURRENT_SMS_SUPPLY')) exit;
     	$this->load->library("sms/".CURRENT_SMS_SUPPLY, NULL, 'sms');
     	$msg = $this->input->post('msg');
 	$mob = $this->input->post('mob');
-	$msg = 'fsadf';
-	$mob = '15618297831';
-	echo $msg.'-'.$mob;
         $r = $this->sms->sendMsg($mob, $msg);
         echo $r;
 	//return $r;

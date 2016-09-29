@@ -88,7 +88,7 @@ class Index extends CI_Controller
      * @param:导航id
      */
     public function index()
-    {        
+    {
         $data = array();
         $this->load->library('lib_ad');
         $this->config->load('global', true);
