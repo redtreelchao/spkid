@@ -778,9 +778,14 @@ class Order_course_api extends CI_Controller
 		$this->db->trans_commit();
 
 		//发送通知邮件和短信
-		$this->load->library("mobile");
+		//$this->load->library("mobile");
 		$content = LOGISTISC_COMPANY. $logistics. INVOICE_NO. $invoice_no; 
-		$smscallback = $this->mobile->send($content, $mobile);
+		//$smscallback = $this->mobile->send($content, $mobile);
+                if (!empty($mobile)){
+                    $url = ERP_HOST.'/api/do_sms';
+                    $pdata = array('msg' => $content, 'mob' => $mobile);
+                    curl_post($url, $pdata);
+                }
 		/*if ( $shipping_true )
 		{
 			$this->order_course_model->notify_shipping($order);

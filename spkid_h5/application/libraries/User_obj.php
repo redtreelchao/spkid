@@ -672,17 +672,27 @@ $info['maillist'] = 2;
 		$insert_arr['sms_priority'] = 1;
 		$insert_arr['create_date'] = date('Y-m-d H:i:s');
 		$insert_arr['send_date'] = date('Y-m-d H:i:s');
-
-		$this->CI->load->library("mobile");
-		$smscallback = $this->CI->mobile->send($content, $mobile);
-
-		if ($smscallback->returnstatus == 'Success') {
+                
+                $url = ERP_HOST.'/api/do_sms';
+                $pdata = array('msg' => $content, 'mob' => $mobile);
+                $smscallback = curl_post($url, $pdata);
+                if ($smscallback) {
+			$insert_arr['status'] = 1;
+			$msg = '';
+		} else {
+			$insert_arr['status'] = 2;
+			//$msg = $smscallback->message;
+                        $msg = 'error';
+		}
+		//$this->CI->load->library("mobile");
+		//$smscallback = $this->CI->mobile->send($content, $mobile);
+		/*if ($smscallback->returnstatus == 'Success') {
 			$insert_arr['status'] = 1;
 			$msg = '';
 		} else {
 			$insert_arr['status'] = 2;
 			$msg = $smscallback->message;
-		}
+		}*/
 
 		$this->send_msg($insert_arr);
 		return $msg;

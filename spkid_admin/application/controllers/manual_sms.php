@@ -134,7 +134,7 @@ class Manual_sms extends CI_Controller
 
     public function send()
     {
-    	$this->load->library('mobile');
+    	//$this->load->library('mobile');
 		$content = $this->input->post("content");
         $mobiles = $this->manual_sms_model->getCurrentBatchMobiles();
         if (empty($mobiles) )
@@ -165,7 +165,12 @@ class Manual_sms extends CI_Controller
 	        	{
 	        		$input_mobile = $mobile_arr;
 	        	}
-	        	$rs = $this->mobile->send($content,$input_mobile);
+	        	//$rs = $this->mobile->send($content,$input_mobile);
+                        
+                        $url = ERP_HOST.'/api/do_sms';
+                        $pdata = array('msg' => $content, 'mob' => $input_mobile);
+                        curl_post($url, $pdata);
+                        
 	        }
 	    }
         $this->manual_sms_model->flagMobileSended();
