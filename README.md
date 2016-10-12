@@ -1,4 +1,5 @@
 # spkid
+基于牙科医疗器械的电商平台。
 spkid_admin下的public/data/，将spkid_image挂载到images下,spkid_static挂载到union/static下
 
 
@@ -39,3 +40,4 @@ CSS/js等文件
 -----
 author:redtreelchao
 date:20160818
+QQ:55279226
