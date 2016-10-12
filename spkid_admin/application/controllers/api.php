@@ -7,7 +7,8 @@ class Api extends CI_Controller
     }
     
     function do_sms(){
-        if (!defined('CURRENT_SMS_SUPPLY')) exit;
+        if (!defined('CURRENT_SMS_SUPPLY') || !defined('SMS_ENABLED') || !defined('SMS_ENABLED_NO') || !defined('SMS_ENABLED_YES')) exit;
+        if (SMS_ENABLED == SMS_ENABLED_NO) exit;
     	$this->load->library("sms/".CURRENT_SMS_SUPPLY, NULL, 'sms');
     	$msg = $this->input->post('msg');
 	$mob = $this->input->post('mob');

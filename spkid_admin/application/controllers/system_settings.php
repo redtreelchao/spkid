@@ -72,7 +72,7 @@ class System_settings extends CI_Controller
 		// 根据ID获取当前DB的数据，活动的存储类型
 		// 如果存储类型是数组，那么数值一定是数组
 		$sys_store_types = array_keys($this->sys_store_types);
-		if($insert['storage_type'] == $sys_store_types['2']){
+		if($insert['storage_type'] == $sys_store_types['1']){
 			$value = $insert['config_value'];
 			eval("\$value=$value;");
 			$insert['config_value'] = serialize($value);

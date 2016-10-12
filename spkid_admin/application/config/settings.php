@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * 系统参数配置，所生成的文件。
- * 生成日期：2016-08-23
+ * 生成日期：2016-10-09
  * @author: nobody
  */
 
@@ -103,21 +103,26 @@ defined('ORDER_SOURCE_TEL_ID') || define('ORDER_SOURCE_TEL_ID', '2');
 
 //短信商
 $sms_supply = array (
-  'supply_one' => 
+  'sykj_http_sms' => 
   array (
-    'key' => '12345',
-    'key2' => '44333',
-    'url' => 'http://www.baidu.com',
+    'sn' => '004245',
+    'pwd' => '76SEqTcggF7Z',
+    'url' => 'http://120.26.69.248/msg/HttpSendSM',
   ),
-  'supply_2' => 
+  'e_mas' => 
   array (
-    'key' => '111',
-    'key2' => '111',
+    'sn' => '111',
+    'pwd' => '111',
     'url' => 'http://www.111.com',
   ),
 );
-defined('SMS_SUPPLY_SUPPLY_ONE') || define('SMS_SUPPLY_SUPPLY_ONE', 'a:3:{s:3:"key";s:5:"12345";s:4:"key2";s:5:"44333";s:3:"url";s:20:"http://www.baidu.com";}'); // supply_one
-defined('SMS_SUPPLY_SUPPLY_2') || define('SMS_SUPPLY_SUPPLY_2', 'a:3:{s:3:"key";s:3:"111";s:4:"key2";s:3:"111";s:3:"url";s:18:"http://www.111.com";}'); // supply_2
+defined('SMS_SUPPLY_SYKJ_HTTP_SMS') || define('SMS_SUPPLY_SYKJ_HTTP_SMS', 'a:3:{s:2:"sn";s:6:"004245";s:3:"pwd";s:12:"76SEqTcggF7Z";s:3:"url";s:35:"http://120.26.69.248/msg/HttpSendSM";}'); // sykj_http_sms
+defined('SMS_SUPPLY_E_MAS') || define('SMS_SUPPLY_E_MAS', 'a:3:{s:2:"sn";s:3:"111";s:3:"pwd";s:3:"111";s:3:"url";s:18:"http://www.111.com";}'); // e_mas
 
 //正用短信商
 defined('CURRENT_SMS_SUPPLY') || define('CURRENT_SMS_SUPPLY', 'sykj_http_sms'); 
+
+//是否启用短信
+defined('SMS_ENABLED') || define('SMS_ENABLED', '1'); // 是否启用短信
+defined('SMS_ENABLED_YES') || define('SMS_ENABLED_YES', '1'); // 是
+defined('SMS_ENABLED_NO') || define('SMS_ENABLED_NO', '2'); // 否

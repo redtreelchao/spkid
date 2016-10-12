@@ -41,9 +41,22 @@ class Quick_edit extends CI_Controller {
     public function system_settings(){
         if( ! check_perm(array('system_settings')) ) die(json_encode(Array('success'=>false,'msg'=>'操作失败，无操作权限！')));
         $this->load->model('settings_model');
+        $sys_store_types = Array(1=>'字符串',2=>'数字',3=>'数组');  // 存储类型
+        
         $pk = $this->input->post( 'pk' );
         $name = $this->input->post( 'name' );
         $value = $this->input->post( 'value' );
+        
+        $settings = $this->settings_model->filter(array('id'=>$pk));
+        if (!$settings) {
+            sys_msg('记录不存在!', 1);
+            die(json_encode(Array('success'=>false,'msg'=>'记录不存在！')));
+        }
+        $sys_store_types = array_keys($sys_store_types);
+        if($settings->storage_type == $sys_store_types['1']){
+            eval("\$value=$value;");
+            $value = serialize($value);
+        }
         $data[$name] = $value;
         $result = $this->settings_model->update( $data, $pk );
         die(json_encode(Array('success'=>true,'msg'=>'操作成功！', 'value'=>443)));
