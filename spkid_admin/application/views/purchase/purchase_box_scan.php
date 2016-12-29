@@ -21,7 +21,9 @@
                     <td>&nbsp;&nbsp;<?=$purchase->purchase_finished_number?>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td align="right">箱子数量:</td>
                     <td><?=$box_count?>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>
-			<?php if(check_perm('pruchase_box_scan_list') ):?><input class="am-btn am-btn-primary" type="button" onclick="redirect('purchase_box/pruchase_box_scan_list/<?=$purchase->purchase_code?>');" value="扫描记录" /><? endif;?>
+			<?php if(check_perm('pruchase_box_scan_list')):?>
+<input class="am-btn am-btn-primary" type="button" onclick="redirect('purchase_box/pruchase_box_scan_list/<?=$purchase->purchase_code?>');" value="扫描记录" />
+<?php   endif;?>
 		    </td>
                 </tr>
             </table>
@@ -51,47 +53,7 @@
                     <th>本次扫描数量</th>
                 </tr>
                 <tbody id="dataTable">
-                <?php if(!empty($details_list)):foreach ($details_list as $detail): ?>
-                <tr class="row">
-                    <td><?php echo $detail->product_name?></td>
-                    <td><?php echo $detail->product_sn?></td>
-                    <td><?php echo $detail->provider_productcode?></td>
-                    <td><?php echo $detail->brand_name?></td>
-                    <td><?php echo $detail->provider_barcode?></td>
-                    <td><?php echo $detail->color_name?></td>
-                    <td><?php echo $detail->size_name?></td>
-                    <td>                    	
-                    	<input type="text" class="v-batch-<?php echo $detail->box_sub_id?>" value="<?php echo $detail->production_batch?>" style="width: 150px;text-align: center;"/>
-                    </td>
-                    <td>
-                    	<input type="text" class="v-expire-<?php echo $detail->box_sub_id?>" value="<?php echo $detail->expire_date?>" style="width: 100px;text-align: center;" onblur="v_check(this);"/>
-                    </td>
-                    <td>
-                        <!--
-                    	<input type="text" class="v-oqc-<?php echo $detail->box_sub_id?>" value="<?php echo $detail->oqc?>" style="width: 100px;text-align: center;"/>
-                        -->
-                        <select class="v-oqc-<?php echo $detail->box_sub_id?>">
-                            <option value="合格"<?=($detail->oqc == '合格') ? ' selected' : '';?>>合格</option>
-                            <option value="不合格"<?=($detail->oqc == '不合格') ? ' selected' : '';?>>不合格</option>
-                        </select>
-                    </td>
-                    <td><?php echo $detail->pnum?></td>
-                    <td>
-                    	<input type="text" class="v-check_num-<?php echo $detail->box_sub_id?>" value="<?php echo $detail->check_num?>" style="width: 150px;text-align: center;"/>
-                    </td>
-                    <td><?php echo $detail->product_finished_number?></td>
-                    <td><?php echo $detail->product_number?></td>
-                    <td>
-                                <input type="text" class="v-add"
-                                   box_sub_id="<?php echo $detail->box_sub_id?>"
-                                   provider_barcode="<?php echo $detail->provider_barcode?>" 
-                               product_id="<?php echo $detail->product_id?>" 
-                               color_id="<?php echo $detail->color_id?>" 
-                               size_id="<?php echo $detail->size_id?>" 
-                               value="0" style="width: 30px;text-align: center;" flg="val" onblur="summly();"/>
-                    </td>
-                </tr>		
-                <?php endforeach;endif;?>
+                
                 </tbody>
                 <tr>
                     <td colspan="14"></td>
